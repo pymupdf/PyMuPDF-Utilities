@@ -37,12 +37,12 @@ for page1 in doc1:
     img.drawRect(croprect)
     img.finish(color = gray, fill = gray)
     
-    for b in blks:                               # loop through the text
-        r = fitz.Rect(b[:4])                     # text rectangle
+    for b in blks:                               # loop through the blocks
+        r = fitz.Rect(b[:4])                     # block rectangle
         # add dislacement of original /CropBox
         r += disp
         
-        img.drawRect(r)                          # surround text rectangle
+        img.drawRect(r)                          # surround block rectangle
         
         if b[-1] == 1:                           # if image block ...
             color = red
@@ -53,7 +53,7 @@ for page1 in doc1:
             
         img.finish(width = 0.3, color = color)
             
-        # insert text of the block using a small, indicative font
+        # insert text of the block using a small, indicative fontsize
         img.insertTextbox(r, b[4], fontname = "/Helvetica", fontsize = 8,
                           color = color, align = a)
     img.commit()                                 # store /Contents of out page
