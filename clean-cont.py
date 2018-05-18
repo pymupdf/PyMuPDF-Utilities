@@ -7,8 +7,7 @@ if not doc.isPDF:
 clist = []                             # all contents xref numbers
 print("\nChecking file '%s' (%i pages) for multiple /Contents.\n" % (doc.name, len(doc)))
 for page in doc:
-    for xref in page._getContents():
-        clist.append(xref)
+    clist.extend(page._getContents())
 
 if len(clist) > len(doc):              # some pages have more than one!
     print("There exist pages with multiple /Contents.")
