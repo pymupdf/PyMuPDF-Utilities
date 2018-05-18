@@ -26,12 +26,13 @@ if len(clist) > len(doc):              # some pages have more than one!
                 continue
             c = b""                    # the combined contents area
             for xref in xrefl:
-                c += doc._getXrefStream(xref)    # append all contents to ...
-            doc._updateStream(xrefl[0], c)       # to overwrite first object
+                c += doc._getXrefStream(xref)    # concat all contents and ...
+            doc._updateStream(xrefl[0], c)       # ... overwrite first object
             page._setContents(xrefl[0])          # reflect this in page defin.
         doc.save("cleaned-" + doc.name,
                  garbage = 4,          # removes now unused contents objects
-                 deflate=True)
+                 deflate = True,
+                )
 else:
     print("All pages only have one /Contens.")
 
