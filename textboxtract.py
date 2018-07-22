@@ -14,17 +14,32 @@ Each original line of the rectangle is then reconstructed using the itertools
 from operator import itemgetter 
 from itertools import groupby
 import fitz
-doc = fitz.open("x.pdf")
-page = doc[59]
+doc = fitz.open("<some.file>")     # any supported document type
+page = doc[pno]                    # we want text from this page
 
-# identify a rectangle, e.g. via text search function
-# search strings are chosen to be unique in this case
-rl1 = page.searchFor("Die Altersübereinstimmung")
-rl2 = page.searchFor("Bombardement durch.")
+"""
+--------------------------------------------------------------------------------
+Identify the rectangle. We use the text search function here. The two
+search strings are chosen to be unique, to make our case work.
+The two returned rectangle lists both have only one item.
+--------------------------------------------------------------------------------
+"""
+rl1 = page.searchFor("Die Altersübereinstimmung") # rect list one
+rl2 = page.searchFor("Bombardement durch.")       # rect list two
 rect = rl1[0] | rl2[0]       # union rectangle
-words = page.getTextWords()  # get all words on the page
+# Now we have the rectangle ----------------------------------------------------
 
-# select the words fully contained in rect
+"""
+Get all words on page in a list of lists. Each word is represented by:
+[x0, y0, x1, y1, word, bno, lno, wno]
+The first 4 entries are the word's rectangle coordinates, the last 3 are just
+technical info (block number, line number, word number).
+"""
+words = page.getTextWords()
+# We subselect from above list.
+
+# Case 1: select the words fully contained in rect
+#-------------------------------------------------------------------------------
 mywords = [w for w in words if fitz.Rect(w[:4]) in rect]
 mywords.sort(key = itemgetter(3, 0))
 group = groupby(mywords, key = itemgetter(3))
@@ -33,7 +48,8 @@ print("------------------------------------------------")
 for y, gwords in group:
     print(" ".join(w[4] for w in gwords))
 
-# select words partially contained in rect
+# Case 2: select words partially contained in rect
+#-------------------------------------------------------------------------------
 mywords = [w for w in words if fitz.Rect(w[:4]).intersects(rect)]
 mywords.sort(key = itemgetter(3, 0))
 group = groupby(mywords, key = itemgetter(3))
