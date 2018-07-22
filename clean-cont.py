@@ -1,6 +1,6 @@
 import sys, time
 import fitz
-t0 = time.process_time()
+t0 = time.time()
 doc = fitz.open(sys.argv[1])
 if not doc.isPDF:
     raise SystemExit("Only works for PDF.")
@@ -34,7 +34,7 @@ if len(clist) > len(doc):              # some pages have more than one!
                  deflate = True,
                 )
 else:
-    print("All pages only have one /Contens.")
+    print("Nothing to do: all pages only have one /Contents object.")
 
-t1 = time.process_time()
+t1 = time.time()
 print("Elapsed time %g seconds" % (t1-t0))
