@@ -1,3 +1,14 @@
+"""
+Utility script
+--------------
+If a PDF has pages with more than one /Contents object, combine them into one.
+This either done with the 'clean' option of 'save' (which invokes an MuPDF 
+function), or just concatenate the streams.
+The latter option is used, if no contents streams are in use by more than one
+page. The MuPDF function does additional syntax checking of the content stream
+and also of all content streams of all annotations.
+"""
+from __future__ import print_function
 import sys, time
 import fitz
 t0 = time.time()
@@ -10,16 +21,16 @@ for page in doc:
     clist.extend(page._getContents())
 
 if len(clist) > len(doc):              # some pages have more than one!
-    print("There exist pages with multiple /Contents.")
-    if len(clist) != len(set(clist)):  # subset of unique xrefs is smaller!
-        print("Re-used /Contents exist -> using 'clean' option.")
+    print("There exist pages with multiple /Contents (%i : %i)." % (len(clist), len(doc)))
+    if len(clist) != len(set(clist)):  # there are duplicate xrefs!
+        print("Re-used /Contents exist -> using MuPDF 'clean'.")
         doc.save("cleaned-" + doc.name,
                  garbage = 4,
                  clean = True,         # use the standard clean function
                  deflate = True,
                  )
     else:                              # each page has its own contents
-        print("No re-used /Contents - going to combine.")
+        print("All /Contents are used only once - combining multiples.")
         for page in doc:
             xrefl = page._getContents()
             if len(xrefl) < 2:         # page has only one contents
@@ -27,14 +38,14 @@ if len(clist) > len(doc):              # some pages have more than one!
             c = b""                    # the combined contents area
             for xref in xrefl:
                 c += doc._getXrefStream(xref)    # concat all contents and ...
-            doc._updateStream(xrefl[0], c)       # ... overwrite first object
+            doc._updateStream(xrefl[0], c)       # ... overwrite first one
             page._setContents(xrefl[0])          # reflect this in page defin.
         doc.save("cleaned-" + doc.name,
                  garbage = 4,          # removes now unused contents objects
                  deflate = True,
                 )
 else:
-    print("Nothing to do: all pages only have one /Contents object.")
+    print("Nothing to do: all pages have only one /Contents object.")
 
 t1 = time.time()
 print("Elapsed time %g seconds" % (t1-t0))
