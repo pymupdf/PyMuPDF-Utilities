@@ -25,23 +25,27 @@ if len(clist) > len(doc):              # some pages have more than one!
     if len(clist) != len(set(clist)):  # there are duplicate xrefs!
         print("Re-used /Contents exist -> using MuPDF 'clean'.")
         doc.save("cleaned-" + doc.name,
-                 garbage = 4,
+                 garbage = 2,
                  clean = True,         # use the standard clean function
-                 deflate = True,
+                 deflate = True,       # recompress contents objects
                  )
     else:                              # each page has its own contents
         print("All /Contents are used only once - combining multiples.")
+        pcount = 0
         for page in doc:
             xrefl = page._getContents()
             if len(xrefl) < 2:         # page has only one contents
                 continue
+            pcount += 1
+            print("cleaning page %i with %i objects" % (page.number, len(xrefl)))
             c = b""                    # the combined contents area
             for xref in xrefl:
                 c += doc._getXrefStream(xref)    # concat all contents and ...
-            doc._updateStream(xrefl[0], c)       # ... overwrite first one
+            doc._updateStream(xrefl[0], c)       # ... put result in first one
             page._setContents(xrefl[0])          # reflect this in page defin.
+        print("Content of %i pages cleaned." % pcount)
         doc.save("cleaned-" + doc.name,
-                 garbage = 4,          # removes now unused contents objects
+                 garbage = 2,          # remove unused & compact XREF
                  deflate = True,
                 )
 else:

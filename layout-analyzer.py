@@ -11,9 +11,11 @@ in the input. Text is shown surrounded by its text block rectangle. Images are
 not displayed, but their locations are indicated by empty rectangles with
 some meta information.
 """
+import sys
+import time
 import fitz
-
-doc1 = fitz.open("demo1.pdf")
+t0 = time.time()
+doc1 = fitz.open(sys.argv[1])
 doc2 = fitz.open()
 red   = (1, 0, 0)
 blue  = (0, 0, 1)
@@ -41,7 +43,6 @@ for page1 in doc1:
         r = fitz.Rect(b[:4])                     # block rectangle
         # add dislacement of original /CropBox
         r += disp
-        
         img.drawRect(r)                          # surround block rectangle
         
         if b[-1] == 1:                           # if image block ...
@@ -53,10 +54,16 @@ for page1 in doc1:
             
         img.finish(width = 0.3, color = color)
             
-        # insert text of the block using a small, indicative fontsize
-        img.insertTextbox(r, b[4], fontname = "/Helvetica", fontsize = 8,
+        if r.isEmpty:                            # do not rely on meaningful rects
+            print("skipping text of empty rect at (%g, %g) on page %i" % (r.x0, r.y0, page1.number))
+        else:
+            # insert text of the block using a small, indicative fontsize
+            img.insertTextbox(r, b[4], fontname = "/Helvetica", fontsize = 8,
                           color = color, align = a)
+
     img.commit()                                 # store /Contents of out page
 
 # save output file
-doc2.save(doc1.name + ".pdf", garbage = 4, deflate = 1, clean = 1)
+doc2.save("layout-" + doc1.name, garbage = 4, deflate = True, clean = True)
+t1 = time.time()
+print("total time: %g sec" % (t1-t0))
