@@ -11,6 +11,9 @@ and also of all content streams of all annotations.
 from __future__ import print_function
 import sys, time
 import fitz
+if not tuple(map(int, fitz.version[0].split("."))) >= (1, 13, 5):
+    raise SystemExit("require PyMuPDF v1.13.5+")
+
 t0 = time.time()
 doc = fitz.open(sys.argv[1])
 if not doc.isPDF:
