@@ -3,7 +3,7 @@ Various utilities using PyMuPDF
 
 * **anonymize.py** - scan through a PDF and remove all text of all pages. Also erase metadata / XML metadata. This works by eliminating everything enclosed by the string pairs "BT" and "ET" in the pages' `/Contents` object(s). Text appearing in images cannot be removed with this script. This includes images made by the PDF operator syntax: some utilities synthesize text on the basis of elementary drawing commands, i.e. every single letter is created by drawing rectangles, lines and curves. This is probably done as a way to enforce copyright protection. In these cases, the script will not work either.
 
-* **gluepix.py** - extract images from a PDF, also taking care of images with a transparency mask. You may want to look at ``extract_img.py`` in this repo, too. It does a similar job, but scans through **all** images, not just the ones referenced by pages. This makes sense when the PDF has structure issues, e.g. a broken page tree.
+* **gluepix.py** - **(requires v1.13.17)** extract images from a PDF, also taking care of images with a transparency mask. You may want to look at ``extract_img.py`` in this repo, too. It does a similar job, but scans through **all** images, not just the ones referenced by pages. This makes sense when the PDF has structure issues, e.g. a broken page tree.
 
 * **extract-img.py** - **(requires v1.13.17)** extract all images from a PDF, ignoring the page tree. It focuses on execution speed, aims to tolerate damaged files, respects the original image format and avoids using Pixmaps. Masked images are rebuilt like in ``gluepix.py``. Tries to identify and ignore "garbage" images like small artefacts, lines and unicolor rectangles.
 
