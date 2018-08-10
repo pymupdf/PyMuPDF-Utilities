@@ -1,5 +1,5 @@
 from __future__ import print_function
-import sys, time
+import os, sys, time
 import fitz
 """
 PyMuPDF utility
@@ -14,6 +14,16 @@ We then create a new Pixmap giving it these alpha values, and return it.
 If the result pixmap is CMYK, it will be converted to RGB first.
 
 """
+if not tuple(map(int, fitz.version[0].split("."))) >= (1, 13, 17):
+    raise SystemExit("require PyMuPDF v1.13.17+")
+
+dimlimit = 100      # each image side must be greater than this
+relsize  = 0.05     # image : pixmap size ratio must be larger than this (5%)
+abssize  = 2048     # absolute image size limit 2 KB: ignore if smaller
+imgdir   = "images" # found images are stored here
+
+if not os.path.exists(imgdir):
+    os.mkdir(imgdir)
 
 def recoverpix(doc, item):
     x = item[0]                   # xref of PDF image
@@ -47,23 +57,42 @@ t0 = time.time()
 fname = sys.argv[1]
 doc = fitz.open(fname)
 xreflist = []
+imglist = []
 for pno in range(len(doc)):
     il = doc.getPageImageList(pno)
+    imglist.extend([x[0] for x in il])
     for img in il:
         xref = img[0]
         if xref in xreflist:
             continue
-        xreflist.append(xref)
+        width  = img[2]
+        height = img[3]
+        if min(width, height) <= dimlimit:
+            continue
         pix = recoverpix(doc, img)
         if type(pix) is dict:     # we got a raw image
             ext = pix["ext"]
             imgdata = pix["image"]
-            fout = open("img-%i-%i.%s" % (pno, xref, ext), "wb")
-            fout.write(imgdata)
-            fout.close()
+            n = pix["colorspace"]
+            imgfile = os.path.join(imgdir, "img-%i.%s" % (xref, ext))
         else:                     # we got a pixmap
-            pix.writePNG("img-%i-%i.png" % (pno, xref)) # save pixmap
+            imgfile = os.path.join(imgdir, "img-%i.png" % xref)
+            n = pix.n
+            imgdata = pix.getPNGData()
+    
+        if len(imgdata) <= abssize:
+            continue
+
+        if len(imgdata) / (width * height * n) <= relsize:
+            continue
+
+        fout = open(imgfile, "wb")
+        fout.write(imgdata)
+        fout.close()
+        xreflist.append(xref)
 
 t1 = time.time()
+imglist = list(set(imglist))
+print(len(set(imglist)), "images in total")
 print(len(xreflist), "images extracted")
 print ("total time %g sec" % (t1-t0))

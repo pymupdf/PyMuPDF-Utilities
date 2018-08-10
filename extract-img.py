@@ -41,6 +41,7 @@ dimlimit = 100      # each image side must be greater than this
 relsize  = 0.05     # image : pixmap size ratio must be larger than this (5%)
 abssize  = 2048     # absolute image size limit 2 KB: ignore if smaller
 imgdir   = "images" # found images are stored here
+
 if not os.path.exists(imgdir):
     os.mkdir(imgdir)
 
@@ -49,16 +50,16 @@ def recoverpix(doc, xref, item):
     """
     def getimage(pix):
         if pix.colorspace.n != 4:
-            return pix.getPNGData()
+            return pix
         tpix = fitz.Pixmap(fitz.csRGB, pix)
-        return tpix.getPNGData()
+        return tpix
 
     s = item["smask"]  # xref of its /SMask
     
     try:
         pix1 = fitz.Pixmap(item["image"])   # make pixmap from image
     except:
-        return b""                    # skip if error
+        return None                    # skip if error
 
     try:
         pix2 = fitz.Pixmap(doc, s)    # create pixmap of /SMask entry
@@ -98,22 +99,23 @@ smasks = [] # stores xrefs of /SMask objects
 # loop through PDF images
 #------------------------------------------------------------------------------
 for xref in range(1, lenXREF):         # scan through all PDF objects
+    if xref in smasks:                 # ignore smasks
+        continue
+
     imgdict = doc.extractImage(xref)
 
     if not imgdict:                    # not an image
         continue
 
-    if xref in smasks:                 # ignore smasks
-        continue
-
     img_icnt += 1                      # increase read images counter
 
-    mxref = imgdict["smask"]
-    if mxref > 0:                      # store /SMask xref
-        smasks.append(mxref)
+    smask = imgdict["smask"]
+    if smask > 0:                      # store /SMask xref
+        smasks.append(smask)
 
     width  = imgdict["width"]
     height = imgdict["height"]
+    ext    = imgdict["ext"]
 
     if min(width, height) <= dimlimit: # rectangle edges too small
         continue
@@ -123,22 +125,24 @@ for xref in range(1, lenXREF):         # scan through all PDF objects
     if l_imgdata <= abssize:           # image too small to be relevant
         continue
 
-    # check image complexity
-    # image data is without alpha channel, so we take "colorspace.n"
-    c_space = max(1, imgdict["colorspace"]) # get the colorspace n
-    l_samples = width * height * c_space    # simulated samples size
+    if smask > 0:                      # has smask: need use pixmaps
+        pix = recoverpix(doc, xref, imgdict)  # create pix with mask applied
+        if not pix:                    # something went wrong
+            continue
+        ext = "png"
+        imgdata = pix.getPNGData()
+        l_samples = len(pix.samples)
+        l_imgdata = len(imgdata)
+    else:
+        c_space = max(1, imgdict["colorspace"]) # get the colorspace n
+        l_samples = width * height * c_space    # simulated samples size
+
     if l_imgdata / l_samples <= relsize:    # seems to be unicolor image
-        continue
-
-    if mxref > 0:                      # has smask
-        imgdata = recoverpix(doc, xref, imgdict)  # create image with mask applied
-
-    if not imgdata:                    # something went wrong: skip
         continue
 
     # now we have an image worthwhile dealing with
     img_ocnt += 1
-    ext       = imgdict["ext"]
+
     imgn1     = fpref + "-%i.%s" % (xref, ext)
     imgname = os.path.join(imgdir, imgn1)
     ofile = open(imgname, "wb")
@@ -147,12 +151,15 @@ for xref in range(1, lenXREF):         # scan through all PDF objects
 
 # now delete any /SMask files not filtered out before
 removed = 0
-for xref in smasks:
-    imgn1 = fpref + "-%i.png" % xref
-    imgname = os.path.join(imgdir, imgn1)
-    if os.path.exists(imgname):
-        os.remove(imgname)
-        removed += 1
+if len(smasks) > 0:
+    imgdir_ls = os.listdir(imgdir)
+    for smask in smasks:
+        imgn1 = fpref + "-%i" % smask
+        for f in imgdir_ls:
+            if f.startswith(imgn1):
+                imgname = os.path.join(imgdir, f)
+                os.remove(imgname)
+                removed += 1
         
 t1 = time.time()
 
