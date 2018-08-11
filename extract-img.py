@@ -57,7 +57,7 @@ def recoverpix(doc, xref, item):
     s = item["smask"]  # xref of its /SMask
     
     try:
-        pix1 = fitz.Pixmap(item["image"])   # make pixmap from image
+        pix1 = fitz.Pixmap(doc, xref)  # make pixmap from image
     except:
         return None                    # skip if error
 
@@ -81,10 +81,9 @@ def recoverpix(doc, xref, item):
 #------------------------------------------------------------------------------
 # Main Program
 #------------------------------------------------------------------------------
-t0 = time.time()
 
 fname = sys.argv[1] # file name
-fpref = sys.argv[2] # image file prefix
+fpref = "img"
 doc = fitz.open(fname)
 img_ocnt = 0
 img_icnt = 0
@@ -93,6 +92,8 @@ lenXREF = doc._getXrefLength()         # PDF object count - do not use entry 0!
 # display some file info
 print("")
 print(__file__, "PDF: %s, pages: %i, objects: %i" % (fname, len(doc), lenXREF-1))
+
+t0 = time.time()                       # start the timer
 
 smasks = [] # stores xrefs of /SMask objects
 #------------------------------------------------------------------------------
