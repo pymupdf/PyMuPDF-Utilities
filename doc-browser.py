@@ -84,6 +84,8 @@ while True:
             zoom = oldzoom = 0
         else:
             zoom = oldzoom = 4
+    if i >= len(doc):                  # wrap around
+        i = 0
     data = get_page(i, zoom)
     image_elem.Update(data=data)
 
