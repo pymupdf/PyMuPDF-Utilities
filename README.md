@@ -9,6 +9,8 @@ Various utilities using PyMuPDF
 
 * **DeDRM-ebook.py** - repeatedly copies a fixed screen area to a PDF page. Can be used to page through an e-book (which might be DRM protected ...) and create a PDF consisting of all its pages in image format - very much like making a full book foto copy. You would start an e-book reader to read a book and then trigger this skript to page through the displayed book making images of each page.
 
+* **doc-browser.py** - a complete GUI document displaying script using **Tkinter**! It it requires `PySimpleGUI <https://pypi.org/project/PySimpleGUI/>`_, an awesome pure Python package exclusively based on Tkinter. To run the script, a PySimpleGUI version **greater 2.9.0** is required.
+
 * **layout-analyzer.py** - create an output PDF for a given document with text and graphics layout analysis. Each text and graphics block is surrounded by a rectangle (graphics content is not shown, only some metadata). Output PDF has page dimensions of the input's /MediaBox. The input's /CropBox is indicated by a gray background rectangle - see example files in this repo: demo1.pdf and layout-demo1.pdf.
 
 * **clean-cont.py** - **(requires v1.13.5)** Inspect PDF pages whether any have multiple /Contents objects. If not, we exit immediately. If **yes**, we check if any contents are shared between pages. If **yes**, we save the the document using the "clean" option and exit. If **not** we join multiple page contents into one, ignore the multiples and save with option "garbage=4".
