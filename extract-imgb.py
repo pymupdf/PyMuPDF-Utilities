@@ -1,6 +1,7 @@
 from __future__ import print_function
 import fitz
 import os, sys, time
+import PySimpleGUI as psg    # show a pogress  meter with this
 """
 This demo extracts all images of a PDF as PNG files, whether they are
 referenced by pages or not.
@@ -31,11 +32,12 @@ Dependencies
 ------------
 PyMuPDF v1.13.17+
 """
+
 if not tuple(map(int, fitz.version[0].split("."))) >= (1, 13, 17):
     raise SystemExit("require PyMuPDF v1.13.17+")
 
-if not len(sys.argv) == 3:
-    raise SystemExit("usage: extract_img.py input.pdf img-prefix")
+if not len(sys.argv) == 2:
+    raise SystemExit("usage: extract_img.py input.pdf")
 
 dimlimit = 100      # each image side must be greater than this
 relsize  = 0.05     # image : pixmap size ratio must be larger than this (5%)
@@ -71,7 +73,6 @@ def recoverpix(doc, xref, item):
     if not (pix1.irect == pix2.irect and \
             pix1.alpha == pix2.alpha == 0 and \
             pix2.n == 1):
-        print("unexpected /SMask situation: pix1", pix1, "pix2", pix2)
         return getimage(pix1)
     pix = fitz.Pixmap(pix1)       # copy of pix1, alpha channel added
     pix.setAlpha(pix2.samples)    # treat pix2.samples as alpha values
@@ -100,6 +101,9 @@ smasks = [] # stores xrefs of /SMask objects
 # loop through PDF images
 #------------------------------------------------------------------------------
 for xref in range(1, lenXREF):         # scan through all PDF objects
+    psg.EasyProgressMeter("Extract Images",   # show our progress
+        xref, lenXREF, "*** Scanning Cross Reference ***")
+
     if xref in smasks:                 # ignore smasks
         continue
 
@@ -164,8 +168,8 @@ if len(smasks) > 0:
         
 t1 = time.time()
 
-print("run time %g" % (t1-t0))
-print("found images:", img_icnt)
-print("extracted images:", (img_ocnt - removed))
-print("skipped smasks:", len(smasks))
-print("removed smasks:", removed)
+print(img_icnt, "found images")
+print((img_ocnt - removed), "extracted images")
+print(len(smasks), "skipped smasks")
+print(removed, "removed smasks")
+print("total time %g sec" % (t1-t0))
