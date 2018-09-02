@@ -1,6 +1,12 @@
 # PyMuPDF-Utilities
 Various utilities using PyMuPDF
 
+* **all-my-pics-attached.py** - take all files from a given directory and **attach** them to pages (as *'FileAttachment'*) of a new PDF. Non-file entries of the directory will be skipped.
+
+* **all-my-pics-embedded.py** - take all files from a given directory and **embed** them (as *'EmbeddedFile'*) in a new PDF. Non-file entries of the directory will be skipped.
+
+* **all-my-pics-inserted.py** - take all image files from a given directory and **insert** them as pages in a new PDF (actually inserts the first page of any supported, non-PDF document type). Non-file entries of the directory will be skipped.
+
 * **anonymize.py** - scan through a PDF and remove all text of all pages. Also erase metadata / XML metadata. This works by eliminating everything enclosed by the string pairs "BT" and "ET" in the pages' `/Contents` object(s). Text appearing in images cannot be removed with this script. This includes images made by the PDF operator syntax: some utilities synthesize text on the basis of elementary drawing commands, i.e. every single letter is created by drawing rectangles, lines and curves. This is probably done as a way to enforce copyright protection. In these cases, the script will not work either.
 
 * **extract-imga.py** - **(requires v1.13.17)** extract images from a PDF looping through its pages. It takes care of images with a transparency ("stencil") mask and also tries to identify and skip "irrelevant" images. Suppresses extracting the same image multiple times. You may also want to look at ``extract-imgb.py`` below.
