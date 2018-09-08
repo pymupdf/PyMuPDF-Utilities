@@ -37,7 +37,7 @@ from PIL import Image, ImageTk
 import time
 
 if len(sys.argv) == 1:
-    rc, fname = sg.GetFileBox('Document Browser', 'Document file to open',
+    rc, fname = sg.GetFileBox('Document Browser', 'Document file to open:',
                               file_types = (
                                             ("PDF Files",     "*.pdf"),
                                             ("XPS Files",     "*.*xps"),
@@ -58,18 +58,21 @@ if not fname:
 doc = fitz.open(fname)
 page_count = len(doc)
 
-# used for response time statistics only
-fitz_img_time = 0.0
-tk_img_time   = 0.0
-img_count     = 1
-
 # allocate storage for page display lists
 dlist_tab = [None] * page_count
 
 title = "PyMuPDF display of '%s', pages: %i" % (fname, page_count)
 
+#------------------------------------------------------------------------------
+# read the page data
+#------------------------------------------------------------------------------
 def get_page(pno, zoom = False, max_size = None, first = False):
-    """Return a PNG image for a document page number.
+    """Return a tkinter.PhotoImage or a PNG image for a document page number.
+    :arg int pno: 0-based page number
+    :arg zoom: top-left of old clip rect, and one of -1, 0, +1 for dim. x or y
+               to indicate the arrow key pressed
+    :arg max_size: (width, height) of available image area
+    :arg bool first: if True, we cannot use tkinter
     """
     dlist = dlist_tab[pno]   # get display list of page number
     if not dlist:            # create if not yet there
@@ -86,22 +89,21 @@ def get_page(pno, zoom = False, max_size = None, first = False):
             zoom_0 = min(max_size[0] / r.width, max_size[1] / r.height)
     mat_0 = fitz.Matrix(zoom_0, zoom_0)
 
-    if not zoom:             # show total page
+    if not zoom:                  # show the total page
         pix = dlist.getPixmap(matrix = mat_0, alpha=False)
     else:
-        mp = r.tl + (r.br - r.tl) * 0.5     # page rect center
-        w2 = r.width / 2
-        h2 = r.height / 2
-        clip = r * 0.5
-        tl = zoom[0]          # old top-left
-        tl.x += zoom[1] * (w2 / 2)
-        tl.x = max(0, tl.x)
-        tl.x = min(w2, tl.x)
-        tl.y += zoom[2] * (h2 / 2)
-        tl.y = max(0, tl.y)
-        tl.y = min(h2, tl.y)
+        w2 = r.width / 2          # we need these ...
+        h2 = r.height / 2         # a few times
+        clip = r * 0.5            # clip rect size is a quarter page
+        tl = zoom[0]              # old top-left
+        tl.x += zoom[1] * (w2 / 2)     # adjust topl-left ...
+        tl.x = max(0, tl.x)            # according to ...
+        tl.x = min(w2, tl.x)           # arrow key ...
+        tl.y += zoom[2] * (h2 / 2)     # provided, but ...
+        tl.y = max(0, tl.y)            # stay within ...
+        tl.y = min(h2, tl.y)           # the page rect
         clip = fitz.Rect(tl, tl.x + w2, tl.y + h2)
-
+        # clip rect is ready, now fill it
         mat = mat_0 * fitz.Matrix(2, 2)      # zoom matrix
         pix = dlist.getPixmap(alpha=False, matrix=mat, clip=clip)
 
@@ -112,30 +114,35 @@ def get_page(pno, zoom = False, max_size = None, first = False):
         img = ImageTk.PhotoImage(pilimg)
 
     return img, clip.tl           # return image, clip position
+#------------------------------------------------------------------------------
 
 
+#------------------------------------------------------------------------------
+# get physical screen dimension to determine the page image max size
+#------------------------------------------------------------------------------
 root = tk.Tk()
 max_width = root.winfo_screenwidth() - 20
 max_height = root.winfo_screenheight() - 135
 max_size = (max_width, max_height)
 root.destroy()
 del root
+#------------------------------------------------------------------------------
 
 form = sg.FlexForm(title, return_keyboard_events = True, 
                    location = (0,0), use_default_focus = False)
 
 cur_page = 0
-data, clip_pos = get_page(cur_page,
-                          zoom = False,
-                          max_size = max_size,
-                          first = True)
+data, clip_pos = get_page(cur_page,              # read first page
+                          zoom = False,          # not zooming yet
+                          max_size = max_size,   # image max dim
+                          first = True)          # no tkinter yet!
 
-image_elem = sg.Image(data = data)
+image_elem = sg.Image(data = data)               # make image element
 
 goto = sg.InputText(str(cur_page + 1), size=(5, 1), do_not_clear=True,
-                    key = "PageNumber")
+                    key = "PageNumber")          # for display & input
 
-layout = [
+layout = [                   # the form layout
     [
         sg.ReadFormButton('Next'),
         sg.ReadFormButton('Prior'),
@@ -148,57 +155,43 @@ layout = [
     [image_elem],
 ]
 
-form.Layout(layout)
+form.Layout(layout)          # define the form
 
-# now define the buttons / events we want to handle
+# define the buttons / events we want to handle
 def is_Enter(btn):
-    if btn.startswith("Return:"): return True
-    if btn == chr(13): return True
-    return False
+    return btn.startswith("Return:") or btn == chr(13)
 
 def is_Quit(btn):
-    if btn == chr(27): return True
-    if btn.startswith("Escape:"): return True
-    return False
+    return btn == chr(27) or btn.startswith("Escape:")
 
 def is_Next(btn):
-    if btn.startswith("Next"): return True
-    if btn == "MouseWheel:Down": return True
-    return False
+    return btn.startswith("Next") or btn == "MouseWheel:Down"
 
 def is_Prior(btn):
-    if btn.startswith("Prior"): return True
-    if btn ==  "MouseWheel:Up":  return True
-    return False
+    return btn.startswith("Prior") or btn ==  "MouseWheel:Up"
 
 def is_Up(btn):
-    if btn.startswith("Up:"):  return True
-    return False
+    return btn.startswith("Up:")
 
 def is_Down(btn):
-    if btn.startswith("Down:"):  return True
-    return False
+    return btn.startswith("Down:")
 
 def is_Left(btn):
-    if btn.startswith("Left:"):  return True
-    return False
+    return btn.startswith("Left:")
 
 def is_Right(btn):
-    if btn.startswith("Right:"):  return True
-    return False
+    return btn.startswith("Right:")
 
 def is_Zoom(btn):
-    if btn.startswith("Zoom"):  return True
-    return False
+    return btn.startswith("Zoom")
 
 def is_MyKeys(btn):
-    if any((is_Enter(btn), is_Next(btn),
-            is_Prior(btn), is_Zoom(btn))):
-        return True
-    return False
+    return any((is_Enter(btn), is_Next(btn),
+            is_Prior(btn), is_Zoom(btn)))
 
 # old page store and zoom toggle
 old_page = 0
+old_zoom = False
 zoom_active = False
 
 while True:
@@ -213,10 +206,8 @@ while True:
     if is_Enter(btn):
         try:
             cur_page = int(value['PageNumber']) - 1  # check if valid
-            while cur_page < 0:
-                cur_page += page_count
         except:
-            cur_page = 0  # this guy's trying to fool me
+            cur_page = 0                         # this guy's trying to fool me
 
     elif is_Next(btn):
         cur_page += 1
@@ -236,36 +227,22 @@ while True:
             zoom = (clip_pos, 0, 0)
 
     # sanitize page number
-    if cur_page >= page_count:  # wrap around
-        cur_page = 0
-    while cur_page < 0:         # pages > 0 look nicer
+    while cur_page >= page_count: # wrap around
+        cur_page -= page_count
+    while cur_page < 0:           # pages < 0 are valid but look bad
         cur_page += page_count
 
     if zoom_pressed and zoom_active:
         zoom = zoom_pressed = zoom_active = False
 
-    t0 = time.perf_counter()
     data, clip_pos = get_page(cur_page, zoom = zoom, max_size = max_size,
                               first = False)
-    t1 = time.perf_counter()
     image_elem.Update(data = data)
-    t2 = time.perf_counter()
-    fitz_img_time += t1 - t0
-    tk_img_time   += t2 - t1
-    img_count     += 1
     old_page = cur_page
+    old_zoom = zoom
     zoom_active = zoom_pressed or zoom
 
     # update page number field
     if is_MyKeys(btn):
         goto.Update(str(cur_page + 1))
 
-
-# print some response time statistics
-if img_count > 0:
-    print("response times for '%s'" % doc.name)
-    print("%.4f" % (fitz_img_time/img_count), "sec fitz avg. image time")
-    print("%.4f" % (tk_img_time/img_count), "sec tk avg. image time")
-    print("%.4f" % ((fitz_img_time + tk_img_time)/img_count), "sec avg. total time")
-    print(img_count, "images read")
-    print(page_count, "pages")
