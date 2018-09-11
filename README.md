@@ -24,3 +24,5 @@ Various utilities using PyMuPDF
 * **textboxtract.py** Shows how to extract text from from within a given rectangle. This works for **all document types** - not just PDF.
 
 * **show-no-annots.py** create a pixmap from a PDF page showing no annotations.
+
+* **form-fields.py** demo script: create a PDF with form fields.
