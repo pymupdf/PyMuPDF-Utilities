@@ -27,5 +27,5 @@ Various utilities using PyMuPDF
 
 * **form-fields.py** demo script: create a PDF with form fields.
 
-* **morph-demo1.py, morph-demo2.py, morph-demo3.py** scripts showing the functioning of ``morph`` parameter in text insertion. Their effects are being shown by [morphing.gif](https://github.com/JorjMcKie/PyMuPDF-Utilities/blob/master/morphing.gif).
+* **morph-demo1.py, morph-demo2.py, morph-demo3.py** are scripts showing the effect of the ``morph`` parameter in text insertions. Each script creates a PDF page, fills a  text box and then morphs that box using the box's uper as fixed point. The effects are being shown by [morphing.gif](https://github.com/JorjMcKie/PyMuPDF-Utilities/blob/master/morphing.gif).
 
