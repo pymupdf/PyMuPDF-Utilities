@@ -26,3 +26,5 @@ Various utilities using PyMuPDF
 * **show-no-annots.py** create a pixmap from a PDF page showing no annotations.
 
 * **form-fields.py** demo script: create a PDF with form fields.
+
+* **morph-demo1.py, morph-demo2.py, morph-demo3.py** scripts showing the functioning of ``morph`` parameter in text insertion. Their effects are being showed by 
