@@ -1,6 +1,8 @@
 # PyMuPDF-Utilities
 Various utilities using PyMuPDF
 
+* **morph-demo1.py, morph-demo2.py, morph-demo3.py** are scripts showing the effect of the ``morph`` parameter in text insertions. Each script creates a PDF page, fills a  text box and then morphs that box using the box's uper as fixed point. The effects are being shown by [morphing.gif](https://github.com/JorjMcKie/PyMuPDF-Utilities/blob/master/morphing.gif).
+
 * **all-my-pics-attached.py** - take all files from a given directory and **attach** them to pages (as *'FileAttachment'*) of a new PDF. Non-file entries of the directory will be skipped.
 
 * **all-my-pics-embedded.py** - take all files from a given directory and **embed** them (as *'EmbeddedFile'*) in a new PDF. Non-file entries of the directory will be skipped.
@@ -27,5 +29,6 @@ Various utilities using PyMuPDF
 
 * **form-fields.py** demo script: create a PDF with form fields.
 
-* **morph-demo1.py, morph-demo2.py, morph-demo3.py** are scripts showing the effect of the ``morph`` parameter in text insertions. Each script creates a PDF page, fills a  text box and then morphs that box using the box's uper as fixed point. The effects are being shown by [morphing.gif](https://github.com/JorjMcKie/PyMuPDF-Utilities/blob/master/morphing.gif).
+* **shapes_and_symbols.py** contains ca. 10 predefined symbols, which can be import and used in PDF page creation. If invoked standalone, a PDF is created with one page for each of the symbols.
 
+* **symbol-list.py** creates a list of symbols and their descriptions, which are implemented in *shapes_and_symbols.py*. This also demstrates the use of the module.

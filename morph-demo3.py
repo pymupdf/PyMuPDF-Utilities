@@ -1,6 +1,6 @@
 import os
 import fitz
-scriptdir = os.path.abspath(os.curdir)
+scriptdir = os.path.abspath(__file__)
 gold = (1,1,0)
 blue = (0,0,1)
 pagerect = fitz.Rect(0,0,400,400)
@@ -21,4 +21,4 @@ for beta in range(-10, 11):
     img.insertTextbox(r, text, fontsize=15, rotate=90, morph = (r.tl, mat))
     img.commit()
 
-doc = doc.save(os.path.join(scriptdir, __file__ + ".pdf"))
+doc.save(os.path.join(scriptdir, __file__ + ".pdf"))
