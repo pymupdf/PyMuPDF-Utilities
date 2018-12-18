@@ -261,7 +261,7 @@ def pencil(img, rect, right=True, morph=None):
     Pencil length will be 3.45 of pencil thickness (height), where the height
     will be chosen to not exceed rectangle height.
     """
-    if left:
+    if not right:
         tip = rect.tl + (rect.bl - rect.tl) * 0.5
     else:
         tip = rect.tr + (rect.br - rect.tr) * 0.5

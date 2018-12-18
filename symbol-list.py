@@ -17,16 +17,16 @@ import shapes_and_symbols as sas
 
 # list of available symbol functions and their descriptions
 tlist = [
-         (sas.arrow, "arrow"),
-         (sas.caro, "caro"),
-         (sas.clover, "clover"),
-         (sas.diamond, "diamond"),
-         (sas.dontenter, "do not enter"),
-         (sas.frowney, "frowney"),
-         (sas.hand, "hand"),
-         (sas.heart, "heart"),
-         (sas.pencil, "pencil"),
-         (sas.smiley, "smiley"),
+         (sas.arrow, "arrow (easy)"),
+         (sas.caro, "caro (easy)"),
+         (sas.clover, "clover (easy)"),
+         (sas.diamond, "diamond (easy)"),
+         (sas.dontenter, "do not enter (medium)"),
+         (sas.frowney, "frowney (medium)"),
+         (sas.hand, "hand (complex)"),
+         (sas.heart, "heart (easy)"),
+         (sas.pencil, "pencil (very complex)"),
+         (sas.smiley, "smiley (easy)"),
          ]
 
 r = fitz.Rect(50, 50, 100, 100)        # first rect to contain a symbol
