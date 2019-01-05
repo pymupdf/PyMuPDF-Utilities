@@ -1,7 +1,9 @@
 # PyMuPDF-Utilities
 Various utilities using PyMuPDF
 
-* **morph-demo1.py, morph-demo2.py, morph-demo3.py** are scripts showing the effect of the ``morph`` parameter in text insertions. Each script creates a PDF page, fills a  text box and then morphs that box using its upper left corner as fixed point. Each morphing result is put on a separate page. I have combined the effects of all three scripts here: [morphing.gif](https://github.com/JorjMcKie/PyMuPDF-Utilities/blob/master/morphing.gif).
+* **morph-demo1.py, morph-demo2.py, morph-demo3.py** are scripts showing the effect of the ``morph`` parameter in text insertions. Each script creates a PDF page, fills a  text box and then morphs that box using its upper left corner as fixed point. Each morphing result is put on a new PDF page and the resulting pixmap is shown in an endless loop. Now require PyMuPDF v1.14.5 and can be run with Python v2.7.
+
+* **quad-show1.py, quad-show2.py** require PyMuPDF v1.14.5 and can be run with Python v2.7. They demonstrate how the modified version of `drawOval` can be used to create a wide range of shapes, both displaying the results in an endless loop.
 
 * **all-my-pics-attached.py** - take all files from a given directory and **attach** them to pages (as *'FileAttachment'* annotations) of a new PDF. Non-file entries of the directory will be skipped.
 

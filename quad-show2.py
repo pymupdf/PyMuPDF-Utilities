@@ -7,17 +7,16 @@ Created on Thu Jan  3 07:05:17 2019
 
 Purpose
 --------
-Demonstrate the effect of morphing a text box. The morphing parameters are the
-box's top-left edge and a shearing matrix in y-axis direction.
+Visualize function "drawOval" by using a quadrilateral (tetrapod) as parameter.
 
 For demonstration purposes, text box creation is placed in a function, which 
-accepts the desired parameter as an integer value. This value, divided by 100,
-is used as the shearing value.
+accepts the desired parameter as float value. This value controls positioning
+the two lower egdes of the quad.
 It then creates a dummy temporary PDF with one page containing stuff we want
 to show. It returns a PNG image of this page.
 
 The function is called by the main program in an "endless" loop, passing in
-angles in range 0 to 360 degrees. The image is displayed using PySimpleGUI.
+float values. The image is displayed using PySimpleGUI.
 
 Notes
 ------
@@ -44,73 +43,67 @@ else:
     import PySimpleGUI27 as sg
     mytime = time.clock
 
-# define some global constants
-gold = (1,1,0)
-blue = (0,0,1)
-pagerect = fitz.Rect(0, 0, 400, 400)   # dimension of our image
-
-mp = fitz.Point(pagerect.width/2.,     # center of page
-                pagerect.height/2.)
-
-r = fitz.Rect(mp, mp + (80, 80))       # rext for text box
-
-text = "Just some demo text, to be filled in a rect."
-
-textpoint = fitz.Point(40, 50)         # start position of this text:
-itext = "Y-Shear Morphing:\nfitz.Matrix(0, %g, 1)"
-
 #------------------------------------------------------------------------------
 # make one page
 #------------------------------------------------------------------------------
-def make_page(beta):
-    """Create a dummy PDF with a page, put in a box filled with above text,
-    and also insert some explanation. Then x-shear the text box around
-    its top-left corner by given value beta. The resulting page's image
-    is returned as a PNG stream, and the PDF discarded again.
-    This functions execution time determines the overall "frames" per
-    second ration.
+def make_oval(f):
+    """Make a PDF page and draw an oval inside a Quad.
+    The upper left and the lower right quad points and the fill color are
+    subject to a passed-in parameter. Effectively, they exchange their position,
+    thus causing changes to the drawn shape.
+    The resulting page picture is passed back as a PNG image and the PDF is
+    discarded again. The execution speed of this function mainly determines
+    the number of "frames" shown per second.
     """
-    doc = fitz.open()
-    page = doc.newPage(width=pagerect.width, height=pagerect.height)
-    mat = fitz.Matrix(0, beta*0.01, 1)
-    img = page.newShape()
-    img.drawRect(r)
-    img.finish(fill=gold, color=blue, width=0.3, morph = (r.tl, mat))
-    img.insertText(textpoint, itext % (beta*0.01), fontname="cobo", fontsize=20)
-    img.insertTextbox(r, text, fontsize=15, rotate=90, morph = (r.tl, mat))
-    img.commit()
-    pix = page.getPixmap(alpha=False)
-    return pix.getImageData("pgm")
+    doc = fitz.open()                  # dummy PDF
+    page=doc.newPage(width=400,height=400)  # page dimensions as you like
+    q = page.rect.quad                 # full page rect as a quad
+    q1 = fitz.Quad(q.lr + (q.ul - q.lr) * f,     # upper left
+                   q.ur,
+                   q.ll,
+                   q.ul + (q.lr - q.ul) * f)     # lower right
+    # make an entertaining fill color - simulating rotation around
+    # a diagonal
+    c1=  min(1, f)
+    c3 = min(1, max(1-f, 0))
+    fill = (c1, 0, c3)
+    page.drawOval(q1, color=(0,0,1),   # blue border
+                  fill=fill,           # variable fill color
+                  width=0.3)           # border width
+    pix = page.getPixmap(alpha=False)  # make pixmap, no alpha
+    doc.close()                        # discard PDF again
+    return pix.getImageData("pgm")     # return a data stream
 
 #------------------------------------------------------------------------------
 # main program
 #------------------------------------------------------------------------------
-form = sg.FlexForm("Demo: Y-Shear-Morphing of a Text Box") # define form
-png = make_page(0)                     # create first picture
+form = sg.FlexForm("drawOval: diagonal points exchange position") # define form
+png = make_oval(0.)                    # create first picture
 img = sg.Image(data = png)             # define form image element
 layout = [[img]]                       # minimal layout
 form.Layout(layout)                    # layout the form
 
 loop_count = 1                         # count the number of loops
-t0 = mytime()               # start a timer
+t0 = mytime()                          # start a timer
 form.Show(non_blocking=True)           # and start showing it
 i = 0
 add = 1
 
 while True:                            # loop forever
-    png = make_page(i)                 # make next picture
+    png = make_oval(i/100.)            # make next picture
     try:                               # guard against form closure
         img.Update(data=png)           # put in new picture
     except:
         break                          # user is fed up seeing this
     form.Refresh()                     # show updated
     loop_count += 1                    # tally the loops
-    i += add
-    if i >= 150:
+    i += add                           # update the parameter
+    if i >= 100:                       # loop backwards from here
         add = -1
         continue
-    if i <= -150:
-        add = 1
+    if i <= 0:                          # loop forward again
+        add = +1
+        i = 0
 
 t1 = mytime()
 fps = round(loop_count / (t1 - t0), 1)
