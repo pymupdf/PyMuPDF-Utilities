@@ -1,14 +1,16 @@
 """
 @created: 2018-08-19 18:00:00
-@author: (c) 2018 Jorj X. McKie
+@author: (c) 2018-2019 Jorj X. McKie
 Display a PyMuPDF Document using Tkinter
 -------------------------------------------------------------------------------
 Dependencies:
 -------------
-PyMuPDF, PySimpleGUI (requires Python 3), Tkinter, PIL
+PyMuPDF v1.14.5+, PySimpleGUI, Tkinter
+
 License:
 --------
 GNU GPL V3+
+
 Description
 ------------
 Get filename and start displaying page 1. Please note that all file types
@@ -16,28 +18,34 @@ of MuPDF are supported (including EPUB e-books and HTML files for example).
 Pages can be directly jumped to, or buttons can be used for paging.
 
 This version contains enhancements:
-* Use of PIL improves response times by a factor 3 or more.
-* Zooming is now flexible: only one button serves as a toggle. Arrow keys can
-  be used for moving the window when zooming.
+* PIL no longer needed
+* Zooming is now flexible: only one button serves as a toggle. Keyboard arrow keys can
+  be used for moving through the window when zooming.
 
 We also interpret keyboard events (PageDown / PageUp) and mouse wheel actions
 to support paging as if a button was clicked. Similarly, we do not include
 a 'Quit' button. Instead, the ESCAPE key can be used, or cancelling the form.
 To improve paging performance, we are not directly creating pixmaps from
-pages, but instead from the fitz.DisplayList of the page. A display list
+pages, but instead from the fitz.DisplayList of the page. Each display list
 will be stored in a list and looked up by page number. This way, zooming
 pixmaps and page re-visits will re-use a once-created display list.
 
 """
 import sys
 import fitz
-import PySimpleGUI as sg
-import tkinter as tk
-from PIL import Image, ImageTk
-import time
+if not list(map(int, fitz.VersionBind.split("."))) >= [1, 14, 5]:
+    raise SystemExit("need PyMuPDF v1.14.5 for this script")
+
+py2 = str is bytes           # this is Python 2!
+if not py2:
+    import PySimpleGUI as sg
+    import tkinter as tk
+else:
+    import PySimpleGUI27 as sg
+    import Tkinter as tk
 
 if len(sys.argv) == 1:
-    rc, fname = sg.GetFileBox('Document Browser', 'Document file to open:',
+    fname = sg.PopupGetFile('Select file and filetype to open:', title='Document Browser',
                               file_types = (
                                             ("PDF Files",     "*.pdf"),
                                             ("XPS Files",     "*.*xps"),
@@ -66,7 +74,7 @@ title = "PyMuPDF display of '%s', pages: %i" % (fname, page_count)
 #------------------------------------------------------------------------------
 # read the page data
 #------------------------------------------------------------------------------
-def get_page(pno, zoom = False, max_size = None, first = False):
+def get_page(pno, zoom = False, max_size = None):
     """Return a tkinter.PhotoImage or a PNG image for a document page number.
     :arg int pno: 0-based page number
     :arg zoom: top-left of old clip rect, and one of -1, 0, +1 for dim. x or y
@@ -107,12 +115,7 @@ def get_page(pno, zoom = False, max_size = None, first = False):
         mat = mat_0 * fitz.Matrix(2, 2)      # zoom matrix
         pix = dlist.getPixmap(alpha=False, matrix=mat, clip=clip)
 
-    if first:                     # first call: tkinter still inactive
-        img = pix.getPNGData()    # so use fitz png output
-    else:                         # else take tk photo image
-        pilimg = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
-        img = ImageTk.PhotoImage(pilimg)
-
+    img = pix.getImageData("pgm") # make PPM/PGM image from pixmap for tkinter
     return img, clip.tl           # return image, clip position
 #------------------------------------------------------------------------------
 
@@ -135,7 +138,7 @@ cur_page = 0
 data, clip_pos = get_page(cur_page,              # read first page
                           zoom = False,          # not zooming yet
                           max_size = max_size,   # image max dim
-                          first = True)          # no tkinter yet!
+                          )
 
 image_elem = sg.Image(data = data)               # make image element
 
@@ -235,8 +238,7 @@ while True:
     if zoom_pressed and zoom_active:
         zoom = zoom_pressed = zoom_active = False
 
-    data, clip_pos = get_page(cur_page, zoom = zoom, max_size = max_size,
-                              first = False)
+    data, clip_pos = get_page(cur_page, zoom = zoom, max_size = max_size)
     image_elem.Update(data = data)
     old_page = cur_page
     old_zoom = zoom
