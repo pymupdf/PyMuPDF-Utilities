@@ -45,7 +45,7 @@ else:
     import Tkinter as tk
 
 if len(sys.argv) == 1:
-    fname = sg.PopupGetFile('Select file and filetype to open:', title='Document Browser',
+    fname = sg.PopupGetFile('Select file and filetype to open:', title='PyMuPDF Document Browser',
                               file_types = (
                                             ("PDF Files",     "*.pdf"),
                                             ("XPS Files",     "*.*xps"),
