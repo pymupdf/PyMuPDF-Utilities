@@ -115,7 +115,7 @@ def get_page(pno, zoom = False, max_size = None):
         mat = mat_0 * fitz.Matrix(2, 2)      # zoom matrix
         pix = dlist.getPixmap(alpha=False, matrix=mat, clip=clip)
 
-    img = pix.getImageData("pgm") # make PPM/PGM image from pixmap for tkinter
+    img = pix.getImageData("ppm") # make PPM image from pixmap for tkinter
     return img, clip.tl           # return image, clip position
 #------------------------------------------------------------------------------
 

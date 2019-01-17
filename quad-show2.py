@@ -11,22 +11,19 @@ Visualize function "drawOval" by using a quadrilateral (tetrapod) as parameter.
 
 For demonstration purposes, text box creation is placed in a function, which 
 accepts the desired parameter as float value. This value controls positioning
-the two lower egdes of the quad.
-It then creates a dummy temporary PDF with one page containing stuff we want
-to show. It returns a PNG image of this page.
+some egdes of the quad.
+It then creates a dummy temporary PDF with one page, containing stuff we want
+to show and returns an image of it.
 
 The function is called by the main program in an "endless" loop, passing in
 float values. The image is displayed using PySimpleGUI.
 
 Notes
 ------
-* We are using Tkinter's capability to directly accept PNG image streams, which
-  is supported since version Tk 8.6.
-
-* Significant speed improvements at creating Tkinter PhotoImage objects can be
-  achieved be using Pillow / PIL instead of Tkinter's own support.
-
-* We are not slowing down the speed of showing new images (i.a.w. "frames per
+* Changed generated page image format to "PPM", which is very much faster than
+  "PNG" both, in terms of creation and reading by tkinter. It also makes us
+  independent from the tkinter version used.
+* We are not slowing down the speed of showing new images (= "frames per
   second"). The statistics displayed at end of program can hence be used as a
   performance indicator.
 """
@@ -57,7 +54,8 @@ def make_oval(f):
     """
     doc = fitz.open()                  # dummy PDF
     page=doc.newPage(width=400,height=400)  # page dimensions as you like
-    q = page.rect.quad                 # full page rect as a quad
+    r = page.rect + (4,4,-4,-4)
+    q = r.quad                 # full page rect as a quad
     q1 = fitz.Quad(q.lr + (q.ul - q.lr) * f,     # upper left
                    q.ur,
                    q.ll,
