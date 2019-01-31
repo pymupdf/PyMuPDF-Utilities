@@ -1,7 +1,7 @@
 from __future__ import print_function
 import fitz
 import os, sys, time
-import PySimpleGUI as psg    # show a pogress  meter with this
+import PySimpleGUI as sg    # show a pogress  meter with this
 """
 This demo extracts all images of a PDF as PNG files, whether they are
 referenced by pages or not.
@@ -35,9 +35,6 @@ PyMuPDF v1.13.17+
 
 if not tuple(map(int, fitz.version[0].split("."))) >= (1, 13, 17):
     raise SystemExit("require PyMuPDF v1.13.17+")
-
-if not len(sys.argv) == 2:
-    raise SystemExit("usage: extract_img.py input.pdf")
 
 dimlimit = 100      # each image side must be greater than this
 relsize  = 0.05     # image : pixmap size ratio must be larger than this (5%)
@@ -83,7 +80,13 @@ def recoverpix(doc, xref, item):
 # Main Program
 #------------------------------------------------------------------------------
 
-fname = sys.argv[1] # file name
+fname = sys.argv[1] if len(sys.argv) == 2 else None
+if not fname:
+    fname = sg.PopupGetFile('Select file:',
+                            title='PyMuPDF PDF Image Extraction')
+if not fname:
+    raise SystemExit()
+
 fpref = "img"
 doc = fitz.open(fname)
 img_ocnt = 0
@@ -101,7 +104,7 @@ smasks = [] # stores xrefs of /SMask objects
 # loop through PDF images
 #------------------------------------------------------------------------------
 for xref in range(1, lenXREF):         # scan through all PDF objects
-    psg.EasyProgressMeter("Extract Images",   # show our progress
+    sg.QuickMeter("Extract Images",   # show our progress
         xref, lenXREF, "*** Scanning Cross Reference ***")
 
     if xref in smasks:                 # ignore smasks

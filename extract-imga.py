@@ -1,7 +1,7 @@
 from __future__ import print_function
 import os, sys, time
 import fitz
-import PySimpleGUI as psg
+import PySimpleGUI as sg
 """
 PyMuPDF utility
 ----------------
@@ -56,8 +56,14 @@ def recoverpix(doc, item):
     # we may need to adjust something for CMYK pixmaps here:
     return getimage(pix)
 
+fname = sys.argv[1] if len(sys.argv) == 2 else None
+if not fname:
+    fname = sg.PopupGetFile('Select file:',
+                            title='PyMuPDF PDF Image Extraction')
+if not fname:
+    raise SystemExit()
+
 t0 = time.time()
-fname = sys.argv[1]
 doc = fitz.open(fname)
 
 page_count = len(doc)                       # number of pages
@@ -65,7 +71,7 @@ page_count = len(doc)                       # number of pages
 xreflist = []
 imglist = []
 for pno in range(page_count):
-    psg.EasyProgressMeter("Extract Images",   # show our progress
+    sg.QuickMeter("Extract Images",   # show our progress
         pno + 1, page_count, "*** Scanning Pages ***")
 
     il = doc.getPageImageList(pno)

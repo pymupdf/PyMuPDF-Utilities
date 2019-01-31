@@ -23,9 +23,9 @@ Various utilities using PyMuPDF
 
 * **layout-analyzer.py** - create an output PDF for a given PDF with text and graphics layout analysis. Each text and graphics block is surrounded by a rectangle (graphics content is not shown, only some metadata). Output PDF has page dimensions of the input's /MediaBox. The input's /CropBox is indicated by a gray background rectangle - see example files in this repo: demo1.pdf and layout-demo1.pdf.
 
-* **clean-cont.py** - **(requires v1.13.5)** Inspect PDF pages whether any have multiple /Contents objects. If not, exit immediately. If **yes**, check if any contents are shared between pages. If **yes**, save the the document using the "clean" option and exit. If **not,**  join multiple page contents into one and save with option "garbage=3" (which remove now unused objects).
+* **clean-cont.py** - **(requires v1.13.5)** Inspect PDF pages whether any have multiple /Contents objects. If not, exit immediately. If **yes**, check if any contents are shared between pages. If **yes**, save the document using the "clean" option and exit. If **not,**  join multiple page contents into one and save with option "garbage=3" (which removes now unused objects).
 
-* **textboxtract.py** Shows how to extract text from from within a given rectangle. This works for **all document types** - not just PDF.
+* **textboxtract.py** Shows how to extract the text from within a given rectangle. This works for **all document types** - not just PDF.
 
 * **show-no-annots.py** create a pixmap from a PDF page showing **no annotations**.
 
@@ -34,6 +34,12 @@ Various utilities using PyMuPDF
 * **shapes_and_symbols.py** contains ca. 10 predefined symbols, which can be imported and used in PDF page creation. If invoked standalone, a PDF is created with one page per each of the symbols.
 
 * **symbol-list.py** creates a list of symbols and their descriptions, which are implemented in **shapes_and_symbols.py** -- thus also demonstrating how to use this module.
+
+* **sierpinski-fitz.py** demonstrates the use of ``Pixmaps`` be creating Sierpinski's carpet (a fractal).
+
+* **sierpinski-punch.py** does the same thing, but this time uses a more intuitive recursive function.
+
+* the **animations** folder contains more examples which all display some animation in endless loops. If you have installed PyMuPDF and PySimpleGUI, you can execute any of them rightaway.
 
 --------------------------------------------
 If you find my work for PyMuPDF useful, you might consider a PayPal donation:
