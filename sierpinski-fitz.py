@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 """
 Created on Wed Jan 30 07:00:00 2019
 
@@ -29,39 +31,45 @@ The time required to save the resulting PNG image very much depends on image
 
 """
 import fitz, time
+
+print(fitz.__doc__)
+
 if not list(map(int, fitz.VersionBind.split("."))) >= [1, 14, 7]:
     raise SystemExit("need PyMuPDF v1.14.8 for this script")
 
-n = 6
-d = 3**n                          # edge length
+mytime = time.clock if str is bytes else time.perf_counter
 
-t0 = time.perf_counter()
-ir = (0, 0, d, d)                 # the pixmap rectangle
+n = 6
+d = 3 ** n  # edge length
+
+t0 = mytime()
+ir = (0, 0, d, d)  # the pixmap rectangle
 
 pm = fitz.Pixmap(fitz.csRGB, ir, False)
-pm.setRect(pm.irect, (255,255,0)) # fill it with some background color
+pm.setRect(pm.irect, (255, 255, 0))  # fill it with some background color
 
-color = (0, 0, 255)               # color to fill the punch holes
+color = (0, 0, 255)  # color to fill the punch holes
 
 # define 'fill' pixmap for the punch holes
-fill = fitz.Pixmap(pm,0)          # copy pm
-fill.invertIRect(fill.irect)      # inverted colors of pm
+fill = fitz.Pixmap(pm, 0)  # copy pm
+fill.invertIRect(fill.irect)  # inverted colors of pm
 
 for lvl in range(0, n + 1):
-    step = 3**(n - lvl)
-    for x in range(0, 3**lvl):
+    step = 3 ** (n - lvl)
+    for x in range(0, 3 ** lvl):
         x0 = x * step
         if x % 3 == 1:
-            for y in range(0, 3**lvl):
+            for y in range(0, 3 ** lvl):
                 y0 = y * step
                 if y % 3 == 1:
-                    #pm.setRect((y0, x0, y0 + step, x0 + step), color)
+                    # pm.setRect((y0, x0, y0 + step, x0 + step), color)
                     pm.copyPixmap(fill, (y0, x0, y0 + step, x0 + step))
 
-t1 = time.perf_counter()
+t1 = mytime()
 pm.writeImage("sierpinski-fitz.png")
-t2 = time.perf_counter()
+t2 = mytime()
 print("Sierpinski's carpet fitz")
 print("------------------------")
-print("%g sec filling the pixmap" % round(t1-t0,3))
-print("%g sec saving the picture" % round(t2-t1,3))
+print("%g sec filling the pixmap" % round(t1 - t0, 3))
+print("%g sec saving the picture" % round(t2 - t1, 3))
+

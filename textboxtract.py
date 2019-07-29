@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 """
 Script showing how to select only text that is contained in a given rectangle
 on a page.
@@ -20,11 +22,12 @@ Remarks
 2. Reconstructed lines will contain words with exactly one space between them.
    So any original multiple spaces will be ignored.
 """
-from operator import itemgetter 
+from operator import itemgetter
 from itertools import groupby
 import fitz
-doc = fitz.open("<some.file>")     # any supported document type
-page = doc[pno]                    # we want text from this page
+
+doc = fitz.open("<some.file>")  # any supported document type
+page = doc[pno]  # we want text from this page
 
 """
 -------------------------------------------------------------------------------
@@ -33,9 +36,9 @@ search strings are chosen to be unique, to make our case work.
 The two returned rectangle lists both have only one item.
 -------------------------------------------------------------------------------
 """
-rl1 = page.searchFor("Die Altersübereinstimmung") # rect list one
-rl2 = page.searchFor("Bombardement durch.")       # rect list two
-rect = rl1[0] | rl2[0]       # union rectangle
+rl1 = page.searchFor("Die Altersübereinstimmung")  # rect list one
+rl2 = page.searchFor("Bombardement durch.")  # rect list two
+rect = rl1[0] | rl2[0]  # union rectangle
 # Now we have the rectangle ---------------------------------------------------
 
 """
@@ -48,20 +51,20 @@ words = page.getTextWords()
 # We subselect from above list.
 
 # Case 1: select the words fully contained in rect
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 mywords = [w for w in words if fitz.Rect(w[:4]) in rect]
-mywords.sort(key = itemgetter(3, 0))   # sort by y1, x0 of the word rect
-group = groupby(mywords, key = itemgetter(3))
+mywords.sort(key=itemgetter(3, 0))  # sort by y1, x0 of the word rect
+group = groupby(mywords, key=itemgetter(3))
 print("Select the words strictly contained in rectangle")
 print("------------------------------------------------")
 for y1, gwords in group:
     print(" ".join(w[4] for w in gwords))
 
 # Case 2: select the words which at least intersect the rect
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 mywords = [w for w in words if fitz.Rect(w[:4]).intersects(rect)]
-mywords.sort(key = itemgetter(3, 0))
-group = groupby(mywords, key = itemgetter(3))
+mywords.sort(key=itemgetter(3, 0))
+group = groupby(mywords, key=itemgetter(3))
 print("\nSelect the words intersecting the rectangle")
 print("-------------------------------------------")
 for y1, gwords in group:

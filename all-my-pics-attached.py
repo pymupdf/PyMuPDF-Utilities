@@ -21,36 +21,38 @@ Take all files from a directory and attach them to pages in a new PDF.
 from __future__ import print_function
 import os, time, sys, fitz
 
+print(fitz.__doc__)
 # do some adjustments whether Python v2 or v3
 if str is not bytes:
     import PySimpleGUI as psg
+
     mytime = time.perf_counter
 else:
     mytime = time.clock
 
 rc = False
 if str is bytes:
-    imgdir = sys.argv[1]               # where my files are
+    imgdir = sys.argv[1]  # where my files are
 else:
-    rc, imgdir = psg.GetPathBox("Make a PDF from Attached Files",
-                                "Enter file directory:")
+    imgdir = psg.PopupGetFolder(
+        "Make a PDF from Attached Files", "Enter file directory:"
+    )
 
 if not imgdir:
     raise SystemExit()
 
-t0 = mytime()                          # set start timer
+t0 = mytime()  # set start timer
 
-width, height = fitz.PaperSize("a6-l") # get paper format
+width, height = fitz.PaperSize("a6-l")  # get paper format
 
-doc = fitz.open()                      # open empty PDF
-page = doc.newPage(width = width,      # make new page
-                   height = height)
+doc = fitz.open()  # open empty PDF
+page = doc.newPage(width=width, height=height)  # make new page
 
 # define sub rect to receive text and annotation symbols
 rect = fitz.Rect(0, 0, width, height) + (36, 36, -36, -36)
 
-imglist = os.listdir(imgdir)           # directory listing
-imgcount = len(imglist)                # number of files
+imglist = os.listdir(imgdir)  # directory listing
+imgcount = len(imglist)  # number of files
 
 # calculate number of pages we will create
 per_page = ((width - 72) // 25) * ((height - 36 - 56) // 35)
@@ -64,31 +66,30 @@ pno = 1
 page.insertText(rect.tl, text)
 page.insertText(rect.bl, "Page %i of %i" % (pno, pages))
 
-point = rect.tl + (0, 20)              # insertion point of first symbol
+point = rect.tl + (0, 20)  # insertion point of first symbol
 
 for i, f in enumerate(imglist):
-    path = os.path.join(imgdir,f)
+    path = os.path.join(imgdir, f)
     if not os.path.isfile(path):
         print("skipping non-file '%s'!" % f)
         continue
 
-    if str is not bytes:               # show progress meter if Python v3
-        psg.EasyProgressMeter("Attaching Files",
-                               i+1, imgcount,
-                               "dir: " + imgdir,
-                               "file: " + f)
+    if str is not bytes:  # show progress meter if Python v3
+        psg.OneLineProgressMeter(
+            "Attaching Files", i + 1, imgcount, "dir: " + imgdir, "file: " + f
+        )
     else:
-        print("attaching file '%s', (%i / %i)" % (f, i+1, imgcount))
+        print("attaching file '%s', (%i / %i)" % (f, i + 1, imgcount))
 
-    img = open(path, "rb").read()                # file content
-    page.addFileAnnot(point, img, filename=f)    # add as attachment
+    img = open(path, "rb").read()  # file content
+    page.addFileAnnot(point, img, filename=f)  # add as attachment
 
-    point += (25, 0)                   # position of next symbol
-    if point.x >= rect.width:          # beyond right limit?
-        point = fitz.Point(rect.x0, point.y + 35)     # start next line
-    if point.y >= rect.height and i < imgcount -1:    # beyond bottom limit?
+    point += (25, 0)  # position of next symbol
+    if point.x >= rect.width:  # beyond right limit?
+        point = fitz.Point(rect.x0, point.y + 35)  # start next line
+    if point.y >= rect.height and i < imgcount - 1:  # beyond bottom limit?
         # prepare another page
-        page = doc.newPage(width = width, height = height)
+        page = doc.newPage(width=width, height=height)
         pno += 1
         page.insertText(rect.tl, text)
         page.insertText(rect.bl, "Page %i of %i" % (pno, pages))
@@ -96,4 +97,5 @@ for i, f in enumerate(imglist):
 
 doc.save("all-my-pics-attached.pdf")
 t1 = mytime()
-print("%g" % (t1-t0), "sec processing time")
+print("%g" % round(t1 - t0, 3), "sec processing time")
+

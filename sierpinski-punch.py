@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 """
 Created on Wed Jan 30 07:00:00 2019
 
@@ -29,48 +31,58 @@ The time required to save the resulting PNG image very much depends on image
 
 """
 import fitz, time
+
+print(fitz.__doc__)
+
 if not list(map(int, fitz.VersionBind.split("."))) >= [1, 14, 8]:
     raise SystemExit("need PyMuPDF v1.14.8 for this script")
-n = 6
-d = 3**n                          # edge length
 
-t0 = time.perf_counter()
-ir = (0, 0, d, d)                 # the pixmap rectangle
+mytime = time.clock if str is bytes else time.perf_counter
+
+n = 6
+d = 3 ** n  # edge length
+
+t0 = mytime()
+ir = (0, 0, d, d)  # the pixmap rectangle
 
 pm = fitz.Pixmap(fitz.csRGB, ir, False)
-pm.setRect(pm.irect, (255,255,0)) # fill it with some background color
+pm.setRect(pm.irect, (255, 255, 0))  # fill it with some background color
 
-color = (0, 0, 255)               # color to fill the punch holes
+color = (0, 0, 255)  # color to fill the punch holes
 
 # define 'fill' pixmap for the punch holes
 fill = fitz.Pixmap(pm, pm.alpha)  # copy pm
-fill.invertIRect()                # inverted colors of pm
+fill.invertIRect()  # inverted colors of pm
+
 
 def punch(x, y, step):
     """Recursively "punch a hole" in the central square of a d x d pixmap.
     """
-    s = step // 3                 # the new step
+    s = step // 3  # the new step
     # iterate through the 9 sub-squares
     # the central one will be filled with the color
     for i in range(3):
         for j in range(3):
             if i != j or i != 1:
-                if s >= 3:        # else prevent going down another level
-                    punch(x+i*s, y+j*s, s)
+                if s >= 3:  # else prevent going down another level
+                    punch(x + i * s, y + j * s, s)
             else:
-                pm.setRect((x+s, y+s, x+2*s, y+2*s), color)
-                #pm.copyPixmap(fill, (x+s, y+s, x+2*s, y+2*s))
-                #pm.invertIRect((x+s, y+s, x+2*s, y+2*s))
+                pm.setRect((x + s, y + s, x + 2 * s, y + 2 * s), color)
+                # pm.copyPixmap(fill, (x+s, y+s, x+2*s, y+2*s))
+                # pm.invertIRect((x+s, y+s, x+2*s, y+2*s))
 
     return
 
-#==============================================================================
+
+# ==============================================================================
 # main program
-#==============================================================================
+# ==============================================================================
 # now start punching holes into the pixmap
 punch(0, 0, d)
-t1 = time.perf_counter()
+t1 = mytime()
 pm.writeImage("sierpinski-punch.png")
-t2 = time.perf_counter()
-print ("%g sec to create / fill the pixmap" % round(t1-t0,3))
-print ("%g sec to save the image" % round(t2-t1,3))
+t2 = mytime()
+print("Sierpinski's carpet 'punch'")
+print("---------------------------")
+print("%g sec to create / fill the pixmap" % round(t1 - t0, 3))
+print("%g sec to save the image" % round(t2 - t1, 3))
