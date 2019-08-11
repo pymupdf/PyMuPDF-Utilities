@@ -10,7 +10,7 @@ Purpose
 Demonstrate the effect of morphing a text box. The morphing parameters are the
 box's top-left edge and a shearing matrix in x-axis direction.
 
-For demonstration purposes, text box creation is placed in a function, which 
+For demonstration purposes, text box creation is placed in a function, which
 accepts the desired parameter as an integer value. This value, divided by 100,
 is used as the shearing value.
 It then creates a dummy temporary PDF with one page containing stuff we want
@@ -31,37 +31,39 @@ Notes
   second"). The statistics displayed at end of program can hence be used as a
   performance indicator.
 """
-import time
+import time, os
 import fitz
+
 if not list(map(int, fitz.VersionBind.split("."))) >= [1, 14, 5]:
     raise SystemExit("need PyMuPDF v1.14.5 for this script")
 
 py2 = str is bytes
 if not py2:
     import PySimpleGUI as sg
+
     mytime = time.perf_counter
 else:
     import PySimpleGUI27 as sg
+
     mytime = time.clock
 
 # define some global constants
-gold = (1,1,0)
-blue = (0,0,1)
-pagerect = fitz.Rect(0, 0, 400, 400)   # dimension of our image
+gold = (1, 1, 0)
+blue = (0, 0, 1)
+pagerect = fitz.Rect(0, 0, 400, 400)  # dimension of our image
 
-mp = fitz.Point(pagerect.width/2.,     # center of the page
-                pagerect.height/2.)
+mp = fitz.Point(pagerect.width / 2.0, pagerect.height / 2.0)  # center of the page
 
-r = fitz.Rect(mp, mp + (80, 80))       # rext for text box
+r = fitz.Rect(mp, mp + (80, 80))  # rext for text box
 
 text = "Just some demo text, to be filled in a rect."
 
-textpoint = fitz.Point(40, 50)         # start position of this text:
+textpoint = fitz.Point(40, 50)  # start position of this text:
 itext = "X-Shear Morphing:\nfitz.Matrix(%g, 0, 1)"
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # make one page
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 def make_page(beta):
     """Create a dummy PDF with a page, put in a box filled with above text,
     and also insert some explanation. Then x-shear the text box around
@@ -75,36 +77,37 @@ def make_page(beta):
     mat = fitz.Matrix(beta * 0.01, 0, 1)
     img = page.newShape()
     img.drawRect(r)
-    img.finish(fill=gold, color=blue, width=0.3, morph = (r.tl, mat))
-    img.insertText(textpoint, itext % (beta*0.01), fontname="cobo", fontsize=20)
-    img.insertTextbox(r, text, fontsize=15, rotate=90, morph = (r.tl, mat))
+    img.finish(fill=gold, color=blue, width=0.3, morph=(r.tl, mat))
+    img.insertText(textpoint, itext % (beta * 0.01), fontname="cobo", fontsize=20)
+    img.insertTextbox(r, text, fontsize=15, rotate=90, morph=(r.tl, mat))
     img.commit()
     pix = page.getPixmap(alpha=False)
     return pix.getImageData("pgm")
 
-#------------------------------------------------------------------------------
-# main program
-#------------------------------------------------------------------------------
-form = sg.FlexForm("Demo: X-Shear-Morphing of a Text Box") # define form
-png = make_page(0)                     # create first picture
-img = sg.Image(data = png)             # define form image element
-layout = [[img]]                       # minimal layout
-form.Layout(layout)                    # layout the form
 
-loop_count = 1                         # count the number of loops
-t0 = mytime()               # start a timer
-form.Show(non_blocking=True)           # and start showing it
+# ------------------------------------------------------------------------------
+# main program
+# ------------------------------------------------------------------------------
+form = sg.FlexForm("Demo: X-Shear-Morphing of a Text Box")  # define form
+png = make_page(0)  # create first picture
+img = sg.Image(data=png)  # define form image element
+layout = [[img]]  # minimal layout
+form.Layout(layout)  # layout the form
+
+loop_count = 1  # count the number of loops
+t0 = mytime()  # start a timer
+form.Show(non_blocking=True)  # and start showing it
 i = 0
 add = 1
 
-while True:                            # loop forever
-    png = make_page(i)                 # make next picture
-    try:                               # guard against form closure
-        img.Update(data=png)           # put in new picture
+while loop_count < 5000:  # loop forever
+    png = make_page(i)  # make next picture
+    try:  # guard against form closure
+        img.Update(data=png)  # put in new picture
     except:
-        break                          # user is fed up seeing this
-    form.Refresh()                     # show updated
-    loop_count += 1                    # tally the loops
+        break  # user is fed up seeing this
+    form.Refresh()  # show updated
+    loop_count += 1  # tally the loops
     i += add
     if i >= 150:
         add = -1
@@ -114,7 +117,5 @@ while True:                            # loop forever
 
 t1 = mytime()
 fps = round(loop_count / (t1 - t0), 1)
-sg.Popup("This was shown with %g frames per second." % fps,
-         title="Statistics",
-         auto_close=True,
-         auto_close_duration=5)
+script = os.path.basename(__file__)
+print("'%s' was shown with %g frames per second." % (script, fps))

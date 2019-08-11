@@ -32,7 +32,7 @@ Notes
   second"). The statistics displayed at end of program can hence be used as a
   performance indicator.
 """
-import time
+import time, os
 import fitz
 
 if not list(map(int, fitz.VersionBind.split("."))) >= [1, 14, 5]:
@@ -101,7 +101,7 @@ form.Show(non_blocking=True)  # start showing pages
 i = 0  # control the rotation angle
 add = 1
 
-while True:  # loop forever
+while loop_count < 5000:  # loop forever
     png = make_page(i)  # make next picture
     try:  # guard against form closure
         img.Update(data=png)  # put in new picture
@@ -117,10 +117,5 @@ while True:  # loop forever
 
 t1 = mytime()
 fps = round(loop_count / (t1 - t0), 1)
-sg.Popup(
-    "This was shown with %g frames per second." % fps,
-    title="Statistics",
-    auto_close=True,
-    auto_close_duration=5,
-)
-
+script = os.path.basename(__file__)
+print("'%s' was shown with %g frames per second." % (script, fps))
