@@ -294,7 +294,7 @@ def _pencil(img, penciltip, pb_height, left=True, morph = None):
     # we specify oneof(lp, rp), delivering either lp or rp. Likewise,
     # variable 's' is used as a sign and is either +1 or -1.
     #---------------------------------------------------------------------------
-    w = pb_height * 0.01                         # standard line thickness
+    w = pb_height * 0.005                         # standard line thickness
     pb_width  = 2 * pb_height                    # pencil body width
     myfinish = partial(img.finish, width = w, morph = morph, closePath = False)
     oneof = lambda l, r: l if left else r        # choose an alternative

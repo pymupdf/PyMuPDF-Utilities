@@ -73,4 +73,3 @@ img.drawCircle(center, radius - 70)
 img.finish(color=white, fill=white)
 img.commit()
 doc.save("piechart2.pdf")
-

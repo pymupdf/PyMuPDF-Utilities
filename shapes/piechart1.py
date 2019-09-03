@@ -66,4 +66,3 @@ for i, c in enumerate(table):
 
 img.commit()
 doc.save("piechart1.pdf")
-

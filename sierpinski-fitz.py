@@ -34,7 +34,7 @@ import fitz, time
 
 print(fitz.__doc__)
 
-if not list(map(int, fitz.VersionBind.split("."))) >= [1, 14, 7]:
+if not list(map(int, fitz.VersionBind.split("."))) >= [1, 14, 8]:
     raise SystemExit("need PyMuPDF v1.14.8 for this script")
 
 mytime = time.clock if str is bytes else time.perf_counter

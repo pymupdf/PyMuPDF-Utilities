@@ -17,6 +17,7 @@ as bullet-point symbols in some text.
 import fitz
 import shapes_and_symbols as sas
 
+print(fitz.__doc__)
 # list of available symbol functions and their descriptions
 tlist = [
     (sas.arrow, "arrow (easy)"),

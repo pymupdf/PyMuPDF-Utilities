@@ -48,34 +48,37 @@ else:
 # ------------------------------------------------------------------------------
 def make_oval(f):
     """Make a PDF page and draw an oval inside a Quad.
-    The lower two quad points and the fill color are subject to a passed-in
-    parameter. Effectively, they exchange their position, thus causing
-    changes to the drawn shape.
-    The resulting page picture is passed back as an image and the PDF is
-    dicarded again.
+    The upper left and the lower right quad points and the fill color are
+    subject to a passed-in parameter. Effectively, they exchange their position,
+    thus causing changes to the drawn shape.
+    The resulting page picture is passed back as a PNG image and the PDF is
+    discarded again. The execution speed of this function mainly determines
+    the number of "frames" shown per second.
     """
     doc = fitz.open()  # dummy PDF
     page = doc.newPage(width=400, height=400)  # page dimensions as you like
     r = page.rect + (4, 4, -4, -4)
     q = r.quad  # full page rect as a quad
-    q1 = fitz.Quad(q.ul, q.ur, q.ll + (q.lr - q.ll) * f, q.ll + (q.lr - q.ll) * (1 - f))
-    # make an entertaining fill color
+    q1 = fitz.Quad(
+        q.lr + (q.ul - q.lr) * f, q.ur, q.ll, q.ul + (q.lr - q.ul) * f  # upper left
+    )  # lower right
+    # make an entertaining fill color - simulating rotation around
+    # a diagonal
     c1 = min(1, f)
     c3 = min(1, max(1 - f, 0))
-    c2 = c1 * c3
-    fill = (c1, c2, c3)
+    fill = (c1, 0, c3)
     page.drawOval(
         q1, color=(0, 0, 1), fill=fill, width=0.3  # blue border  # variable fill color
     )  # border width
     pix = page.getPixmap(alpha=False)  # make pixmap, no alpha
     doc.close()  # discard PDF again
-    return pix.getImageData("ppm")  # return a PGM image of the page
+    return pix.getImageData("pgm")  # return a data stream
 
 
 # ------------------------------------------------------------------------------
 # main program
 # ------------------------------------------------------------------------------
-form = sg.FlexForm("drawOval: lower points exchange position")  # define form
+form = sg.FlexForm("drawOval: diagonal points exchange position")  # define form
 png = make_oval(0.0)  # create first picture
 img = sg.Image(data=png)  # define form image element
 layout = [[img]]  # minimal layout
@@ -91,15 +94,17 @@ while loop_count < 10000:  # loop forever
     png = make_oval(i / 100.0)  # make next picture
     try:  # guard against form closure
         img.Update(data=png)  # put in new picture
+        form.Refresh()  # show updated
     except:
+        form.Close()
         break  # user is fed up seeing this
-    form.Refresh()  # show updated
+
     loop_count += 1  # tally the loops
     i += add  # update the parameter
     if i >= 100:  # loop backwards from here
         add = -1
         continue
-    if i < 0:  # loop forward again
+    if i <= 0:  # loop forward again
         add = +1
         i = 0
 

@@ -9,14 +9,14 @@ Purpose
 --------
 Visualize function "drawOval" by using a quadrilateral (tetrapod) as parameter.
 
-For demonstration purposes, text box creation is placed in a function, which
-accepts the desired parameter as float value. This value controls positioning
-some egdes of the quad.
+For demonstration purposes, oval creation is placed in a function, which
+accepts an integer parameter. This value controls the position of some
+egdes of the quad.
 It then creates a dummy temporary PDF with one page, containing stuff we want
 to show and returns an image of it.
 
 The function is called by the main program in an "endless" loop, passing in
-float values. The image is displayed using PySimpleGUI.
+the parameter. The image is displayed using PySimpleGUI.
 
 Notes
 ------
@@ -27,9 +27,10 @@ Notes
   second"). The statistics displayed at end of program can hence be used as a
   performance indicator.
 """
-import time, os
+import time, math, os
 import fitz
 
+print(fitz.__doc__)
 if not list(map(int, fitz.VersionBind.split("."))) >= [1, 14, 5]:
     raise SystemExit("need PyMuPDF v1.14.5 for this script")
 
@@ -46,39 +47,64 @@ else:
 # ------------------------------------------------------------------------------
 # make one page
 # ------------------------------------------------------------------------------
-def make_oval(f):
+def make_oval(i):
     """Make a PDF page and draw an oval inside a Quad.
-    The upper left and the lower right quad points and the fill color are
-    subject to a passed-in parameter. Effectively, they exchange their position,
-    thus causing changes to the drawn shape.
-    The resulting page picture is passed back as a PNG image and the PDF is
-    discarded again. The execution speed of this function mainly determines
-    the number of "frames" shown per second.
+    The lower two quad points and the fill color are subject to a passed-in
+    parameter. Effectively, they exchange their position, thus causing
+    changes to the drawn shape.
+    The resulting page picture is passed back as an image and the PDF is
+    dicarded again.
     """
     doc = fitz.open()  # dummy PDF
-    page = doc.newPage(width=400, height=400)  # page dimensions as you like
-    r = page.rect + (4, 4, -4, -4)
+    red = (1, 0, 0)
+    blue = (0, 0, 1)
+    page = doc.newPage(width=400, height=300)  # page dimensions as you like
+    r = page.rect + (+4, +4, -4, -4)  # leave a border of 4 pix
     q = r.quad  # full page rect as a quad
+    f = i / 100.0
+    if f >= 0:
+        u = f
+        o = 0
+    else:
+        u = 0
+        o = -f
     q1 = fitz.Quad(
-        q.lr + (q.ul - q.lr) * f, q.ur, q.ll, q.ul + (q.lr - q.ul) * f  # upper left
-    )  # lower right
-    # make an entertaining fill color - simulating rotation around
-    # a diagonal
-    c1 = min(1, f)
-    c3 = min(1, max(1 - f, 0))
+        q.ul + (q.ur - q.ul) * o,
+        q.ul + (q.ur - q.ul) * (1 - o),
+        q.ll + (q.lr - q.ll) * u,
+        q.ll + (q.lr - q.ll) * (1 - u),
+    )
+    # make an entertaining fill color
+    c1 = min(1, max(o, u))
+    c3 = min(1, max(1 - u, 1 - o))
     fill = (c1, 0, c3)
-    page.drawOval(
-        q1, color=(0, 0, 1), fill=fill, width=0.3  # blue border  # variable fill color
+    img = page.newShape()
+    img.drawOval(q1)
+    img.finish(
+        color=blue, fill=fill, width=0.3  # blue border  # variable fill color
     )  # border width
+    img.drawCircle(q1.ll, 4)
+    img.finish(color=red, fill=red)
+    img.drawCircle(q1.lr, 4)
+    img.finish(color=blue, fill=blue)
+    img.drawCircle(q1.ul, 4)
+    img.finish(color=red, fill=red)
+    img.drawCircle(q1.ur, 4)
+    img.finish(color=blue, fill=blue)
+    img.commit()
     pix = page.getPixmap(alpha=False)  # make pixmap, no alpha
     doc.close()  # discard PDF again
-    return pix.getImageData("pgm")  # return a data stream
+    image = pix.getImageData("ppm")
+    del pix
+    del page
+    del img
+    return image  # return a PGM image of the page
 
 
 # ------------------------------------------------------------------------------
 # main program
 # ------------------------------------------------------------------------------
-form = sg.FlexForm("drawOval: diagonal points exchange position")  # define form
+form = sg.FlexForm("drawOval: left-right points exchange")  # define form
 png = make_oval(0.0)  # create first picture
 img = sg.Image(data=png)  # define form image element
 layout = [[img]]  # minimal layout
@@ -91,7 +117,8 @@ i = 0
 add = 1
 
 while loop_count < 10000:  # loop forever
-    png = make_oval(i / 100.0)  # make next picture
+
+    png = make_oval(i)  # make next picture
     try:  # guard against form closure
         img.Update(data=png)  # put in new picture
         form.Refresh()  # show updated
@@ -104,9 +131,9 @@ while loop_count < 10000:  # loop forever
     if i >= 100:  # loop backwards from here
         add = -1
         continue
-    if i <= 0:  # loop forward again
+    if i <= -100:  # loop forward again
         add = +1
-        i = 0
+        i = -100
 
 t1 = mytime()
 fps = round(loop_count / (t1 - t0), 1)
