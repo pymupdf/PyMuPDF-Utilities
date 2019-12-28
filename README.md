@@ -1,7 +1,7 @@
 # PyMuPDF-Utilities
-This repository contains demos and examples for using PyMuPDF - each in their respective folders.
+This repository contains demos, examples and for using PyMuPDF - each in their respective folders.
 
-From the examples folder, here is a collection of interesting scripts.
+From the examples folder, here is a synopsis of interesting scripts.
 
 * **morph-demo1.py, morph-demo2.py, morph-demo3.py** are scripts showing the effect of the ``morph`` parameter in text insertions. Each script creates a PDF page, fills a  text box and then morphs that box using its upper left corner as fixed point. Each morphing result is put on a new PDF page and the resulting pixmap is shown in an endless loop. Now require PyMuPDF v1.14.5 and can be run with Python v2.7.
 
