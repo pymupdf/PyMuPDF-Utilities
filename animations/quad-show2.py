@@ -27,22 +27,17 @@ Notes
   second"). The statistics displayed at end of program can hence be used as a
   performance indicator.
 """
-import time, math, os
-import fitz
+import math
+import os
+import time
 
-print(fitz.__doc__)
+import fitz
+import PySimpleGUI as sg
+
+mytime = time.time
 if not list(map(int, fitz.VersionBind.split("."))) >= [1, 14, 5]:
     raise SystemExit("need PyMuPDF v1.14.5 for this script")
-
-py2 = str is bytes
-if not py2:
-    import PySimpleGUI as sg
-
-    mytime = time.perf_counter
-else:
-    import PySimpleGUI27 as sg
-
-    mytime = time.clock
+print(fitz.__doc__)
 
 # ------------------------------------------------------------------------------
 # make one page
@@ -104,19 +99,22 @@ def make_oval(i):
 # ------------------------------------------------------------------------------
 # main program
 # ------------------------------------------------------------------------------
-form = sg.FlexForm("drawOval: left-right points exchange")  # define form
 png = make_oval(0.0)  # create first picture
 img = sg.Image(data=png)  # define form image element
 layout = [[img]]  # minimal layout
-form.Layout(layout)  # layout the form
+form = sg.FlexForm(
+    "drawOval: left-right points exchange", layout, finalize=True
+)  # define form
 
 loop_count = 1  # count the number of loops
 t0 = mytime()  # start a timer
-form.Show(non_blocking=True)  # and start showing it
 i = 0
 add = 1
 
-while loop_count < 10000:  # loop forever
+while True:  # loop forever
+    event, values = form.Read(timeout=0)
+    if event is None:
+        break
 
     png = make_oval(i)  # make next picture
     try:  # guard against form closure

@@ -31,21 +31,16 @@ Notes
   second"). The statistics displayed at end of program can hence be used as a
   performance indicator.
 """
-import time, os
+import os
+import time
+
 import fitz
+import PySimpleGUI as sg
 
 if not list(map(int, fitz.VersionBind.split("."))) >= [1, 14, 5]:
     raise SystemExit("need PyMuPDF v1.14.5 for this script")
 
-py2 = str is bytes
-if not py2:
-    import PySimpleGUI as sg
-
-    mytime = time.perf_counter
-else:
-    import PySimpleGUI27 as sg
-
-    mytime = time.clock
+mytime = time.time
 
 # define some global constants
 gold = (1, 1, 0)
@@ -88,25 +83,25 @@ def make_page(beta):
 # ------------------------------------------------------------------------------
 # main program
 # ------------------------------------------------------------------------------
-form = sg.FlexForm("Demo: Y-Shear-Morphing of a Text Box")  # define form
+
 png = make_page(0)  # create first picture
 img = sg.Image(data=png)  # define form image element
 layout = [[img]]  # minimal layout
-form.Layout(layout)  # layout the form
-
+form = sg.Window("Demo: Y-Shear-Morphing of a Text Box", layout, finalize=True)
 loop_count = 1  # count the number of loops
 t0 = mytime()  # start a timer
-form.Show(non_blocking=True)  # and start showing it
 i = 0
 add = 1
 
-while loop_count < 5000:  # loop forever
+while True:  # loop forever
+    event, values = form.Read(timeout=0)
+    if event is None:
+        break
     png = make_page(i)  # make next picture
     try:  # guard against form closure
         img.Update(data=png)  # put in new picture
     except:
         break  # user is fed up seeing this
-    form.Refresh()  # show updated
     loop_count += 1  # tally the loops
     i += add
     if i >= 150:
