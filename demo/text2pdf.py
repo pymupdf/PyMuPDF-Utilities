@@ -13,15 +13,6 @@ Adjust preferred page format, fontsize, fontname, fontfile below.
 Formula of lines per page (nlines) is also used by the 'insertPage' method.
 ------------------------------------------------------------------------------
 """
-def pixlen(text, widthlist, fontsize):
-    """Calculate the length of text in pixels, given a list of (font-specific)
-    glyph widths and the fontsize. Parameter 'widthlist' should have been
-    created by 'doc._getCharWidths()'."""
-    pl = 0.0
-    for t in text:
-        pl += widthlist[ord(t)]
-    return pl * fontsize
-    
     
 width, height = fitz.PaperSize("a4") # choose paper format
 fontsz = 10                          # choose font size of text
@@ -70,12 +61,11 @@ print(ofn, "contains", len(doc), "pages.")
 hdr_fontsz = 16                             # header fontsize
 ftr_fontsz = 8                              # footer fontsize
 blue = (0, 0, 1)                            # header / footer color
-fwidths = doc._getCharWidths("Helvetica")   # get glyph widths of font
 pspace = 500                                # available line width
 
 for page in doc:
     footer = "%i (%i)" % (page.number + 1, len(doc))  # footer text
-    plen_ftr = pixlen(footer, fwidths, ftr_fontsz)    # footer pixel length
+    plen_ftr = fitz.getTextlength(footer, fontname="Helvetica", fontsize=ftr_fontsz)
     
     page.insertText(fitz.Point(50, 50), ifn,          # header = input filename
                     color = blue,
