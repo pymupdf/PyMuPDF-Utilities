@@ -16,8 +16,8 @@ These are quite a number of examples by now. Many of them have originated in ear
 If you find issues please submit a PR, and we will gladly incorporate it.
 
 
-Files in this Directory
-=========================
+Some Files in this Directory
+==============================
 
 ======================= ===========================================================================================
 File                    Purpose

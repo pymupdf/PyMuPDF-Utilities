@@ -66,7 +66,7 @@ for lvl in range(0, n + 1):
                     pm.copyPixmap(fill, (y0, x0, y0 + step, x0 + step))
 
 t1 = mytime()
-pm.writeImage("sierpinski-fitz.png")
+pm.writeImage("sierpinski-carpet.png")
 t2 = mytime()
 print("Sierpinski's carpet fitz")
 print("------------------------")
