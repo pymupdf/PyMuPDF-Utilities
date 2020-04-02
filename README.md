@@ -1,7 +1,9 @@
 # PyMuPDF-Utilities
-This repository contains demos, examples and for using PyMuPDF - each in their respective folders.
+This repository contains demos, examples and for using PyMuPDF in the respective folders.
 
-From the examples folder, here is a synopsis of interesting scripts.
+> These scripts were written over an extended period of time - each for the then existing PyMuPDF version. I will not (reliably) go over each of them and ensure they still work. Occasionally a script may therefore no longer be compatible with the **current** version. If you find such inconsistencies, please **do not submit an issue**, but try to repair the script and submit a PR instead. Thank you.
+
+From the examples folder, here is a synopsis of some scripts that you may find interesting.
 
 * **morph-demo1.py, morph-demo2.py, morph-demo3.py** are scripts showing the effect of the ``morph`` parameter in text insertions. Each script creates a PDF page, fills a  text box and then morphs that box using its upper left corner as fixed point. Each morphing result is put on a new PDF page and the resulting pixmap is shown in an endless loop. Now require PyMuPDF v1.14.5 and can be run with Python v2.7.
 
@@ -11,7 +13,7 @@ From the examples folder, here is a synopsis of interesting scripts.
 
 * **all-my-pics-embedded.py** - take all files from a given directory and **embed** them (as *'EmbeddedFile'* entries) in a new PDF. Non-file entries of the directory will be skipped.
 
-* **all-my-pics-inserted.py** - take all *image* files from a given directory and **insert** them as pages in a new PDF (actually inserts the **first page** of any supported non-PDF document). Non-file entries of the directory will be skipped.
+* **all-my-pics-inserted.py** - take all _**image**_ (only) files from a given directory and **insert** them as pages in a new PDF (actually inserts the **first page** of any supported non-PDF document). Non-file entries of the directory will be skipped.
 
 * **anonymize.py** - scan through a PDF and remove all text of all pages. Also erase metadata / XML metadata. This works by eliminating everything enclosed by the string pairs "BT" and "ET" in the pages' `/Contents` object(s). Text appearing in images cannot be removed with this script -- this includes images made by the PDF operator syntax: some utilities synthesize text on the basis of elementary drawing commands, i.e. every single letter is created by drawing rectangles, lines and curves. This is probably done as a way to enforce copyright protection. In these cases, the script will not work either.
 

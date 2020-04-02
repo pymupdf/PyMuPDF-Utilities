@@ -72,4 +72,3 @@ print("Sierpinski's carpet fitz")
 print("------------------------")
 print("%g sec filling the pixmap" % round(t1 - t0, 3))
 print("%g sec saving the picture" % round(t2 - t1, 3))
-
