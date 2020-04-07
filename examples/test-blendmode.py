@@ -26,7 +26,7 @@ import os
 import fitz
 
 print(fitz.__doc__)
-thisdir = os.path.dirname(__file__)
+thisdir = lambda f: os.path.join(os.path.dirname(__file__), f)
 
 blend_modes = (
     fitz.PDF_BM_ColorBurn,
@@ -49,10 +49,10 @@ blend_modes = (
 
 
 def table(rect=(0, 0, 1, 1), cols=1, rows=1):
-    """Return a list of (rows x cols) rectangles.
+    """Return a list of (rows x cols) equal sized rectangles.
 
     Notes:
-        A little utility to fill a given area with table cells.
+        A little utility to fill a given area with table cells of equal size.
     Args:
         rect: rect_like to use as the table area
         rows: number of rows
@@ -157,4 +157,4 @@ for i, bmode in enumerate(blend_modes):
     annot = page.addHighlightAnnot(rects[i][1])  # take second one
     annot.update(blend_mode=bmode, opacity=opacity)  # and finish the annotation
 
-doc.save(os.path.join(thisdir, "test-blendmode.pdf"), garbage=3, deflate=True)
+doc.save(thisdir("test-blendmode.pdf"), garbage=3, deflate=True)
