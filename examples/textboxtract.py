@@ -4,11 +4,11 @@ from __future__ import print_function
 Script showing how to select only text that is contained in a given rectangle
 on a page.
 
-We use the page method 'getTextWords()' which delivers a list of all words.
+We use the page method 'getText("words")' which delivers a list of all words.
 Every item contains the word's rectangle (given by its coordinates, not as a
 fitz.Rect in this case).
-From this list we subselect words positioned in the given rectangle (or are at
-least partially contained).
+From this list we subselect words positioned in the given rectangle (or at
+least intersect).
 We sort this sublist by ascending y-ccordinate, and then by ascending x value.
 Each original line of the rectangle is then reconstructed using the itertools
 'groupby' function.
@@ -22,7 +22,6 @@ Remarks
 2. Reconstructed lines will contain words with exactly one space between them.
    So any original multiple spaces will be ignored.
 """
-from operator import itemgetter
 from itertools import groupby
 import fitz
 
@@ -33,7 +32,8 @@ page = doc[pno]  # we want text from this page
 -------------------------------------------------------------------------------
 Identify the rectangle. We use the text search function here. The two
 search strings are chosen to be unique, to make our case work.
-The two returned rectangle lists both have only one item.
+The two returned rectangle lists both have only one item in this example.
+Replace the following 3 lines by whatever you know about your rectangle.
 -------------------------------------------------------------------------------
 """
 rl1 = page.searchFor("Die Altersübereinstimmung")  # rect list one
@@ -46,25 +46,37 @@ Get all words on page in a list of lists. Each word is represented by:
 [x0, y0, x1, y1, word, bno, lno, wno]
 The first 4 entries are the word's rectangle coordinates, the last 3 are just
 technical info (block number, line number, word number).
+The term 'word' here stands for any string without space.
 """
-words = page.getTextWords()
-# We subselect from above list.
+words = page.getText("words")  # list of words on page
+words.sort(key=lambda w: (w[3], w[0]))  # ascending y, then x coordinate
+"""
+We will subselect from this list, demonstrating two alternatives:
+(1) only words inside the rectangle
+(2) only words insertecting the rectangle
 
+The resulting sublist is then grouped by words having the same bottom
+coordinate, i.e. are on the same line. We recreate a line by joining
+the words with one space between each.
+"""
+
+# ----------------------------------------------------------------------------
 # Case 1: select the words fully contained in rect
-# ------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 mywords = [w for w in words if fitz.Rect(w[:4]) in rect]
-mywords.sort(key=itemgetter(3, 0))  # sort by y1, x0 of the word rect
-group = groupby(mywords, key=itemgetter(3))
+group = groupby(mywords, key=lambda w: w[3])
+
 print("Select the words strictly contained in rectangle")
 print("------------------------------------------------")
 for y1, gwords in group:
-    print(" ".join(w[4] for w in gwords))
+    print(" ".join(w[4] for w in gwords))  # one line
 
-# Case 2: select the words which at least intersect the rect
-# ------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+# Case 2: select the words which intersect the rect
+# ----------------------------------------------------------------------------
 mywords = [w for w in words if fitz.Rect(w[:4]).intersects(rect)]
-mywords.sort(key=itemgetter(3, 0))
-group = groupby(mywords, key=itemgetter(3))
+group = groupby(mywords, key=lambda w: w[3])
+
 print("\nSelect the words intersecting the rectangle")
 print("-------------------------------------------")
 for y1, gwords in group:
