@@ -13,4 +13,4 @@ Because of the excellent performance of PyMuPDF (😉), this process is fast eno
 
 Scripts `morph-demo1.py`, `morph-demo2.py` and `morph-demo3.py` show the effect of morphing a text box given some fixpoint.
 
-Scripts `quad-show2.py` and `quad-show2.py` simply draw quadrilaterals to demonstrate what happens when their corners are modified following certain patterns.
+Scripts `quad-show1.py` and `quad-show2.py` simply draw quadrilaterals to demonstrate what happens when their corners are modified following certain patterns.
