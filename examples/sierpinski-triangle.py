@@ -16,16 +16,14 @@ import time
 
 import fitz
 
-thisdir = os.path.dirname(__file__)  # folder to store the result
-outfile = os.path.join(
-    thisdir, os.path.basename(__file__).replace(".py", ".pdf")
-)  # filename
+outfile = __file__.replace(".py", ".pdf")
+
 w = 150  # PDF page width, also determines triangle size.
 h = 0.5 * math.sqrt(3) * w  # this makes it equal-sided
 doc = fitz.open()  # empty new PDF
 page = doc.newPage(-1, width=w, height=h)  # make a new page
 color1 = (0, 0, 1)  # start triangle is filled with this (blue)
-fill = (1, 1, 0)  # cut out triangle fill color (yellow)
+fill = fitz.utils.getColor("papayawhip")  # cut out triangle fill color
 shape = page.newShape()  # make a new Shape object
 
 
