@@ -25,7 +25,8 @@ import fitz
 
 print(fitz.__doc__)
 
-fname1 = "curly-polygon"
+outpdf = __file__.replace(".py", ".pdf")
+outsvg = __file__.replace(".py", ".svg")
 doc = fitz.open()
 page = doc.newPage()
 img = page.newShape()
@@ -56,8 +57,8 @@ img.finish(color=(0, 0, 1), fill=(1, 1, 0), closePath=False)
 # adjust visible page to dimensions of the drawing
 page.setCropBox(img.rect)
 img.commit()
-doc.save(fname1 + ".pdf")
-fout = open(fname1 + ".svg", "w")
+doc.save(outpdf)
+fout = open(outsvg, "w")
 fout.write(page.getSVGimage())
 fout.close()
 doc.close()

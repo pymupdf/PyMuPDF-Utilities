@@ -11,7 +11,7 @@ page = doc.newPage(width=500, height=500)
 center = (page.rect.tl + page.rect.br) / 2.0
 radius = 200
 n = 523  # number of lines to draw
-curve = 3  # type of curve, 2 = cardioid, 3 = nephroid, etc.
+curve = 4  # type of curve, 2 = cardioid, 3 = nephroid, etc.
 p0 = center - (radius, 0)
 theta = -360 / n
 shape = page.newShape()
@@ -29,9 +29,9 @@ for i in range(1, n):
 shape.draw_cont = ""  # we only need the points
 
 for i in range(n):  # do the line drawing
-    tar = curve * i % n
+    tar = curve * i % n  # target point of this line
     shape.drawLine(points[i], points[tar])
 
 shape.finish(color=(1, 0, 0), width=0.2)  # draw the lines
 shape.commit()
-doc.save(outpdf)
+doc.save(outpdf, deflate=True)

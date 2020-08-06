@@ -40,7 +40,7 @@ startyear = int(startyear)
 
 doc = fitz.open()  # new empty PDF
 # font = fitz.Font("cour")  # use the built-in font Courier
-font = fitz.Font("fimo")  # use Fira Mono - a nicer mono-spaced font
+font = fitz.Font("spacemo")  # use Space Mono - a nicer mono-spaced font
 cal = calendar.LocaleTextCalendar(locale="de")  # use your locale
 # cal = calendar.TextCalendar()  # or stick with English
 
