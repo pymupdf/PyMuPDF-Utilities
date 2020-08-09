@@ -4,7 +4,7 @@ This is a GUI script written in wxPython to maintain the images shown by a PDF p
 * Detect images used by a page and display basic information: image reference name, location on the page ("bbox" - boundary box) and rotation.
 * Multiple images can be selected one at a time by stepping through them via a button.
 * The selected image can be deleted, moved around and rotated by multiples of 90 degrees.
-* New images can be inserted from image files supported by MuPDF. They will inserted at the page's top left and are then available for repoitioning.
+* New images can be inserted from image files supported by MuPDF. They will be inserted at the page's top left and are then available for repositioning.
 
 ## General working approach
 When a page is shown, the first image will be indicated by a red border (sequence determined by insertion sequence, FIFO). Use button **Next img** to select the desired one.
@@ -22,9 +22,9 @@ On the panel's left side a number of controls and information fields is shown:
 
 ![screen](image-maintenance.jpg)
 
-* **Next img** - _(button)_ Step through the images.
+* **Next img** - _(button)_ Step through the images. This is a wraparound button: after the last image, the first one will be shown again.
 * **Image: 1/2** - _(information)_ Currently selected image (bordered red) and total number of images.
-* **Name:** - _(information)_ The internal (PDF reference) name of the image.
+* **Name:** - _(information)_ The internal (PDF reference) name of the image. This is item[7] of the image's entry in `page.getImageList()` - shown in the picture for demo purposes.
 * **Rotation** - _(ListBox)_ one of degrees 0, 90, 180, 270 - the (detected) image rotation. Can be updated.
 * **[Picture]** - _(information)_ Followed by a number of **_SpinCtrl_** fields. Can be used to change the image position.
 * **[Rectangle]** - _(information)_ Followed by a number of text fields displaying the `fitz.Rect` corresponding to the **[Picture]** coordinates.
@@ -44,7 +44,7 @@ On the panel's right side the PDF page is displayed. In addition it contains the
 
 > Paging also works if using the mouse wheel or the PageDown / PageUp keys.
 
-The currently selected image is wrapped with a thin red border. Moving the cursor inside this area will change its appearance to a "hand" 👆 symbol and dragging the rectangle becomes available (left mouse button held down).
+The currently selected image is wrapped with a thin red border. Moving the cursor inside this area will change its appearance to a "hand" ðŸ‘† symbol and dragging the rectangle becomes available (left mouse button held down).
 
 To change the rectangle shape or size, hover the mouse over the rectangle's bottom right corner until it changes to a cross "`+`". Then drag with left mouse button held down.
 
