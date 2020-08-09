@@ -1,17 +1,17 @@
 # Maintaining Images of a PDF Page
 This is a GUI script written in wxPython to maintain the images shown by a PDF page.
 ## Main Features
-* Detect images used by a page and display basic information: image reference name, location on the page ("bbox" boundary box) and rotation.
+* Detect images used by a page and display basic information: image reference name, location on the page ("bbox" - boundary box) and rotation.
 * Multiple images can be selected one at a time by stepping through them via a button.
 * The selected image can be deleted, moved around and rotated by multiples of 90 degrees.
 * New images can be inserted from image files supported by MuPDF. They will inserted at the page's top left and are then available for repoitioning.
 
 ## General working approach
-When a page is shown, the first image will be indicated by a red border. Image sequence is determined by insertion sequence, FIFO. Use button **Next img** to select the desired one.
+When a page is shown, the first image will be indicated by a red border (sequence determined by insertion sequence, FIFO). Use button **Next img** to select the desired one.
 
 The mouse cursor hovering inside that area will change shape to indicate that moving is possible. Hold down left mouse button to drag.
 
-The bottom right corner allows changing the area size. The mouse pointer changes its shape to a north-west / south-east symbol.
+The bottom right corner allows changing the area size. The mouse pointer changes its shape to a "`+`" symbol.
 
 While moving the rectangle, the image will stay at its current position. When you are satisfied with size, location and rotation, press button **_Update img_**. This causes the image to snap to the new area.
 
@@ -23,7 +23,7 @@ On the panel's left side a number of controls and information fields is shown:
 ![screen](image-maintenance.jpg)
 
 * **Next img** - _(button)_ Step through the images.
-* **Image: 6/6** - _(information)_ Currently selected image (bordered red) and total number of images.
+* **Image: 1/2** - _(information)_ Currently selected image (bordered red) and total number of images.
 * **Name:** - _(information)_ The internal (PDF reference) name of the image.
 * **Rotation** - _(ListBox)_ one of degrees 0, 90, 180, 270 - the (detected) image rotation. Can be updated.
 * **[Picture]** - _(information)_ Followed by a number of **_SpinCtrl_** fields. Can be used to change the image position.
@@ -39,7 +39,7 @@ On the panel's right side the PDF page is displayed. In addition it contains the
 
 * **forw** - _(button)_ Display next page.
 * **back** - _(button)_ Display previous page.
-* **[3]** - _(text field)_ Enter desired page number and press ENTER.
+* **[1]** - _(text field)_ Enter desired page number and press ENTER.
 * More information to show the total number of pages and the current page format. The latter only works if the resp. module is available.
 
 > Paging also works if using the mouse wheel or the PageDown / PageUp keys.
@@ -63,7 +63,7 @@ Pressing **Update img** moves the image to its new rectangle in the following wa
 ## Caveats and Limitations
 Although many images can be handled with this script, there are situations that do not work or need extra handling:
 
-* In PDF, images may be referenced by a page directly (which we do handle), or indirectly via referencing a so-called **Form XObject**, which itself may contain images. The latter case is **not supported**.
+* In PDF, images may be referenced by a page directly (which we do handle), or indirectly via referencing a so-called **Form XObject**, which itself may contain images. The latter case is **not supported** and not included in the image list.
 * Only images named in a page's `/Resources` object are supported - **no embedded images**, **no PDF drawings**.
 * The position of an image is determined by usually one PDF matrix command, which looks like `a b c d e f cm`. Letters **a** through **f** correspond to the same-named parameters of `fitz.Matrix`.  
 But PDFs are a complex concept, and there is a plethora of different ways to achieve the same thing: occasionally multiple matrices may have been used, or the page is subject to some coordinate system change.  
