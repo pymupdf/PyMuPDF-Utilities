@@ -44,9 +44,9 @@ On the panel's right side the PDF page is displayed. In addition it contains the
 
 > Paging also works if using the mouse wheel or the PageDown / PageUp keys.
 
-The currently selected image is wrapped with a thin red border. Moving the cursor inside this area will change its appearance to a "hand" ðŸ‘† symbol and dragging the rectangle becomes available (left mouse button held down).
+The currently selected image is wrapped with a thin red border. Moving the cursor inside this area will change its appearance to a "hand" 👆 symbol and dragging the rectangle becomes available (left mouse button held down).
 
-To change the rectangle shape or size, hover the mouse over the rectangle's bottom right corner until it changes to a cross "`+`". Then drag with left mouse button held down.
+To change the rectangle shape or size, hover the mouse over the rectangle's bottom right corner until it changes to a cross ➕. Then drag with left mouse button held down.
 
 These actions will move the red rectangle only. The image itself is not yet affected.
 
@@ -68,6 +68,6 @@ Although many images can be handled with this script, there are situations that 
 * The position of an image is determined by usually one PDF matrix command, which looks like `a b c d e f cm`. Letters **a** through **f** correspond to the same-named parameters of `fitz.Matrix`.  
 But PDFs are a complex concept, and there is a plethora of different ways to achieve the same thing: occasionally multiple matrices may have been used, or the page is subject to some coordinate system change.  
 In those cases we only **_detect_** that the situation is not straightforward and do not offer changing the rectangle. The corresponding message is "cannot re-compute image rect".
-* PyMuPDF only supports image rotations by multiples of 90 degrees. Images with other rotation angles are also not supported for modification. The message in this case is "cannot handle image rotation".
-* You can try to overcome the previous two cases by pressing **Refresh img**. This button is available if the current rectangle could be determined. The old image display command is deleted and a new, "clean" command is generated. The image will display with zero degrees rotation. This will mostly end up in a nice modifyable rectangle.  
+* Currently, PyMuPDF supports image rotations by multiples of 90° only. Other angles are not supported for modification. The message in this case is "cannot handle image rotation".
+* You can try to overcome the previous two cases by pressing **Refresh img**. The old image display command is deleted and a new, "clean" command is generated. The image will remain in its current position (but be displayed without rotation). This will mostly end up in a nice modifyable rectangle.  
 But please do check the result and the well-being of any other images on the page!
