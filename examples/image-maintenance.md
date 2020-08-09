@@ -11,7 +11,7 @@ When a page is shown, the first image will be indicated by a red border (sequenc
 
 The mouse cursor hovering inside that area will change shape to indicate that moving is possible. Hold down left mouse button to drag.
 
-The bottom right corner allows changing the area size. The mouse pointer changes its shape to a "`+`" symbol.
+The bottom right corner allows changing the area size. The mouse pointer changes its shape to a  symbol.
 
 While moving the rectangle, the image will stay at its current position. When you are satisfied with size, location and rotation, press button **_Update img_**. This causes the image to snap to the new area.
 
