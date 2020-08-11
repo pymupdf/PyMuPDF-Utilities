@@ -65,7 +65,7 @@ Although many images can be handled with this script, there are situations that 
 
 * In PDF, images may be referenced by a page directly (which we do handle), or indirectly via referencing a so-called **Form XObject**, which itself may contain images. The latter case is **not supported** and not included in this script's image list.
 * Only images named in a page's `/Resources` object are supported - **no inline images**, **no PDF drawings**.
-* The position of an image is determined by usually one PDF matrix command, which looks like `a b c d e f cm`. Letters **a** through **f** correspond to the same-named parameters of `fitz.Matrix`.  
+* The position of an image is determined by usually one PDF matrix command, which looks like `a b c d e f cm`. Letters **a** through **f** correspond to the same-named parameters of `fitz.Matrix`. The letters **cm** indicate the function "concatenate matrix" in PDF's mini-language.  
 But PDFs are a complex concept, and mostly there is a plethora of ways to achieve the same thing: occasionally multiple matrices may have been used, or the page may be subject to some coordinate system change, etc.
 In those cases we only **_detect_** that the situation is not straightforward and do not offer changing the rectangle directly. The corresponding message is **"cannot re-compute image rect"**.
 * Currently, PyMuPDF supports image rotations by multiples of 90° only. Other angles are not supported for modification. The message in this case is **"cannot handle image rotation"**.
