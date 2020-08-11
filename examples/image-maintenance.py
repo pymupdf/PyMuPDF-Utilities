@@ -71,12 +71,12 @@ def calc_matrix(fw, fh, tr, rotate=0):
 
     Notes:
         The result is basically a multiplication of four matrices in this
-        sequence: number one moves the image rectangle (always a unit rect!)
-        to (0,0), number two rotates as desired, number three scales using
-        the width-height-ratio, and number four moves to the target rect.
+        sequence: number one moves the image rectangle (always a unit rect!) to (0,0), number two rotates as desired, number three
+        scales using the width-height-ratio, and number four moves to the
+        target rect.
     Args:
         fw, fh: width / height ratio factors 0 < f <= 1.
-                The longer one must equal 1.
+                The longer one must be 1.
         tr: target rect in PDF (!) coordinates
         rotate: (degrees) rotation angle.
     Returns:
@@ -473,7 +473,7 @@ class PDFdisplay(wx.Dialog):
         szr30.Add(self.imgRotation, (4, 1), (1, 1), wx.ALIGN_LEFT)
 
         szr30.Add(
-            wx.StaticText(self, -1, "[Picture]    Left:"),
+            wx.StaticText(self, -1, "[wx.Rect]    Left:"),
             (5, 0),
             (1, 1),
             wx.ALIGN_RIGHT,
@@ -497,7 +497,7 @@ class PDFdisplay(wx.Dialog):
         )
 
         szr30.Add(
-            wx.StaticText(self, -1, "[Rectangle]    x0:"),
+            wx.StaticText(self, -1, "[fitz.Rect]    x0:"),
             (8, 0),
             (1, 1),
             wx.ALIGN_RIGHT,
@@ -926,6 +926,7 @@ class PDFdisplay(wx.Dialog):
         if in_brect:
             self.resize_rect = True
             self.current_idx = in_brect
+            self.btn_Update.Enable()
             evt.Skip()
             return
 
@@ -995,6 +996,7 @@ class PDFdisplay(wx.Dialog):
         keys = list(self.page_images.keys())
         idx = keys.index(img) + 1
         self.fill_img_details(idx % len(keys))
+        self.btn_Update.Disable()
         evt.Skip()
         return
 
