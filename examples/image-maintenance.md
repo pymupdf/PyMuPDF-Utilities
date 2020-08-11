@@ -4,7 +4,7 @@ This is a GUI script written in wxPython to maintain the images shown by a PDF p
 * Detect images used by a page and display basic information: image reference name, location on the page ("bbox" - boundary box) and rotation.
 * Multiple images can be selected one at a time by stepping through them via a button.
 * The selected image can be deleted, moved around and rotated by multiples of 90 degrees.
-* New images can be inserted from image files supported by MuPDF. They will be inserted at the page's top left and are then available for repositioning.
+* New images can be inserted from image files supported by MuPDF. They will initially be put at the page's top left and are then available for repositioning.
 
 ## General working approach
 When a page is shown, the first image will be indicated by a red border (sequence determined by insertion sequence, FIFO). Use button **Next img** to select the desired one.
