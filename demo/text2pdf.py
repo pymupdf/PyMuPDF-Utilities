@@ -121,6 +121,6 @@ m = {
 doc.setMetadata(m)
 
 # and save the PDF
-doc.save(ofn, garbage=4, deflate=True)
+doc.save(ofn, garbage=3, deflate=True)
 doc.close()
 

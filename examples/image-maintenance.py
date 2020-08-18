@@ -43,8 +43,16 @@ except ImportError:
 
 app = None
 app = wx.App()
-assert wx.VERSION[0:3] >= (3, 0, 3), "need wxPython Phoenix version"
-assert fitz.VersionBind.split(".") >= ["1", "17", "5"], "need PyMuPDF 1.17.5 or later"
+
+if wx.VERSION[:3] < (3, 0, 3):
+    raise AssertionError("need wxPython Phoenix version")
+if fitz.VersionBind.split(".") < ["1", "17", "5"]:
+    raise AssertionError("need PyMuPDF 1.17.5 or later")
+
+# compute maximum PDF page display dimensions
+MAX_WIDTH, MAX_HEIGHT = wx.GetDisplaySize()
+MAX_WIDTH -= 400
+MAX_HEIGHT -= 130
 cur_hand = wx.Cursor(wx.CURSOR_HAND)
 cur_cross = wx.Cursor(wx.CURSOR_CROSS)
 cur_norm = wx.Cursor(wx.CURSOR_DEFAULT)
@@ -59,11 +67,7 @@ def getint(v):
         pass
     if not type(v) is str:  # we need a string at least
         return 0
-    a = "0"
-    for d in v:  # exract and append the digits
-        if d in "0123456789":
-            a += d
-    return int(a)
+    return int("0" + "".join((d for d in v if d in "0123456789")))
 
 
 def calc_matrix(fw, fh, tr, rotate=0):
@@ -258,7 +262,7 @@ class PDFdisplay(wx.Dialog):
     def __init__(self, parent, filename):
         defPos = wx.DefaultPosition
         defSiz = wx.DefaultSize
-        zoom = 1.2  # zoom factor of display
+        zoom = 1  # zoom factor of display
         wx.Dialog.__init__(
             self,
             parent,
@@ -323,9 +327,8 @@ class PDFdisplay(wx.Dialog):
         self.paperform = wx.StaticText(self, -1, "", defPos, defSiz, 0)
         # ---------------------------------------------------------------------
         # define zooming matrix for displaying PDF page images
-        # we increase images by 20%, so take 1.2 as scale factors
         # ---------------------------------------------------------------------
-        self.zoom = fitz.Matrix(zoom, zoom)  # will use a constant zoom
+        self.zoom = fitz.Matrix(zoom, zoom)
         self.shrink = ~self.zoom  # corresp. shrink matrix
         self.bitmap = self.pdf_show(1)
         self.PDFimage = wx.StaticBitmap(self, -1, self.bitmap, defPos, defSiz, style=0)
@@ -433,23 +436,22 @@ class PDFdisplay(wx.Dialog):
         # ---------------------------------------------------------------------
         # dialog sizers
         # ---------------------------------------------------------------------
-        szr00 = wx.BoxSizer(wx.HORIZONTAL)
-        szr10 = wx.BoxSizer(wx.VERTICAL)
-        szr20 = wx.BoxSizer(wx.HORIZONTAL)
-        szr30 = wx.GridBagSizer(7, 7)
+        szr00 = wx.BoxSizer(wx.HORIZONTAL)  # overall dialog window
+        szr10 = wx.BoxSizer(wx.VERTICAL)  # right: page display
+        szr20 = wx.BoxSizer(wx.HORIZONTAL)  # top right: page navigation
+        szr30 = wx.GridBagSizer(7, 7)  # left: image handling
 
+        # fields for page navigation and info
         szr20.Add(self.btn_Next, 0, wx.ALL, 5)
         szr20.Add(self.btn_Prev, 0, wx.ALL, 5)
         szr20.Add(self.TextToPage, 0, wx.ALL, 5)
         szr20.Add(self.statPageMax, 0, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 5)
         szr20.Add(self.paperform, 0, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 5)
-        # ---------------------------------------------------------------------
-        #       use GridBagSizer for image details
-        # ---------------------------------------------------------------------
+
+        # use GridBagSizer for image details
         line_span = wx.GBSpan(1, 5)  # use for item taking full line
-        # ---------------------------------------------------------------------
+
         # Image details header
-        # ---------------------------------------------------------------------
         t = wx.StaticText(self, -1, "Image Details", defPos, defSiz, wx.ALIGN_CENTER)
         t.SetBackgroundColour("STEEL BLUE")
         t.SetForegroundColour("WHITE")
@@ -460,9 +462,8 @@ class PDFdisplay(wx.Dialog):
             line_span,
             wx.EXPAND,
         )
-        # ---------------------------------------------------------------------
+
         # bbox header and fields
-        # ---------------------------------------------------------------------
         szr30.Add(self.btn_next_image, (2, 0), (1, 1))
         szr30.Add(self.img_count, (2, 1), (1, 1), wx.ALIGN_LEFT)
 
@@ -496,6 +497,7 @@ class PDFdisplay(wx.Dialog):
             wx.EXPAND,
         )
 
+        # display of fitz.Rect
         szr30.Add(
             wx.StaticText(self, -1, "[fitz.Rect]    x0:"),
             (8, 0),
@@ -522,9 +524,7 @@ class PDFdisplay(wx.Dialog):
 
         szr30.Add(self.message, (11, 0), line_span, wx.ALIGN_LEFT)
 
-        # ---------------------------------------------------------------------
         # buttons
-        # ---------------------------------------------------------------------
         szr30.Add(
             wx.StaticLine(self, -1, defPos, defSiz, wx.LI_HORIZONTAL),
             (14, 0),
@@ -576,7 +576,6 @@ class PDFdisplay(wx.Dialog):
         szr00.Fit(self)
         self.SetSizer(szr00)
         self.Layout()
-
         self.Centre(wx.BOTH)
 
         # Bind dialog items to event handlers
@@ -895,6 +894,7 @@ class PDFdisplay(wx.Dialog):
             page.insertImage(r, filename=path)
         except Exception as exc:
             self.message.Label = "Unsupported image file"
+            print(str(exc), r)
             evt.Skip()
             return
 
@@ -1118,6 +1118,14 @@ class PDFdisplay(wx.Dialog):
 
     def pdf_show(self, pno):
         page = self.doc[getint(pno) - 1]  # load page & get Pixmap
+        width = page.rect.width
+        height = page.rect.height
+        if width / height < MAX_WIDTH / MAX_HEIGHT:
+            zoom = MAX_HEIGHT / height
+        else:
+            zoom = MAX_WIDTH / width
+        self.zoom = fitz.Matrix(zoom, zoom)
+        self.shrink = ~self.zoom
         pix = page.getPixmap(matrix=self.zoom, alpha=False)
         bmp = wx.Bitmap.FromBuffer(pix.w, pix.h, pix.samples)
         paper = FindFit(page.rect.width, page.rect.height)

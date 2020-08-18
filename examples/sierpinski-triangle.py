@@ -77,7 +77,8 @@ compute_time = round(t1 - t0, 3)
 shape.commit()  # write the shape to the page
 
 meta = {
-    "title": "Sierpinski Triangle with %i sub-triangles" % triangle_count,
+    "title": "Sierpinski Triangle with %i sub-triangles, %g seconds"
+    % (triangle_count, compute_time),
     "author": "Jorj X. McKie",
     "subject": "Demonstration of PyMuPDF's features",
     "keywords": "PDF, fractal, Sierpinski, triangle",
