@@ -1,0 +1,36 @@
+D:\Jorj\Documents\GitHub\PyMuPDF-Utilities\font-replacement>py repl-fontnames.py pymupdf.pdf
+
+D:\Jorj\Documents\GitHub\PyMuPDF-Utilities\font-replacement>py repl-font.py pymupdf.pdf
+Processing PDF 'pymupdf.pdf' with 318 pages.
+
+Phase 1: Create unicode subsets.
+End of phase 1, 0.49 seconds.
+
+Font replacement overview:
+        NimbusMonL-Bold replaced by: Space Mono Bold.
+        NimbusMonL-Regu replaced by: Space Mono Regular.
+    NimbusMonL-ReguObli replaced by: Space Mono Italic.
+     NimbusRomNo9L-Medi replaced by: FiraGO Regular.
+ NimbusRomNo9L-MediItal replaced by: FiraGO Italic.
+     NimbusRomNo9L-Regu replaced by: FiraGO Regular.
+ NimbusRomNo9L-ReguItal replaced by: FiraGO Italic.
+        NimbusSanL-Bold replaced by: FiraGO Bold.
+    NimbusSanL-BoldItal replaced by: FiraGO Bold Italic.
+        NimbusSanL-Regu replaced by: FiraGO Regular.
+    NimbusSanL-ReguItal replaced by: FiraGO Italic.
+
+Building font subsets:
+Used 67 glyphs of font 'Space Mono Bold'. 70 KB saved.
+Used 114 glyphs of font 'Space Mono Regular'. 64 KB saved.
+Used 88 glyphs of font 'Space Mono Italic'. 74 KB saved.
+Used 100 glyphs of font 'FiraGO Regular'. 753 KB saved.
+Used 97 glyphs of font 'FiraGO Italic'. 760 KB saved.
+Used 71 glyphs of font 'FiraGO Bold'. 764 KB saved.
+Used 31 glyphs of font 'FiraGO Bold Italic'. 780 KB saved.
+Font subsets built, 2.86 seconds.
+
+Phase 2: rebuild document.
+End of phase 2, 12.82 seconds
+Total duration 16.17 seconds
+
+D:\Jorj\Documents\GitHub\PyMuPDF-Utilities\font-replacement>

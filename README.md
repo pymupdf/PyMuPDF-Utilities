@@ -32,8 +32,6 @@ From the examples folder, here is a synopsis of some scripts that you may find i
 
 * **textboxtract.py** Shows how to extract the text from within a given rectangle. This works for **all document types** - not just PDF.
 
-* **show-no-annots.py** create a pixmap from a PDF page showing **no annotations**.
-
 * **form-fields.py** demo script: create a PDF with form fields.
 
 * **shapes_and_symbols.py** contains ca. 10 predefined symbols, which can be imported and used in PDF page creation. If invoked standalone, a PDF is created with one page per each of the symbols.

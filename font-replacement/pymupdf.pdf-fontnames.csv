@@ -1,0 +1,26 @@
+#
+# Do not replace the first 3 fonts
+#
+1851;CMMI5;keep;			 2 glyphs/size 7323/serifed/italic
+1852;CMSY5;keep;			 2 glyphs/size 7356/serifed/italic
+2993;CMSY9;keep;			 3 glyphs/size 7555/serifed/italic
+#
+# Replace these 3 by a nicer monospaced font: Space Mono
+#
+1685;NimbusMonL-Bold;spacembo;		 67 glyphs/size 18061/serifed/bold
+1424;NimbusMonL-Regu;spacemo;		 112 glyphs/size 23477/serifed
+1686;NimbusMonL-ReguObli;spacemit;	 88 glyphs/size 18680/serifed/italic
+#
+# Replace all others by Fira Go fonts
+#
+1306;NimbusRomNo9L-Medi;figo;		 86 glyphs/size 20046/serifed/bold
+1425;NimbusRomNo9L-MediItal;figit;	 10 glyphs/size 7645/serifed/italic/bold
+1307;NimbusRomNo9L-Regu;figo;		 100 glyphs/size 22726/serifed
+1308;NimbusRomNo9L-ReguItal;figit;	 97 glyphs/size 21802/serifed/italic
+1259;NimbusSanL-Bold;figbo;		 71 glyphs/size 13488/serifed/bold
+1260;NimbusSanL-BoldItal;figbi;		 31 glyphs/size 9855/serifed/italic/bold
+1305;NimbusSanL-Regu;figo;		 64 glyphs/size 9622/serifed
+2343;NimbusSanL-ReguItal;figit;		 4 glyphs/size 3585/serifed/italic
+#
+# Caution: no empty lines supported! Treated as end of file.
+#
