@@ -3,7 +3,11 @@ This repository contains demos, examples and for using PyMuPDF in the respective
 
 > These scripts were written over an extended period of time - each for the then existing PyMuPDF version. I will not (reliably) go over each of them and ensure they still work. Occasionally a script may therefore no longer be compatible with the **current** version. If you find such inconsistencies, please **do not submit an issue**, but try to repair the script and submit a PR instead. Thank you.
 
-From the examples folder, here is a synopsis of some scripts that you may find interesting.
+## Font Replacement
+New for PyMuPDF v1.17.6 is the ability to replace selected fonts in existing PDFs. This is a set of two script and their documentation in [this](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/examples) folder.
+
+## Examples
+From the [examples](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/examples) folder, here is a synopsis of some scripts that you may find interesting.
 
 * **image-maintenance.py** a really cool GUI script (wxPython) which allows insertion, deletion and modification of images on PDF pages in a visually controlled mode. Requires v1.17.5 and a Phoenix version of wxPython.
 * **morph-demo1.py, morph-demo2.py, morph-demo3.py** are scripts showing the effect of the ``morph`` parameter in text insertions. Each script creates a PDF page, fills a  text box and then morphs that box using its upper left corner as fixed point. Each morphing result is put on a new PDF page and the resulting pixmap is shown in an endless loop. Now require PyMuPDF v1.14.5 and can be run with Python v2.7.
