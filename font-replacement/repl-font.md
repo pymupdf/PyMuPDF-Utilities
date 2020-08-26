@@ -58,8 +58,8 @@ Existing text is extracted via `page.getText("dict")`. While this contains a lot
 ## Usage
 Follow this procedure to replace fonts in a given file ``input.pdf``
 
-1. Run ``repl-fontnames.py input.pdf``. This will produce file ``input.pdf-fontnames.csv``.
+1. **_Run_** ``repl-fontnames.py input.pdf``. This will produce file ``input.pdf-fontnames.csv``.
 
-2. Edit the produced CSV as decscribed above. It is required as input for the next step.
+2. **_Edit_** the produced CSV as decscribed above. It is required as input for the next step.
 
-3. Run ``repl-font.py input.pdf``. This will read the PDF and CSV files and replace the specified font(s). The resulting PDF is saved as ``input-new.pdf``.
+3. **_Run_** ``repl-font.py input.pdf``. This will read the PDF and CSV files and replace the specified font(s). The resulting PDF is saved as ``input-new.pdf``.
