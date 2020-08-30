@@ -21,7 +21,9 @@ infilename = sys.argv[1]
 font_list = set()
 doc = fitz.open(infilename)
 for i in range(len(doc)):
-    for f in doc.getPageFontList(i):
+    for f in doc.getPageFontList(i, full=True):
+        if f[-1] == 0:
+            continue  # no support for text in XObjects
         msg = ""
         xref = f[0]
         fontname = f[3]
