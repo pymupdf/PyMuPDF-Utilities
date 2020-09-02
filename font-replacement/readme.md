@@ -80,9 +80,9 @@ This is what **_font subsetting_** is all about. We use package ``fontTools`` to
 
 To support embeddable versions of the old Base-14 fonts, MuPDF chooses CFF fonts: the "Nimbus" font families by URW++ - developped by URW Type Foundry GmbH). So if you choose one of these Base-14 replacement fonts, the resulting PDF may easily be larger than the original.
 
-This is not necessarily a big problem: the Nimbus fonts are relatively small (around 50 KB or less per font weight). But you still may want to consider alternatives which support subsetting.
+This is not necessarily a big problem: the Nimbus fonts are relatively small (around 50 KB or less - albeit per font weight). But you still may want to consider alternatives which support subsetting.
 
-There also exist free versions of these Nimbus fonts **which are subsettable**, at [this](https://www.fontsquirrel.com/fonts/) website and search for nimbus-sans, nimbus-mono or nimbus-roman.
+There also exist free versions of the Nimbus fonts, **which are subsettable** (OTF or TTF formats). They can be downloaded from [this](https://www.fontsquirrel.com/fonts/) website. Search for nimbus-sans, nimbus-mono or nimbus-roman.
 
 To illustrate the above, look at the following example numbers of a 4-page PDF, which was created as a PDF export of a Word document.
 
@@ -92,20 +92,27 @@ The original size is **240 KB** and it contains
 * 24 glyphs mono-spaced bold
 * 69 glyphs mono-spaced regular
 
-Replacing these by (the non-subsettable) **"helv"** (33 KB), **"hebo"** (34 KB), **"cobo"** (51 KB) and **"cour"** (45 KB) Nimbus fonts, this leads to the new file size **172 KB**.
+Replacing these by (the non-subsettable) **"helv"** (33 KB), **"hebo"** (34 KB), **"cobo"** (51 KB) and **"cour"** (45 KB) Nimbus fonts leads to the new file size **172 KB**.
 
 When instead taking **"Noto Sans Regular"**, **"Noto Sans Bold"**, **"Space Mono Bold"** and **"Space Mono Regular"** (which all support font subsetting), the resulting file size is only **53 KB** ... and it looks nicer!
 
 
 ## How to replace a font with itself
-This may sound ridiculous. But imagine you have inserted text in a PDF using PyMuPDF and you are dissatisfied with the resulting file size: large-sized fonts were pulled in.
+This may sound ridiculous. But imagine you have inserted text in a PDF and you are dissatisfied with the resulting file size: large-sized fonts were pulled in.
 
-You can use this facility as a font subsetting mechanism and "replace" fonts with themselves.
+You can use this facility as a font subsetting mechanism and **_"replace" fonts with themselves_**.
 
 ![screen](multi-language.jpg)
 
+The above multi language page had been created using the large font "Droid Sans Fallback Regular", which yielded a file size of **1.62 MB**. Applying the two scripts and replacing "keep" with "china-s" in the intermediate CSV file from:
 
-The above multi language page had been created using the large font "Droid Sans Fallback Regular", which yielded a file size of **1.62 MB**. Applying the two scripts and replacing "keep" with "china-s" in the intermediate CSV file like so: ``"Droid Sans Fallback Regular;china-s; 50483 glyphs/size 3556308"`` yielded a new file size of only **16.1 KB**!
+``Droid Sans Fallback Regular;keep; 50483 glyphs/size 3556308``
+
+to:
+
+``Droid Sans Fallback Regular;china-s; 50483 glyphs/size 3556308``
+
+... yielded a new file size of only **16.1 KB**!
 
 A very significant file size reduction in this case!
 
