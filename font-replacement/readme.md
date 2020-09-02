@@ -96,6 +96,41 @@ Replacing these by (the non-subsettable) **"helv"** (33 KB), **"hebo"** (34 KB),
 
 When instead taking **"Noto Sans Regular"**, **"Noto Sans Bold"**, **"Space Mono Bold"** and **"Space Mono Regular"** (which all support font subsetting), the resulting file size is only **53 KB** ... and it looks nicer!
 
+
+## How to replace a font with itself
+This may sound ridiculous. But imagine you have inserted text in a PDF using PyMuPDF and you are dissatisfied with the resulting file size: large-sized fonts were pulled in.
+
+You can use this facility as a font subsetting mechanism and "replace" fonts with themselves.
+
+![screen](multi-language.jpg)
+
+
+The above multi language page had been created using the large font "Droid Sans Fallback Regular", which yielded a file size of **1.62 MB**. Applying the two scripts and replacing "keep" with "china-s" in the intermediate CSV file like so: ``"Droid Sans Fallback Regular;china-s; 50483 glyphs/size 3556308"`` yielded a new file size of only **16.1 KB**!
+
+A very significant file size reduction in this case!
+
+The run protocol looked like this:
+
+```
+python repl-font.py tw-textbox3.pdf
+Processing PDF 'tw-textbox3.pdf' with 1 pages.
+
+Phase 1: Create unicode subsets.
+End of phase 1, 0.03 seconds.
+
+Font replacement overview:
+ Droid Sans Fallback Regular replaced by: Droid Sans Fallback Regular.
+
+Building font subsets:
+Used 179 glyphs of font 'Droid Sans Fallback Regular'. 3453 KB saved.
+Font subsets built, 0.77 seconds.
+
+Phase 2: rebuild document.
+End of phase 2, 0.01 seconds
+Total duration 0.81 seconds
+```
+> As you can see, although 5 different languages where used, it was only 180 glyphs out of over 50,000 in this font - about 0.36 percent. Consequently, most of this font was thrown out by subsetting.
+
 ## Changes
 * Version 2020-09-02:
     - Now also supporting text in so-called "Form XObjects", i.e. text not encoded in the page's `/Contents`.
