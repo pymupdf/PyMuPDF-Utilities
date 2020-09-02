@@ -111,7 +111,7 @@ to:
 
 ``Droid Sans Fallback Regular;china-s; 50483 glyphs/size 3556308``
 
-... yielded a new file size of only **16.1 KB**!
+... yielded a new file size of only **16.1 KB** - less than 1% of the original!
 
 A very significant file size reduction in this case!
 
@@ -135,7 +135,7 @@ Phase 2: rebuild document.
 End of phase 2, 0.01 seconds
 Total duration 0.81 seconds
 ```
-> As you can see, although 5 different languages where used, it was only 180 glyphs out of over 50,000 in this font - about 0.36 percent. Consequently, most of this font was thrown out by subsetting.
+> As you can see, although 5 different languages where used, it was only 180 glyphs out of over 50,000 in this font - about 0.36 percent. Subsetting saved us over 99% of the font's original size.
 
 ## Changes
 * Version 2020-09-02:
