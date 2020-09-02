@@ -97,7 +97,7 @@ When instead taking **"Noto Sans Regular"**, **"Noto Sans Bold"**, **"Space Mono
 
 
 ## How to replace a font with itself
-This may sound ridiculous. But imagine you have inserted text in a PDF and you are disappointed with the resulting file size: large-sized fonts were pulled in.
+This may sound ridiculous. But imagine you have inserted text in a PDF and now you are disappointed with the resulting file size: large-sized fonts have been pulled in.
 
 You can use this facility as a font subsetting mechanism and **_"replace" fonts with themselves_**.
 
