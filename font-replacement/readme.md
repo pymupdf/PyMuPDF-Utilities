@@ -77,7 +77,7 @@ This is what **_font subsetting_** is all about. We use package ``fontTools`` to
 
 ``fontTools`` cannot create subsets for CFF type fonts (as far as we know).
 
-To support embeddable versions of the old Base-14 fonts, MuPDF chooses CFF fonts: the "Nimbus" font families by URW++ - developped by URW Type Foundry GmbH). So if you choose one of these Base-14 replacement fonts, the resulting PDF may easily be larger than the original.
+To support embeddable versions of the old Base-14 fonts, MuPDF chooses CFF fonts: the "Nimbus" font families by URW++ (developped by URW Type Foundry GmbH). So if you choose one of these Base-14 replacement fonts, the resulting PDF may easily be larger than the original.
 
 This is not necessarily a big problem: the Nimbus fonts are relatively small (around 50 KB or less - albeit per font weight). But you still may want to consider alternatives which support subsetting.
 
