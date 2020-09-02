@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """
 @created: 2020-08-20 13:00:00
 
@@ -24,7 +23,7 @@ Iterate through the pages and ...
   stay intact (images, links, annotations, ...) as well as text with a not
   replaced font.
 
-* Write original text pieces to the page again, using the replacement font.
+* Write original text pieces to the page again, using the new font.
 
 * Original text color is kept.
 
@@ -46,7 +45,7 @@ TODOs, Missing Features, Limitations
 * Running this script will always make rewritten text visible, because it will
   be inserted after other page content (images, drawings, etc.) has been drawn.
   This is inevitable and may be a drawback for using this script.
-* Replacing fonts will be subsetted based on its used unicodes. This is
+* New fonts will be subsetted based on its used unicodes. This is
   currently not reflected ("ABCDEF+"-style prefix) in the font definition.
 
 
@@ -62,9 +61,8 @@ Reasons include:
 
 * This script enforces use of embedded fonts. This will add to the output size.
 * We use fontTools to create font subsets based on the used unicodes.
-  Depending on the choice of replacement fonts subsetting may not be supported.
-  supported. We know of no way subsetting CFF fonts like the embeddable
-  Base-14 font variants.
+  Depending on the choice of the new font, subsetting may not wordk. We know of
+  no way subsetting CFF fonts like the embeddable Base-14 font variants.
 
 License
 -------
@@ -75,6 +73,15 @@ MIT license (fontTools)
 Copyright
 ---------
 (c) 2020 Jorj X. McKie
+
+Changes
+-------
+* Version 2020-09-02:
+- Now also supporting text in so-called "Form XObjects", i.e. text not encoded
+  in the page's /Contents.
+- The intermediate CSV file containing mappings between old and new font names
+  is now handled as a binary file (read / write options "rb", resp. "wb") to
+  support fontnames encoded as general UTF-8.
 
 """
 import os
@@ -196,10 +203,20 @@ def cont_clean(page, fontrefs):
     
     Args:
         page: the page
-        fontrefs: (list of bytes) looking like b"/refname ".
+        fontrefs: dict of contents stream xrefs. Each xref key has a list of
+            ref names looking like b"/refname ".
     """
 
     def remove_font(fontrefs, lines):
+        """This inline function removes references to fonts in a /Contents stream.
+
+        Args:
+            fontrefs: a list of bytes objects looking like b"/fontref ".
+            lines: a list of the lines of the /Contents.
+        Returns:
+            (bool, lines), where the bool is True if we have changed any of
+            the lines.
+        """
         changed = False
         count = len(lines)
         for ref in fontrefs:
@@ -230,14 +247,16 @@ def cont_clean(page, fontrefs):
         return changed, lines
 
     doc = page.parent
-    page.cleanContents(sanitize=True)
-    xref = page.getContents()[0]  # there is only one /Contents obj now
-    cont = doc.xrefStream(xref)
-    cont_lines = cont.splitlines()
-    changed, cont_lines = remove_font(fontrefs, cont_lines)
-    if changed:
-        cont = b"\n".join(cont_lines) + b"\n"
-        doc.updateStream(xref, cont)  # replace command source
+    for xref in fontrefs.keys():
+        xref0 = 0 + xref
+        if xref0 == 0:  # the page contents
+            xref0 = page.getContents()[0]  # there is only one /Contents obj now
+        cont = doc.xrefStream(xref0)
+        cont_lines = cont.splitlines()
+        changed, cont_lines = remove_font(fontrefs[xref], cont_lines)
+        if changed:
+            cont = b"\n".join(cont_lines) + b"\n"
+            doc.updateStream(xref0, cont)  # replace command source
 
 
 def build_subset(buffer, unc_set):
@@ -273,7 +292,9 @@ def build_subset(buffer, unc_set):
                 "--recalc-bounds",
             ]
         )
-        new_buffer = open("newfont.ttf", "rb").read()  # subset font
+        fd = open("newfont.ttf", "rb")
+        new_buffer = fd.read()  # subset font
+        fd.close()
     except:
         new_buffer = None
     os.remove("uncfile.txt")
@@ -286,8 +307,8 @@ def build_subset(buffer, unc_set):
 def clean_fontnames(page):
     """Remove multiple references to one font.
 
-    When rebuilding the page text, dozens of font reference names '/Fnnn' are
-    generated pointing to the same font.
+    When rebuilding the page text, dozens of font reference names '/Fnnn' may
+    be generated pointing to the same font.
     This function removes these duplicates and thus reduces the size of the
     /Resources object.
     """
@@ -318,18 +339,22 @@ def build_repl_table(doc, fname):
     Read the font relacement file and store its information in dictionaries
     'font_subsets', 'font_buffers' and 'new_fontnames'.
     """
-    repl_file = open(fname)
-    while True:
-        line = repl_file.readline()
-        if not line or line == "\n":
-            break
+    fd = open(fname, "rb")
+    lines = fd.read().splitlines()
+    fd.close()
+
+    for line in lines:
+        line = line.decode()
         if line.endswith("\n"):
             line = line[:-1]
+        if not line:
+            continue
         line = line.strip()
         if line.startswith("#"):
             continue
-        xref, oldfont, newfont = line.split(";")[:3]
-        if newfont == "keep":
+        oldfont, newfont = line.split(";")[:2]
+
+        if newfont == "keep":  # ignore if not replaced
             continue
         if "." in newfont or "/" in newfont or "\\" in newfont:
             font = fitz.Font(fontfile=newfont)
@@ -372,16 +397,22 @@ def tilted_span(page, wdir, span, font):
 
 
 def get_page_fontrefs(page):
-    fontlist = page.getFontList()
-    fontrefs = []  # ref names for each font to replace
+    fontlist = page.getFontList(full=True)
+    # Ref names for each font to replace.
+    # Each contents stream has a separate entry here: keyed by xref,
+    # 0 = page /Contents, otherwise xref of XObject
+    fontrefs = {}
     for f in fontlist:
         fontname = f[3]
+        cont_xref = f[-1]  # xref of XObject, 0 if page /Contents
         idx = fontname.find("+") + 1
         fontname = fontname[idx:]  # remove font subset indicator
-        if fontname in new_fontnames.keys():  # do we replace this font?
+        if fontname in new_fontnames.keys():  # we replace this font!
             refname = f[4]
             refname = b"/" + refname.encode() + b" "
-            fontrefs.append(refname)
+            refs = fontrefs.get(cont_xref, [])
+            refs.append(refname)
+            fontrefs[cont_xref] = refs
     return fontrefs  # return list of font reference names
 
 
@@ -402,7 +433,7 @@ extr_flags = fitz.TEXT_PRESERVE_LIGATURES | fitz.TEXT_PRESERVE_WHITESPACE
 print("Phase 1: Create unicode subsets.")
 for page in indoc:
     fontrefs = get_page_fontrefs(page)
-    if fontrefs == []:  # page has no fonts to replace
+    if fontrefs == {}:  # page has no fonts to replace
         continue
     for block in page.getText("dict", flags=extr_flags)["blocks"]:
         for line in block["lines"]:
@@ -449,14 +480,17 @@ print()
 # Phase 2
 print("Phase 2: rebuild document.")
 for page in indoc:
-    fontrefs = get_page_fontrefs(page)
-    if fontrefs == []:  # page has no fonts to replace
-        continue
     # extract text again
     blocks = page.getText("dict", flags=extr_flags)["blocks"]
 
+    # clean contents streams of the page and any referenced XObjects.
+    page.cleanContents(sanitize=True)
+    fontrefs = get_page_fontrefs(page)
+    if fontrefs == {}:  # page has no fonts to replace
+        continue
     cont_clean(page, fontrefs)  # remove its old text
     textwriters = {}  # contains one text writer per detected text color
+
     for block in blocks:
         for line in block["lines"]:
             wmode = line["wmode"]

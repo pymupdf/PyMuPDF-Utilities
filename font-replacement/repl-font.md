@@ -1,4 +1,4 @@
-# Replacing Font in Existing PDFs with PyMuPDF
+# Replacing Fonts in Existing PDFs using PyMuPDF
 
 Using PyMuPDF v1.17.6 or later, replacing fonts in an existing PDF becomes possible. This describes a set of scripts which allow replacing selected fonts by some others.
 
@@ -10,7 +10,7 @@ It supports the following features:
 * Maintain the page layout, table of contents, links, images, etc.
 * Build font subsets based on the characters used.
 
-This makes it e.g. possible to replace **Courier** by a nicer monospaced font, take a non-serifed font instead of Times-Roman, etc.
+This makes it e.g. possible to replace **Courier** by a nicer monospaced font, or to take a non-serifed font instead of Times-Roman, etc.
 
 ## Technical Approach
 
@@ -22,44 +22,77 @@ This makes it e.g. possible to replace **Courier** by a nicer monospaced font, t
 The script makes heavy use of and is dependent on MuPDF's page cleaning and text extraction facilities, `Page.cleanContents()` and `Page.getText("dict")`.
 
 ## Choosing Replacement Fonts
-The font replacing script expects a CSV file which specifies, which fonts should be replace. You must execute a utility script which creates a list of all used fonts and stores it in a CSV file.
+The font replacing script expects a CSV file which specifies, which fonts should be replaced by which other fonts. You must execute a utility script which creates this list of all used fonts
 
 Edit this file to specify which fonts you wish to change.
 
 Here is an example output:
 
-| xref | fontname | replace | information |
-|------|----------|-------------|-------------|
-| 26 | Utopia-Regular-Identity-H | keep |  58 glyphs/size 7498/serifed |
-| 30 | Utopia-Semibold-Identity-H | keep |  58 glyphs/size 8037/serifed/bold |
-| 34 | Utopia-Italic-Identity-H | keep |  229 glyphs/size 5103/serifed |
-| 42 | ZapfDingbats-Identity-H | keep |  2 glyphs/size 371/serifed |
-| 47 | ArialMT-Identity-H | keep |  20 glyphs/size 2675/serifed |
+| fontname | replace | information |
+|----------|-------------|-------------|
+| Utopia-Regular-Identity-H | keep |  58 glyphs/size 7498/serifed |
+| Utopia-Semibold-Identity-H | keep |  58 glyphs/size 8037/serifed/bold |
+| Utopia-Italic-Identity-H | keep |  229 glyphs/size 5103/serifed |
+| ZapfDingbats-Identity-H | keep |  2 glyphs/size 371/serifed |
+| ArialMT-Identity-H | keep |  20 glyphs/size 2675/serifed |
 
-Change the **"replace"** column value with a desired replacement font. If you want to keep the old font, ignore that line or delete it.
+Change the **"replace"** column value with a desired replacement font. If you want to keep the old font, ignore the line or delete it.
 
-Use the "information" column to help make up your decision. If the old font contains only a few glyphs ("ZapfDingbats") or a small size, you might want to leave it untouched. Other information like "bold", "mono", etc. may also help choosing the right replacement. Keep in mind however, that this information (provided by the font creator) cannot be garantied to be complete or even correct: you may see "serifed" although it is a "sans" font, or "mono" is missing for a monospaced font, etc.
+Use the "information" column to help make up your decision. If the old font has only a few used glyphs ("ZapfDingbats") or a small size, you might want to leave it untouched. Other information like "bold", "mono", etc. may also help choosing the right replacement. Keep in mind however, that this latter information (provided by the font creator) cannot be garantied to be complete or even correct: you may see "serifed" although it is a "sans" font, or "mono" is missing even though it is a monospaced font, etc.
 
-Use the following values to replace "keep" with a new font name:
+Use the following values to replace **"keep"** with a new font name:
 
 * One of the Base-14 builtin fontnames Times-Roman, Helvetica, Courier, Symbol or ZapfDingbats and their font weight alternatives (like "heit" = Helvetica-Oblique).
-* One of the CJK builtin fontnames, e.g. "china-t" for traditional Chinese.
+* One of the CJK builtin fontnames, e.g. "china-t" for Traditional Chinese.
 * One of the builtin fontnames for repositiory `pymupdf-fonts` fonts, e.g. "figo" for "FiraGO Regular", or "spacemo" for "Space Mono Regular".
 * The file name of a font installed on your system, e.g. `C:/Windows/Fonts/DejaVuSerif-Bold.ttf`. In this case, make sure that the file name contains a "`.`" or a path separater ("`/`", "`\`") to be recognized as such.
 
 ## Limitations, TODOs, Quality Checks
+While this is a set of cool scripts providing a long-awaited feature, it does have its limitations and shortcomings.
+
+Among the general issues when replacing one font by another one are these:
+
+1. You are bound to **_see unsatisfactory results_** if you replace a mono-spaced by a proportional font, or vice versa.
+2. Even if fonts have similar characteristics (e.g. both are proportional), there may exist subtle differences for select characters. This may lead to different text lengths even if font sizes are equal. Because the available space for a piece of text on the PDF page must not be exceeded, the font size may have to be reduced to fit - leading to an uneven overall appearance.
+The contrary may also happen: if the new font is narrower, it will produce smaller text widths - which lead to gaps to subsequent text pieces on the same line if those are written with a different font.
+3. Do not expect that a justified text paragraph remains justified with a new font!
+4. When choosing a replacement font, make sure it has a glyph set at least as large as the original font.
+
+
 Existing text is extracted via `page.getText("dict")`. While this contains a lot of information about each text span, it is still not complete, e.g.
 
-* There is currently no way to determine whether extracted text is actually visible in the original. It may be covered by other objects like images (i.e. be in "background"), or be attributed as "hidden" - we wouldn't know this. Rewritten text will always be visible afterwards.
-* There is currently no way to tell whether text is under control of some opacity (transparency) instruction. The only way to "simulate" this is via a semi-manual intervention along the line ``if fontsize > some threshold, then opacity=0.2``.
-* TODO: The precision of text extraction is critical foro successful execution. On rare occasions, inter-character spacing may be incorrectly computed by MuPDF. Words may be erroneously joined or, vice versa characters in a word may show misplaced gaps. Maybe this can be healed by choosing the more detailed extraction method `page.getText("rawdict")`.
-* Another important, heavily used MuPDF utility function is invoked by `Page.cleanContents()`. It concatenates multiple `/Contents` objects, purifies their command syntax and snychronizes fonts actually **used** with fonts **named** in the `/Resources` page object.
+* There is currently no way to determine whether text is actually visible in the original. It may be covered by other objects like images (i.e. be in "background"), or be attributed as "hidden" - we wouldn't know this. Rewritten text will always be visible.
+* There is currently no way to tell whether text is under control of some opacity (transparency) instruction. The only way to "simulate" this is via a semi-manual intervention along the line ``"if fontsize > some threshold, then opacity=0.2"`` - assuming that such a large fontsize will probably be used as a watermark.
+* The precision of text extraction is critical for successful execution. On rare occasions, inter-character spacing may be incorrectly computed by MuPDF. Words may be erroneously joined or, vice versa characters in a word may show unexpected gaps. TODO: Maybe this can be healed by choosing the more detailed extraction method `page.getText("rawdict")`.
+* Another important, heavily used MuPDF utility function is invoked by `Page.cleanContents()`. It concatenates multiple `/Contents` objects, purifies their command syntax and synchronizes the fonts actually **used** with the fonts **listed** in the `/Resources` objects.
+Again, on rare occasions, contents cleaning may damage page appearance. If this happens, it may help to replace all fonts.
 
-## Usage
-Follow this procedure to replace fonts in a given file ``input.pdf``
+## Notes on Font Subsetting
+A font contains a mapping between the character code and its visual appearance (the "glyph"). In a simplistic view, a font can be thought of being a table which does this mapping.
 
-1. **_Run_** ``repl-fontnames.py input.pdf``. This will produce file ``input.pdf-fontnames.csv``.
+Obviously, the larger the set of supported characters, the larger will be the size of a font. There are fonts which support many hundred or thousands of characters. For example "Droid Sans Fallback Regular" contains over 50,000 glyphs, which leads to a file size of 3.6 MB.
 
-2. **_Edit_** the produced CSV as decscribed above. It is required as input for the next step.
+On the other hand, for any given font in any given PDF, comparatively few of its glpyhs will **actually be used**. The used subset is often in the range of low two digit percentages, or even less. Getting rid of the unused portions of the charatcer-to-glyph mapping is therefore an important vehicle to control PDF file sizes.
 
-3. **_Run_** ``repl-font.py input.pdf``. This will read the PDF and CSV files and replace the specified font(s). The resulting PDF is saved as ``input-new.pdf``.
+This is what **_font subsetting_** is all about. We use package ``fontTools`` to do this for OTF and TTF fonts.
+
+``fontTools`` cannot create subsets for CFF type fonts (as far as we know). MuPDF however chooses CFF fonts as embeddable replacements for the Base-14 fonts ("Nimbus" font family by URW). So if you choose one of these Base-14 as replacement fonts, the resulting PDF may easily be larger than the original.
+
+This is not necessarily a big problem: the Nimbus fonts are relatively small (around 50 KB per font weight). But you still may want to consider alternatives which support subsetting.
+
+To illustrate the above, look at these example numbers of a 4-page PDF, which was created as PDF export of a Word document.
+
+The original size is **240 KB** and it contains
+* 63 glyphs sans-serif regular
+* 34 glyphs sans-serif bold
+* 24 glyphs mono-spaced bold
+* 69 glyphs mono-spaced regular
+
+Replacing these by (the non-subsettable) **"helv"** (33 KB), **"hebo"** (34 KB), **"cobo"** (51 KB) and **"cour"** (45 KB) Nimbus fonts, this leads to the new file size **172 KB**.
+
+When instead taking **"Noto Sans Regular"**, **"Noto Sans Bold"** and **"Space Mono Regular"** (which all support font subsetting), the resulting file size is only **53 KB** ... and the result looks nicer!
+
+## Changes
+* Version 2020-09-02:
+    - Now also supporting text in so-called "Form XObjects", i.e. text not encoded in the page's `/Contents`.
+    - The intermediate CSV file containing mappings between old and new font names is now handled as a binary file (read / write options "rb", resp. "wb") to support fontnames encoded as general UTF-8.
