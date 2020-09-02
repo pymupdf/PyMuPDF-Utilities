@@ -135,7 +135,7 @@ Phase 2: rebuild document.
 End of phase 2, 0.01 seconds
 Total duration 0.81 seconds
 ```
-> As you can see, although 5 different languages where used, it was only 180 glyphs out of over 50,000 in this font - about 0.36 percent. Subsetting saved us over 99% of the font's original size.
+> As you can see, although 6 different languages where used, it was only 180 glyphs out of over 50,000 in this font - about 0.36 percent. Subsetting saved us over 99% of the font's original size.
 
 ## Changes
 * Version 2020-09-02:
