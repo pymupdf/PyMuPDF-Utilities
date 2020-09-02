@@ -97,13 +97,13 @@ When instead taking **"Noto Sans Regular"**, **"Noto Sans Bold"**, **"Space Mono
 
 
 ## How to replace a font with itself
-This may sound ridiculous. But imagine you have inserted text in a PDF and you are dissatisfied with the resulting file size: large-sized fonts were pulled in.
+This may sound ridiculous. But imagine you have inserted text in a PDF and you are disappointed with the resulting file size: large-sized fonts were pulled in.
 
 You can use this facility as a font subsetting mechanism and **_"replace" fonts with themselves_**.
 
 ![screen](multi-language.jpg)
 
-The above multi language page had been created using the large font "Droid Sans Fallback Regular", which yielded a file size of **1.62 MB**. Applying the two scripts and replacing "keep" with "china-s" in the intermediate CSV file from:
+The above multi language page had been created using the large font "Droid Sans Fallback Regular", which resulted in a file size of **1.62 MB**. Applying the two scripts and replacing "keep" with "china-s" in the intermediate CSV file - from:
 
 ``Droid Sans Fallback Regular;keep; 50483 glyphs/size 3556308``
 
