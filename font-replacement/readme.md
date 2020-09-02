@@ -1,32 +1,31 @@
-# Replacing Fonts in Existing PDFs using PyMuPDF
+# Replacing Fonts in a PDF with PyMuPDF
 
-Using PyMuPDF v1.17.6 or later, replacing fonts in an existing PDF becomes possible. This describes a set of scripts which allow replacing selected fonts by some others.
-
+Using PyMuPDF v1.17.6 or later, replacing fonts in an existing PDF becomes possible. This describes the How-To and some technical background.
 ## Features
 It supports the following features:
 
-* Replace selected or all fonts in a PDF.
-* Ensure that all fonts in a PDF are embedded.
+* Replace one or more fonts in a PDF.
+* All new fonts will be **embedded**.
 * Maintain the page layout, table of contents, links, images, etc.
-* Build font subsets based on the characters used.
+* Build font subsets based on usage, thus reducing file size.
 
 This makes it e.g. possible to replace **Courier** by a nicer monospaced font, or to take a non-serifed font instead of Times-Roman, etc.
 
 ## Technical Approach
 
-* Each page is searched for text written with one of the replaceable fonts.
+* Each page is searched for text written with one of the obsolete fonts.
 * These text pieces are inspected for their used unicodes.
-* Build subsets for replacing fonts based on the used unicodes.
-* Remove and rewrite each text span for a replaceable font.
+* Build subsets of the new fonts based on the used unicodes.
+* Remove then rewrite each applicable text span with its new font.
 
 The script makes heavy use of and is dependent on MuPDF's page cleaning and text extraction facilities, `Page.cleanContents()` and `Page.getText("dict")`.
 
 ## Choosing Replacement Fonts
-The font replacing script expects a CSV file which specifies, which fonts should be replaced by which other fonts. You must execute a utility script which creates this list of all used fonts
+The font replacing script expects a CSV file which specifies, which old font should be replaced by which new fonts. You must execute a utility script which creates a list of all used fonts.
 
 Edit this file to specify which fonts you wish to change.
 
-Here is an example output:
+Here is an example utility output:
 
 | fontname | replace | information |
 |----------|-------------|-------------|
@@ -36,21 +35,21 @@ Here is an example output:
 | ZapfDingbats-Identity-H | keep |  2 glyphs/size 371/serifed |
 | ArialMT-Identity-H | keep |  20 glyphs/size 2675/serifed |
 
-Change the **"replace"** column value with a desired replacement font. If you want to keep the old font, ignore the line or delete it.
+Change the **"replace"** column value with a desired new font. If you want to keep the old font, ignore the line or delete it.
 
-Use the "information" column to help make up your decision. If the old font has only a few used glyphs ("ZapfDingbats") and / or has a small size, you might want to leave it untouched. Other information like "bold", "mono", etc. may also help choosing the right replacement. Keep in mind however, that this latter information (provided by the font creator) cannot be garantied to be complete or even correct: you may see "serifed" although it is a "sans" font, or "mono" is missing even though it is a monospaced font, etc.
+Use the "information" column to help make up your decision. If the old font has only a few used glyphs ("ZapfDingbats") and / or has a small size, you might want to leave it untouched. Other information like "bold", "mono", etc. may also help choosing the right replacement. Keep in mind however, that this latter information (provided by the font creator) is not reliable: you may see "serifed" although it is a "sans" font, or "mono" is missing even though it is a monospaced font, etc.
 
 Use the following values to replace **"keep"** with a new font name:
 
-* One of the Base-14 builtin fontnames Times-Roman, Helvetica, Courier, Symbol or ZapfDingbats and their font weight alternatives (like "heit" = Helvetica-Oblique).
-* One of the CJK builtin fontnames, e.g. "china-t" for Traditional Chinese.
-* One of the builtin fontnames for repositiory `pymupdf-fonts` fonts, e.g. "figo" for "FiraGO Regular", or "spacemo" for "Space Mono Regular".
-* The file name of a font installed on your system, e.g. `C:/Windows/Fonts/DejaVuSerif-Bold.ttf`. In this case, make sure that the file name contains a "`.`" or a path separater ("`/`", "`\`") to be recognized as such.
+* One of the Base-14 builtin reserved fontnames for Times-Roman, Helvetica, Courier, Symbol or ZapfDingbats (like "heit" = Helvetica-Oblique, "cobi" = "Courier-BoldOblique", etc.).
+* One of the CJK reserved builtin fontnames, e.g. "china-t" for Traditional Chinese.
+* One of the builtin fontnames available when [pymupdf-fonts](https://pypi.org/search/?q=pymupdf-fonts) is installed, e.g. "figo" for "FiraGO Regular", or "spacemo" for "Space Mono Regular".
+* The file name of a font installed on your system, e.g. `C:/Windows/Fonts/DejaVuSerif-Bold.ttf`. In this case, make sure that the string contains at least one of "`.`", "`/`" or "`\`") to be recognized as such.
 
 ## Limitations, TODOs, Quality Checks
 While this is a set of cool scripts providing a long-awaited feature, it does have its limitations and shortcomings.
 
-Among the general issues when replacing one font by another one are these:
+Among the general issues when replacing a font are these:
 
 1. You will probably **_see unsatisfactory results_** if you replace a mono-spaced by a proportional font, or vice versa.
 2. Even if fonts have similar characteristics (e.g. both are proportional), there may exist subtle differences for select characters. This may lead to different text lengths even if font sizes are equal. Because the available space for a text piece must not be exceeded, the font size will be reduced to fit where needed - leading to an uneven overall appearance.
