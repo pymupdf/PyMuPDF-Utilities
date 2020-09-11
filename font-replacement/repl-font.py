@@ -83,11 +83,15 @@ Changes
   is now handled as a binary file (read / write options "rb", resp. "wb") to
   support fontnames encoded as general UTF-8.
 
+* Version 2020-09-10:
+- Change the CSV parameter file to JSON format. This hopefully covers more
+  peculiarities for fontname specifications.
+
 """
 import os
 import sys
 import time
-import math
+import json
 from pprint import pprint
 
 import fitz
@@ -235,13 +239,24 @@ def cont_clean(page, fontrefs):
                         found = False  # switch off
                         continue  # next line
                 if found == True and (
-                    lines[i].endswith(b" TJ") or lines[i].endswith(b" Tj")
+                    lines[i].endswith(
+                        (
+                            b"TJ",
+                            b"Tj",
+                            b"TL",
+                            b"Tc",
+                            b"Td",
+                            b"Tm",
+                            b"T*",
+                            b"Ts",
+                            b"Tw",
+                            b"Tz",
+                            b"'",
+                            b'"',
+                        )
+                    )
                 ):  # write command for our font?
                     lines[i] = b""  # remove it
-                    if lines[i - 1].endswith(
-                        b" Tm"
-                    ):  # also remove preceeding text matrix
-                        lines[i - 1] = b""
                     changed = True  # tell we have changed
                     continue
         return changed, lines
@@ -339,21 +354,16 @@ def build_repl_table(doc, fname):
     Read the font relacement file and store its information in dictionaries
     'font_subsets', 'font_buffers' and 'new_fontnames'.
     """
-    fd = open(fname, "rb")
-    lines = fd.read().splitlines()
+    fd = open(fname)
+    fontdicts = json.load(fd)
+
     fd.close()
 
-    for line in lines:
-        line = line.decode()
-        if line.endswith("\n"):
-            line = line[:-1]
-        if not line:
-            continue
-        line = line.strip()
-        if line.startswith("#"):
-            continue
-        oldfont, newfont = line.split(";")[:2]
-
+    for fontdict in fontdicts:
+        oldfont = fontdict["oldfont"]
+        newfont = fontdict["newfont"]
+        oldfont = oldfont.strip()
+        newfont = newfont.strip()
         if newfont == "keep":  # ignore if not replaced
             continue
         if "." in newfont or "/" in newfont or "\\" in newfont:
@@ -377,7 +387,7 @@ def build_repl_table(doc, fname):
 
 
 def tilted_span(page, wdir, span, font):
-    """Output a non-horizontal span."""
+    """Output a non-horizontal text span."""
     cos, sin = wdir  # writing direction from the line
     matrix = fitz.Matrix(cos, -sin, sin, cos, 0, 0)  # corresp. matrix
     text = span["text"]  # text to write
@@ -421,16 +431,24 @@ def get_page_fontrefs(page):
 # ------------------
 infilename = sys.argv[1]
 indoc = fitz.open(infilename)  # input PDF
-repl_filename = infilename + "-fontnames.csv"
+
+repl_filename = infilename + "-fontnames.json"
 if os.path.exists(repl_filename):
     build_repl_table(indoc, repl_filename)
+
 if new_fontnames == {}:
-    sys.exit("No fonts to replace at all.")
-print("Processing PDF '%s' with %i pages.\n" % (indoc.name, indoc.pageCount))
+    sys.exit("\n***** There are no fonts to replace. *****")
+print(
+    "Processing PDF '%s' with %i page%s.\n"
+    % (indoc.name, indoc.pageCount, "s" if indoc.pageCount > 1 else "")
+)
+
 t0 = time.perf_counter()
+# the following flag prevents images from being extracted:
 extr_flags = fitz.TEXT_PRESERVE_LIGATURES | fitz.TEXT_PRESERVE_WHITESPACE
+
 # Phase 1
-print("Phase 1: Create unicode subsets.")
+print("Phase 1: Create sets of used unicodes per new font.")
 for page in indoc:
     fontrefs = get_page_fontrefs(page)
     if fontrefs == {}:  # page has no fonts to replace
@@ -442,17 +460,18 @@ for page in indoc:
                 if new_fontname is None:  # do not replace this font
                     continue
 
-                # replace non-utf8 by paragraph symbol
+                # replace non-utf8 by section symbol
                 text = span["text"].replace(chr(0xFFFD), chr(0xB6))
                 # extend collection of used unicodes
                 subset = font_subsets.get(new_fontname, set())
                 for c in text:
                     subset.add(ord(c))  # add any new unicode values
-                font_subsets[new_fontname] = subset  # replace the set
+                font_subsets[new_fontname] = subset  # store back extended set
 
 
 t0_1 = time.perf_counter()
 print("End of phase 1, %g seconds.\n" % round(t0_1 - t0, 2))
+print()
 print("Font replacement overview:")
 
 max_len = max([len(k) for k in new_fontnames.keys()]) + 1
@@ -483,20 +502,20 @@ for page in indoc:
     # extract text again
     blocks = page.getText("dict", flags=extr_flags)["blocks"]
 
-    # clean contents streams of the page and any referenced XObjects.
+    # clean contents streams of the page and any XObjects.
     page.cleanContents(sanitize=True)
     fontrefs = get_page_fontrefs(page)
     if fontrefs == {}:  # page has no fonts to replace
         continue
-    cont_clean(page, fontrefs)  # remove its old text
+    cont_clean(page, fontrefs)  # remove text using fonts to be replaced
     textwriters = {}  # contains one text writer per detected text color
 
     for block in blocks:
         for line in block["lines"]:
-            wmode = line["wmode"]
-            wdir = list(line["dir"])
+            wmode = line["wmode"]  # writing mode (horizontal, vertical)
+            wdir = list(line["dir"])  # writing direction
             markup_dir = 0
-            bidi_level = 0
+            bidi_level = 0  # not used
             if wdir == [0, 1]:
                 markup_dir = 4
             for span in line["spans"]:
@@ -532,9 +551,10 @@ for page in indoc:
                 except:
                     print("page %i exception:" % page.number, text)
 
+    # now write all text stored in the list of text writers
     for color in textwriters.keys():  # output the stored text per color
         tw = textwriters[color]
-        outcolor = fitz.sRGB_to_pdf(color)  # recover (r,g,b) for given sRGB value
+        outcolor = fitz.sRGB_to_pdf(color)  # recover (r,g,b)
         tw.writeText(page, color=outcolor)
 
     clean_fontnames(page)

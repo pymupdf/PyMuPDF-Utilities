@@ -48,9 +48,14 @@ Changes
   is now handled as a binary file (read / write options "rb", resp. "wb") to
   support fontnames encoded as general UTF-8.
 
+* Version 2020-09-10:
+- Change the CSV parameter file to JSON format. This hopefully covers more
+  peculiarities for fontname specifications.
+
 """
 import fitz
 import sys
+import json
 
 
 def make_msg(font):
@@ -64,8 +69,8 @@ def make_msg(font):
         msg.append("italic")
     if flags["bold"]:
         msg.append("bold")
-    msg = "/".join(msg)
-    return msg.encode()
+    msg = ", ".join(msg)
+    return msg
 
 
 infilename = sys.argv[1]
@@ -76,20 +81,25 @@ for i in range(len(doc)):
         msg = ""
         fontname = f[3]
         if f[1] == "n/a":
-            msg = b"Not embedded!"
+            msg = "Not embedded!"
         else:
             extr = doc.extractFont(f[0])
             font = fitz.Font(fontbuffer=extr[-1])
             msg = make_msg(font)
         idx = fontname.find("+") + 1
         fontname = fontname[idx:]
+        if idx > 0:
+            msg += ", subset font"
         font_list.add((fontname, msg))
 
 font_list = list(font_list)
 font_list.sort(key=lambda x: x[0])
-outname = infilename + "-fontnames.csv"
-out = open(outname, "wb")
+outname = infilename + "-fontnames.json"
+out = open(outname, "w")
+outlist = []
 for fontname, msg in font_list:
-    msg1 = b"keep"
-    out.write(b"%s;%s; %s\n" % (fontname.encode(), msg1, msg))
+    msg1 = "keep"
+    outlist.append({"oldfont": fontname, "newfont": msg1, "info": msg})
+
+json.dump(outlist, out, indent=2)
 out.close()
