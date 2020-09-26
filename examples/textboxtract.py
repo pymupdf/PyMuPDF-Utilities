@@ -21,6 +21,12 @@ Remarks
 
 2. Reconstructed lines will contain words with exactly one space between them.
    So any original multiple spaces will be ignored.
+
+3. Depending on your requirements, you can get away without any special script
+   by using features new in version 1.17.7. They work on a by-character level,
+   meaning they cut away parts of a word where necessary. On the other hand
+   they are extremely simple to use: Page.getTextbox(rect), or
+   Page.getText("text", clip=rect), etc. is all you need.
 """
 from itertools import groupby
 import fitz
