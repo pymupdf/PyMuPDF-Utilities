@@ -14,7 +14,7 @@ With some simplification, this works using the following commands:
 
 * `"x y m"` starts a path by positioning on point (x, y).
 * `"x y l"` defines a line **ending** at point (x, y). The **start** point of the line must either be the point defined by `"m"`, or is taken to be the end point of the preceeding command.
-* `"x1 y1 x2 y2 x3 y3 c"` defines a Bézier curve with two control points, (x1, y1) and (x2, y2), which ends at point (x3, y3). Its start point must either be defined by `"m"` or is taken to be the end point of the preceeding command. There are variants of `"c"`, called `"v"` and `"y"` respectively. They the same thing except that they either duplicate the start point (`"v"`) or the end point (`"y"`) and use it as one of the two control points. So both are just abbreviated versions of `"c"`.
+* `"x1 y1 x2 y2 x3 y3 c"` defines a (cubic) Bézier curve with two control points, (x1, y1) and (x2, y2), which ends at point (x3, y3). Its start point must either be defined by `"m"` or is taken to be the end point of the preceeding command. There are variants of `"c"`, called `"v"` and `"y"` respectively. They the same thing except that they either duplicate the start point (`"v"`) or the end point (`"y"`) and use it as one of the two control points. So both are just abbreviated versions of `"c"`.
 * `"x y w h re"` defines a rectangle. (x, y) is its lower-left point, w and h are its width and height. This command defines a **complete (sub) path** and does not require a preceeding `"m"` or other command. It therefore in most cases is the only command in a path. But it may be part of the command sequence of a higher level path, in which case (x, y) must be used as the connector.
 * `"h"` (no parameters) connects the last point of the path with its first point using a straight line.
 
@@ -22,7 +22,7 @@ There are other commands which define stroke and fill color, line width and line
 
 Then, several commands exist which actually **draw** the path. The individual command names control how this should happen: stroking or filling or both, handling of colors if the interiors of parts of the path overlap, etc.
 
-> Circles and most other mathematical curves are **never represented with 100% precision in PDF**. Instead, approximations of them with Bézier curves are used - which in essence are polynomials of degree 3. This approach requires a piece-wise presentation. For example, circles are represented by 4 Bézier curves, each of which approximate a quarter circle perimeter.
+> Circles and most other mathematical curves are **never represented with 100% precision in PDF**. Instead, approximations of them with Bézier curves are used - which in essence are polynomials of degree 3. This approach requires a piece-wise presentation. For example, circles are represented by 4 Bézier curves, each of which approximate a quarter circle perimeter. For details on Bézier curves consult [this article[(https://en.wikipedia.org/wiki/B%C3%A9zier_curve) for example.
 
 For details on PDF operators see page 985 in the [manual](https://www.adobe.com/content/dam/acom/en/devnet/acrobat/pdfs/pdf_reference_1-7.pdf).
 
