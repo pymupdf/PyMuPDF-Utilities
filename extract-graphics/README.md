@@ -22,7 +22,7 @@ There are other commands which define stroke and fill color, line width and line
 
 Then, several commands exist which actually **draw** the path. The individual command names control how this should happen: stroking or filling or both, handling of colors if the interiors of parts of the path overlap, etc.
 
-> Circles and most other mathematical curves are **never represented with 100% precision in PDF**. Instead, approximations of them with Bézier curves are used - which in essence are polynomials of degree 3. This approach requires a piece-wise presentation. For example, circles are represented by 4 Bézier curves, each of which approximate a quarter circle perimeter. For details on Bézier curves consult [this article[(https://en.wikipedia.org/wiki/B%C3%A9zier_curve) for example.
+> Circles and most other mathematical curves are **never represented with 100% precision in PDF**. Instead, approximations of them with Bézier curves are used - which in essence are polynomials of degree 3. This approach requires a piece-wise presentation. For example, circles are represented by 4 Bézier curves, each of which approximate a quarter circle perimeter. For details on Bézier curves consult [this article](https://en.wikipedia.org/wiki/B%C3%A9zier_curve) for example.
 
 For details on PDF operators see page 985 in the [manual](https://www.adobe.com/content/dam/acom/en/devnet/acrobat/pdfs/pdf_reference_1-7.pdf).
 
