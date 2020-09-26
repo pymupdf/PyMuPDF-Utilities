@@ -24,6 +24,8 @@ Then, several commands exist which actually **draw** the path. The individual co
 
 > Circles and most other mathematical curves are **never represented with 100% precision in PDF**. Instead, approximations of them with Bézier curves are used - which in essence are polynomials of degree 3. This approach requires a piece-wise presentation. For example, circles are represented by 4 Bézier curves, each of which approximate a quarter circle perimeter.
 
+For details on PDF operators see page 985 in the [manual](https://www.adobe.com/content/dam/acom/en/devnet/acrobat/pdfs/pdf_reference_1-7.pdf).
+
 ## Converting a PDF Path to Python
 
 Module ``extractGraphic`` converts each PDF path to the following Python dictionary:
@@ -49,16 +51,16 @@ The ``items`` list contains any number of these entries:
                # from either the "m" PDF command or a previous end point.
 ("c", p1, p2, p3, p4)  # Bezier curve from p1 to p4. p1 is created
                # from either the "m" PDF command or a previous end point.
-               # PDF "v", "y" commands are translated to this, too.
+               # PDF "v", "y" commands are converted to this format.
 ("re", rect)  # rectangle (fitz.Rect)
 ("qu", quad)  # created from "re" if current matrix is a rotation.
 ```
 
-Multiple consecutive entries in ``items`` in a path indicate a compound drawing. Multiple commands of a path are **_"chained"_** together: in general, this implies that the **_last point_** of an entry **_must equal_** the first point of the following entry. But rectangles and quads are complete sub-paths and drawn starting and ending with their **_top-left_** corner - so this point must be used for chaining where needed.
+Multiple consecutive entries in ``items`` in a path indicate a compound drawing. They are **_"chained"_** together: in general, this implies that the **_last point_** of an entry **_must equal_** the first point of the following entry. The exceptions are rectangles and quads. They are complete sub-paths and drawn starting and ending at their **_top-left_** corner - so this point must be used for chaining where needed.
 
 The programmer must take this into account when modifying a path.
 
-> **Hint:** If encountering 4 consecutive connected Bezier curves "c", then they in many cases jointly define a **_circle_**, because circles need 4 Bezier curves which each form a quarter perimeter (see previous section). To confirm, check whether ``path["rect"]`` is a square.
+> **Hint:** If encountering 4 consecutive connected Bezier curves "c", then they in many cases jointly define a **_circle_**, because circles need 4 Bézier curves which each form a quarter perimeter (see previous section). To confirm, check whether ``path["rect"]`` is a square.
 
 > This session draws a circle with radius 100 around the center (300,300) and then extracts this drawing from the page:
 
