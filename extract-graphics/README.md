@@ -1,26 +1,28 @@
 # Extracting Drawings from a PDF Page with PyMuPDF
 This utility module walks through a PDF page's ``/Contents`` objects and interprets drawings. These are things composed of elementary commands defining lines, curves and rectangles, including their properties like colors and line dashing.
 
-PDF combines these commands in so-called **_paths_**, which can become complex graphics or other objects.
+PDF combines these commands in so-called **_paths_**, which can become complex graphics or other objects. [Here](https://github.com/pymupdf/PyMuPDF-Utilities/blob/master/shapes/symbol-list.pdf) is an example.
 
-The module returns a list of such paths by converting each PDF path into a Python dictionary. The path dictionary can subsequently be used for a number of purposes.
+The module returns a list of such paths by converting each PDF path into a Python dictionary. This path dictionary can subsequently be used for a number of purposes.
 
-* Reproduce the path drawing on some other page by using the draw commands of the ``Shape`` class.
+* Reproduce the original path drawing on some other page.
 * Use the lines, rectangles or curves of a path to locate table borders, help with text positioning or similar.
 * Simply make lists e.g. of all lines or all rectangles on the page, potentially subselecting them by properties like fill color or location.
 
 ## How PDF Encodes its Paths
-With some simplification, this works using the following commands:
+PDF uses a special mini-language for "painting" a page's appearance. Every PDF viewer, like Adobe Acrobat, must be able to interpret this language - and it indeed is "source code", which must be interpreted. A subset of commands of the language are used to paint paths. Please note, the unusual convention used by this language: function / command parameters **precede** the function! With some simplification, this works using the following:
 
-* `"x y m"` starts a path by positioning on point (x, y).
-* `"x y l"` defines a line **ending** at point (x, y). The **start** point of the line must either be the point defined by `"m"`, or is taken to be the end point of the preceeding command.
-* `"x1 y1 x2 y2 x3 y3 c"` defines a (cubic) Bézier curve with two control points, (x1, y1) and (x2, y2), which ends at point (x3, y3). Its start point must either be defined by `"m"` or is taken to be the end point of the preceeding command. There are variants of `"c"`, called `"v"` and `"y"` respectively. They are the same thing except that they either duplicate the start point (`"v"`) or the end point (`"y"`) and use this copy as one of the two control points. So both are just abbreviated versions of `"c"`.
-* `"x y w h re"` defines a rectangle. (x, y) is its lower-left point, w and h are its width and height. This command defines a **complete (sub) path** and does not require a preceeding `"m"` or other command. It therefore in most cases is the only command in a path. But it may be part of the command sequence of a higher level path, in which case (x, y) must be used as the connector.
-* `"h"` (no parameters) connects the last point of the path with its first point using a straight line.
+* `"x y m"` **_opens_** a new path by positioning ("move") on point (x, y).
+* `"x y l"` **_defines_** a line, ending at point (x, y). The start point of the line must either be the point defined by `"m"`, or is taken to be the end point of the preceeding command.
+* `"x1 y1 x2 y2 x3 y3 c"` **_defines_** a (cubic) Bézier curve with two control points ((x1, y1) and (x2, y2)), which ends at point (x3, y3). Its start point must again either be defined by `"m"` or is taken to be the end point of the preceeding command. There are variants of `"c"`, called `"v"` and `"y"` respectively. They are the same thing except that they either duplicate the start point (`"v"`) or the end point (`"y"`) and use this copy as one of the two control points. So both are just abbreviated versions of `"c"`.
+* `"x y w h re"` **_defines_** a rectangle. (x, y) is its lower-left point, w and h are its width and height. This command defines a **complete (sub) path** and does not require a preceeding `"m"` or other command. It therefore in most cases is the **_only command_** in a path. But it may be part of the command sequence of a higher level path, in which case (x, y) must be used as the connector.
+* `"h"` (no parameters) **defines** a connection of the last point of the path with its first point using a straight line.
 
 There are other commands which define stroke and fill color, line width and line dashing and other path property modifications.
 
-Then, several commands exist which actually **draw** the path. The individual command names control how this should happen: stroking or filling or both, handling of colors if the interiors of parts of the path overlap, etc.
+All of these commands are definitions only - they do not **paint** or draw anything.
+
+Several commands exist which actually **draw** the path. Each one of them also **closes** the path. The individual command names control how the drawing should happen: stroking or filling or both, handling of colors if the interiors of parts of the path overlap, etc.
 
 > Circles and most other mathematical curves are **never represented with 100% precision in PDF**. Instead, approximations of them with Bézier curves are used - which in essence are polynomials of degree 3. This approach requires a piece-wise presentation. For example, circles are represented by 4 Bézier curves, each of which approximate a quarter circle perimeter - with amazing precision. For details on Bézier curves consult [this article](https://en.wikipedia.org/wiki/B%C3%A9zier_curve) for example. Quote: "TrueType fonts use composite Bézier curves composed of quadratic Bézier curves. Other languages and imaging tools (such as PostScript, Asymptote, Metafont, and SVG) use composite Béziers composed of cubic Bézier curves for drawing curved shapes. OpenType fonts can use either kind, depending on the flavor of the font."
 
