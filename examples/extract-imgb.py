@@ -1,7 +1,13 @@
 from __future__ import print_function
+
+import io
+import os
+import sys
+import time
+
 import fitz
-import os, sys, time
 import PySimpleGUI as sg  # show a pogress  meter with this
+from PIL import Image
 
 """
 This demo extracts all images of a PDF as PNG files, whether they are
@@ -31,7 +37,7 @@ Found images are stored in a directory one level below the input PDF, called
 
 Dependencies
 ------------
-PyMuPDF v1.13.17+
+PyMuPDF v1.13.17+, Pillow
 """
 
 print(fitz.__doc__)
@@ -47,36 +53,23 @@ if not os.path.exists(imgdir):
     os.mkdir(imgdir)
 
 
-def recoverpix(doc, xref, item):
+def recoverpix(doc, x, imgdict):
     """Return pixmap for item, if an /SMask exists.
     """
-
-    def getimage(pix):
-        if pix.colorspace.n != 4:
-            return pix
-        tpix = fitz.Pixmap(fitz.csRGB, pix)
-        return tpix
-
-    s = item["smask"]  # xref of its /SMask
+    s = imgdict["smask"]  # xref of its /SMask
 
     try:
-        pix1 = fitz.Pixmap(doc, xref)  # make pixmap from image
+        fpx = io.BytesIO(imgdict["image"])
+        fps = io.BytesIO(doc.extractImage(s)["image"])
+        img0 = Image.open(fpx)
+        mask = Image.open(fps)
+        img = Image.new("RGBA", img0.size)
+        img.paste(img0, None, mask)
+        bf = io.BytesIO()
+        img.save(bf, "png")
+        return {"ext": "png", "colorspace": 3, "image": bf.getvalue()}
     except:
-        return None  # skip if error
-
-    try:
-        pix2 = fitz.Pixmap(doc, s)  # create pixmap of /SMask entry
-    except:
-        print("cannot create mask %i for image %i" % (s, xref))
-        return getimage(pix1)  # return w/ failed transparency
-
-    # check that we are safe
-    if not (pix1.irect == pix2.irect and pix1.alpha == pix2.alpha == 0 and pix2.n == 1):
-        return getimage(pix1)
-    pix = fitz.Pixmap(pix1)  # copy of pix1, alpha channel added
-    pix.setAlpha(pix2.samples)  # treat pix2.samples as alpha values
-    pix1 = pix2 = None  # free temp pixmaps
-    return getimage(pix)
+        return None
 
 
 # ------------------------------------------------------------------------------
@@ -140,12 +133,12 @@ for xref in range(1, lenXREF):  # scan through all PDF objects
         continue
 
     if smask > 0:  # has smask: need use pixmaps
-        pix = recoverpix(doc, xref, imgdict)  # create pix with mask applied
-        if not pix:  # something went wrong
+        imgdict = recoverpix(doc, xref, imgdict)  # create pix with mask applied
+        if imgdict is None:  # something went wrong
             continue
         ext = "png"
-        imgdata = pix.getPNGData()
-        l_samples = len(pix.samples)
+        imgdata = imgdict["image"]
+        l_samples = width * height * 3
         l_imgdata = len(imgdata)
     else:
         c_space = max(1, imgdict["colorspace"])  # get the colorspace n

@@ -1,7 +1,13 @@
 from __future__ import print_function
-import os, sys, time
+
+import io
+import os
+import sys
+import time
+
 import fitz
 import PySimpleGUI as sg
+from PIL import Image
 
 """
 PyMuPDF utility
@@ -15,15 +21,19 @@ case, we assume it being a sequence of alpha bytes belonging to our image.
 We then create a new Pixmap giving it these alpha values, and return it.
 If the result pixmap is CMYK, it will be converted to RGB first.
 
+Dependencies
+------------
+PyMuPDF v1.13.17+, Pillow
+
 """
 print(fitz.__doc__)
 
 if not tuple(map(int, fitz.version[0].split("."))) >= (1, 13, 17):
     raise SystemExit("require PyMuPDF v1.13.17+")
 
-dimlimit = 100  # each image side must be greater than this
-relsize = 0.05  # image : pixmap size ratio must be larger than this (5%)
-abssize = 2048  # absolute image size limit 2 KB: ignore if smaller
+dimlimit = 0  # 100  # each image side must be greater than this
+relsize = 0  # 0.05  # image : pixmap size ratio must be larger than this (5%)
+abssize = 0  # 2048  # absolute image size limit 2 KB: ignore if smaller
 imgdir = "images"  # found images are stored in this subfolder
 
 if not os.path.exists(imgdir):
@@ -36,27 +46,16 @@ def recoverpix(doc, item):
     if s == 0:  # no smask: use direct image output
         return doc.extractImage(x)
 
-    def getimage(pix):
-        if pix.colorspace.n != 4:
-            return pix
-        tpix = fitz.Pixmap(fitz.csRGB, pix)
-        return tpix
-
-    # we need to reconstruct the alpha channel with the smask
-    pix1 = fitz.Pixmap(doc, x)
-    pix2 = fitz.Pixmap(doc, s)  # create pixmap of the /SMask entry
-
-    # sanity check
-    if not (pix1.irect == pix2.irect and pix1.alpha == pix2.alpha == 0 and pix2.n == 1):
-        pix2 = None
-        return getimage(pix1)
-
-    pix = fitz.Pixmap(pix1)  # copy of pix1, alpha channel added
-    pix.setAlpha(pix2.samples)  # treat pix2.samples as alpha value
-    pix1 = pix2 = None  # free temp pixmaps
-
-    # we may need to adjust something for CMYK pixmaps here:
-    return getimage(pix)
+    # we need to reconstruct an alpha channel with the smask
+    fpx = io.BytesIO(doc.extractImage(x)["image"])
+    fps = io.BytesIO(doc.extractImage(s)["image"])
+    img0 = Image.open(fpx)
+    mask = Image.open(fps)
+    img = Image.new("RGBA", img0.size)
+    img.paste(img0, None, mask)
+    bf = io.BytesIO()
+    img.save(bf, "png")
+    return {"ext": "png", "colorspace": 3, "image": bf.getvalue()}
 
 
 fname = sys.argv[1] if len(sys.argv) == 2 else None
@@ -91,22 +90,15 @@ for pno in range(page_count):
         if min(width, height) <= dimlimit:
             continue
         pix = recoverpix(doc, img)
-        if type(pix) is dict:  # we got a raw image
-            ext = pix["ext"]
-            imgdata = pix["image"]
-            n = pix["colorspace"]
-            imgfile = os.path.join(imgdir, "img-%i.%s" % (xref, ext))
-        else:  # we got a pixmap
-            imgfile = os.path.join(imgdir, "img-%i.png" % xref)
-            n = pix.n
-            imgdata = pix.getPNGData()
+        n = pix["colorspace"]
+        imgdata = pix["image"]
 
         if len(imgdata) <= abssize:
             continue
-
         if len(imgdata) / (width * height * n) <= relsize:
             continue
 
+        imgfile = os.path.join(imgdir, "img-%i.%s" % (xref, ext))
         fout = open(imgfile, "wb")
         fout.write(imgdata)
         fout.close()
@@ -117,4 +109,3 @@ imglist = list(set(imglist))
 print(len(set(imglist)), "images in total")
 print(len(xreflist), "images extracted")
 print("total time %g sec" % (t1 - t0))
-
