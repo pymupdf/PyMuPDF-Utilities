@@ -20,7 +20,7 @@ PDF uses a special mini-language for "painting" a page's appearance. Every PDF v
 
 There are other commands which define stroke and fill color, line width and line dashing and other path property modifications.
 
-All of these commands are definitions only - they do not **paint** or draw anything.
+All of the commands so far are definitions only - they do not **paint** or draw anything.
 
 Several commands exist which actually **draw** the path. Each one of them also **closes** the path. The individual command names control how the drawing should happen: stroking or filling or both, handling of colors if the interiors of parts of the path overlap, etc.
 
