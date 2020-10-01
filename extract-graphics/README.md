@@ -173,3 +173,49 @@ for path in paths:
             quads.append(item[1])
 ```
 
+## Alternative Approach
+The MuPDF CLI tool offers a way to achieve similar results:
+
+```bash
+mutool trace some.file 1
+```
+This will extract **all so-called "device calls"** made on page 1 (1-based notation, i.e. corresponds to page 0) to stdout.
+
+Directing the output to a file reveals an XML-like syntax for all commands issued by the page. This include drawings, image invocations and text output. This information is hence a superset of what the above module produces.
+
+> Unfortunately, there seems to be no official documentation of what can be found therein. Most of it however is fortunately pretty obvious.
+
+Please not that this feature will work for all supported documents - **_not just PDF!_**
+
+Here is the output of our above circle example:
+
+```xml
+<document filename="circle.pdf">
+<page number="1" mediabox="0 0 595 842">
+<set_default_colorspaces gray="DeviceGray" rgb="DeviceRGB" cmyk="DeviceCMYK" oi="None"/>
+<fill_path winding="nonzero" colorspace="DeviceRGB" color="1 1 0" transform="1 0 0 -1 0 842">
+    <moveto x="200" y="542"/>
+    <curveto x1="200" y1="486.772" x2="244.772" y2="442" x3="300" y3="442"/>
+    <curveto x1="355.228" y1="442" x2="400" y2="486.772" x3="400" y3="542"/>
+    <curveto x1="400" y1="597.228" x2="355.228" y2="642" x3="300" y3="642"/>
+    <curveto x1="244.772" y1="642" x2="200" y2="597.228" x3="200" y3="542"/>
+    <closepath/>
+</fill_path>
+<stroke_path linewidth="1" miterlimit="10" linecap="0,0,0" linejoin="0" dash_phase="0" dash="2" colorspace="DeviceRGB" color="0 0 1" transform="1 0 0 -1 0 842">
+    <moveto x="200" y="542"/>
+    <curveto x1="200" y1="486.772" x2="244.772" y2="442" x3="300" y3="442"/>
+    <curveto x1="355.228" y1="442" x2="400" y2="486.772" x3="400" y3="542"/>
+    <curveto x1="400" y1="597.228" x2="355.228" y2="642" x3="300" y3="642"/>
+    <curveto x1="244.772" y1="642" x2="200" y2="597.228" x3="200" y3="542"/>
+    <closepath/>
+</stroke_path>
+</page>
+</document>
+```
+
+### Notes
+0. Painting the circle happens in two separate paths: one for **_filling_** the circle, and a second one for **_stroking_** the perimeter line. This is similar for all paths which contain a fill color.
+0. There is no special rectangle draw command: Rectangles are always split in four line draws.
+0. Coordinates are given in their original coordinate system together with a transformation matrix.
+1. We plan to include this output type in the PyMuPDF package in a future version.
+2. The output can be interpreted with an XML parser (tried with the lxml package).
