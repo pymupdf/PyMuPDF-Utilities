@@ -98,7 +98,7 @@ for pno in range(page_count):
         if len(imgdata) / (width * height * n) <= relsize:
             continue
 
-        imgfile = os.path.join(imgdir, "img-%i.%s" % (xref, ext))
+        imgfile = os.path.join(imgdir, "img-%i.%s" % (xref, pix["ext"]))
         fout = open(imgfile, "wb")
         fout.write(imgdata)
         fout.close()

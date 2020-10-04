@@ -124,10 +124,9 @@ if __name__ == "__main__":
     blue = getColor("blue")  # line color for cosine
     yellow = getColor("py_color")  # background color
     w = 0.3  # line width
-    # --------------------------------------------------------------------------
+
     # Define start / end points of x axis that we want to use as 0 and 2*pi.
     # They may be positioned in any way.
-    # --------------------------------------------------------------------------
     pb = fitz.Point(200, 200)  # begin, treated as (0, 0)
     pe = fitz.Point(400, 100)  # end, treated as (2*pi, 0)
 
@@ -135,9 +134,8 @@ if __name__ == "__main__":
     alfa = img.horizontal_angle(pb, pe)  # connection angle towards x-axis
     rad = abs(pe - pb)  # distance of these points
     pe1 = pb + (rad, 0)  # make corresp. horizontal end point
-    # =============================================================================
-    #   first draw a rectangle in which the functions graphs will later appear
-    # =============================================================================
+
+    # first draw a rectangle in which the functions graphs will later appear
     f = abs(pe - pb) * 0.5 / math.pi  # represents 1 unit
     rect = fitz.Rect(pb.x - 5, pb.y - f - 5, pe1.x + 5, pb.y + f + 5)
     img.drawRect(rect)  # draw it
@@ -148,9 +146,7 @@ if __name__ == "__main__":
     # finish the envelopping rectangle
     img.finish(fill=yellow, morph=morph)  # rotate it around begin point
 
-    # =============================================================================
-    #   get all points for the sine function
-    # =============================================================================
+    # get all points for the sine function
     pntsin = bsinPoints(pb, pe1)
 
     # only horizontal axis supported, therefore need to rotate
@@ -162,9 +158,7 @@ if __name__ == "__main__":
 
     img.finish(color=red, width=w, closePath=False)
 
-    # =============================================================================
-    #   same thing for cosine with "blue"
-    # =============================================================================
+    # same thing for cosine with "blue"
     pntcos = bcosPoints(pb, pe1)
     points = rot_points(pntcos, pb, alfa)
 
@@ -183,4 +177,4 @@ if __name__ == "__main__":
 
     img.commit()  # commit with overlay = True
 
-    doc.save("draw-sines.pdf")
+    doc.save(__file__.replace(".py", ".pdf"))
