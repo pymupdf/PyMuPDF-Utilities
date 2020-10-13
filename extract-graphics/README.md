@@ -1,7 +1,3 @@
-**These scripts are becoming obsolete!**
+**These scripts are obsolete!**
 
-The next version (1.17.8 or 1.18.0) of PyMuPDF will support this feature directly via a new method of class ``Page`` - probably called ``Page.getDrawings()``.
-
-It will work for **_all document types_** - not only PDF. At the same time, draw command detection will be more reliable and precise.
-
-So stay tuned.
+Since version 1.18.0 this feature is supported as `Page.getDrawings()`. [This](https://pymupdf.readthedocs.io/en/latest/faq.html#extracting-drawings) section of the documentation explains the use.
