@@ -4,7 +4,10 @@ This repository contains demos, examples and for using PyMuPDF in the respective
 > These scripts were written over an extended period of time - each for the then existing PyMuPDF version. I will not (reliably) go over each of them and ensure they still work. Occasionally a script may therefore no longer be compatible with the **current** version. If you find such inconsistencies, please **do not submit an issue**, but try to repair the script and submit a PR instead. Thank you.
 
 ## Font Replacement
-New for PyMuPDF v1.17.6 is the ability to replace selected fonts in existing PDFs. This is a set of two script and their documentation in [this](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/font-replacement) folder.
+New for PyMuPDF v1.17.6 is the ability to replace selected fonts in existing PDFs. This is a set of two scripts and their documentation in [this](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/font-replacement) folder.
+
+## Textbox Extraction
+PyMuPDF's features have been extended in this respect. We therefore move example scripts and an extended description to its [own](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/textbox-extraction) folder.
 
 ## Examples
 From the [examples](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/examples) folder, here is a synopsis of some scripts that you may find interesting.

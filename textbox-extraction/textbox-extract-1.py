@@ -31,20 +31,15 @@ Remarks
 from itertools import groupby
 import fitz
 
-doc = fitz.open("<some.file>")  # any supported document type
-page = doc[pno]  # we want text from this page
+doc = fitz.open("search.pdf")  # any supported document type
+page = doc[0]  # we want text from this page
 
 """
 -------------------------------------------------------------------------------
-Identify the rectangle. We use the text search function here. The two
-search strings are chosen to be unique, to make our case work.
-The two returned rectangle lists both have only one item in this example.
-Replace the following 3 lines by whatever you know about your rectangle.
+Identify the rectangle.
 -------------------------------------------------------------------------------
 """
-rl1 = page.searchFor("Die Altersübereinstimmung")  # rect list one
-rl2 = page.searchFor("Bombardement durch.")  # rect list two
-rect = rl1[0] | rl2[0]  # union rectangle
+rect = page.firstAnnot.rect  # this annot has been prepared for us!
 # Now we have the rectangle ---------------------------------------------------
 
 """

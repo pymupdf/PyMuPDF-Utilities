@@ -1,37 +1,56 @@
 """
-PyMuPDF demo script to generate tangent constructors of curves
-like cardioid, nephroid and the like
+PyMuPDF demo script to generate tangent constructors of mathematical curves
+like Cardioid, Nephroid and similar.
+This works by putting the points of a regular polygon on a circle's
+perimeter and then draw - in clockwise fashion - a line from each point to
+a point following 'curve' places after it.
+The number 'curve' determines the type of the constructed curve. For a
+cardioid ('curve' = 2) we therefore would be doing this:
+Draw lines p0 to p2, p1 to p3, p2 to p4, ..., p[n-1] to p1.
+
+Just change the 'curve' value to create a different curve.
 """
 import fitz
-import os
 
-outpdf = os.path.abspath(__file__).replace(".py", ".pdf")
 doc = fitz.open()
 page = doc.newPage(width=500, height=500)
-center = (page.rect.tl + page.rect.br) / 2.0
-radius = 200
-n = 523  # number of lines to draw
+center = (page.rect.tl + page.rect.br) / 2.0  # center of the page
+radius = 200  # we will draw a circle with this radius
+n = 523  # number of points on circle perimeter
 curve = 4  # type of curve, 2 = cardioid, 3 = nephroid, etc.
-p0 = center - (radius, 0)
-theta = -360 / n
-shape = page.newShape()
 
-# draw a blue circle filled with yellow
+p0 = center - (radius, 0)  # leftmost point of circle perimeter
+theta = -360 / n  # the angle corresponding to number of points
+
+# define the colors we will use
+stroke = (1, 0, 0)  # color of the lines
+fill = (1, 1, 0)  # fill color of circle
+border = (0, 0, 1)  # border color of circle
+
+shape = page.newShape()  # make a drawing canvas for the page
+
+# draw the circle
 shape.drawCircle(center, radius)
-shape.finish(color=(0, 0, 1), fill=(1, 1, 0), width=3)
+shape.finish(color=border, fill=fill, width=3)
 
-# calculate points on the perimeter
-points = [p0]
+"""
+------------------------------------------------------------------------------
+Compute the points on the perimeter. We do this by "abusing" the
+'drawSector' method: it does this for us, but we discard its drawings.
+------------------------------------------------------------------------------
+"""
+points = [p0]  # first point
 point = p0
 for i in range(1, n):
-    point = shape.drawSector(center, point, theta)
+    point = shape.drawSector(center, point, theta)  # computes next point
     points.append(point)
-shape.draw_cont = ""  # we only need the points
+shape.draw_cont = ""  # we only need the points: discard draw commands
 
-for i in range(n):  # do the line drawing
+for i in range(n):
+    # connect each point with the right successor
     tar = curve * i % n  # target point of this line
     shape.drawLine(points[i], points[tar])
 
-shape.finish(color=(1, 0, 0), width=0.2)  # draw the lines
+shape.finish(color=stroke, width=0.2)  # finsh the line draws
 shape.commit()
-doc.save(outpdf, deflate=True)
+doc.save(__file__.replace(".py", ".pdf"), deflate=True)
