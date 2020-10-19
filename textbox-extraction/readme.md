@@ -25,7 +25,7 @@ This approach will guarantee intact original words and a reading sequence as est
 ----------
 
 ## Notes
-This folder contains an example file `search.pdf` with one page and an annotation which shows the area to select from. The TOFU symbol in the outputs further down is show for the big black arrow whose character bbox intersects the selection rectangle.
+This folder contains an example file `search.pdf` with one page and an annotation which shows the area to select from. The TOFU symbol in the outputs further down represents the big black triangle whose character bbox intersects the selection rectangle.
 
 ![screen](search.png)
 
