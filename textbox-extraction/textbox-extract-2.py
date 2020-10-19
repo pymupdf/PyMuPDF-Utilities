@@ -11,7 +11,6 @@ There also is no logic that maintains natural reading order, so text will
 appear as stored in the document.
 
 """
-from itertools import groupby
 import fitz
 
 doc = fitz.open("search.pdf")  # any supported document type
