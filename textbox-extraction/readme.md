@@ -51,8 +51,7 @@ Wasser und Seife. Enthusiasten
 sen das schon länger und tauschen
 sich diesbezüglich mit Hilfe
 Online-Wikis aus. Unter anderem
-schwören sie auf den
-Lebensmittel-
+schwören sie auf den Lebensmittel-
 zusatzstoff Guaran (E 412).
 ```
 
