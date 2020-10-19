@@ -3,13 +3,17 @@ Extracting text from within specific rectangular areas of a document page is fre
 
 In PyMuPDF, you can select from several options to achieve this. All methods are applicable to all document types support by MuPDF - not only PDF. Choose the right method from the following list:
 
-## `Page.getTextbox(rect)`
+## 1. `Page.getTextbox(rect)`
 Returns text contained in the rectangle 'rect'. Text appears in the sequence as coded in the document (which is not necessarily an appropriate reading sequence). Inclusion of text is decided by character. So words may appear mutilated. Line breaks may be contained, but one final line break will be omitted. See the example script `textbox-extract-2.py` in this folder.
 
-## `Page.getText("text", clip=rect)`
+----------
+
+## 2. `Page.getText("text", clip=rect)`
 This is one of the old, standard extraction methods - except for the `clip` parameter (if `None`, the full page is taken), which was introduced in version 1.17.7. The result looks like the previous method (which is actually derived from this one), except that there always is a final line break.
 
-## `Page.getText("words")`
+----------
+
+## 3. `Page.getText("words")`
 This is also an old, standard extraction method. The method delivers a list of items, which each represent one string without spaces (called a "word") - together with its position.
 
 You have to write a script which selects the words contained in (or intersecting) the rectangle, sort the result (usually by vertical, then by horizontal coordinates) and then glue words together having the same bottom vertical coordinate.
@@ -17,6 +21,8 @@ You have to write a script which selects the words contained in (or intersecting
 The script `textbox-extract-1.py` is an example for such a script. It also implements two word selection alternatives: one with only accepting fully contained words, and a second one including any intersecting word.
 
 This approach will guarantee intact original words and a reading sequence as established by your sort. However, any multiple spaces in the original text will be lost and replaced by one space.
+
+----------
 
 ## Notes
 This folder contains an example file `search.pdf` with one page and an annotation which shows the area to select from. The TOFU symbol in the outputs further down is show for the big black arrow whose character bbox intersects the selection rectangle.
