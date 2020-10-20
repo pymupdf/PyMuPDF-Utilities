@@ -22,7 +22,7 @@ This approach can cope with documents where text is not stored in desired readin
 
 Multiple spaces in the original text will be lost and replaced by one.
 
-The script `textbox-extract-1.py` is an example for such a script. It also implements two word **selection alternatives:** one with only accepting **_fully contained_** words, and a second one including **intersecting words**.
+The script `textbox-extract-1.py` is an example for such a script. It also implements two word **selection alternatives:** one with only accepting **_fully contained_** words, and a second one including **_intersecting words_**.
 
 ----------
 
