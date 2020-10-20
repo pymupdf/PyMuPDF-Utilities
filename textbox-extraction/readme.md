@@ -9,7 +9,7 @@ Returns text contained in the rectangle 'rect'. Text appears in the sequence as 
 ----------
 
 ## 2. `Page.getText("text", clip=rect)`
-This is one of the old, standard extraction methods. The `clip` parameter is new and was introduced in version 1.17.7. If `clip`is set, the result looks like the previous method's out, except that there always is a final line break.
+This is one of the old, standard extraction methods. The `clip` parameter is new and was introduced in version 1.17.7. If `clip`is set, the result looks like the previous method's output, except that there always is a final line break.
 
 ----------
 
