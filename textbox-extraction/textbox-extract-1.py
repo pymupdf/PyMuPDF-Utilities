@@ -71,16 +71,14 @@ The term 'word' here stands for any string without space.
 words = page.getText("words")  # list of words on page
 """
 We will subselect from this list, demonstrating two alternatives:
-(1) only words inside the rectangle
+(1) only words inside above rectangle
 (2) only words insertecting the rectangle
 
-The resulting sublist is then grouped by words having the same bottom
-coordinate, i.e. are on the same line. We recreate a line by joining
-the words with one space between each.
+The resulting sublist is then converted to a string by calling above funtion.
 """
 
 # ----------------------------------------------------------------------------
-# Case 1: select the words fully contained in rect
+# Case 1: select the words *fully contained* in the rect
 # ----------------------------------------------------------------------------
 mywords = [w for w in words if fitz.Rect(w[:4]) in rect]
 
@@ -89,7 +87,7 @@ print("------------------------------------------------")
 print(make_text(mywords))
 
 # ----------------------------------------------------------------------------
-# Case 2: select the words which intersect the rect
+# Case 2: select the words *intersecting* the rect
 # ----------------------------------------------------------------------------
 mywords = [w for w in words if fitz.Rect(w[:4]).intersects(rect)]
 
