@@ -6,7 +6,7 @@ Page method `getText("words")` delivers a list of tuples. Each tuples identifies
 
 The method knows nothing about the meaning of these strings: it will identify just everything as a "word", that is surrounded spaces.
 
-If you however are looking for occurrences of a certain word, you need a mechanism that strips off punctuation like commas pr colons, maybe also numerical components or *"dashed"* combinations with other words.
+If you however are looking for occurrences of a certain word, you need a mechanism that strips off punctuation like commas or colons, maybe also numerical components or *"dashed"* combinations with other words.
 
 Script `mark-words.py` aims to solve this problem: inside the strings of the tuples of `getText("words")` it will identify alphabetic substrings and calculate the respective subrectangles.
 
