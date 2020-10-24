@@ -30,5 +30,7 @@ For a satisfactory result, you must provide three information pieces. There is n
 2. The **_stop point_**: We similarly search for and ensure a unique string **"stark aus."** The bottom right point of the returned rectangle is our end point.
 3. The **_clip rectangle_**: In many cases this may be left to default to the page rectangle. In our case however, text is organized in **_three columns_**, and we certainly want to limit line marking to one of them. Setting the clip rectangle width to a little more than one third of the page rectangle does the job.
 
+Of course things are a lot easier if you do all this in a GUI script, where the user can provide this information with the mouse.
+
 ![screen](mark-lines.png)
 
