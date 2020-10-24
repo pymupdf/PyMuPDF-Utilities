@@ -4,7 +4,7 @@ Extracting text from within specific rectangular areas of a document page is fre
 In PyMuPDF, you can select from several options to achieve this. All methods are applicable to all document types support by MuPDF - not only PDF. Choose the right method from the following list:
 
 ## 1. `Page.getTextbox(rect)`
-Returns text contained in the rectangle 'rect'. Text appears in the sequence as coded in the document. So it may not adhere to an appropriate reading sequence. Inclusion of text is decided by character. So words may appear mutilated. Line breaks may be present, but one final line break will be omitted. See the example script `textbox-extract-2.py` in this folder.
+Returns text contained in the rectangle 'rect'. Text appears in the sequence as coded in the document. So it may not adhere to an appropriate reading sequence. Inclusion of text is decided by character and words may hende appear mutilated. Line breaks may be present, but one final line break will be omitted. See the example script `textbox-extract-2.py` in this folder.
 
 ----------
 
