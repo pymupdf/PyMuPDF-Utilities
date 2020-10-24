@@ -10,7 +10,7 @@ If you however are looking for occurrences of a certain word, you need a mechani
 
 Script `mark-words.py` aims to solve this problem: inside the strings of the tuples of `getText("words")` it will identify alphabetic substrings and calculate the respective subrectangles.
 
-The demo script looks for and marks all "real" (punctuation-free) words on the example PDF page in this folder, which end with the letter "m". Please note the word circled red: the colon ":" has been detected and separated from the end of word.
+The demo script looks for and marks all "real" (punctuation-free) words on the example PDF page in this folder, which end with the letter "m". Please note the word circled red: the colon ":" has been detected and correctly separated from the end of the word.
 
 Feel free to modify the selection mechanism: e.g. by using regular expressions.
 
