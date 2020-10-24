@@ -28,7 +28,7 @@ The short script `mark-lines.py` is an example for this.
 For a satisfactory result, you must provide three information pieces. There is no general rule for how to do this. This example aims to help you find the solution for your situation.
 1. The **_start point_**: We search for string **"im vorfeld solch"** and make sure that there is only one hit. the topl left corner of this rectangle is our start point.
 2. The **_stop point_**: We similarly search for and ensure a unique string **"stark aus."** The bottom right point of the returned rectangle is our end point.
-3. The **_clip rectangle_**: In many cases this may be left to default to the page rectangle. In our case however, text is organized in three columns, and we certainly want to limit line marking to one of these three columns. Setting the clip rectangle width to a little more than one third of the page rectangle is sufficient.
+3. The **_clip rectangle_**: In many cases this may be left to default to the page rectangle. In our case however, text is organized in **_three columns_**, and we certainly want to limit line marking to one of them. Setting the clip rectangle width to a little more than one third of the page rectangle does the job.
 
 ![screen](mark-lines.png)
 
