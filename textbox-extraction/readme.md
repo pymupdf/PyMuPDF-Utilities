@@ -57,7 +57,9 @@ zusatzstoff Guaran (E 412).
 ```
 
 ### Output of `textbox-extract-2.py`
-This is based on `Page.getTextbox(rect)`. This obviously is a lot simpler and may be sufficient if you have no problem with the reading sequence and if you are able to position your rectangle in a way that does not cut through words.
+This is based on `Page.getTextbox(rect)`. The selection is based on single characters: a character belongs to the party if its bbox intersects the rectangle. Apart from this, text is selected as present in the document - including any spaces and line breaks, no reordering takes place.
+
+This obviously is a lot simpler and may be sufficient if you have no issue with the reading sequence and properly positioning the selection rectangle.
 
 It would also be the typical way to verify what has been identified by a previous `Page.searchFor()`.
 ```
