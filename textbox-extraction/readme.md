@@ -59,7 +59,7 @@ zusatzstoff Guaran (E 412).
 ### Output of `textbox-extract-2.py`
 This is based on `Page.getTextbox(rect)`. This obviously is a lot simpler and may be sufficient if you have no problem with the reading sequence and if you are able to position your rectangle in a way that does not cut through words.
 
-It would also be the typical to verify what has been identified by a previous `Page.searchFor()`.
+It would also be the typical way to verify what has been identified by a previous `Page.searchFor()`.
 ```
 
 Wer eine perfekte Seife
