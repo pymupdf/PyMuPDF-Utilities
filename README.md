@@ -1,10 +1,13 @@
 # PyMuPDF-Utilities
 This repository contains demos, examples and for using PyMuPDF in the respective folders.
 
-> These scripts were written over an extended period of time - each for the then existing PyMuPDF version. I will not (reliably) go over each of them and ensure they still work. Occasionally a script may therefore no longer be compatible with the **current** version. If you find such inconsistencies, please **do not submit an issue**, but try to repair the script and submit a PR instead. Thank you.
+> These scripts were written over an extended period of time - each for the then existing PyMuPDF version. I will not (reliably) go over each of them and ensure they still work. Occasionally a script may therefore no longer be compatible with the **current** version. If you find such inconsistencies, please **do not submit issues**, but try to repair the script and submit the corrected script via a Pull Request instead. Thank you.
 
 ## Font Replacement
 New for PyMuPDF v1.17.6 is the ability to replace selected fonts in existing PDFs. This is a set of two scripts and their documentation in [this](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/font-replacement) folder.
+
+## Marking Words and Lines
+PyMuPDF's features have been extended in this respect. We therefore created this [own](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/word&line-marking) folder to contain dedicated scripts, descriptions and examples.
 
 ## Textbox Extraction
 PyMuPDF's features have been extended in this respect. We therefore move example scripts and an extended description to its [own](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/textbox-extraction) folder.
@@ -36,8 +39,6 @@ From the [examples](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/exa
 * **layout-analyzer.py** - create an output PDF for a given PDF with text and graphics layout analysis. Each text and graphics block is surrounded by a rectangle (graphics content is not shown, only some metadata). Output PDF has page dimensions of the input's /MediaBox. The input's /CropBox is indicated by a gray background rectangle - see example files in this repo: demo1.pdf and layout-demo1.pdf.
 
 * **clean-cont.py** - **(requires v1.13.5)** Inspect PDF pages whether any have multiple /Contents objects. If not, exit immediately. If **yes**, check if any contents are shared between pages. If **yes**, save the document using the "clean" option and exit. If **not,**  join multiple page contents into one and save with option "garbage=3" (which removes now unused objects).
-
-* **textboxtract.py** Shows how to extract the text from within a given rectangle. This works for **all document types** - not just PDF.
 
 * **form-fields.py** demo script: create a PDF with form fields.
 
