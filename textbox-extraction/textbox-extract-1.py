@@ -68,7 +68,9 @@ The first 4 entries are the word's rectangle coordinates, the last 3 are just
 technical info (block number, line number, word number).
 The term 'word' here stands for any string without space.
 """
+
 words = page.getText("words")  # list of words on page
+
 """
 We will subselect from this list, demonstrating two alternatives:
 (1) only words inside above rectangle

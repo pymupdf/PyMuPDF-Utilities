@@ -2,7 +2,7 @@ import fitz
 
 """
 This marks a longer, unique sentence on the page.
-The parameters 'start', 'stop' and 'clip' are computed from the
+The parameters 'start', 'stop' and 'clip' are fully computed from the
 returned hit rectangles.
 """
 doc = fitz.open("search.pdf")
@@ -18,7 +18,7 @@ text1 = (
 )
 
 rl = page.searchFor(
-    " ".join(text1),
+    " ".join(text1),  # reconstruct full sentence for searching
 )
 
 # You should check success here!

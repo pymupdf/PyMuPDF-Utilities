@@ -43,6 +43,7 @@ Dependencies
 ------------
 PyMuPDF v1.18.0
 """
+import time
 import fitz
 
 
@@ -78,9 +79,11 @@ def find_words(page, word_tuple, prefix="", suffix="", lower=True):
 
     for block in blocks:
         for line in block["lines"]:
+            if line["spans"] == []:
+                continue
+            r = fitz.Rect()  # start with an empty rectangle
+            checkword = ""
             for span in line["spans"]:
-                r = fitz.Rect()  # start with an empty rectangle
-                checkword = ""
                 for char in span["chars"]:
                     # change the following to account for non-Latin
                     # alphabets, any exceptions, etc.
@@ -92,15 +95,15 @@ def find_words(page, word_tuple, prefix="", suffix="", lower=True):
                             rlist.append(r)  # append what we have so far
                         r = fitz.Rect()  # start over with empty rect
                         checkword = ""
-                if take_this(checkword, prefix, suffix, lower):
-                    rlist.append(r)  # append any dangling rect
+            if take_this(checkword, prefix, suffix, lower):
+                rlist.append(r)  # append any dangling rect
     return rlist
 
 
 if __name__ == "__main__":
     doc = fitz.open("search.pdf")
     page = doc[0]
-
+    time0 = time.perf_counter()
     # make a list of "technical" words
     wordlist = page.getText("words")
 
@@ -111,7 +114,7 @@ if __name__ == "__main__":
         word_tuple (word_tuple[4]).
         """
         text = word_tuple[4].lower()
-        if not "m" in text:  # skip strings which cannot be correct
+        if not "m" in text:  # skip strings which cannot fit
             continue
         rlist = find_words(
             page, word_tuple, prefix="", suffix="m", lower=True
@@ -123,4 +126,6 @@ if __name__ == "__main__":
             annot.setBorder(width=0.3)  # border (cosmetics)
             annot.update()
 
+    time1 = time.perf_counter()
+    print("Duration %g" % (time1 - time0))
     doc.save(__file__.replace(".py", ".pdf"), garbage=3, deflate=True)
