@@ -76,16 +76,16 @@ def make_oval(i):
     img = page.newShape()
     img.drawOval(q1)
     img.finish(
-        color=blue, fill=fill, width=0.3  # blue border  # variable fill color
-    )  # border width
+        color=blue,  # blue border
+        fill=fill,  # variable fill color
+        width=0.3,  # border width
+    )
     img.drawCircle(q1.ll, 4)
-    img.finish(color=red, fill=red)
-    img.drawCircle(q1.lr, 4)
-    img.finish(color=blue, fill=blue)
     img.drawCircle(q1.ul, 4)
-    img.finish(color=red, fill=red)
+    img.finish(fill=red)
     img.drawCircle(q1.ur, 4)
-    img.finish(color=blue, fill=blue)
+    img.drawCircle(q1.lr, 4)
+    img.finish(fill=blue)
     img.commit()
     pix = page.getPixmap(alpha=False)  # make pixmap, no alpha
     doc.close()  # discard PDF again
@@ -93,7 +93,7 @@ def make_oval(i):
     del pix
     del page
     del img
-    return image  # return a PGM image of the page
+    return image  # return a PPM image of the page
 
 
 # ------------------------------------------------------------------------------
