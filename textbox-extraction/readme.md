@@ -6,7 +6,7 @@ In PyMuPDF, you can select from several options to achieve this. All methods are
 ----------
 
 ## 1. `Page.getText("words")`
-This is also an old, standard extraction method. The method delivers a list of tuples, which each represent one string without spaces (called a "word") - together with its position. Each tuple looks like this: `(x0, y0, x1, y1, "string", blocknumber, linenumber, wordnumber)`. The first 4 items are the coordinates of the bbox that surround "string". The last 3 items are block number on the page, line number in a block, word number in a line.
+This is an old, standard extraction method. The method delivers a list of tuples, which each represent one string without spaces (called a "word") - together with its position. Each tuple looks like this: `(x0, y0, x1, y1, "string", blocknumber, linenumber, wordnumber)`. The first 4 items are the coordinates of the bbox that surround "string". The last 3 items are block number on the page, line number in a block, word number in a line.
 
 You have to write a script which selects the words **_contained in_** (or **_intersecting_**) the given rectangle by using the bbox coordinates, then sort the result, and then glue words together again that belong to the same line.
 
