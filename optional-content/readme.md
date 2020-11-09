@@ -23,6 +23,6 @@ The following features are missing yet and may be included in future versions:
 ## Examples
 The folder currently contains the example script `radio-ocg.py`. It creates a PDF with one page, which is divided in 2 x 2 equal sized rectangles.
 
-The first 4 pages of a `source.pdf` are displayed in those sub-rectangles, controlled by a group of OCGs which are linked together via a radio button group: whenever one source page is set to be displayed (ON), the other three are switched to OFF.
+The first 4 pages of a `source.pdf` are displayed in those sub-rectangles, each associated with an OCG. These 4 OCGs are linked together via a radio button group: whenever one source page is set to be displayed (ON), the other three are switched to OFF.
 
 > Please note, that this effect works for some (e.g. Adobe Acrobat), but not for all PDF viewers.
