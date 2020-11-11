@@ -117,7 +117,11 @@ if __name__ == "__main__":
         if not "m" in text:  # skip strings which cannot fit
             continue
         rlist = find_words(
-            page, word_tuple, prefix="", suffix="m", lower=True
+            page,
+            word_tuple,
+            prefix="",
+            suffix="m",
+            lower=True,
         )  # get list of sub-rects
         for rect in rlist:
             if rect.isEmpty:  # skip empty ones
