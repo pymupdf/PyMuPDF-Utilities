@@ -10,9 +10,14 @@ If you however are looking for occurrences of a certain word, you need a mechani
 
 Script `mark-words.py` aims to solve this problem: inside the strings of the tuples of `getText("words")` it will identify alphabetic substrings and calculate the respective subrectangles.
 
-The demo script looks for and marks all "real" (punctuation-free and non compounded with other) words that are contained in a list. Please note, that the only two exact matches have indeed been found.
+The demo script looks for and marks all "real" words contained in a list:
 
-Feel free to modify the selection algorithm: e.g. use regular expressions.
+* remove punctuation characters and digits
+* only accept exact matches - no compounds with other words, etc.
+
+Please note, that the only two exact matches have indeed been found.
+
+Feel free to adapt the selection algorithm to your needs: e.g. use regular expressions.
 
 
 ## 2. Highlighting Textlines
