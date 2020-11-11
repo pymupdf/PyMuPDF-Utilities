@@ -6,15 +6,14 @@ Page method `getText("words")` delivers a list of tuples. Each tuples identifies
 
 The method knows nothing about the meaning of these strings: it will identify just everything as a "word", that is surrounded spaces.
 
-If you however are looking for occurrences of a certain word, you need a mechanism that strips off punctuation like commas or colons, maybe also numerical components or *"dashed"* combinations with other words.
+If you however are looking for occurrences of a certain word, you need a mechanism that strips off punctuation like commas or colons, maybe also numerical components or combinations with other words.
 
 Script `mark-words.py` aims to solve this problem: inside the strings of the tuples of `getText("words")` it will identify alphabetic substrings and calculate the respective subrectangles.
 
-The demo script looks for and marks all "real" (punctuation-free) words on the example PDF page in this folder, which end with the letter "m". Please note the word circled red: the colon ":" has been detected and correctly separated from the word.
+The demo script looks for and marks all "real" (punctuation-free and non compounded with other) words that are contained in a list. Please note, that the only two exact matches have indeed been found.
 
 Feel free to modify the selection algorithm: e.g. use regular expressions.
 
-![screen1](mark-words.jpg)
 
 ## 2. Highlighting Textlines
 This is possible since some time using

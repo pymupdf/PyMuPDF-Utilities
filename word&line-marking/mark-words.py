@@ -92,11 +92,11 @@ def find_words(page, word_tuple, prefix="", suffix="", lower=True):
                         checkword += char["c"]
                     else:  # non-alphabetic character detected
                         if take_this(checkword, prefix, suffix, lower):
-                            rlist.append(r)  # append what we have so far
+                            rlist.append((r, checkword))  # append what we have so far
                         r = fitz.Rect()  # start over with empty rect
                         checkword = ""
             if take_this(checkword, prefix, suffix, lower):
-                rlist.append(r)  # append any dangling rect
+                rlist.append((r, checkword))  # append any dangling rect
     return rlist
 
 
@@ -106,7 +106,7 @@ if __name__ == "__main__":
     time0 = time.perf_counter()
     # make a list of "technical" words
     wordlist = page.getText("words")
-
+    m = ("seife", "wissenschaft")  # only accept these full words
     for word_tuple in wordlist:
         """
         For performance reasons, be stingy with invoking find_words!
@@ -114,19 +114,21 @@ if __name__ == "__main__":
         word_tuple (word_tuple[4]).
         """
         text = word_tuple[4].lower()
-        if not "m" in text:  # skip strings which cannot fit
+        if not text.startswith(m):  # skip strings we know cannot fit
             continue
-        rlist = find_words(
+        items = find_words(
             page,
             word_tuple,
             prefix="",
-            suffix="m",
+            suffix="",
             lower=True,
         )  # get list of sub-rects
-        for rect in rlist:
-            if rect.isEmpty:  # skip empty ones
+        for item in items:
+            if item[0].isEmpty:  # skip empty ones
                 continue
-            annot = page.addRectAnnot(rect)  # else surround the word with a thin
+            if not item[1].lower() in m:
+                continue  # skip what does not exactly fit.
+            annot = page.addRectAnnot(item[0])  # else surround the word with a thin
             annot.setBorder(width=0.3)  # border (cosmetics)
             annot.update()
 
