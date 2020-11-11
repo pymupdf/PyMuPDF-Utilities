@@ -110,19 +110,19 @@ if __name__ == "__main__":
     for word_tuple in wordlist:
         """
         For performance reasons, be stingy with invoking find_words!
-        Insert any pre-selection here by e.g. pre-checking the string in
-        word_tuple (word_tuple[4]).
+        Do as much pre-selection as is possible here, by skipping strings,
+        which will definitely be no match.
         """
         text = word_tuple[4].lower()
-        if not text.startswith(m):  # skip strings we know cannot fit
+        if not text.startswith(m):  # skip strings that we know cannot fit
             continue
         items = find_words(
             page,
             word_tuple,
-            prefix="",
-            suffix="",
-            lower=True,
-        )  # get list of sub-rects
+            prefix="",  # restrict to this prefix
+            suffix="",  # restrict to this suffix
+            lower=True,  # comparisons ignore upper / lower case
+        )  # get list of sub-rects and matching words
         for item in items:
             if item[0].isEmpty:  # skip empty ones
                 continue
