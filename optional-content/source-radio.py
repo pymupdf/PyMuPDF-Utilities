@@ -26,7 +26,7 @@ r3 = r2 + (r2.width, 0, r2.width, 0)
 
 # make 4 OCGs - one for each source page image.
 # each is OFF at first
-xref0 = doc.addOCG("ocg0", on=False)
+xref0 = doc.addOCG("ocg0", on=True)
 xref1 = doc.addOCG("ocg1", on=False)
 xref2 = doc.addOCG("ocg2", on=False)
 xref3 = doc.addOCG("ocg3", on=False)
@@ -46,6 +46,7 @@ doc.save(  # save the file
     garbage=3,
     pretty=True,
     deflate=True,
+    clean=True,
 )
 
 # the new file can now be viewed by e.g. Adobe Acrobat reader and
