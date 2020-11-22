@@ -25,11 +25,10 @@ r2 = r0 + (0, r0.height, 0, r0.height)
 r3 = r2 + (r2.width, 0, r2.width, 0)
 
 # make 4 OCGs - one for each source page image.
-# each is OFF at first
-xref0 = doc.addOCG("ocg0", on=True)
-xref1 = doc.addOCG("ocg1", on=False)
-xref2 = doc.addOCG("ocg2", on=False)
-xref3 = doc.addOCG("ocg3", on=False)
+xref0 = doc.add_ocg("ocg0", on=True)
+xref1 = doc.add_ocg("ocg1", on=False)
+xref2 = doc.add_ocg("ocg2", on=False)
+xref3 = doc.add_ocg("ocg3", on=False)
 doc.setOCStates(
     -1,  # the default OC configuration
     rbgroups=[[xref0, xref1, xref2, xref3]],  # one radio-button group
