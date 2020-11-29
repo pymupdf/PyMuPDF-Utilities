@@ -110,7 +110,6 @@ Existing text is extracted via `page.getText("dict")`. This dictionary is critic
 * There is currently no way to tell whether text is under control of some opacity (transparency) instruction. **Rewritten text will be non-transparent**. The only way to "simulate" this is via adapting the script to your needs. For illustration purposes we have included logic that sets opacity to 20% if the font size is 100 or more.
 * On rare occasions, inter-character spacing may be incorrectly computed by MuPDF: Words may be erroneously joined or drawn apart.
 * Another important, heavily used MuPDF utility function is invoked by `Page.cleanContents()`. It concatenates multiple `/Contents` objects, purifies their command syntax and **synchronizes** the fonts **used,** with the fonts **listed** in the `/Resources` objects.
-Again, on rare occasions, contents cleaning may damage page appearance. If this happens, it may help to replace all fonts.
 
 ## Notes on Font Subsetting
 A font contains basically two things: (1) code that generates a character's visual appearance (the "glyph") and (2) a mapping between the character code and its glyph. In a simplistic view, a font can be thought of being an array which does this mapping.
@@ -121,9 +120,9 @@ On the other hand, for any given font in any given PDF, comparatively few of its
 
 This is what **_font subsetting_** is all about. We use package [fontTools](https://pypi.org/project/fontTools/) to do this for OTF and TTF font types.
 
-**fontTools** cannot create subsets for CFF type fonts (as far as we know).
+**fontTools** cannot create subsets for **_CFF type fonts_** (as far as we know).
 
-To support embeddable versions of the old Base-14 fonts, MuPDF chooses CFF fonts: the **_"Nimbus"_** font families by **URW++** (developed by _URW Type Foundry GmbH_). So if you choose one of these to replace their non-embedded twins, the resulting PDF may become larger.
+However, to support embeddable versions of the old Base-14 fonts, MuPDF unfortunately chooses CFF fonts: the **_"Nimbus"_** font families by **URW++** (developed by _URW Type Foundry GmbH_). So, if you choose one of these to replace their non-embedded twins, the resulting PDF may become larger.
 
 This is not necessarily a big problem: the Nimbus fonts are relatively small (around 50 KB or less - albeit per font weight). But you still may want to consider alternatives that do support subsetting.
 
@@ -167,7 +166,7 @@ We replace with "korea" (could have been any of "japan", "china-s" or "china-t")
 [
   {
     "oldfont": "Droid Sans Fallback Regular",
-    "newfont": "korea",  # or japan, china-s, china-t, ordering=0
+    "newfont": "cjk",
     "info": "50483 glyphs, size 3556308"
   }
 ]
@@ -205,4 +204,4 @@ Total duration 0.81 seconds
     - The intermediate CSV file containing mappings between old and new font names is now handled as a binary file (read / write options "rb", resp. "wb") to support fontnames encoded as general UTF-8.
 
 * Version 2020-09-10:
-    - switched from CSV to JSON format for better support of non-ASCII fontnames.
+    - switched from CSV to JSON format for better support of non-ASCII UTF-8 fontnames.
