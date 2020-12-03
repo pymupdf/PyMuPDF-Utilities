@@ -68,7 +68,7 @@ annot = page.addFreetextAnnot(
     fill_color=gold,
     align=fitz.TEXT_ALIGN_CENTER,
 )
-annot.setBorder(width=0.3, dashes=[2])
+annot.set_border(width=0.3, dashes=[2])
 annot.update(text_color=blue, fill_color=gold)
 
 print_descr(annot)
@@ -110,39 +110,39 @@ pos = annot.rect.bl
 
 r = fitz.Rect(pos, pos.x + 75, pos.y + 35) + (0, 20, 0, 20)
 annot = page.addPolylineAnnot([r.bl, r.tr, r.br, r.tl])  # 'Polyline'
-annot.setBorder(width=0.3, dashes=[2])
-annot.setColors(stroke=blue, fill=green)
-annot.setLineEnds(fitz.PDF_ANNOT_LE_CLOSED_ARROW, fitz.PDF_ANNOT_LE_R_CLOSED_ARROW)
-annot.update(fill_color=(1, 1, 0))
+annot.set_border(width=0.3, dashes=[2])
+annot.set_colors(stroke=blue)
+annot.set_line_ends(fitz.PDF_ANNOT_LE_CLOSED_ARROW, fitz.PDF_ANNOT_LE_R_CLOSED_ARROW)
+annot.update(fill_color=gold)
 print_descr(annot)
 
 r += displ
 annot = page.addPolygonAnnot([r.bl, r.tr, r.br, r.tl])  # 'Polygon'
-annot.setBorder(width=0.3, dashes=[2])
-annot.setColors(stroke=blue, fill=gold)
-annot.setLineEnds(fitz.PDF_ANNOT_LE_DIAMOND, fitz.PDF_ANNOT_LE_CIRCLE)
+annot.set_border(width=0.3, dashes=[2])
+annot.set_colors(stroke=blue, fill=gold)
+annot.set_line_ends(fitz.PDF_ANNOT_LE_DIAMOND, fitz.PDF_ANNOT_LE_CIRCLE)
 annot.update()
 print_descr(annot)
 
 r += displ
 annot = page.addLineAnnot(r.tr, r.bl)  # 'Line'
-annot.setBorder(width=0.3, dashes=[2])
-annot.setColors(stroke=blue, fill=gold)
-annot.setLineEnds(fitz.PDF_ANNOT_LE_DIAMOND, fitz.PDF_ANNOT_LE_CIRCLE)
+annot.set_border(width=0.3, dashes=[2])
+annot.set_colors(stroke=blue, fill=gold)
+annot.set_line_ends(fitz.PDF_ANNOT_LE_DIAMOND, fitz.PDF_ANNOT_LE_CIRCLE)
 annot.update()
 print_descr(annot)
 
 r += displ
 annot = page.addRectAnnot(r)  # 'Square'
-annot.setBorder(width=1, dashes=[1, 2])
-annot.setColors(stroke=blue, fill=gold)
+annot.set_border(width=1, dashes=[1, 2])
+annot.set_colors(stroke=blue, fill=gold)
 annot.update(opacity=0.5)
 print_descr(annot)
 
 r += displ
 annot = page.addCircleAnnot(r)  # 'Circle'
-annot.setBorder(width=0.3, dashes=[2])
-annot.setColors(stroke=blue, fill=gold)
+annot.set_border(width=0.3, dashes=[2])
+annot.set_colors(stroke=blue, fill=gold)
 annot.update()
 print_descr(annot)
 
@@ -154,7 +154,7 @@ print_descr(annot)  # annot.rect
 
 r += displ
 annot = page.addStampAnnot(r, stamp=10)  # 'Stamp'
-annot.setColors(stroke=green)
+annot.set_colors(stroke=green)
 annot.update()
 print_descr(annot)
 

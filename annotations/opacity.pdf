@@ -1,0 +1,166 @@
+%PDF-1.4
+%µ¶
+
+1 0 obj
+<<
+  /Type /Catalog
+  /Pages 2 0 R
+>>
+endobj
+
+2 0 obj
+<<
+  /Type /Pages
+  /Count 1
+  /Kids [ 4 0 R ]
+>>
+endobj
+
+3 0 obj
+<<
+>>
+endobj
+
+4 0 obj
+<<
+  /Type /Page
+  /MediaBox [ 0 0 595 842 ]
+  /Rotate 0
+  /Resources 3 0 R
+  /Parent 2 0 R
+  /Annots [ 5 0 R 7 0 R ]
+>>
+endobj
+
+5 0 obj
+<<
+  /Type /Annot
+  /Subtype /Circle
+  /Rect [ 50 742 100 792 ]
+  /BS <<
+    /W 1
+  >>
+  /C [ 1 0 0 ]
+  /P 4 0 R
+  /F 4
+  /NM (fitzannot-0)
+  /AP <<
+    /N 6 0 R
+  >>
+  /IC [ 1 0 0 ]
+  /CA .6666667
+  /BM /Multiply
+>>
+endobj
+
+6 0 obj
+<<
+  /Type /XObject
+  /Subtype /Form
+  /BBox [ 50 742 100 792 ]
+  /Matrix [ 1 0 0 1 0 0 ]
+  /Length 176
+  /Resources <<
+    /ExtGState <<
+      /H <<
+        /CA .6666667
+        /ca .6666667
+        /BM /Multiply
+      >>
+    >>
+  >>
+>>
+stream
+q
+/H gs
+1 w
+1 0 0 RG
+1 0 0 rg
+75 791 m
+88.24596 791 99 780.246 99 767 c
+99 753.754 88.24596 743 75 743 c
+61.75404 743 51 753.754 51 767 c
+51 780.246 61.75404 791 75 791 c
+b
+
+Q
+
+endstream
+endobj
+
+7 0 obj
+<<
+  /Type /Annot
+  /Subtype /Circle
+  /Rect [ 75 717 125 767 ]
+  /BS <<
+    /W 1
+  >>
+  /C [ 0 0 1 ]
+  /P 4 0 R
+  /F 4
+  /NM (fitzannot-1)
+  /AP <<
+    /N 8 0 R
+  >>
+  /IC [ 0 0 1 ]
+  /CA .33333335
+  /BM /Multiply
+>>
+endobj
+
+8 0 obj
+<<
+  /Type /XObject
+  /Subtype /Form
+  /BBox [ 75 717 125 767 ]
+  /Matrix [ 1 0 0 1 0 0 ]
+  /Length 184
+  /Resources <<
+    /ExtGState <<
+      /H <<
+        /CA .33333335
+        /ca .33333335
+        /BM /Multiply
+      >>
+    >>
+  >>
+>>
+stream
+q
+/H gs
+1 w
+0 0 1 RG
+0 0 1 rg
+100 766 m
+113.24596 766 124 755.246 124 742 c
+124 728.754 113.24596 718 100 718 c
+86.75404 718 76 728.754 76 742 c
+76 755.246 86.75404 766 100 766 c
+b
+
+Q
+
+endstream
+endobj
+
+xref
+0 9
+0000000000 00001 f 
+0000000016 00000 n 
+0000000070 00000 n 
+0000000136 00000 n 
+0000000158 00000 n 
+0000000295 00000 n 
+0000000528 00000 n 
+0000000976 00000 n 
+0000001210 00000 n 
+
+trailer
+<<
+  /Size 9
+  /Root 1 0 R
+>>
+startxref
+1668
+%%EOF
