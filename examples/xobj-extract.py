@@ -6,7 +6,7 @@ It scans the pages of a PDF and stores embedded XObjects as pages in a
 new PDF.
 
 The new PDF pages can subsequently be used to generate conventional
-rester images of the original XObjects or as sources to be embedded
+raster images of the original XObjects or as sources to be embedded
 in other PDFs.
 
 Date of creation: 2020-03-15
