@@ -3,6 +3,10 @@ This repository contains demos, examples and for using PyMuPDF in the respective
 
 > These scripts were written over an extended period of time - each for the then existing PyMuPDF version. I will not (reliably) go over each of them and ensure they still work. Occasionally a script may therefore no longer be compatible with the **current** version. If you find such inconsistencies, please **do not submit issues**, but try to repair the script and submit the corrected script via a Pull Request instead. Thank you.
 
+## Advanced TOC Handling
+Handling of table of contents (TOC) has been significantly improved in v1.18.6. I have therefore created another new [folder](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/advanced-toc) dealing specifically with this subject.
+
+
 ## Font Replacement
 New for PyMuPDF v1.17.6 is the ability to replace selected fonts in existing PDFs. This is a set of two scripts and their documentation in [this](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/font-replacement) folder.
 
