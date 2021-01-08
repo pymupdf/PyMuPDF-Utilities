@@ -180,12 +180,16 @@ This is how the result looks like:
 ![screen](colored-toc.png)
 
 
-Obviously in this case, because we in fact changed every single item, the same result could have been achieved by applying the changes directly to the ``toc`` object and then setting that as the new TOC.
+Obviously in this case, because we in fact changed every single item, the same result could have been achieved by applying the changes directly to the ``toc`` list and then setting that as the new TOC.
 
 There are however more or less subtle differences in favor of this function:
 * `doc.set_toc_item()` reuses the old xref number, whereas `doc.set_toc()` acquires new xref numbers (currently - we may be changing this going forward). The old ones must be regained using garbage option of 2 or more on `save()`.
 * If an exception occurs within underlying MuPDF functions, `doc.set_toc_item()` is better recoverable because of its granular approach (changes only one xref at a time). `doc.set_toc()` consists of two internal steps, both of which are bulk changes to all xref numbers dealing with TOC storage, making it impossible to roll back except by discarding all changes to the PDF completely.
 
-If a PDF is signed, only incremental changes are possible without invalidating the signature.
+Other advantages of using `doc.set_toc_item()`:
 
-Also incremental saves are fast but always increase the file size. So you may be generally interested in small overall changed data volumes in order to minimize those increments.
+* If a PDF is signed, only incremental changes are possible without invalidating the signature. Also, incremental saves are fast, but always increase the file size. So you should generally be interested in small overall changed data volumes in order to minimize those increments. This makes the method an ideal candidate for small changes to the TOC.
+
+There are disadvantages, too:
+* You cannot change the overall TOC structure with `doc.set_toc_item()` - only the content of each item. You cannot add items, or change hierarchy levels, or positions inside the TOC list.
+* You cannot delete TOC items either ... but there is method `doc.del_toc_item(idx)`, which removes an item's title string and sets the item's target to empty.
