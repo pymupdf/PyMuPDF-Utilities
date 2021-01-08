@@ -174,6 +174,12 @@ for i, item in enumerate(toc):
 
 doc.save("colored-toc.pdf")
 ```
+
+This is how the result looks like:
+
+![screen](colored-toc.png)
+
+
 Obviously in this case, because we in fact changed every single item, the same result could have been achieved by applying the changes directly to the ``toc`` object and then setting that as the new TOC.
 
 There are however more or less subtle differences in favor of this function:
