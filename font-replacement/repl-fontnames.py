@@ -27,7 +27,7 @@ name or just leave it untouched.
 
 Dependencies
 ------------
-PyMuPDF v1.17.6
+PyMuPDF v1.18.4
 
 License
 -------
@@ -52,10 +52,66 @@ Changes
 - Change the CSV parameter file to JSON format. This hopefully covers more
   peculiarities for fontname specifications.
 
+* Version 2020-11-27:
+- The fontname to replace ("old" fontname) is now a list to account for
+  potentially different name variants in the various entangled PDF objects
+  like /FontName, /BaseName, etc.
 """
 import fitz
 import sys
 import json
+
+
+def norm_name(name):
+    while "#" in name:
+        p = name.find("#")
+        c = int(name[p + 1 : p + 3], 16)
+        name = name.replace(name[p : p + 3], chr(c))
+    p = name.find("+") + 1
+    return name[p:]
+
+
+def get_fontnames(doc, item):
+    """Return a list of fontnames.
+
+    There may be more than one alternative e.g. for Type0 fonts.
+    """
+    subset = False
+    fontname = item[3]
+    idx = fontname.find("+") + 1
+    fontname = fontname[idx:]
+    if idx > 0:
+        subset = True
+    names = [fontname]
+    text = doc.xref_object(item[0])
+    font = ""
+    descendents = ""
+
+    for line in text.splitlines():
+        line = line.split()
+        if line[0] == "/BaseFont":
+            font = norm_name(line[1][1:])
+        elif line[0] == "/DescendantFonts":
+            descendents = " ".join(line[1:]).replace(" 0 R", " ")
+            if descendents.startswith("["):
+                descendents = descendents[1:-1]
+            descendents = map(int, descendents.split())
+
+    if font and font not in names:
+        names.append(font)
+    if not descendents:
+        return subset, tuple(names)
+
+    # 'descendents' is a list of descendent font xrefs.
+    # Should be just one by the books.
+    for xref in descendents:
+        for line in doc.xref_object(xref).splitlines():
+            line = line.split()
+            if line[0] == "/BaseFont":
+                font = norm_name(line[1][1:])
+                if font not in names:
+                    names.append(font)
+    return subset, tuple(names)
 
 
 def make_msg(font):
@@ -79,16 +135,16 @@ doc = fitz.open(infilename)
 for i in range(len(doc)):
     for f in doc.getPageFontList(i, full=True):
         msg = ""
-        fontname = f[3]
+        subset, fontname = get_fontnames(doc, f)
+
         if f[1] == "n/a":
             msg = "Not embedded!"
         else:
             extr = doc.extractFont(f[0])
             font = fitz.Font(fontbuffer=extr[-1])
             msg = make_msg(font)
-        idx = fontname.find("+") + 1
-        fontname = fontname[idx:]
-        if idx > 0:
+
+        if subset:
             msg += ", subset font"
         font_list.add((fontname, msg))
 

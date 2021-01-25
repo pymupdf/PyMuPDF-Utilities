@@ -51,7 +51,7 @@ TODOs, Missing Features, Limitations
 
 Dependencies
 ------------
-PyMuPDF v1.17.6
+PyMuPDF v1.18.4
 fontTools
 
 Notes
@@ -87,17 +87,23 @@ Changes
 - Change the CSV parameter file to JSON format. This hopefully covers more
   peculiarities for fontname specifications.
 
+* Version 2020-11-27:
+- The fontname to replace ("old" fontname) is now a list to account for
+  potentially different name variants in the various entangled PDF objects
+  like /FontName, /BaseName, etc.
+
 """
+import json
 import os
 import sys
 import time
-import json
 from pprint import pprint
 
 import fitz
+import fontTools.subset as fts
 
-if fitz.VersionBind.split(".") < ["1", "17", "6"]:
-    sys.exit("Need at least PyMuPDF v1.17.6")
+if fitz.VersionBind.split(".") < ["1", "18", "4"]:
+    sys.exit("Need at least PyMuPDF v1.18.4")
 
 # Contains sets of unicodes in use by font.
 # "new fontname": unicode-list
@@ -131,9 +137,9 @@ def error_exit(searchname, name):
 def get_new_fontname(old_fontname):
     """Determine new fontname for a given old one.
 
-    Return None if not found. The complex logci part is required because font
-    name length is restricted to 32 bytes (by MuPDF?).
-    So we need check instead whether a dict key "almost" matches.
+    Return None if not found. The complex logic part is required because font
+    name length is restricted to 32 bytes (by MuPDF).
+    So we check instead, whether a dict key "almost" matches.
     """
     new_fontname = new_fontnames.get(old_fontname, None)
     if new_fontname:  # the simple case.
@@ -182,7 +188,7 @@ def get_font(searchname, flags):
 
 def resize(span, font):
     """Adjust fontsize for the replacement font.
-    
+
     Computes new fontsize such that text will not exceed the bbox width.
 
     Args:
@@ -204,7 +210,7 @@ def resize(span, font):
 
 def cont_clean(page, fontrefs):
     """Remove text written with one of the fonts to replace.
-    
+
     Args:
         page: the page
         fontrefs: dict of contents stream xrefs. Each xref key has a list of
@@ -265,13 +271,13 @@ def cont_clean(page, fontrefs):
     for xref in fontrefs.keys():
         xref0 = 0 + xref
         if xref0 == 0:  # the page contents
-            xref0 = page.getContents()[0]  # there is only one /Contents obj now
-        cont = doc.xrefStream(xref0)
+            xref0 = page.get_contents()[0]  # there is only one /Contents obj now
+        cont = doc.xref_stream(xref0)
         cont_lines = cont.splitlines()
         changed, cont_lines = remove_font(fontrefs[xref], cont_lines)
         if changed:
             cont = b"\n".join(cont_lines) + b"\n"
-            doc.updateStream(xref0, cont)  # replace command source
+            doc.update_stream(xref0, cont)  # replace command source
 
 
 def build_subset(buffer, unc_set):
@@ -283,8 +289,6 @@ def build_subset(buffer, unc_set):
     Returns:
         Either None if subsetting is unsuccessful or the subset font buffer.
     """
-    import fontTools.subset as fts
-
     unc_list = list(unc_set)
     unc_list.sort()
     unc_file = open("uncfile.txt", "w")  # store unicodes as text file
@@ -342,46 +346,52 @@ def clean_fontnames(page):
         for name in names[1:]:
             namex = b"/" + name.encode() + b" "
             cont = cont.replace(namex, name0)
-    xref = page.getContents()[0]  # xref of first /Contents
-    page.parent.updateStream(xref, cont)  # replace it with our result
-    page._setContents(xref)  # tell PDF: this is the only /Contents object
-    page.cleanContents(sanitize=True)  # sanitize ensures cleaning /Resources
+    xref = page.get_contents()[0]  # xref of first /Contents
+    page.parent.update_stream(xref, cont)  # replace it with our result
+    page.set_contents(xref)  # tell PDF: this is the only /Contents object
+    page.clean_contents(sanitize=True)  # sanitize ensures cleaning /Resources
 
 
 def build_repl_table(doc, fname):
     """Populate font replacement information.
 
-    Read the font relacement file and store its information in dictionaries
-    'font_subsets', 'font_buffers' and 'new_fontnames'.
+    Read the JSON font relacement file and store its information in
+    dictionaries 'font_subsets', 'font_buffers' and 'new_fontnames'.
     """
     fd = open(fname)
     fontdicts = json.load(fd)
-
     fd.close()
 
     for fontdict in fontdicts:
         oldfont = fontdict["oldfont"]
-        newfont = fontdict["newfont"]
-        oldfont = oldfont.strip()
-        newfont = newfont.strip()
+        newfont = fontdict["newfont"].strip()
+
         if newfont == "keep":  # ignore if not replaced
             continue
         if "." in newfont or "/" in newfont or "\\" in newfont:
-            font = fitz.Font(fontfile=newfont)
+            try:
+                font = fitz.Font(fontfile=newfont)
+            except:
+                sys.exit("Could not create font '%s'." % newfont)
             fontbuffer = font.buffer
             new_fontname = font.name
             font_subsets[new_fontname] = set()
             font_buffers[new_fontname] = fontbuffer
-            new_fontnames[oldfont] = new_fontname
+            for item in oldfont:
+                new_fontnames[item] = new_fontname
             del font
             continue
 
-        font = fitz.Font(newfont)
+        try:
+            font = fitz.Font(newfont)
+        except:
+            sys.exit("Could not create font '%s'." % newfont)
         fontbuffer = font.buffer
         new_fontname = font.name
         font_subsets[new_fontname] = set()
         font_buffers[new_fontname] = fontbuffer
-        new_fontnames[oldfont] = new_fontname
+        for item in oldfont:
+            new_fontnames[item] = new_fontname
         del font
         continue
 
@@ -503,7 +513,7 @@ for page in indoc:
     blocks = page.getText("dict", flags=extr_flags)["blocks"]
 
     # clean contents streams of the page and any XObjects.
-    page.cleanContents(sanitize=True)
+    page.clean_contents(sanitize=True)
     fontrefs = get_page_fontrefs(page)
     if fontrefs == {}:  # page has no fonts to replace
         continue
@@ -538,18 +548,12 @@ for page in indoc:
                 else:  # make new
                     tw = fitz.TextWriter(page.rect)  # make text writer
                     textwriters[color] = tw  # store it for later use
-                try:
-                    tw.append(
-                        span["origin"],
-                        text,
-                        font=font,
-                        fontsize=resize(span, font),  # use adjusted fontsize
-                        wmode=wmode,
-                        markup_dir=markup_dir,
-                        bidi_level=bidi_level,
-                    )
-                except:
-                    print("page %i exception:" % page.number, text)
+                tw.append(
+                    span["origin"],
+                    text,
+                    font=font,
+                    fontsize=resize(span, font),  # use adjusted fontsize
+                )
 
     # now write all text stored in the list of text writers
     for color in textwriters.keys():  # output the stored text per color
@@ -562,4 +566,8 @@ for page in indoc:
 t1 = time.perf_counter()
 print("End of phase 2, %g seconds" % round(t1 - t0_2, 2))
 print("Total duration %g seconds" % round(t1 - t0, 2))
-indoc.save(indoc.name.replace(".pdf", "-new.pdf"), garbage=4, deflate=True)
+indoc.save(
+    indoc.name.replace(".pdf", "-new.pdf"),
+    garbage=4,
+    deflate=True,
+)
