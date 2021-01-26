@@ -327,13 +327,13 @@ def clean_fontnames(page):
     """Remove multiple references to one font.
 
     When rebuilding the page text, dozens of font reference names '/Fnnn' may
-    be generated pointing to the same font.
+    be generated that point to the same font.
     This function removes these duplicates and thus reduces the size of the
     /Resources object.
     """
-    cont = bytearray(page.readContents())  # read and concat all /Contents
+    cont = bytearray(page.read_contents())  # read and concat all /Contents
     font_xrefs = {}  # key: xref, value: set of font refs using it
-    for f in page.getFontList():
+    for f in page.get_fonts():
         xref = f[0]
         name = f[4]  # font ref name, 'Fnnn'
         names = font_xrefs.get(xref, set())
@@ -453,12 +453,12 @@ print(
     % (indoc.name, indoc.pageCount, "s" if indoc.pageCount > 1 else "")
 )
 
-t0 = time.perf_counter()
+t0 = time.perf_counter()  # store start time
 # the following flag prevents images from being extracted:
-extr_flags = fitz.TEXT_PRESERVE_LIGATURES | fitz.TEXT_PRESERVE_WHITESPACE
+extr_flags = fitz.TEXT_PRESERVE_LIGATURES
 
 # Phase 1
-print("Phase 1: Create sets of used unicodes per new font.")
+print("Phase 1: Collect the used unicodes per font.")
 for page in indoc:
     fontrefs = get_page_fontrefs(page)
     if fontrefs == {}:  # page has no fonts to replace
@@ -479,7 +479,7 @@ for page in indoc:
                 font_subsets[new_fontname] = subset  # store back extended set
 
 
-t0_1 = time.perf_counter()
+t0_1 = time.perf_counter()  # end time of phase 1
 print("End of phase 1, %g seconds.\n" % round(t0_1 - t0, 2))
 print()
 print("Font replacement overview:")
@@ -503,11 +503,12 @@ for fontname in font_subsets.keys():
     print(msg)
     del old_buffer
 
-t0_2 = time.perf_counter()
+t0_2 = time.perf_counter()  # end time of font subset building
 print("Font subsets built, %g seconds." % round(t0_2 - t0_1, 2))
 print()
+
 # Phase 2
-print("Phase 2: rebuild document.")
+print("Phase 2: Rebuild the document.")
 for page in indoc:
     # extract text again
     blocks = page.getText("dict", flags=extr_flags)["blocks"]
@@ -564,8 +565,8 @@ for page in indoc:
     clean_fontnames(page)
 
 t1 = time.perf_counter()
-print("End of phase 2, %g seconds" % round(t1 - t0_2, 2))
-print("Total duration %g seconds" % round(t1 - t0, 2))
+print("End of phase 2, %g seconds." % round(t1 - t0_2, 2))
+print("Total duration %g seconds." % round(t1 - t0, 2))
 indoc.save(
     indoc.name.replace(".pdf", "-new.pdf"),
     garbage=4,
