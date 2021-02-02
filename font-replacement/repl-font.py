@@ -2,7 +2,7 @@
 """
 @created: 2020-08-20 13:00:00
 
-@author: Jorj X. McKie
+@author: (c) Jorj.X.McKie@outlook.de, 2020-2021
 
 Font Replacement
 ----------------
@@ -56,13 +56,20 @@ fontTools
 
 Notes
 ------
-The resulting PDF will often (but not always) be larger than the input.
-Reasons include:
+The resulting PDF may be larger or smaller than the input. Reasons include:
 
 * This script enforces use of embedded fonts. This will add to the output size.
-* We use fontTools to create font subsets based on the used unicodes.
-  Depending on the choice of the new font, subsetting may not wordk. We know of
-  no way subsetting CFF fonts like the embeddable Base-14 font variants.
+* We use fontTools to create font subsets. Depending on the choice of the new
+  font, subsetting may not work. E.g. we know of no way subsetting CFF fonts
+  like the embeddable Base-14 font variants. This can add to the output size.
+* Some PDFs contain several different subsets built from the same basefont. We
+  will always replace all these occurrences with one new font on output. This
+  may *significantly* reduce the output size, because the new font's subset is
+  built across all PDF pages. We have seen file size reductions by several
+  hundred KB because of this effect.
+* One new font may replace multiple input fonts. This will almost certainly
+  reduce output size, because subsetting happens based on the union of multiple
+  sets of input characters.
 
 License
 -------
@@ -76,6 +83,8 @@ Copyright
 
 Changes
 -------
+* Version 2021-01-31:
+- Adjustments to changes in the PyMuPDF API.
 * Version 2020-09-02:
 - Now also supporting text in so-called "Form XObjects", i.e. text not encoded
   in the page's /Contents.
@@ -324,15 +333,15 @@ def build_subset(buffer, unc_set):
 
 
 def clean_fontnames(page):
-    """Remove multiple references to one font.
+    """Remove multiple references to the same font.
 
     When rebuilding the page text, dozens of font reference names '/Fnnn' may
-    be generated that point to the same font.
+    be generated, which point to the same font.
     This function removes these duplicates and thus reduces the size of the
     /Resources object.
     """
     cont = bytearray(page.read_contents())  # read and concat all /Contents
-    font_xrefs = {}  # key: xref, value: set of font refs using it
+    font_xrefs = {}  # key: xref, value: set of font ref names using it
     for f in page.get_fonts():
         xref = f[0]
         name = f[4]  # font ref name, 'Fnnn'
@@ -413,11 +422,11 @@ def tilted_span(page, wdir, span, font):
     if sin > 0:  # clockwise rotation
         origin.y = bbox.y0
     tw.append(origin, text, font=font, fontsize=fontsize)
-    tw.writeText(page, morph=(origin, matrix))
+    tw.write_text(page, morph=(origin, matrix))
 
 
 def get_page_fontrefs(page):
-    fontlist = page.getFontList(full=True)
+    fontlist = page.get_fonts(full=True)
     # Ref names for each font to replace.
     # Each contents stream has a separate entry here: keyed by xref,
     # 0 = page /Contents, otherwise xref of XObject
@@ -450,7 +459,7 @@ if new_fontnames == {}:
     sys.exit("\n***** There are no fonts to replace. *****")
 print(
     "Processing PDF '%s' with %i page%s.\n"
-    % (indoc.name, indoc.pageCount, "s" if indoc.pageCount > 1 else "")
+    % (indoc.name, indoc.page_count, "s" if indoc.page_count > 1 else "")
 )
 
 t0 = time.perf_counter()  # store start time
@@ -463,7 +472,7 @@ for page in indoc:
     fontrefs = get_page_fontrefs(page)
     if fontrefs == {}:  # page has no fonts to replace
         continue
-    for block in page.getText("dict", flags=extr_flags)["blocks"]:
+    for block in page.get_text("dict", flags=extr_flags)["blocks"]:
         for line in block["lines"]:
             for span in line["spans"]:
                 new_fontname = get_new_fontname(span["font"])
@@ -511,7 +520,7 @@ print()
 print("Phase 2: Rebuild the document.")
 for page in indoc:
     # extract text again
-    blocks = page.getText("dict", flags=extr_flags)["blocks"]
+    blocks = page.get_text("dict", flags=extr_flags)["blocks"]
 
     # clean contents streams of the page and any XObjects.
     page.clean_contents(sanitize=True)

@@ -19,7 +19,7 @@ This makes it e.g. possible to replace **Courier** by a nicer monospaced font, o
 * For each new font, a subset is built based on the used unicodes.
 * Remove the text pieces, then rewrite them with the respective new font.
 
-The script makes heavy use of and is dependent on MuPDF's page cleaning and text extraction facilities, `Page.cleanContents()` and `Page.getText("dict")`.
+The script makes heavy use of and is dependent on MuPDF's page cleaning and text extraction facilities, `Page.clean_contents()` and `Page.get_text("dict")`.
 
 ## Choosing Replacement Fonts
 The actual font replacing script expects a JSON file which specifies, which old font should be replaced by which new font. You must execute a utility script which creates this JSON file. Then edit this file.
@@ -102,14 +102,15 @@ In general, and independent from the scripts presented here, there are always is
 2. Even if fonts have similar characteristics (e.g. both are proportional), there usually exist differences for individual characters. This may lead to different text lengths, even if font sizes are equal - just think of Arial vs. Arial Narrow. Because the page is not being completely rewritten, the replacing text piece must stay within the original rectangle by all means. This may or may not require reducing the fontsize - leading to an uneven overall appearance. The contrary may also happen: if the new font is narrower, it will produce shorter text lengths - leading to larger gaps to subsequent text pieces on the same line.
 3. **Do not expect** that justified text remains justified!
 4. **Do not expect** that every character with the new font will appear at the same position as with the old font.
+5. The text of PDFs is often created with subtle modifications of single inter-character spacings, for example to achieve an extra small distance between the letters "fl" or to the letter following a capital "W". Any such modifications will be lost under font replacement.
 
 
-Existing text is extracted via `page.getText("dict")`. This dictionary is critical for the overall success: while it does contain lots of information about each text span, it is **still not complete**, e.g.
+Existing text is extracted via `page.get_text("dict")`. This dictionary is critical for the overall success: while it does contain lots of information about each text span, it is **still not complete**, e.g.
 
-* There is currently no way to determine whether the original text is actually visible. It may be covered by other objects like images (i.e. be in "background"), or be attributed as "hidden" or whatever - we wouldn't know about this. **Rewritten text will always be visible.**
+* There is currently no way to determine whether the original text is actually visible. It may be covered by other objects like images (i.e. be in "background"), or be attributed as "hidden" or subject to some Optional Content rules ... or whatever - we wouldn't know about this. **Rewritten text will always be visible.**
 * There is currently no way to tell whether text is under control of some opacity (transparency) instruction. **Rewritten text will be non-transparent**. The only way to "simulate" this is via adapting the script to your needs. For illustration purposes we have included logic that sets opacity to 20% if the font size is 100 or more.
 * On rare occasions, inter-character spacing may be incorrectly computed by MuPDF: Words may be erroneously joined or drawn apart.
-* Another important, heavily used MuPDF utility function is invoked by `Page.cleanContents()`. It concatenates multiple `/Contents` objects, purifies their command syntax and **synchronizes** the fonts **used,** with the fonts **listed** in the `/Resources` objects.
+* Another important, heavily used MuPDF utility function is invoked by `Page.clean_contents()`. It concatenates multiple `/Contents` objects, purifies their command syntax and **synchronizes** the fonts **used,** with the fonts **listed** in the `/Resources` objects.
 
 ## Notes on Font Subsetting
 A font contains basically two things: (1) code that generates a character's visual appearance (the "glyph") and (2) a mapping between the character code and its glyph. In a simplistic view, a font can be thought of being an array which does this mapping.

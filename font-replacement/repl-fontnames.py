@@ -2,28 +2,32 @@
 """
 @created: 2020-08-20 13:00:00
 
-@author: Jorj X. McKie
+@author: (c) Jorj.X.McKie@outlook.de, 2020-2021
 
 Font Replacement
 ----------------
 This is one of two scripts which allow replacement of specific fonts in a PDF.
 It scans through the pages and creates a condensed list of the used fonts, which
-its writes to a CSV file.
+it writes to a JSON file.
 
-This file must be edited in order to select the fonts to be exchanged.
+This file must be edited in order to select the fonts to replace.
 After these changes, script 'repl-font.py' may be invoked which reads the PDF
-and this CSV file to actually perform the font exchange.
+and this JSON file to actually perform the font replacement.
 
-For a given PDF files 'input.pdf' the CSV file 'input.pdf-fontnames.csv' is
-created. Its entries are:
+For a given PDF file 'input.pdf' the JSON file 'input.pdf-fontnames.json' is
+created, which represents a list. Per old font, the list items are:
 
-oldfont;"keep";comments
+  {"oldfont": ["fontname1", ...], "newfont": "keep", "info": "..."}
 
-Where 'oldfont' is an existing fontname, 'keep' specifies the default action
-(do not replace this font), and 'comment' contains a number of font information
-to facilitate any replacement decision.
-The editor of the file is expected to replace the 'keep' keyword with a new font
-name or just leave it untouched.
+Where 'oldfont' is a list of existing fontnames (there may be aliases),
+'newfont' the desired new font ('keep' = do not replace this font), and
+'comment' contains a number of font data that may help to decide.
+
+Replace any 'keep' with a new font name or leave it untouched - in which case
+the item is ignored.
+A new fontname can either be a reserved code like "helv", "china-s", etc. or
+the name of a fontfile like "arial.ttf". A font filename is recognized by the
+presence of at least one of the characters ".", "/" or "\".
 
 Dependencies
 ------------
@@ -130,25 +134,25 @@ def make_msg(font):
 
 
 infilename = sys.argv[1]
-font_list = set()
+font_list = {}
 doc = fitz.open(infilename)
-for i in range(len(doc)):
-    for f in doc.getPageFontList(i, full=True):
+for i in range(doc.page_count):
+    for f in doc.get_page_fonts(i, full=True):
         msg = ""
         subset, fontname = get_fontnames(doc, f)
 
         if f[1] == "n/a":
             msg = "Not embedded!"
         else:
-            extr = doc.extractFont(f[0])
+            extr = doc.extract_font(f[0])
             font = fitz.Font(fontbuffer=extr[-1])
             msg = make_msg(font)
 
         if subset:
-            msg += ", subset font"
-        font_list.add((fontname, msg))
+            msg = "subset, " + msg
+        font_list[fontname] = (fontname, msg)
 
-font_list = list(font_list)
+font_list = list(font_list.values())
 font_list.sort(key=lambda x: x[0])
 outname = infilename + "-fontnames.json"
 out = open(outname, "w")
