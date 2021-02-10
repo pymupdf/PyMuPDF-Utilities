@@ -5,7 +5,7 @@ Created on Wed Jan 30 07:00:00 2019
 
 @author: Jorj
 @copyright: (c) 2019 Jorj X. McKie
-@license: GNU GPL 3.0
+@license: GNU AFFERO GPL V3
 
 Purpose
 --------

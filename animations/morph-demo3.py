@@ -3,7 +3,7 @@ Created on Thu Jan  3 07:05:17 2019
 
 @author: Jorj
 @copyright: (c) 2019 Jorj X. McKie
-@license: GNU GPL 3.0
+@license: GNU AFFERO GPL V3
 
 Purpose
 --------

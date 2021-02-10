@@ -5,7 +5,7 @@
 
 @copyright: (c) 2020, Jorj X. McKie
 
-@license: GNU GPL 3.0 or later
+@license: GNU AFFERO GPL V3 or later
 
 Description
 -----------

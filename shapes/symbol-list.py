@@ -5,7 +5,7 @@ from __future__ import print_function
 Created on Sun Dec  9 08:34:06 2018
 
 @author: Jorj
-@license: GNU GPL 3.0+
+@license: GNU AFFERO GPL V3+
 
 Create a list of available symbols defined in shapes_and_symbols.py
 

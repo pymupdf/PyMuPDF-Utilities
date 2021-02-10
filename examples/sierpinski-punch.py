@@ -5,7 +5,7 @@ Created on Wed Jan 30 07:00:00 2019
 
 @author: Jorj
 @copyright: (c) 2019 Jorj X. McKie
-@license: GNU GPL 3.0
+@license: GNU AFFERO GPL V3
 
 Purpose
 --------
@@ -56,8 +56,7 @@ fill.invertIRect()  # inverted colors of pm
 
 
 def punch(x, y, step):
-    """Recursively "punch a hole" in the central square of a d x d pixmap.
-    """
+    """Recursively "punch a hole" in the central square of a d x d pixmap."""
     s = step // 3  # the new step
     # iterate through the 9 sub-squares
     # the central one will be filled with the color

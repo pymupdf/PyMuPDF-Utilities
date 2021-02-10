@@ -317,7 +317,7 @@ def build_subset(buffer, unc_set):
                 "oldfont.ttf",
                 "--unicodes-file=uncfile.txt",
                 "--output-file=newfont.ttf",
-                "--recalc-bounds",
+                "--passthrough-tables",
             ]
         )
         fd = open("newfont.ttf", "rb")

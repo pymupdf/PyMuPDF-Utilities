@@ -161,7 +161,7 @@ The produced JSON file is this:
   }
 ]
 ```
-We replace with "korea" (could have been any of "japan", "china-s" or "china-t"):
+We replace with "cjk" (could also have been any of "korea", "japan", "china-s" or "china-t"):
 
 ```json
 [
@@ -197,7 +197,21 @@ Phase 2: rebuild document.
 End of phase 2, 0.01 seconds
 Total duration 0.81 seconds
 ```
-> As you can see, although 6 different languages where used, it was only 180 glyphs out of over 50,000 in this font - about 0.36 percent. Subsetting saved us over 99% of the font's original size.
+> As you can see, although 6 different languages where used, it was only 180 glyphs out of over 50,000 in this font - about 0.36 percent. Subsetting saved us over 99.5% of the font's original size. The saved amount is displayed in uncompressed kilobytes - savings in this case therefore are about 1.6 MB compressed.
+
+### Integrated Font Subsetting
+Since its version 1.18.8, PyMuPDF also has an **_integrated support_** for reducing font binary sizes by building font subsets. It is implemented by a new, **_experimental_** method `Document.subset_fonts()`.
+
+Use this method directly before saving the PDF to a new file like this. For details check out the [PyMuPDF documentation](https://readthedocs.org/projects/pymupdf/):
+
+```python
+# doc is a new or modified PDF document
+doc.subset_fonts()
+doc.save("newfile.pdf", garbage=3, deflate=True, ...)
+```
+
+The method scans the complete document for eligible fonts (embedded OTF or TTF, not already subsetted, ...) and replaces them with smaller binaries, based on the used text.
+
 
 ## Changes
 * Version 2020-09-02:

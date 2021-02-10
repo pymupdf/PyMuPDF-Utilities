@@ -8,7 +8,7 @@ sides.
 
 @author: Jorj X. McKie
 @copyright: (c) 2020, Jorj X. McKie
-@license: GNU GPL 3.0+, GNU AGPL 3.0
+@license: GNU AFFERO GPL V3
 """
 import math
 import os

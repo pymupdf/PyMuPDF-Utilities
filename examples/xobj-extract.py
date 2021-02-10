@@ -18,8 +18,7 @@ Copyright
 
 License
 --------
-GNU GPL 3.0 or later, uses MuPDF v1.16.0 by Artifex Software Inc. licensed
-under GNU AGPL 3.0
+GNU AFFERO GPL V3
 
 """
 import sys
