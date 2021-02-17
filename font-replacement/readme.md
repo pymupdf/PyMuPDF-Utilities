@@ -123,11 +123,13 @@ This is what **_font subsetting_** is all about. We use package [fontTools](http
 
 **fontTools** cannot create subsets for **_CFF type fonts_** (as far as we know).
 
-However, to support embeddable versions of the old Base-14 fonts, MuPDF unfortunately chooses CFF fonts: the **_"Nimbus"_** font families by **URW++** (developed by _URW Type Foundry GmbH_). So, if you choose one of these to replace their non-embedded twins, the resulting PDF may become larger.
+However, the embeddable alternatives of the PDF-defined Base-14 fonts included in MuPDF are non-subsettable **CFF** fonts: the **_"Nimbus"_** font families by **URW++** (developed by _URW Type Foundry GmbH_). So, if you choose any of these, the resulting PDF may become **_larger_**.
 
 This is not necessarily a big problem: the Nimbus fonts are relatively small (around 50 KB or less - albeit per font weight). But you still may want to consider alternatives that do support subsetting.
 
 There also exist free versions of the Nimbus fonts, **which are subsettable** (OTF or TTF formats). They can be downloaded from [this](https://www.fontsquirrel.com/fonts/) website. Search for nimbus-sans, nimbus-mono or nimbus-roman.
+
+Another option: convert the CFF format to TTF, e.g. by using the free software [FontForge](https://fontforge.org/).
 
 To illustrate the effect of font subsetting, look at the following example numbers of a 4-page PDF, once created as a PDF export of a Word document.
 
@@ -137,7 +139,7 @@ The original size is **240 KB** and it contains
 * 24 glyphs mono-spaced bold
 * 69 glyphs mono-spaced regular
 
-Replacing these by (the non-subsettable) **"helv"** (33 KB), **"hebo"** (34 KB), **"cobo"** (51 KB) and **"cour"** (45 KB) Nimbus fonts respectively leads to the new file size **172 KB**.
+Replacing these by (the non-subsettable CFF fonts) **"helv"** (33 KB), **"hebo"** (34 KB), **"cobo"** (51 KB) and **"cour"** (45 KB) Nimbus fonts respectively leads to the new file size **172 KB**.
 
 When instead taking **"Noto Sans Regular"**, **"Noto Sans Bold"**, **"Space Mono Bold"** and **"Space Mono Regular"** (which all support font subsetting), the resulting file size is only **53 KB** ... and it looks nicer, too!
 
@@ -200,7 +202,9 @@ Total duration 0.81 seconds
 > As you can see, although 6 different languages where used, it was only 180 glyphs out of over 50,000 in this font - about 0.36 percent. Subsetting saved us over 99.5% of the font's original size. The saved amount is displayed in uncompressed kilobytes - savings in this case therefore are about 1.6 MB compressed.
 
 ### Integrated Font Subsetting
-Since its version 1.18.8, PyMuPDF also has an **_integrated support_** for reducing font binary sizes by building font subsets. It is implemented by a new, **_experimental_** method `Document.subset_fonts()`.
+Since its version 1.18.8, PyMuPDF also has an **_integrated support_** for reducing font binary sizes by building font subsets.
+
+It is implemented by a new, **_experimental_** method `Document.subset_fonts()`. Do use this option instead of font replacement, where possible.
 
 Use this method directly before saving the PDF to a new file like this. For details check out the [PyMuPDF documentation](https://readthedocs.org/projects/pymupdf/):
 
@@ -210,7 +214,7 @@ doc.subset_fonts()
 doc.save("newfile.pdf", garbage=3, deflate=True, ...)
 ```
 
-The method scans the complete document for eligible fonts (embedded OTF or TTF, not already subsetted, ...) and replaces them with smaller binaries, based on the used text.
+The method scans the complete document for eligible fonts (embedded OTF or TTF, that are no subsets yet) and replaces them with smaller binaries, which are computed based on their use.
 
 
 ## Changes
