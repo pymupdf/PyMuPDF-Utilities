@@ -3,6 +3,11 @@ This repository contains demos, examples and for using PyMuPDF in the respective
 
 > These scripts were written over an extended period of time - each for the then existing PyMuPDF version. I will not (reliably) go over each of them and ensure they still work. Occasionally a script may therefore no longer be compatible with the **current** version. If you find such inconsistencies, please **do not submit issues**, but try to repair the script and submit the corrected script via a Pull Request instead. Thank you.
 
+## OCR Support
+While PyMuPDF has not yet integrated MuPDF's seamless support of Tesseract OCR, there are still ways to use OCR tools in PyMuPDF scripts.
+
+There are now two demo examples in the new folder [OCR](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/OCR) which use Tesseract OCR and `easyocr` respectively.
+
 ## Advanced TOC Handling
 Handling of table of contents (TOC) has been significantly improved in v1.18.6. I have therefore created another new [folder](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/advanced-toc) dealing specifically with this subject.
 
