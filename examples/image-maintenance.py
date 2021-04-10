@@ -11,7 +11,7 @@ Dependencies:
 PyMuPDF v1.17.5, wxPython Phoenix version
 
 License:
- GNU GPL 3.x, GNU AFFERO GPL 3
+ GNU AFFERO GPL 3
 
 Copyright:
  (c) 2020 Jorj X. McKie
@@ -71,7 +71,7 @@ def getint(v):
 
 
 def calc_matrix(fw, fh, tr, rotate=0):
-    """ Calculate transformation matrix for image insertion.
+    """Calculate transformation matrix for image insertion.
 
     Notes:
         The result is basically a multiplication of four matrices in this
@@ -238,7 +238,7 @@ def find_image(page, img):
 
 def get_images(page):
     """Loop through the page images.
-    
+
     We only consider images referenced by the page itself, not those shown
     by e.g. Form XObjects.
     """
@@ -721,7 +721,7 @@ class PDFdisplay(wx.Dialog):
         event.Skip()
 
     def on_update_image(self, evt):
-        """ Perform PDF update of changed image position.
+        """Perform PDF update of changed image position.
 
         Compute new rectangle from displayed values, compute new matrix,
         update resp. /Contents object with computed matrix, reload
@@ -768,7 +768,7 @@ class PDFdisplay(wx.Dialog):
 
     def on_refresh_image(self, evt):
         """Remove image invocation command and insert new one.
-        
+
         This should make the image position changeable in corner cases.
         A valid image rectangle must however exist to be successful!
         """
