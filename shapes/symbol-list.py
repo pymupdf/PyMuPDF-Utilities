@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 
 """
 Created on Sun Dec  9 08:34:06 2018
@@ -46,14 +45,12 @@ img = page.newShape()  # start a Shape (canvas)
 
 for i, r in enumerate(rlist):
     tlist[i][0](img, rlist[i])  # execute symbol creation
-    img.insertText(
+    img.insert_text(
         rlist[i].br + p, tlist[i][1], fontsize=r.height / 1.2  # insert description text
     )
 
 # store everything to the page's /Contents object
 img.commit()
 
-import os
 
-scriptdir = os.path.dirname(__file__)
-doc.save(os.path.join(scriptdir, "symbol-list.pdf"))  # save the PDF
+doc.save(__file__.replace(".py", ".pdf"))  # save the PDF
