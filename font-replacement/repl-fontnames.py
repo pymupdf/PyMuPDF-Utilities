@@ -2,28 +2,27 @@
 """
 @created: 2020-08-20 13:00:00
 
-@author: (c) Jorj X. McKie, jorj.x.mckie@outlook.de, 2020-2021
+@author: Jorj X. McKie
 
 Font Replacement
 ----------------
 This is one of two scripts which allow replacement of specific fonts in a PDF.
 It scans through the pages and creates a condensed list of the used fonts, which
-its writes to a CSV file.
+its writes to a JSON file.
 
 This file must be edited in order to select the fonts to be exchanged.
 After these changes, script 'repl-font.py' may be invoked which reads the PDF
-and this CSV file to actually perform the font exchange.
+and this JSON file to actually perform the font exchange.
 
-For a given PDF files 'input.pdf' the CSV file 'input.pdf-fontnames.csv' is
-created. Its entries are:
+For a given PDF file 'input.pdf' the JSON file 'input.pdf-fontnames.json' is
+created. which you must edit. It is a list of one dictionary per font, like
 
-oldfont;"keep";comments
+{"oldfont": ["fontname1", ...], "newfont": "keep", "info": "..."}
 
-Where 'oldfont' is an existing fontname, 'keep' specifies the default action
-(do not replace this font), and 'comment' contains a number of font information
-to facilitate any replacement decision.
-The editor of the file is expected to replace the 'keep' keyword with a new font
-name or just leave it untouched.
+Where 'oldfont' is a list of fontname aliases of a used font, 'keep'
+specifies the default action (do not replace this font), and 'info' contains
+some font information to facilitate the replacement decision.
+Either replace the 'keep' keyword with a new fontname or just leave it as is.
 
 Dependencies
 ------------
@@ -63,25 +62,23 @@ import json
 
 
 def norm_name(name):
-    while "#" in name:
+    """Replace hex parts of the fontname."""
+    while "#" in name:  # any hexadecimals in the name?
         p = name.find("#")
         c = int(name[p + 1 : p + 3], 16)
         name = name.replace(name[p : p + 3], chr(c))
-    p = name.find("+") + 1
-    return name[p:]
+    if name.find("+") == 5:  # only if '+' at position 5
+        return True, name[6:]
+    return False, name
 
 
 def get_fontnames(doc, item):
-    """Return a list of fontnames.
+    """Return a list of fontnames for an item of 'page.get_fonts()'.
 
     There may be more than one alternative e.g. for Type0 fonts.
     """
-    subset = False
     fontname = item[3]
-    idx = fontname.find("+") + 1
-    fontname = fontname[idx:]
-    if idx > 0:
-        subset = True
+    subset, fontname = norm_name(fontname)
     names = [fontname]
     xref = item[0]
     text = doc.xref_object(item[0])
@@ -89,27 +86,30 @@ def get_fontnames(doc, item):
     descendents = ""
     t, temp = doc.xref_get_key(xref, "BaseFont")
     if t == "name":
-        font = norm_name(temp[1:])
+        _, font = norm_name(temp[1:])
         names.append(font)
     t, temp = doc.xref_get_key(xref, "DescendantFonts")
-    if t != "array":
+    if t != "array":  # no DescendantFonts - done
         return subset, tuple(set(names))
-    temp = temp[1:-1]  # get rid of array brackets
-    if temp.endswith(">>"):  # this is an embedded dictionary!
-        temp_list = temp.split("/")
+    temp = temp[1:-1]  # remove array brackets
+
+    # DescendantFonts is either one xref or one embedded PDF dictionary
+    if temp.endswith(">>"):  # embedded dictionary!
+        temp_list = temp.split("/")  # split at name separator
         try:
             p0 = temp_list.index("BaseFont")
-        except:
+        except:  # no fontname provided - done
             return subset, tuple(set(names))
-        p0 += 1
+        p0 += 1  # next item is the fontname
         font = temp_list[p0]
-        font = norm_name(font)
+        _, font = norm_name(font)
         names.append(font)
         return subset, tuple(set(names))
-    nxref = int(temp.replace("0 R", ""))  # get xref of descendant font
+    # DescendantFonts given as xref
+    nxref = int(temp.replace("0 R", ""))  # get xref of DescendantFonts
     t, temp = doc.xref_get_key(nxref, "BaseFont")
-    if t == "name":
-        font = norm_name(temp[1:])
+    if t == "name":  # fontname, append it
+        _, font = norm_name(temp[1:])
         names.append(font)
     return subset, tuple(set(names))
 
