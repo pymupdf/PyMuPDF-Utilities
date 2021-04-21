@@ -2,7 +2,7 @@
 """
 @created: 2020-08-20 13:00:00
 
-@author: (c) Jorj.X.McKie@outlook.de, 2020-2021
+@author: (c) Jorj X. McKie, jorj.x.mckie@outlook.de, 2020-2021
 
 Font Replacement
 ----------------
@@ -56,20 +56,13 @@ fontTools
 
 Notes
 ------
-The resulting PDF may be larger or smaller than the input. Reasons include:
+The resulting PDF will often (but not always) be larger than the input.
+Reasons include:
 
 * This script enforces use of embedded fonts. This will add to the output size.
-* We use fontTools to create font subsets. Depending on the choice of the new
-  font, subsetting may not work. E.g. we know of no way subsetting CFF fonts
-  like the embeddable Base-14 font variants. This can add to the output size.
-* Some PDFs contain several different subsets built from the same basefont. We
-  will always replace all these occurrences with one new font on output. This
-  may *significantly* reduce the output size, because the new font's subset is
-  built across all PDF pages. We have seen file size reductions by several
-  hundred KB because of this effect.
-* One new font may replace multiple input fonts. This will almost certainly
-  reduce output size, because subsetting happens based on the union of multiple
-  sets of input characters.
+* We use fontTools to create font subsets based on the used unicodes.
+  Depending on the choice of the new font, subsetting may not wordk. We know of
+  no way subsetting CFF fonts like the embeddable Base-14 font variants.
 
 License
 -------
@@ -83,8 +76,6 @@ Copyright
 
 Changes
 -------
-* Version 2021-01-31:
-- Adjustments to changes in the PyMuPDF API.
 * Version 2020-09-02:
 - Now also supporting text in so-called "Form XObjects", i.e. text not encoded
   in the page's /Contents.
@@ -102,17 +93,14 @@ Changes
   like /FontName, /BaseName, etc.
 
 """
-import json
 import os
 import sys
 import time
+import json
 from pprint import pprint
 
 import fitz
-import fontTools.subset as fts
 
-if fitz.VersionBind.split(".") < ["1", "18", "4"]:
-    sys.exit("Need at least PyMuPDF v1.18.4")
 
 # Contains sets of unicodes in use by font.
 # "new fontname": unicode-list
@@ -298,6 +286,8 @@ def build_subset(buffer, unc_set):
     Returns:
         Either None if subsetting is unsuccessful or the subset font buffer.
     """
+    import fontTools.subset as fts
+
     unc_list = list(unc_set)
     unc_list.sort()
     unc_file = open("uncfile.txt", "w")  # store unicodes as text file
@@ -317,7 +307,7 @@ def build_subset(buffer, unc_set):
                 "oldfont.ttf",
                 "--unicodes-file=uncfile.txt",
                 "--output-file=newfont.ttf",
-                "--passthrough-tables",
+                "--recalc-bounds",
             ]
         )
         fd = open("newfont.ttf", "rb")
@@ -333,16 +323,16 @@ def build_subset(buffer, unc_set):
 
 
 def clean_fontnames(page):
-    """Remove multiple references to the same font.
+    """Remove multiple references to one font.
 
     When rebuilding the page text, dozens of font reference names '/Fnnn' may
-    be generated, which point to the same font.
+    be generated pointing to the same font.
     This function removes these duplicates and thus reduces the size of the
     /Resources object.
     """
-    cont = bytearray(page.read_contents())  # read and concat all /Contents
-    font_xrefs = {}  # key: xref, value: set of font ref names using it
-    for f in page.get_fonts():
+    cont = bytearray(page.readContents())  # read and concat all /Contents
+    font_xrefs = {}  # key: xref, value: set of font refs using it
+    for f in page.getFontList():
         xref = f[0]
         name = f[4]  # font ref name, 'Fnnn'
         names = font_xrefs.get(xref, set())
@@ -422,11 +412,11 @@ def tilted_span(page, wdir, span, font):
     if sin > 0:  # clockwise rotation
         origin.y = bbox.y0
     tw.append(origin, text, font=font, fontsize=fontsize)
-    tw.write_text(page, morph=(origin, matrix))
+    tw.writeText(page, morph=(origin, matrix))
 
 
 def get_page_fontrefs(page):
-    fontlist = page.get_fonts(full=True)
+    fontlist = page.getFontList(full=True)
     # Ref names for each font to replace.
     # Each contents stream has a separate entry here: keyed by xref,
     # 0 = page /Contents, otherwise xref of XObject
@@ -459,20 +449,20 @@ if new_fontnames == {}:
     sys.exit("\n***** There are no fonts to replace. *****")
 print(
     "Processing PDF '%s' with %i page%s.\n"
-    % (indoc.name, indoc.page_count, "s" if indoc.page_count > 1 else "")
+    % (indoc.name, indoc.pageCount, "s" if indoc.pageCount > 1 else "")
 )
 
-t0 = time.perf_counter()  # store start time
+t0 = time.perf_counter()
 # the following flag prevents images from being extracted:
-extr_flags = fitz.TEXT_PRESERVE_LIGATURES
+extr_flags = fitz.TEXT_PRESERVE_LIGATURES | fitz.TEXT_PRESERVE_WHITESPACE
 
 # Phase 1
-print("Phase 1: Collect the used unicodes per font.")
+print("Phase 1: Create sets of used unicodes per new font.")
 for page in indoc:
     fontrefs = get_page_fontrefs(page)
     if fontrefs == {}:  # page has no fonts to replace
         continue
-    for block in page.get_text("dict", flags=extr_flags)["blocks"]:
+    for block in page.getText("dict", flags=extr_flags)["blocks"]:
         for line in block["lines"]:
             for span in line["spans"]:
                 new_fontname = get_new_fontname(span["font"])
@@ -488,7 +478,7 @@ for page in indoc:
                 font_subsets[new_fontname] = subset  # store back extended set
 
 
-t0_1 = time.perf_counter()  # end time of phase 1
+t0_1 = time.perf_counter()
 print("End of phase 1, %g seconds.\n" % round(t0_1 - t0, 2))
 print()
 print("Font replacement overview:")
@@ -512,15 +502,14 @@ for fontname in font_subsets.keys():
     print(msg)
     del old_buffer
 
-t0_2 = time.perf_counter()  # end time of font subset building
+t0_2 = time.perf_counter()
 print("Font subsets built, %g seconds." % round(t0_2 - t0_1, 2))
 print()
-
 # Phase 2
-print("Phase 2: Rebuild the document.")
+print("Phase 2: rebuild document.")
 for page in indoc:
     # extract text again
-    blocks = page.get_text("dict", flags=extr_flags)["blocks"]
+    blocks = page.getText("dict", flags=extr_flags)["blocks"]
 
     # clean contents streams of the page and any XObjects.
     page.clean_contents(sanitize=True)
@@ -558,12 +547,15 @@ for page in indoc:
                 else:  # make new
                     tw = fitz.TextWriter(page.rect)  # make text writer
                     textwriters[color] = tw  # store it for later use
-                tw.append(
-                    span["origin"],
-                    text,
-                    font=font,
-                    fontsize=resize(span, font),  # use adjusted fontsize
-                )
+                try:
+                    tw.append(
+                        span["origin"],
+                        text,
+                        font=font,
+                        fontsize=resize(span, font),  # use adjusted fontsize
+                    )
+                except:
+                    print("page %i exception:" % page.number, text)
 
     # now write all text stored in the list of text writers
     for color in textwriters.keys():  # output the stored text per color
@@ -574,10 +566,9 @@ for page in indoc:
     clean_fontnames(page)
 
 t1 = time.perf_counter()
-print("End of phase 2, %g seconds." % round(t1 - t0_2, 2))
-print("Total duration %g seconds." % round(t1 - t0, 2))
+print("End of phase 2, %g seconds" % round(t1 - t0_2, 2))
+print("Total duration %g seconds" % round(t1 - t0, 2))
 indoc.save(
     indoc.name.replace(".pdf", "-new.pdf"),
     garbage=4,
-    deflate=True,
 )
