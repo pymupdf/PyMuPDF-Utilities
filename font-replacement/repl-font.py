@@ -571,4 +571,5 @@ print("Total duration %g seconds" % round(t1 - t0, 2))
 indoc.save(
     indoc.name.replace(".pdf", "-new.pdf"),
     garbage=4,
+    deflate=True,
 )
