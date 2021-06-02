@@ -41,6 +41,7 @@ Notes
 
 if not list(map(int, fitz.VersionBind.split("."))) >= [1, 14, 5]:
     raise SystemExit("need PyMuPDF v1.14.5 for this script")
+print(fitz.__doc__)
 
 
 mytime = time.perf_counter
@@ -49,11 +50,12 @@ mytime = time.perf_counter
 gold = (1, 1, 0)
 blue = (0, 0, 1)
 pagerect = fitz.Rect(0, 0, 400, 400)  # dimension of our image
-
+pwidth = pagerect.width
+pheight = pagerect.height
 mp = fitz.Point(pagerect.width / 2.0, pagerect.height / 2.0)  # center of the page
 
 r = fitz.Rect(mp, mp + (80, 80))  # rect of text box
-
+tl = r.tl
 text = "Just some demo text, to be filled in a rect."
 
 textpoint = fitz.Point(40, 50)  # start position of this text:
@@ -71,16 +73,15 @@ def make_page(beta):
     second ration.
     """
     doc = fitz.open()
-    page = doc.newPage(width=pagerect.width, height=pagerect.height)
+    page = doc.new_page(width=pwidth, height=pheight)
     mat = fitz.Matrix(beta)
-    img = page.newShape()
-    img.drawRect(r)
-    img.finish(fill=gold, color=blue, width=0.3, morph=(r.tl, mat))
-    img.insertText(textpoint, itext % beta, fontname="cobo", fontsize=20)
-    img.insertTextbox(r, text, fontsize=15, rotate=90, morph=(r.tl, mat))
+    img = page.new_shape()
+    img.draw_rect(r)
+    img.finish(fill=gold, color=blue, width=0.3, morph=(tl, mat))
+    img.insert_text(textpoint, itext % beta, fontname="cobo", fontsize=20)
+    img.insert_textbox(r, text, fontsize=15, rotate=90, morph=(tl, mat), lineheight=1.2)
     img.commit()
-    pix = page.getPixmap(alpha=False)
-    return pix.getImageData("pgm")
+    return page.get_pixmap().tobytes("pgm")
 
 
 # ------------------------------------------------------------------------------

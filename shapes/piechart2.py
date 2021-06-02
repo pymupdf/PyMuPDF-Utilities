@@ -9,9 +9,9 @@ print(fitz.__doc__)
 from fitz.utils import getColor  # for getting RGB colors by name
 
 doc = fitz.open()  # new empty PDF
-page = doc.newPage()  # creates an ISO-A4 page
+page = doc.new_page()  # creates an ISO-A4 page
 
-img = page.newShape()  # start a Shape (canvas) for the page
+img = page.new_shape()  # start a Shape (canvas) for the page
 
 # title of the page
 title = "Sitzverteilung nach der Bundestagswahl 2013"
@@ -44,10 +44,10 @@ table = (  # seats, party color & name
 seats = float(sum([c[0] for c in table]))  # total seats
 stitle = "Bundestagssitze insgesamt: %i" % (seats,)
 
-img.insertText(fitz.Point(72, 72), title, fontsize=14, color=blue)
-img.insertText(fitz.Point(ts_h - 30, ts_v - 30), stitle, fontsize=13, color=blue)
+img.insert_text(fitz.Point(72, 72), title, fontsize=14, color=blue)
+img.insert_text(fitz.Point(ts_h - 30, ts_v - 30), stitle, fontsize=13, color=blue)
 
-img.drawLine(fitz.Point(72, 80), fitz.Point(550, 80))
+img.draw_line(fitz.Point(72, 80), fitz.Point(550, 80))
 img.finish(color=blue)
 
 # draw the table data
@@ -56,20 +56,20 @@ for i, c in enumerate(table):
     color = getColor(c[1])  # avoid multiple color lookups
     # the method delivers point of other end of the constructed arc
     # we will use it as input for next round
-    point = img.drawSector(center, point, beta, fullSector=True)
+    point = img.draw_sector(center, point, beta, fullSector=True)
     img.finish(color=white, fill=color, closePath=False)
 
     text = "%s, %i %s" % (c[2], c[0], "Sitze" if c[0] > 1 else "Sitz")
     pos = fitz.Point(ts_h, ts_v + i * lineheight)
-    img.insertText(pos, text, color=blue)
+    img.insert_text(pos, text, color=blue)
     tl = fitz.Point(pos.x - 30, ts_v - 10 + i * lineheight)
     br = fitz.Point(pos.x - 10, ts_v + i * lineheight)
     rect = fitz.Rect(tl, br)  # legend color bar
-    img.drawRect(rect)
+    img.draw_rect(rect)
     img.finish(fill=color, color=color)
 
 # overlay center of circle with white
-img.drawCircle(center, radius - 70)
+img.draw_circle(center, radius - 70)
 img.finish(color=white, fill=white)
 img.commit()
 doc.save("piechart2.pdf")

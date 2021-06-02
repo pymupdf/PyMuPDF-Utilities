@@ -26,14 +26,14 @@ tar_width = pix0.width * 3
 tar_height = pix0.height * 4
 tar_irect = fitz.IRect(0, 0, tar_width, tar_height)
 tar_pix = fitz.Pixmap(tar_cs, tar_irect, pix0.alpha)
-tar_pix.clearWith(90)  # clear target with a "very lively stone gray" (Loriot)
+tar_pix.clear_with(90)  # clear target with a "very lively stone gray" (Loriot)
 
 # now fill target with 3 * 4 tiles of input picture
 for i in list(range(4)):
     pix0.y = i * pix0.height  # modify input's y coord
     for j in list(range(3)):
         pix0.x = j * pix0.width  # modify input's x coord
-        tar_pix.copyPixmap(pix0, pix0.irect)  # copy input to new loc
+        tar_pix.copy(pix0, pix0.irect)  # copy input to new loc
         # save all intermediate images to show what is happening
         fn = "target-" + str(i) + str(j) + ".png"
-        tar_pix.writePNG(fn)
+        tar_pix.save(fn)

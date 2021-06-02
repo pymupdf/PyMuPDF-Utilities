@@ -13,7 +13,7 @@ from PIL import Image
 PyMuPDF utility
 ----------------
 For a given entry in a page's getImageList() list, function "recoverpix"
-returns a dictionary like the one produced by "Document.extractImage".
+returns a dictionary like the one produced by "Document.extract_image".
 It preprocesses the following special cases:
 * The PDF image has an /SMask (soft mask) entry. We use Pillow for recovering
   the original image with an alpha channel in RGBA format.
@@ -61,10 +61,10 @@ def recoverpix(doc, item):
     # use Pillow to recover original image
     if smask > 0:
         fpx = io.BytesIO(  # BytesIO object from image binary
-            doc.extractImage(xref)["image"],
+            doc.extract_image(xref)["image"],
         )
         fps = io.BytesIO(  # BytesIO object from smask binary
-            doc.extractImage(smask)["image"],
+            doc.extract_image(smask)["image"],
         )
         img0 = Image.open(fpx)  # Pillow Image
         mask = Image.open(fps)  # Pillow Image
@@ -80,15 +80,15 @@ def recoverpix(doc, item):
 
     # special case: /ColorSpace definition exists
     # to be sure, we convert these cases to RGB PNG images
-    if "/ColorSpace" in doc.xrefObject(xref, compressed=True):
+    if "/ColorSpace" in doc.xref_object(xref, compressed=True):
         pix1 = fitz.Pixmap(doc, xref)
         pix2 = fitz.Pixmap(fitz.csRGB, pix1)
         return {  # create dictionary expected by caller
             "ext": "png",
             "colorspace": 3,
-            "image": pix2.getImageData("png"),
+            "image": pix2.tobytes("png"),
         }
-    return doc.extractImage(xref)
+    return doc.extract_image(xref)
 
 
 fname = sys.argv[1] if len(sys.argv) == 2 else None
@@ -100,7 +100,7 @@ if not fname:
 t0 = time.time()
 doc = fitz.open(fname)
 
-page_count = doc.pageCount  # number of pages
+page_count = doc.page_count  # number of pages
 
 xreflist = []
 imglist = []
@@ -112,7 +112,7 @@ for pno in range(page_count):
         "*** Scanning Pages ***",
     )
 
-    il = doc.getPageImageList(pno)
+    il = doc.get_page_images(pno)
     imglist.extend([x[0] for x in il])
     for img in il:
         xref = img[0]

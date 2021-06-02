@@ -37,6 +37,7 @@ mytime = time.perf_counter
 
 if not list(map(int, fitz.VersionBind.split("."))) >= [1, 14, 5]:
     raise SystemExit("need PyMuPDF v1.14.5 for this script")
+print(fitz.__doc__)
 
 # ------------------------------------------------------------------------------
 # make one page
@@ -51,7 +52,7 @@ def make_oval(f):
     the number of "frames" shown per second.
     """
     doc = fitz.open()  # dummy PDF
-    page = doc.newPage(width=400, height=400)  # page dimensions as you like
+    page = doc.new_page(width=400, height=400)  # page dimensions as you like
     r = page.rect + (4, 4, -4, -4)
     q = r.quad  # full page rect as a quad
     q1 = fitz.Quad(
@@ -62,12 +63,10 @@ def make_oval(f):
     c1 = min(1, f)
     c3 = min(1, max(1 - f, 0))
     fill = (c1, 0, c3)
-    page.drawOval(
+    page.draw_oval(
         q1, color=(0, 0, 1), fill=fill, width=0.3  # blue border  # variable fill color
     )  # border width
-    pix = page.getPixmap(alpha=False)  # make pixmap, no alpha
-    doc.close()  # discard PDF again
-    return pix.getImageData("pgm")  # return a data stream
+    return page.get_pixmap().tobytes("ppm")  # return a data stream
 
 
 # ------------------------------------------------------------------------------

@@ -23,12 +23,12 @@ doc = fitz.open("search.pdf")  # the document
 page = doc[0]  # the page
 
 # determine start point
-rl = page.searchFor("im vorfeld solch ")  # use a unique string on the page
+rl = page.search_for("im vorfeld solch ")  # use a unique string on the page
 # we might want to check that len(rl) == 1 here
 start = rl[0].tl  # top-left point
 
 # determine stop point
-rl = page.searchFor("stark aus.")  # use a unique string
+rl = page.search_for("stark aus.")  # use a unique string
 # again, possibly check len(rl) == 1
 stop = rl[0].br  # bottom-right point
 
@@ -37,12 +37,12 @@ clip = page.rect  # start with page rectangle
 width = clip.width  # take the width and limit it
 clip.x1 = width * 0.35  # to about one third to get the left column
 
-page.addHighlightAnnot(start=start, stop=stop, clip=clip)
+page.add_highlight_annot(start=start, stop=stop, clip=clip)
 # ------------------------------------------------------------
 # underlining and strike-through work in the same way:
 # ------------------------------------------------------------
-# page.addUnderlineAnnot(start=start, stop=stop, clip=clip)
-# page.addStrikeoutAnnot(start=start, stop=stop, clip=clip)
-# page.addSquigglyAnnot(start=start, stop=stop, clip=clip)
+# page.add_underline_annot(start=start, stop=stop, clip=clip)
+# page.add_strikeout_annot(start=start, stop=stop, clip=clip)
+# page.add_squiggly_annot(start=start, stop=stop, clip=clip)
 
 doc.save(__file__.replace(".py", ".pdf"))

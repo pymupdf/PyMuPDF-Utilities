@@ -13,7 +13,7 @@ Just change the 'curve' value to create a different curve.
 import fitz
 
 doc = fitz.open()
-page = doc.newPage(width=500, height=500)
+page = doc.new_page(width=500, height=500)
 center = (page.rect.tl + page.rect.br) / 2.0  # center of the page
 radius = 200  # we will draw a circle with this radius
 n = 523  # number of points on circle perimeter
@@ -27,10 +27,10 @@ stroke = (1, 0, 0)  # color of the lines
 fill = (1, 1, 0)  # fill color of circle
 border = (0, 0, 1)  # border color of circle
 
-shape = page.newShape()  # make a drawing canvas for the page
+shape = page.new_shape()  # make a drawing canvas for the page
 
 # draw the circle
-shape.drawCircle(center, radius)
+shape.draw_circle(center, radius)
 shape.finish(color=border, fill=fill, width=3)
 
 """
@@ -42,14 +42,14 @@ Compute the points on the perimeter. We do this by "abusing" the
 points = [p0]  # first point
 point = p0
 for i in range(1, n):
-    point = shape.drawSector(center, point, theta)  # computes next point
+    point = shape.draw_sector(center, point, theta)  # computes next point
     points.append(point)
 shape.draw_cont = ""  # we only need the points: discard draw commands
 
 for i in range(n):
     # connect each point with the right successor
     tar = curve * i % n  # target point of this line
-    shape.drawLine(points[i], points[tar])
+    shape.draw_line(points[i], points[tar])
 
 shape.finish(color=stroke, width=0.2)  # finsh the line draws
 shape.commit()

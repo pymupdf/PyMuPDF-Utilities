@@ -44,5 +44,5 @@ with open(args.csv) as tocfile:
             toc.append([int(row[0]), row[1], int(row[2]), p4])
         except:
             toc.append([int(row[0]), row[1], int(row[2])])
-doc.setToC(toc)
+doc.set_toc(toc)
 doc.saveIncr()

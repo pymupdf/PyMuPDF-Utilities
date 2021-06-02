@@ -34,5 +34,5 @@ print "----------------------------------------"
 print "\nnew metadata:"
 for k,v in oldmeta.items():
     print k, ":",v
-doc.setMetadata(oldmeta)
+doc.set_metadata(oldmeta)
 doc.saveIncr()

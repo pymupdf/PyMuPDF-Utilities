@@ -47,13 +47,13 @@ ir = (0, 0, d, d)  # the pixmap rectangle
 
 pm = fitz.Pixmap(fitz.csRGB, ir, False)
 fillcolor = fitz.utils.getColorInfoDict()["papayawhip"]
-pm.setRect(ir, fillcolor)  # fill it with some background color
+pm.set_rect(ir, fillcolor)  # fill it with some background color
 
 color = (0, 0, 255)  # color to fill the punch holes
 
 # define 'fill' pixmap for the punch holes
 fill = fitz.Pixmap(pm, 0)  # copy pm
-fill.invertIRect(fill.irect)  # inverted colors of pm
+fill.invert_irect(fill.irect)  # inverted colors of pm
 
 for lvl in range(0, n + 1):
     step = 3 ** (n - lvl)
@@ -63,12 +63,12 @@ for lvl in range(0, n + 1):
             for y in range(0, 3 ** lvl):
                 y0 = y * step
                 if y % 3 == 1:
-                    pm.setRect((y0, x0, y0 + step, x0 + step), color)
-                    # pm.copyPixmap(fill, (y0, x0, y0 + step, x0 + step))
+                    pm.set_rect((y0, x0, y0 + step, x0 + step), color)
+                    # pm.copy(fill, (y0, x0, y0 + step, x0 + step))
 
 t1 = mytime()
 outfile = __file__.replace(".py", ".png")
-pm.writeImage(outfile)
+pm.save(outfile)
 t2 = mytime()
 print("Sierpinski's carpet fitz")
 print("------------------------")

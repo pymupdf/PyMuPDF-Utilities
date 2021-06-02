@@ -3,8 +3,10 @@ This repository contains demos, examples and for using PyMuPDF in the respective
 
 > These scripts were written over an extended period of time - each for the then existing PyMuPDF version. I will not (reliably) go over each of them and ensure they still work. Occasionally a script may therefore no longer be compatible with the **current** version. If you find such inconsistencies, please **do not submit issues**, but try to repair the script and submit the corrected script via a Pull Request instead. Thank you.
 
+> Up to version 1.18.x of PyMupdf a major effort was undertaken to rename (almost) all methods and attributes to the **_snake_case_** standard. This task is now finished. For the time being and including versions 1.19.x, old and new names will coexist. For example, the old name `doc.newPage()` can be used as well as the new name `doc.new_page()` to create a new page. In versions 1.19.x, a deprecation warning will be issued when old method names are used. In versions thereafter, only the new names will remain being valid. To help migrating your scripts to new names, you may want to use ``alias-changer.py`` in this folder.
+
 ## OCR Support
-While PyMuPDF has not yet integrated MuPDF's seamless support of Tesseract OCR, there are still ways to use OCR tools in PyMuPDF scripts.
+While PyMuPDF does not yet support MuPDF's seamless support of Tesseract OCR, there are nonetheless ways to use OCR tools in PyMuPDF scripts.
 
 There are now two demo examples in the new folder [OCR](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/OCR) which use Tesseract OCR and `easyocr` respectively.
 

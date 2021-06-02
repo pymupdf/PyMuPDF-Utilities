@@ -32,13 +32,13 @@ After reading a page, we
 '''
 doc = fitz.Document("adobe.pdf")
 pno = 61
-page = doc.loadPage(pno)
+page = doc.load_page(pno)
 
 #==============================================================================
 # search for top of table
 #==============================================================================
 table_title = "Table 3.4 "
-search1 = page.searchFor(table_title, hit_max = 1)
+search1 = page.search_for(table_title, hit_max = 1)
 if not search1:
     raise ValueError("table top delimiter not found")
 rect1 = search1[0]  # the rectangle that surrounds the search string
@@ -47,7 +47,7 @@ ymin = rect1.y1     # table starts below this value
 #==============================================================================
 # search for bottom of table
 #==============================================================================
-search2 = page.searchFor("related tasks", hit_max = 1)
+search2 = page.search_for("related tasks", hit_max = 1)
 if not search2:
     print("warning: table bottom delimiter not found - using end of page")
     ymax = 99999

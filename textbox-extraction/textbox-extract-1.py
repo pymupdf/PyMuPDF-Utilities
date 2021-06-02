@@ -1,10 +1,8 @@
-from __future__ import print_function
-
 """
 Script showing how to select only text that is contained in a given rectangle
 on a page.
 
-We use the page method 'getText("words")' which delivers a list of all words.
+We use the page method 'get_text("words")' which delivers a list of all words.
 Every item contains the word's rectangle (given by its coordinates, not as a
 fitz.Rect in this case).
 From this list we subselect words positioned in the given rectangle (or at
@@ -25,14 +23,14 @@ Remarks
 3. Depending on your requirements, you can get away without any special script
    by using features new in version 1.17.7. They work on a by-character level,
    meaning they cut away parts of a word where necessary. On the other hand
-   they are extremely simple to use: Page.getTextbox(rect), or
-   Page.getText("text", clip=rect), etc. is all you need.
+   they are extremely simple to use: Page.get_textbox(rect), or
+   Page.get_text("text", clip=rect), etc. is all you need.
 """
 import fitz
 
 
 def make_text(words):
-    """Return textstring output of getText("words").
+    """Return textstring output of get_text("words").
 
     Word items are sorted for reading sequence left to right,
     top to bottom.
@@ -58,7 +56,7 @@ page = doc[0]  # we want text from this page
 Identify the rectangle.
 -------------------------------------------------------------------------------
 """
-rect = page.firstAnnot.rect  # this annot has been prepared for us!
+rect = page.first_annot.rect  # this annot has been prepared for us!
 # Now we have the rectangle ---------------------------------------------------
 
 """
@@ -69,7 +67,7 @@ technical info (block number, line number, word number).
 The term 'word' here stands for any string without space.
 """
 
-words = page.getText("words")  # list of words on page
+words = page.get_text("words")  # list of words on page
 
 """
 We will subselect from this list, demonstrating two alternatives:

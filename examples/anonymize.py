@@ -38,7 +38,7 @@ assert len(sys.argv) == 2, "need input PDF file name"
 fn = sys.argv[1]
 assert fn.endswith(".pdf"), "expect a PDF file"
 doc = fitz.open(fn)
-doc.setMetadata({})               # set metadata values to "none"
+doc.set_metadata({})               # set metadata values to "none"
 doc._delXmlMetadata()             # delete any XML metadata
 for page in doc:
     xref_lst = page._getContents()

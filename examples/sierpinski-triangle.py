@@ -21,10 +21,10 @@ outfile = __file__.replace(".py", ".pdf")
 w = 150  # PDF page width, also determines triangle size.
 h = 0.5 * math.sqrt(3) * w  # this makes it equal-sided
 doc = fitz.open()  # empty new PDF
-page = doc.newPage(-1, width=w, height=h)  # make a new page
+page = doc.new_page(-1, width=w, height=h)  # make a new page
 color1 = (0, 0, 1)  # start triangle is filled with this (blue)
 fill = fitz.utils.getColor("papayawhip")  # cut out triangle fill color
-shape = page.newShape()  # make a new Shape object
+shape = page.new_shape()  # make a new Shape object
 
 
 def triangle(shape, a, b, c, fill, triangle_count):
@@ -45,7 +45,7 @@ def triangle(shape, a, b, c, fill, triangle_count):
     ab = a + (b - a) * 0.5  # calculate ...
     ac = a + (c - a) * 0.5  # the middle points ...
     bc = b + (c - b) * 0.5  # of all sides
-    shape.drawPolyline((ab, ac, bc))  # draw the cut-out triangle
+    shape.draw_polyline((ab, ac, bc))  # draw the cut-out triangle
     shape.finish(fill=fill, closePath=True)  # colorize it
 
     triangle_count += 1  # just created one new triangle
@@ -65,7 +65,7 @@ x = (b.x - a.x) * 0.5  # middle point of line
 y = a.y - x * math.sqrt(3)
 c = fitz.Point(x, y)  # top corner of drawn triangle
 
-shape.drawPolyline((a, b, c))  # draw start triangle on it
+shape.draw_polyline((a, b, c))  # draw start triangle on it
 shape.finish(fill=color1, closePath=True)  # colorize it
 
 t0 = time.perf_counter()
@@ -84,10 +84,10 @@ meta = {
     "keywords": "PDF, fractal, Sierpinski, triangle",
     "creator": os.path.basename(__file__),
     "producer": "PyMuPDF v%s" % fitz.VersionBind,
-    "creationDate": fitz.getPDFnow(),
-    "modDate": fitz.getPDFnow(),
+    "creationDate": fitz.get_pdf_now(),
+    "modDate": fitz.get_pdf_now(),
 }
-doc.setMetadata(meta)
+doc.set_metadata(meta)
 doc.save(outfile, deflate=True)
 print(
     "Computation time %g seconds, triangle side %g pixels, %i sub-triangles."

@@ -17,7 +17,7 @@ if not tuple(map(int, fitz.version[0].split("."))) >= (1, 13, 5):
 
 t0 = time.time()
 doc = fitz.open(sys.argv[1])
-if not doc.isPDF:
+if not doc.is_pdf:
     raise SystemExit("Only works for PDF.")
 clist = []  # all contents xref numbers
 print(

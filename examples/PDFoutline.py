@@ -129,7 +129,7 @@ class ScratchPad():
 #==============================================================================
 def pdf_show(dlg, seite):
     pno = getint(seite) - 1
-    pix = spad.doc.getPagePixmap(pno)
+    pix = spad.doc.get_page_pixmap(pno)
     spad.height = pix.h
     a = pix.samplesRGB()                  # samples without alpha bytes
     bmp = bmp_from_buffer(pix.w, pix.h, a)
@@ -852,11 +852,11 @@ def DisableOK():
 #==============================================================================
 def getPDFinfo():
     spad.doc = fitz.open(spad.file)
-    if spad.doc.needsPass:
+    if spad.doc.needs_pass:
         decrypt_doc()
-        if spad.doc.isEncrypted:
+        if spad.doc.is_encrypted:
             return True
-    spad.seiten = spad.doc.pageCount
+    spad.seiten = spad.doc.page_count
     spad.meta = {"author":"", "title":"", "subject":""}
 
     for key, wert in spad.doc.metadata.items():
@@ -869,7 +869,7 @@ def getPDFinfo():
             spad.meta[key] = ""
 
     spad.fromjson = False
-    spad.inhalt = spad.doc.getToC(simple = False)
+    spad.inhalt = spad.doc.get_toc(simple = False)
     tocfile = spad.file + ".json"
     if os.path.exists(tocfile):
         d = wx.MessageDialog(None,
@@ -914,7 +914,7 @@ def decrypt_doc():
             spad.doc.authenticate(pw)
         else:
             return
-        if spad.doc.isEncrypted:
+        if spad.doc.is_encrypted:
             pw = None
             dlg.SetTitle("Wrong password. Enter correct one or cancel.")
     return
@@ -927,7 +927,7 @@ def make_pdf(dlg):
     indir, infile = os.path.split(f)
     odir = indir
     ofile = infile
-    if spad.doc.needsPass or spad.doc.openErrCode:
+    if spad.doc.needs_pass or spad.doc.openErrCode:
         ofile = ""
     sdlg = wx.FileDialog(None, "Specify Output", odir, ofile,
                                    "PDF files (*.pdf)|*.pdf", wx.FD_SAVE)
@@ -936,7 +936,7 @@ def make_pdf(dlg):
         return None
 
     outfile = sdlg.GetPath()
-    if spad.doc.needsPass or spad.doc.openErrCode:
+    if spad.doc.needs_pass or spad.doc.openErrCode:
         title =  "Repaired / decrypted PDF requires new output file"
         while outfile == spad.file:
             sdlg = wx.FileDialog(None, title, odir, "",
@@ -959,7 +959,7 @@ def make_pdf(dlg):
     m["subject"]  = dlg.aussub.Value
     m["keywords"] = dlg.keywords.Value
 
-    spad.doc.setMetadata(m)    # set new metadata
+    spad.doc.set_metadata(m)    # set new metadata
     # store our outline entries as bookmarks
     if spad.grid_changed:
         newtoc = []
@@ -969,7 +969,7 @@ def make_pdf(dlg):
             tit = z[1].strip()
             top = getint(z[3])
             newtoc.append([lvl, tit, pno, top])
-        spad.doc.setToC(newtoc)
+        spad.doc.set_toc(newtoc)
 
     if outfile == spad.file:
         spad.doc.save(outfile, incremental=True)

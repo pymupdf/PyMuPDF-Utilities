@@ -75,13 +75,13 @@ def print_widget(w):
 
 
 doc = fitz.open(sys.argv[1])
-if not doc.isFormPDF:
+if not doc.is_form_pdf:
     raise SystemExit("'%s' has no form fields." % doc.name)
 print("".ljust(80, "-"))
 print("Form field synopsis of file '%s'" % sys.argv[1])
 print("".ljust(80, "-"))
 for page in doc:
-    a = page.firstWidget
+    a = page.first_widget
     header_shown = False
 
     while a:

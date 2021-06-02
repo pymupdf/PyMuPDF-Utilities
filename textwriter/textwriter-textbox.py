@@ -11,7 +11,7 @@ import fitz
 outfile = os.path.abspath(__file__).replace(".py", ".pdf")
 
 doc = fitz.open()
-page = doc.newPage()
+page = doc.new_page()
 
 page_rect = page.rect
 
@@ -52,7 +52,7 @@ This longer text part checks, whether the very last line will not be justified e
 fill_rect = fitz.Rect(72, 72, 372, 372)  #  keep above text in here
 writer = fitz.TextWriter(page_rect, color=blue)  # start a text writer
 
-writer.fillTextbox(  # fill in above text
+writer.fill_textbox(  # fill in above text
     fill_rect,  # keep text inside this
     text,  # the text
     align=fitz.TEXT_ALIGN_JUSTIFY,  # alignment
@@ -62,14 +62,14 @@ writer.fillTextbox(  # fill in above text
 )
 
 # write our results to the PDF page.
-writer.writeText(page)
+writer.write_text(page)
 
 # To show what happened, draw the rectangles, etc.
-shape = page.newShape()
-shape.drawRect(writer.textRect)  # the generated TextWriter rectangle
-shape.drawCircle(writer.lastPoint, 2)  # coordinates of end of text
+shape = page.new_shape()
+shape.draw_rect(writer.textRect)  # the generated TextWriter rectangle
+shape.draw_circle(writer.lastPoint, 2)  # coordinates of end of text
 shape.finish(color=blue, width=0.3)  # show with blue color
-shape.drawRect(fill_rect)  # the rect within which we had to stay
+shape.draw_rect(fill_rect)  # the rect within which we had to stay
 shape.finish(color=red, width=0.3)  # show in red color
 shape.commit()
 
@@ -82,9 +82,9 @@ This uses the 'morph' argument introduced in v1.17.0.
 mat = fitz.Matrix(1, 1)
 mat *= fitz.Matrix(-15)  # rotation
 mat *= fitz.Matrix(0.8, 0.8)  # scaling
-mat.preTranslate(50, -fill_rect.height)  # translation
+mat.pretranslate(50, -fill_rect.height)  # translation
 point = fill_rect.bl  # use as pivotal point for morphing
-writer.writeText(
+writer.write_text(
     page,
     morph=(point, mat),
     color=0,  # choose a different text color
@@ -93,7 +93,7 @@ writer.writeText(
 
 """
 Write the text box also in a number of other ways on subsequent pages.
-Method 'Page.writeText' supports:
+Method 'Page.write_text' supports:
     - combining several TextWriter objects
     - putting directly in specific rectangles
     - automatic scaling
@@ -102,29 +102,29 @@ Method 'Page.writeText' supports:
     - put in foreground or background
 It internally uses method 'showPDFpage'.
 """
-page = doc.newPage()
+page = doc.new_page()
 # Rotation by 180 degrees can use the same textbox. The same effect can be
 # achieved with TextWriter by using morph=(M, Matrix(180)), where M is the
 # middle point of textbox.
-page.writeText(
+page.write_text(
     textbox,  # content will always be contained in this rect
     rotate=180,  # other angles will result in scaling down
     writers=writer,
 )
 
-page = doc.newPage()
+page = doc.new_page()
 # now rotate by 90 and by 270 degrees. For this we exchange width and height
 # and for more fun, we also scale down.
 textbox1 = fitz.Rect(
     textbox.tl, textbox.x0 + textbox.height / 2, textbox.y0 + textbox.width / 2
 )
 textbox2 = textbox1 + fitz.Rect(0, 1, 0, 1) * textbox1.height
-page.writeText(textbox1, writers=writer, rotate=90)
-page.writeText(textbox2, writers=writer, rotate=-90, color=red)
+page.write_text(textbox1, writers=writer, rotate=90)
+page.write_text(textbox2, writers=writer, rotate=-90, color=red)
 
-page = doc.newPage()
+page = doc.new_page()
 # now a rotation by other than 90-degree-multiples
-page.writeText(page.rect, writers=writer, rotate=-45)
+page.write_text(page.rect, writers=writer, rotate=-45)
 
 
 doc.save(

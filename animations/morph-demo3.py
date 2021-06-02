@@ -41,6 +41,7 @@ if not list(map(int, fitz.VersionBind.split("."))) >= [1, 14, 5]:
     raise SystemExit("need PyMuPDF v1.14.5 for this script")
 
 mytime = time.time
+print(fitz.__doc__)
 
 # define some global constants
 gold = (1, 1, 0)
@@ -68,16 +69,17 @@ def make_page(beta):
     second ration.
     """
     doc = fitz.open()
-    page = doc.newPage(width=pagerect.width, height=pagerect.height)
+    page = doc.new_page(width=pagerect.width, height=pagerect.height)
     mat = fitz.Matrix(0, beta * 0.01, 1)
-    img = page.newShape()
-    img.drawRect(r)
+    img = page.new_shape()
+    img.draw_rect(r)
     img.finish(fill=gold, color=blue, width=0.3, morph=(r.tl, mat))
-    img.insertText(textpoint, itext % (beta * 0.01), fontname="cobo", fontsize=20)
-    img.insertTextbox(r, text, fontsize=15, rotate=90, morph=(r.tl, mat))
+    img.insert_text(textpoint, itext % (beta * 0.01), fontname="cobo", fontsize=20)
+    img.insert_textbox(
+        r, text, fontsize=15, rotate=90, morph=(r.tl, mat), lineheight=1.2
+    )
     img.commit()
-    pix = page.getPixmap(alpha=False)
-    return pix.getImageData("pgm")
+    return page.get_pixmap().tobytes("pgm")
 
 
 # ------------------------------------------------------------------------------

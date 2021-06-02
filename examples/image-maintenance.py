@@ -142,7 +142,7 @@ def find_image(page, img):
         replaced by the new matrix command.
     """
     doc = page.parent
-    img_rect = page.getImageBbox(img)
+    img_rect = page.get_image_bbox(img)
 
     rc = {
         "xref": 0,
@@ -154,7 +154,7 @@ def find_image(page, img):
         "bbox": img_rect,
         "msg": None,
     }
-    if img_rect.isInfinite:
+    if img_rect.is_infinite:
         rc["msg"] = "cannot find image"
         return rc
 
@@ -163,8 +163,8 @@ def find_image(page, img):
     cont = b""
     mat_factors = []
     xref = 0
-    for xref in page.getContents():
-        cont = doc.xrefStream(xref)
+    for xref in page.get_contents():
+        cont = doc.xref_stream(xref)
         pos1 = cont.find(invoker)
         if pos1 > 0:
             rc["begin"] = pos1
@@ -228,7 +228,7 @@ def find_image(page, img):
 
     rc["deg"] = deg
 
-    mat_test = calc_matrix(1, 1, img_rect * ~page.transformationMatrix, rotate=deg)
+    mat_test = calc_matrix(1, 1, img_rect * ~page.transformation_matrix, rotate=deg)
     delta = abs(mat - mat_test)  # this must small enough
     if delta > 1e-3:
         rc["msg"] = "cannot re-compute image rect"
@@ -242,7 +242,7 @@ def get_images(page):
     We only consider images referenced by the page itself, not those shown
     by e.g. Form XObjects.
     """
-    img_list = [img[-3] for img in page.getImageList(True) if img[-1] == 0]
+    img_list = [img[-3] for img in page.get_images(True) if img[-1] == 0]
     images = {}  # the result
     for img in img_list:
         try:
@@ -286,9 +286,9 @@ class PDFdisplay(wx.Dialog):
         # open document when dialog gets created
         # ---------------------------------------------------------------------
         self.doc = fitz.open(filename)  # create Document object
-        if self.doc.needsPass:  # check password protection
+        if self.doc.needs_pass:  # check password protection
             self.decrypt_doc()
-        if self.doc.isEncrypted:  # quit if we cannot decrypt
+        if self.doc.is_encrypted:  # quit if we cannot decrypt
             self.Destroy()
             return
         self.last_pno = -1  # memorize last page displayed
@@ -700,7 +700,7 @@ class PDFdisplay(wx.Dialog):
 
     def on_next_page(self, event):  # means: page forward
         page = getint(self.TextToPage.Value) + 1  # current page + 1
-        page = min(page, self.doc.pageCount)  # cannot go beyond last page
+        page = min(page, self.doc.page_count)  # cannot go beyond last page
         self.TextToPage.ChangeValue(str(page))  # put target page# in screen
         self.new_image(page)  # refresh the layout
         event.Skip()
@@ -749,15 +749,15 @@ class PDFdisplay(wx.Dialog):
         fh = rect.height / factor
         if d["deg"] in (90, 270):  # exchange values
             fw, fh = fh, fw
-        tar_rect = new_rect * ~page.transformationMatrix
+        tar_rect = new_rect * ~page.transformation_matrix
         matrix = calc_matrix(fw, fh, tar_rect, rot)
         # we have the matrix, now read /Contents stream
-        cont = bytearray(self.doc.xrefStream(xref))  # modifyable version!
+        cont = bytearray(self.doc.xref_stream(xref))  # modifyable version!
 
         new_mat = b"%g %g %g %g %g %g cm" % tuple(matrix)
         cont[start:stop] = new_mat  # put in new PDF matrix
 
-        self.doc.updateStream(xref, bytes(cont))  # rewrite stream
+        self.doc.update_stream(xref, bytes(cont))  # rewrite stream
         page = self.doc.reload_page(page)  # reload the page
         self.last_pno = -1
         self.new_image(pno + 1)  # make new bitmap from page
@@ -783,18 +783,18 @@ class PDFdisplay(wx.Dialog):
         factor = max(rect.width, rect.height)
         fw = rect.width / factor  # calculate width / height ratio
         fh = rect.height / factor
-        tar_rect = rect * ~page.transformationMatrix
+        tar_rect = rect * ~page.transformation_matrix
         matrix = calc_matrix(fw, fh, tar_rect, 0)
         # we have the matrix, now read /Contents stream
-        cont = bytearray(self.doc.xrefStream(xref))  # modifyable version!
+        cont = bytearray(self.doc.xref_stream(xref))  # modifyable version!
         cont[begin:end] = b""  # remove old display command
-        self.doc.updateStream(xref, bytes(cont))
+        self.doc.update_stream(xref, bytes(cont))
         new_cmd = b"\nq\n%g %g %g %g %g %g cm " % tuple(matrix)
         new_cmd += b"/%s Do\nQ\n" % key.encode()
-        if not page._isWrapped:
-            page.wrapContents()
+        if not page.is_wrapped:
+            page.wrap_contents()
         fitz.TOOLS._insert_contents(page, new_cmd, 1)
-        page.cleanContents()
+        page.clean_contents()
         page = self.doc.reload_page(page)
         self.last_pno = -1
         self.new_image(pno + 1)
@@ -816,10 +816,10 @@ class PDFdisplay(wx.Dialog):
         xref = d["xref"]
         begin = d["begin"]
         end = d["end"]
-        cont = bytearray(self.doc.xrefStream(xref))  # modifyable version!
+        cont = bytearray(self.doc.xref_stream(xref))  # modifyable version!
         cont[begin:end] = b""
-        self.doc.updateStream(xref, bytes(cont))
-        page.cleanContents()
+        self.doc.update_stream(xref, bytes(cont))
+        page.clean_contents()
         page = self.doc.reload_page(page)
         self.last_pno = -1
         self.last_image = None
@@ -851,7 +851,7 @@ class PDFdisplay(wx.Dialog):
         indir, infile = os.path.split(self.doc.name)
         odir = indir
         ofile = infile
-        if self.doc.needsPass or not self.doc.can_save_incrementally():
+        if self.doc.needs_pass or not self.doc.can_save_incrementally():
             ofile = ""
         sdlg = wx.FileDialog(
             self, "Specify Output", odir, ofile, "PDF files (*.pdf)|*.pdf", wx.FD_SAVE
@@ -860,7 +860,7 @@ class PDFdisplay(wx.Dialog):
             evt.Skip()
             return
         outfile = sdlg.GetPath()
-        if self.doc.needsPass or not self.doc.can_save_incrementally():
+        if self.doc.needs_pass or not self.doc.can_save_incrementally():
             title = "Repaired / decrypted PDF requires new output file"
             while outfile == self.doc.name:
                 sdlg = wx.FileDialog(
@@ -891,7 +891,7 @@ class PDFdisplay(wx.Dialog):
         h = min(page.rect.height / 2, 200)
         r = fitz.Rect(0, 0, w, h)
         try:
-            page.insertImage(r, filename=path)
+            page.insert_image(r, filename=path)
         except Exception as exc:
             self.message.Label = "Unsupported image file"
             print(str(exc), r)
@@ -1037,7 +1037,7 @@ class PDFdisplay(wx.Dialog):
         i = degrees.index(str(d["deg"]))
         self.rotation = d["deg"]
         rect = d["bbox"]
-        if not rect.isInfinite:
+        if not rect.is_infinite:
             self.img_rect = bbox = self.Rect_to_wxRect(rect)
             br = bbox.BottomRight
             br2 = wx.Point(br.x + self.sense, br.y + self.sense)
@@ -1126,7 +1126,7 @@ class PDFdisplay(wx.Dialog):
             zoom = MAX_WIDTH / width
         self.zoom = fitz.Matrix(zoom, zoom)
         self.shrink = ~self.zoom
-        pix = page.getPixmap(matrix=self.zoom, alpha=False)
+        pix = page.get_pixmap(matrix=self.zoom, alpha=False)
         bmp = wx.Bitmap.FromBuffer(pix.w, pix.h, pix.samples)
         paper = FindFit(page.rect.width, page.rect.height)
         self.paperform.Label = "Page format: " + paper
@@ -1151,7 +1151,7 @@ class PDFdisplay(wx.Dialog):
                 self.doc.authenticate(pw)
             else:
                 return
-            if self.doc.isEncrypted:
+            if self.doc.is_encrypted:
                 pw = None
                 dlg.SetTitle("Wrong password. Enter correct one or cancel.")
         return

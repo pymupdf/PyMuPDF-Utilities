@@ -34,7 +34,7 @@ import time
 import fitz
 import PySimpleGUI as sg
 
-mytime = time.time
+mytime = time.perf_counter
 if not list(map(int, fitz.VersionBind.split("."))) >= [1, 14, 5]:
     raise SystemExit("need PyMuPDF v1.14.5 for this script")
 print(fitz.__doc__)
@@ -53,7 +53,7 @@ def make_oval(i):
     doc = fitz.open()  # dummy PDF
     red = (1, 0, 0)
     blue = (0, 0, 1)
-    page = doc.newPage(width=400, height=300)  # page dimensions as you like
+    page = doc.new_page(width=400, height=300)  # page dimensions as you like
     r = page.rect + (+4, +4, -4, -4)  # leave a border of 4 pix
     q = r.quad  # full page rect as a quad
     f = i / 100.0
@@ -73,27 +73,21 @@ def make_oval(i):
     c1 = min(1, max(o, u))
     c3 = min(1, max(1 - u, 1 - o))
     fill = (c1, 0, c3)
-    img = page.newShape()
-    img.drawOval(q1)
+    img = page.new_shape()
+    img.draw_oval(q1)
     img.finish(
         color=blue,  # blue border
         fill=fill,  # variable fill color
         width=0.3,  # border width
     )
-    img.drawCircle(q1.ll, 4)
-    img.drawCircle(q1.ul, 4)
+    img.draw_circle(q1.ll, 4)
+    img.draw_circle(q1.ul, 4)
     img.finish(fill=red)
-    img.drawCircle(q1.ur, 4)
-    img.drawCircle(q1.lr, 4)
+    img.draw_circle(q1.ur, 4)
+    img.draw_circle(q1.lr, 4)
     img.finish(fill=blue)
     img.commit()
-    pix = page.getPixmap(alpha=False)  # make pixmap, no alpha
-    doc.close()  # discard PDF again
-    image = pix.getImageData("ppm")
-    del pix
-    del page
-    del img
-    return image  # return a PPM image of the page
+    return page.get_pixmap().tobytes("ppm")  # return a PPM image of the page
 
 
 # ------------------------------------------------------------------------------

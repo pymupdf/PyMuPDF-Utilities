@@ -53,7 +53,7 @@ for key in doc.metadata:
 print("")
 
 # here we print out the outline of the document(if any)
-toc = doc.getToC()
+toc = doc.get_toc()
 if len(toc) == 0:
     print("No Table of Contents available")
 else:
@@ -66,14 +66,14 @@ print("")
 
 # get the page number, which should start from 0
 pn = int(sys.argv[2]) - 1
-if pn > doc.pageCount:
-    raise SystemExit("%s has %d pages only" % (sys.argv[1], doc.pageCount))
+if pn > doc.page_count:
+    raise SystemExit("%s has %d pages only" % (sys.argv[1], doc.page_count))
 
 # get the page
 page = doc[pn]
 
 # we can also get all the links in the current page
-links = page.getLinks()
+links = page.get_links()
 if len(links) == 0:
     print("No links on page", (pn + 1))
 else:
@@ -90,21 +90,21 @@ else:
 # we create a transformation matrix here
 zoom = int(sys.argv[3])
 rotate = int(sys.argv[4])
-trans = fitz.Matrix(zoom / 100.0, zoom / 100.0).preRotate(rotate)
+trans = fitz.Matrix(zoom / 100.0, zoom / 100.0).prerotate(rotate)
 
 # create raster image of page (non-transparent)
-pm = page.getPixmap(matrix=trans, alpha=False)
+pm = page.get_pixmap(matrix=trans, alpha=False)
 
 # write a PNG image of the page
-pm.writePNG(sys.argv[5])
+pm.save(sys.argv[5])
 
 # now we are ready for search, with max hit count limited to 16
 # the return result is a list of hit box rectangles
-res = page.searchFor(sys.argv[6], hit_max=16)
+res = page.search_for(sys.argv[6], hit_max=16)
 print("search text '%s' found %i on the page" % (sys.argv[6], len(res)))
 for r in res:
     # we invert the pixmap at the hit irect to highlight the search result
-    pm.invertIRect(r.round())
+    pm.invert_irect(r.round())
 
 # and finally write to another PNG
-pm.writePNG("dl-" + sys.argv[5])
+pm.save("dl-" + sys.argv[5])

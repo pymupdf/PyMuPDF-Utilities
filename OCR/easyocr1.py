@@ -50,7 +50,7 @@ def get_easyocr(page, bbox):
         matrix=mat,
         clip=bbox,
     )
-    image = pix.getImageData("png")
+    image = pix.tobytes("png")
     t1 = time.perf_counter()
 
     # Step 2: Invoke easyocr to OCR the image.
@@ -70,7 +70,7 @@ def get_easyocr(page, bbox):
 doc = fitz.open("v110-changes.pdf")
 ocr_count = 0
 for page in doc:
-    text_blocks = page.getText("dict", flags=0)["blocks"]
+    text_blocks = page.get_text("dict", flags=0)["blocks"]
     for b in text_blocks:
         for l in b["lines"]:
             for s in l["spans"]:

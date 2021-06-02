@@ -7,7 +7,7 @@ outfile = thisfile.replace(".py", ".pdf")
 font1 = fitz.Font("helv")
 font2 = fitz.Font("tiro")
 doc = fitz.open()
-page = doc.newPage()
+page = doc.new_page()
 point = fitz.Point(50, 72)
 matrix = fitz.Matrix(-20)
 
@@ -20,11 +20,11 @@ _, last = wrt1.append(last, " several", font1, 11)
 _, last = wrt2.append(last, " times!", font2, 24)
 
 # output both text writers on current page in arbitrary sequence
-wrt1.writeText(page, morph=(point, matrix))  # using the same morph parameter
-wrt2.writeText(page, morph=(point, matrix))  # also preserves the joint text.
+wrt1.write_text(page, morph=(point, matrix))  # using the same morph parameter
+wrt2.write_text(page, morph=(point, matrix))  # also preserves the joint text.
 
 # make a new page
-page = doc.newPage()
+page = doc.new_page()
 rect = wrt1.textRect | wrt2.textRect  # join rect of blue and red text
 # make new rectangle from it, rotated by 90 degrees
 nrect = fitz.Rect(
@@ -34,7 +34,7 @@ nrect = fitz.Rect(
 )
 
 # use the page method for joint rotated output
-page.writeText(nrect, writers=(wrt1, wrt2), rotate=90)
+page.write_text(nrect, writers=(wrt1, wrt2), rotate=90)
 
 # one more time with rotation by 270 degrees
 nrect += (
@@ -43,14 +43,14 @@ nrect += (
     2 * nrect.width,
     0,
 )
-page.writeText(nrect, writers=(wrt1, wrt2), rotate=-90)
+page.write_text(nrect, writers=(wrt1, wrt2), rotate=-90)
 
 # more outputs with 45 degrees
-page = doc.newPage()
-page.writeText(
+page = doc.new_page()
+page.write_text(
     page.rect, writers=(wrt1, wrt2), color=(0.2, 0.6, 1), rotate=-45  # or recoloring
 )
-page.writeText(
+page.write_text(
     page.rect,
     writers=(wrt1, wrt2),
     opacity=0.5,  # can be used for watermarking

@@ -25,7 +25,7 @@ t2 = time.clock()                      # save current time again
 cdir = os.path.split(fullname)[0]      # split dir from filename
 fnout = tempfile.mkstemp(suffix = ".pdf", dir = cdir) # create temp pdf name 
 doc = fitz.open(fullname)              # open now optimized PDF
-doc.setMetadata(meta)                  # restore old metadata
+doc.set_metadata(meta)                  # restore old metadata
 doc.save(fnout[1], garbage = 4)        # save temp PDF with it, a little sub opt
 doc.close()                            # close it
 

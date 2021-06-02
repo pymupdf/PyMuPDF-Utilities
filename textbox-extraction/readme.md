@@ -5,7 +5,7 @@ In PyMuPDF, you can select from several options to achieve this. All methods are
 
 ----------
 
-## 1. `Page.getText("words")`
+## 1. `Page.get_text("words")`
 This is an old, standard extraction method. The method delivers a list of tuples, which each represent one string without spaces (called a "word") - together with its position. Each tuple looks like this: `(x0, y0, x1, y1, "string", blocknumber, linenumber, wordnumber)`. The first 4 items are the coordinates of the bbox that surround "string". The last 3 items are block number on the page, line number in a block, word number in a line.
 
 You have to write a script which selects the words **_contained in_** (or **_intersecting_**) the given rectangle by using the bbox coordinates, then sort the result, and then glue words together again that belong to the same line.
@@ -16,12 +16,12 @@ The script `textbox-extract-1.py` is an example for such a script. It also imple
 
 ----------
 
-## 2. `Page.getTextbox(rect)`
+## 2. `Page.get_textbox(rect)`
 Returns text contained in the rectangle 'rect'. Text appears in the sequence as coded in the document. So it may not be in a desirable reading sequence. Inclusion of text is decided by character and words may hence appear mutilated. Line breaks may be present, but one final line break will be omitted. See the example script `textbox-extract-2.py` in this folder.
 
 ----------
 
-## 3. `Page.getText("text", clip=rect)`
+## 3. `Page.get_text("text", clip=rect)`
 This is one of the old, standard extraction methods. The `clip` parameter is new and was introduced in version 1.17.7. If `clip` is not `None`, the result looks like the previous method's output, except that there always is a final line break.
 
 ----------
@@ -32,7 +32,7 @@ This folder contains an example file `search.pdf` with one page and an annotatio
 ![screen](search.png)
 
 ### Output of `textbox-extract-1.py`
-This script is based on `Page.getText("words")`. Words are selected in two ways: (1) whether they are fully contained in the given rectangle, or (2) whether their bbox has a non-empty intersection with it. Look at the above picture to compare these effects. The bottom vertical coordinates `y1` of the words are **_rounded_** to cope with any artifacts that may be caused by e.g. font changes or similar things.
+This script is based on `Page.get_text("words")`. Words are selected in two ways: (1) whether they are fully contained in the given rectangle, or (2) whether their bbox has a non-empty intersection with it. Look at the above picture to compare these effects. The bottom vertical coordinates `y1` of the words are **_rounded_** to cope with any artifacts that may be caused by e.g. font changes or similar things.
 ```
 Select the words strictly contained in rectangle
 ------------------------------------------------
@@ -59,11 +59,11 @@ zusatzstoff Guaran (E 412).
 ```
 
 ### Output of `textbox-extract-2.py`
-This is based on `Page.getTextbox(rect)`. The selection is based on single characters: a character belongs to the party if its bbox intersects rect. Apart from this, text is selected as present in the document - including any spaces and line breaks, no reordering takes place.
+This is based on `Page.get_textbox(rect)`. The selection is based on single characters: a character belongs to the party if its bbox intersects rect. Apart from this, text is selected as present in the document - including any spaces and line breaks, no reordering takes place.
 
 This obviously is a lot simpler and may be sufficient if you have no issue with the reading sequence and properly positioning the selection rectangle.
 
-It would also be the typical way to verify that the text found by some previous `Page.searchFor()` really is what you have been looking for.
+It would also be the typical way to verify that the text found by some previous `Page.search_for()` really is what you have been looking for.
 ```
 
 Wer eine perfekte Seife

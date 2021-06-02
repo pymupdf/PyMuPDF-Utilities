@@ -28,7 +28,7 @@ smiley(img, rect, ...)
 
 Allmost all functions have the same first and second parameter:
 
-img    - fitz.Shape object created by p.newShape()
+img    - fitz.Shape object created by p.new_shape()
 rect   - fitz.Rect object. This is the area in which the image should appear.
 
 Other parameters are function-specific, but always include a "morph" argument.
@@ -65,14 +65,14 @@ def dontenter(img, r, morph = None):
     """
     red = getColor("red3")
     white = (1,1,1)
-    img.drawOval(r)               # draw red circle w/ thick white border
+    img.draw_oval(r)               # draw red circle w/ thick white border
     img.finish(fill = red, color = white, width = r.width * 0.04)
-    img.drawOval(r)               # draw empty circle, thin black border
+    img.draw_oval(r)               # draw empty circle, thin black border
     img.finish(width = r.width * 0.001)
     deltah = r.width * 0.13
     deltav = r.height * 0.45
     rs = r + (deltah, deltav, -deltah, -deltav)
-    img.drawRect(rs)              # draw white horizontal rectangle
+    img.draw_rect(rs)              # draw white horizontal rectangle
     img.finish(color = white, fill = white, width = r.width * 0.06,
                roundCap = False, morph = morph)
     return
@@ -93,8 +93,8 @@ def heart(img, r, col = (1,0,0), morph = None):
     pl2  = r.tl + (r.bl - r.tl) * 0.40
     pr2  = r.tr + (r.br - r.tr) * 0.40
     # we have defined all 6 points and now draw 2 Bezier curves
-    img.drawBezier(htop, pl1, pl2, hbot)
-    img.drawBezier(htop, pr1, pr2, hbot)
+    img.draw_bezier(htop, pl1, pl2, hbot)
+    img.draw_bezier(htop, pr1, pr2, hbot)
     img.finish(color = col, fill = col, closePath = True, morph = morph)
 
 # =============================================================================
@@ -106,10 +106,10 @@ def clover(img, r, col = (0,1,0), morph = None):
     # this is made of 4 Bezier curves, each starting and ending in the
     # rect's middle point M
     M = r.tl + (r.br - r.tl) * 0.5
-    img.drawBezier(M, r.tl, r.tr, M)
-    img.drawBezier(M, r.tr, r.br, M)
-    img.drawBezier(M, r.bl, r.tl, M)
-    img.drawBezier(M, r.br, r.bl, M)
+    img.draw_bezier(M, r.tl, r.tr, M)
+    img.draw_bezier(M, r.tr, r.br, M)
+    img.draw_bezier(M, r.bl, r.tl, M)
+    img.draw_bezier(M, r.br, r.bl, M)
     img.finish(color = col, fill = col, width = 0.3, morph = morph)
 
 # =============================================================================
@@ -123,7 +123,7 @@ def diamond(img, r, col = (1,0,0), morph = None):
     mri = r.tr + (r.br - r.tr) * 0.5
     mbo = r.bl + (r.br - r.bl) * 0.5
     mle = r.tl + (r.bl - r.tl) * 0.5
-    img.drawPolyline((mto, mri, mbo, mle))
+    img.draw_polyline((mto, mri, mbo, mle))
     img.finish(color = white, fill = col, closePath = True, morph = morph)
 
 # =============================================================================
@@ -138,10 +138,10 @@ def caro(img, r, col = (1,0,0), morph = None):
     mbo = r.bl + (r.br - r.bl) * 0.5
     mle = r.tl + (r.bl - r.tl) * 0.5
     M = r.tl + (r.br - r.tl) * 0.5
-    img.drawCurve(mle, M, mto)
-    img.drawCurve(mto, M, mri)
-    img.drawCurve(mri, M, mbo)
-    img.drawCurve(mbo, M, mle)
+    img.draw_curve(mle, M, mto)
+    img.draw_curve(mto, M, mri)
+    img.draw_curve(mri, M, mbo)
+    img.draw_curve(mbo, M, mle)
     img.finish(color = white, fill = col, morph = morph)
 
 # =============================================================================
@@ -163,7 +163,7 @@ def arrow(img, r, fill = None, color = None, morph = None):
     p1 = r.tl
     p2 = r.bl
     p3 = r.tr + (r.br - r.tr) * 0.5
-    img.drawPolyline((p1, p2, p3))
+    img.draw_polyline((p1, p2, p3))
     img.finish(color = stroke, fill = col, closePath = True, morph = morph)
 
 # =============================================================================
@@ -231,20 +231,20 @@ def hand(img, r, color = None, fill = None, morph = None):
     # IMPORTANT: the end point of each draw method must equal the start point
     # of the next one in order to create one connected path. Only then the
     # "finish" parameters will apply to all individual draws.
-    img.drawCurve(p1, p3, p2)
-    img.drawCurve(p2, p4, p5)
-    img.drawLine(p5, p6)
-    img.drawBezier(p6, p6 + d1, p7 + d1, p7)
-    img.drawLine(p7, d7)
-    img.drawLine(d7, p8)
-    img.drawBezier(p8, p8 + d1, p9 + d1, p9)
-    img.drawLine(p9, d9)
-    img.drawLine(d9, p10)
-    img.drawBezier(p10, p10 + d1, p11 + d1, p11)
-    img.drawLine(p11, d11)
-    img.drawLine(d11, p12)
-    img.drawBezier(p12, p12 + d1, p13 + d1, p13)
-    img.drawLine(p13, rect.bl)
+    img.draw_curve(p1, p3, p2)
+    img.draw_curve(p2, p4, p5)
+    img.draw_line(p5, p6)
+    img.draw_bezier(p6, p6 + d1, p7 + d1, p7)
+    img.draw_line(p7, d7)
+    img.draw_line(d7, p8)
+    img.draw_bezier(p8, p8 + d1, p9 + d1, p9)
+    img.draw_line(p9, d9)
+    img.draw_line(d9, p10)
+    img.draw_bezier(p10, p10 + d1, p11 + d1, p11)
+    img.draw_line(p11, d11)
+    img.draw_line(d11, p12)
+    img.draw_bezier(p12, p12 + d1, p13 + d1, p13)
+    img.draw_line(p13, rect.bl)
     img.finish(color = line, fill = skin, closePath = False, morph = morph)
     return
 
@@ -319,14 +319,14 @@ def _pencil(img, penciltip, pb_height, left=True, morph = None):
     # control point 2 for pencil rubber
     hp2 = oneof(r.br, r.bl) + (pb_height*0.6*s, 0)
     # pencil body is some type of yellow
-    img.drawRect(r)
+    img.draw_rect(r)
     myfinish(fill = yellow, color = wood)
-    img.drawPolyline((r.tl, topline0, botline0, r.bl))
-    img.drawPolyline((r.tr, topline1, botline1, r.br))
+    img.draw_polyline((r.tl, topline0, botline0, r.bl))
+    img.draw_polyline((r.tr, topline1, botline1, r.br))
     myfinish(fill = wood, color = wood)
     # draw pencil edge lines
-    img.drawLine(topline0, topline1)
-    img.drawLine(botline0, botline1)
+    img.draw_line(topline0, topline1)
+    img.draw_line(botline0, botline1)
     myfinish(color = wood2)
 
     #===========================================================================
@@ -334,19 +334,19 @@ def _pencil(img, penciltip, pb_height, left=True, morph = None):
     #===========================================================================
     blackrect = fitz.Rect(oneof((r.tr - (pb_height/2., 0)), r.tl),
                           oneof(r.br, (r.bl + (pb_height/2., 0))))
-    img.drawRect(blackrect)
+    img.draw_rect(blackrect)
     myfinish(fill = black)
 
     #===========================================================================
     # draw the pencil rubber
     #===========================================================================
-    img.drawBezier(oneof(r.tr, r.tl), hp1, hp2, oneof(r.br, r.bl))
+    img.draw_bezier(oneof(r.tr, r.tl), hp1, hp2, oneof(r.br, r.bl))
     myfinish(fill = red)
 
     #===========================================================================
     # draw pencil tip and curves indicating pencil sharpening traces
     #===========================================================================
-    img.drawPolyline((tipendtop, penciltip, tipendbot))
+    img.draw_polyline((tipendtop, penciltip, tipendbot))
     myfinish(fill = wood)                   # pencil tip
     p1 = tipendtop                          # either left or right
     p2 = oneof(topline0, topline1)
@@ -356,23 +356,23 @@ def _pencil(img, penciltip, pb_height, left=True, morph = None):
     cp1 = p1 + (p2-p1)*0.5 + p0             # ctrl point upper rounding
     cp2 = p2 + (p3-p2)*0.5 + p0*2.9         # ctrl point middle rounding
     cp3 = p3 + (p4-p3)*0.5 + p0             # ctrl point lower rounding
-    img.drawCurve(p1, cp1, p2)
+    img.draw_curve(p1, cp1, p2)
     myfinish(fill = yellow, color=yellow, closePath = True)
-    img.drawCurve(p2, cp2, p3)
+    img.draw_curve(p2, cp2, p3)
     myfinish(fill = yellow, color=yellow, closePath = True)
-    img.drawCurve(p3, cp3, p4)
+    img.draw_curve(p3, cp3, p4)
     myfinish(fill = yellow, color=yellow, closePath = True)
 
     #===========================================================================
     # draw the pencil tip lead
     #===========================================================================
-    img.drawPolyline((penciltip + (tipendtop - penciltip)*0.4,
+    img.draw_polyline((penciltip + (tipendtop - penciltip)*0.4,
                       penciltip,
                       penciltip + (tipendbot - penciltip)*0.4))
     #===========================================================================
     # add a curve to indicate lead is round
     #===========================================================================
-    img.drawCurve(penciltip + (tipendtop - penciltip)*0.4,
+    img.draw_curve(penciltip + (tipendtop - penciltip)*0.4,
                   penciltip + (pb_height * 0.6 * s, 0),
                   penciltip + (tipendbot - penciltip)*0.4)
     myfinish(fill = black)
@@ -380,11 +380,11 @@ def _pencil(img, penciltip, pb_height, left=True, morph = None):
     #===========================================================================
     # re-border pencil body to get rid of some pesky pixels
     #===========================================================================
-    img.drawPolyline((p1, p2, p3, p4))
+    img.draw_polyline((p1, p2, p3, p4))
     myfinish(color = yellow)
     br_tl = oneof(blackrect.tl, blackrect.tr)
     br_bl = oneof(blackrect.bl, blackrect.br)
-    img.drawPolyline((br_tl, tipendtop, penciltip, tipendbot, br_bl))
+    img.draw_polyline((br_tl, tipendtop, penciltip, tipendbot, br_bl))
     myfinish()
     #===========================================================================
     # draw pencil label - first a rounded rectangle
@@ -393,11 +393,11 @@ def _pencil(img, penciltip, pb_height, left=True, morph = None):
     p2 = fitz.Point(0.45, 0.15) * pb_height
     lblrect = fitz.Rect(topline0 + oneof(p1, p2),
                         botline1 - oneof(p2, p1))
-    img.drawRect(lblrect)
-    img.drawCurve(lblrect.tr,
+    img.draw_rect(lblrect)
+    img.draw_curve(lblrect.tr,
                    fitz.Point(lblrect.x1+pb_height/4., penciltip.y),
                    lblrect.br)
-    img.drawCurve(lblrect.tl,
+    img.draw_curve(lblrect.tl,
                    fitz.Point(lblrect.x0-pb_height/4., penciltip.y),
                    lblrect.bl)
     myfinish(fill = black)
@@ -409,13 +409,13 @@ def _pencil(img, penciltip, pb_height, left=True, morph = None):
     p1b = blackrect.bl + (blackrect.width/3.,   -pb_height/20.)
     p2t = blackrect.tl + (blackrect.width*2/3., pb_height/20.)
     p2b = blackrect.bl + (blackrect.width*2/3., -pb_height/20.)
-    img.drawLine(p1t, p1b)
-    img.drawLine(p2t, p2b)
+    img.draw_line(p1t, p1b)
+    img.draw_line(p2t, p2b)
     img.finish(color = white, width = pb_height*0.08, roundCap = False,
                morph = morph)
 
     # insert text to indicate a medium lead grade
-    if img.insertTextbox(lblrect, "HB", color = white, morph = morph,
+    if img.insert_textbox(lblrect, "HB", color = white, morph = morph,
                           fontsize = pb_height * 0.22, align = 1) < 0:
         raise ValueError("not enough space to store 'HB' text")
     return
@@ -427,20 +427,20 @@ def smiley(img, rect, color = (0,0,0), fill = (1,1,0), morph = None):
     dx = rect.width * 0.2
     dy = rect.height * 0.25
     w = rect.width * 0.01
-    img.drawOval(rect)                      # draw face
+    img.draw_oval(rect)                      # draw face
     img.finish(fill = fill, width = w, morph = morph)
     # calculate rectangles containing the eyes
     rl = fitz.Rect(rect.tl + (dx, dy),
                    rect.tl + (2 * dx, 2 * dy))
     rr = fitz.Rect(rect.tr + (-2 * dx, dy),
                    rect.tr + (-dx, 2 * dy))
-    img.drawOval(rl)                        # draw left eye
-    img.drawOval(rr)                        # draw right eye
+    img.draw_oval(rl)                        # draw left eye
+    img.draw_oval(rr)                        # draw right eye
     img.finish(fill = color, morph = morph)
     p0 = rl.bl + (0, 0.75 * dy)             # left corner of mouth
     p1 = rr.br + (0, 0.75 * dy)             # right corner of mouth
     c  = rect.bl + (rect.br - rect.bl)*0.5
-    img.drawCurve(p0, c, p1)                # draw mouth
+    img.draw_curve(p0, c, p1)                # draw mouth
     img.finish(width = 4 * w, closePath = False, morph = morph)
 
 # =============================================================================
@@ -450,20 +450,20 @@ def frowney(img, rect, color = (0,0,0), fill = (1,1,0), morph = None):
     dx = rect.width * 0.2
     dy = rect.height * 0.25
     w = rect.width * 0.01
-    img.drawOval(rect)                      # draw face
+    img.draw_oval(rect)                      # draw face
     img.finish(fill = fill, width = w, morph = morph)
     # calculate rectangles containing the eyes
     rl = fitz.Rect(rect.tl + (dx, dy),
                    rect.tl + (2 * dx, 2 * dy))
     rr = fitz.Rect(rect.tr + (-2 * dx, dy),
                    rect.tr + (-dx, 2 * dy))
-    img.drawOval(rl)                        # draw left eye
-    img.drawOval(rr)                        # draw right eye
+    img.draw_oval(rl)                        # draw left eye
+    img.draw_oval(rr)                        # draw right eye
     img.finish(fill = color, morph = morph)
     p0 = rl.bl + (0, dy)                    # left corner of mouth
     p1 = rr.br + (0, dy)                    # right corner of mouth
     c  = rl.bl + (rr.br - rl.bl)*0.5
-    img.drawCurve(p0, c, p1)                # draw mouth
+    img.draw_curve(p0, c, p1)                # draw mouth
     img.finish(width = 4 * w, closePath = False, morph = morph)
 
 """
@@ -482,83 +482,83 @@ if __name__ == "__main__":
     green = getColor("limegreen")
     red = getColor("red2")
     doc = fitz.open()
-    p = doc.newPage()
-    img = p.newShape()
+    p = doc.new_page()
+    img = p.new_shape()
     r = fitz.Rect(100, 100, 200, 200)
     heart(img, r, red)
     img.commit()
-    p.setCropBox(r + (10, 10, -10, -15))
+    p.set_cropbox(r + (10, 10, -10, -15))
 
-    p = doc.newPage()
-    img = p.newShape()
+    p = doc.new_page()
+    img = p.new_shape()
     pnt = r.tl + (r.br - r.tl)*0.5
     clover(img, r, green, morph = (pnt, fitz.Matrix(45)))
     img.commit()
-    p.setCropBox(r + (5, 5, -5, -5))
+    p.set_cropbox(r + (5, 5, -5, -5))
 
-    p = doc.newPage()
-    img = p.newShape()
+    p = doc.new_page()
+    img = p.new_shape()
     diamond(img, r, red)
     img.commit()
-    p.setCropBox(r)
+    p.set_cropbox(r)
 
-    p = doc.newPage()
-    img = p.newShape()
+    p = doc.new_page()
+    img = p.new_shape()
     pnt = r.tl + (r.br - r.tl)*0.5
     caro(img, r, red, morph = (pnt, fitz.Matrix(45)))
     img.commit()
-    p.setCropBox(r + (10, 10, -10, -10))
+    p.set_cropbox(r + (10, 10, -10, -10))
 
-    p = doc.newPage()
-    img = p.newShape()
+    p = doc.new_page()
+    img = p.new_shape()
     pnt = r.tl + (r.br - r.tl)*0.5
     arrow(img, r, fill=red, morph = (pnt, fitz.Matrix(1,1)))
     img.commit()
-    p.setCropBox(r)
+    p.set_cropbox(r)
 
-    p = doc.newPage()
-    img = p.newShape()
+    p = doc.new_page()
+    img = p.new_shape()
     dontenter(img, r, morph = None)
     img.commit()
-    p.setCropBox(r + (-5, -5, 5, 5))
+    p.set_cropbox(r + (-5, -5, 5, 5))
 
-    p = doc.newPage()
-    img = p.newShape()
+    p = doc.new_page()
+    img = p.new_shape()
     rh = r + (0, 120, 30, 120)
     hand(img, rh, morph = None)
     cropbox = +img.rect + (0, 0, 0, 5)
     img.commit()
-    p.setCropBox(cropbox)
+    p.set_cropbox(cropbox)
 
-    p = doc.newPage()
-    img = p.newShape()
+    p = doc.new_page()
+    img = p.new_shape()
     smiley(img, r, morph = None)
     cropbox = +img.rect + (-5, -5, 5, 5)
     img.commit()
-    p.setCropBox(cropbox)
+    p.set_cropbox(cropbox)
 
-    p = doc.newPage()
-    img = p.newShape()
+    p = doc.new_page()
+    img = p.new_shape()
     frowney(img, r, morph = None)
     cropbox = +img.rect + (-5, -5, 5, 5)
     img.commit()
-    p.setCropBox(cropbox)
+    p.set_cropbox(cropbox)
 
     # create first pencil page (tip left)
-    p = doc.newPage()
-    img = p.newShape()
+    p = doc.new_page()
+    img = p.new_shape()
     pencil(img, p.rect, True)
     cropbox = +img.rect + (0, -5, 0, +5)
     img.commit()
-    p.setCropBox(cropbox)
+    p.set_cropbox(cropbox)
 
     # create second pencil page (tip right)
-    p = doc.newPage()
-    img = p.newShape()
+    p = doc.new_page()
+    img = p.new_shape()
     pencil(img, p.rect, False)
     cropbox = +img.rect + (0, -5, 0, +5)
     img.commit()
-    p.setCropBox(cropbox)
+    p.set_cropbox(cropbox)
 
     m = {'title': "Shapes and Symbols",
          'author': "Jorj X. McKie",
@@ -566,9 +566,9 @@ if __name__ == "__main__":
          'keywords': "symbols, shapes, signs",
          'creator': "shapes_and_symbols.py",
          'producer': "PyMuPDF",
-         'creationDate': fitz.getPDFnow(),
-         'modDate': fitz.getPDFnow()}
-    doc.setMetadata(m)
+         'creationDate': fitz.get_pdf_now(),
+         'modDate': fitz.get_pdf_now()}
+    doc.set_metadata(m)
     import os
     scriptdir = os.path.dirname(__file__)
     print(scriptdir)

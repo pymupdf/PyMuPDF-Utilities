@@ -43,8 +43,8 @@ ef_list = []  # store file infos here, because I wanted
 # to adjust column widths of the report to actually occurring data ...
 # Of yourse, a direct print is perfectly possible.
 
-for i in range(doc.embeddedFileCount): # number of embedded files
-    info = doc.embeddedFileInfo(i)     # get one info dict
+for i in range(doc.embfile_count): # number of embedded files
+    info = doc.embfile_info(i)     # get one info dict
     ef = (info["name"], info["file"], char_repl(info["desc"]),
           info["length"], info["size"])
     ef_list.append(ef)                 # save in the info list

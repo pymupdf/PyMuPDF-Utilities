@@ -39,12 +39,12 @@ xobj_total = 0  # counts total number of extracted xobjects
 xrefs_encountered = []  # stores already extracted XObjects
 for pno in range(len(src)):
     xobj_count = 0  # counts extracted objects per page
-    xobj_list = src.getPageXObjectList(pno)  # get list of XObjects
+    xobj_list = src.get_page_xobjects(pno)  # get list of XObjects
     for xobj in xobj_list:  # loop through them
         if xobj[2] != 0:  # if not occurring directly on the page
             continue  # skip
         bbox = fitz.Rect(xobj[-1])  # bbox of XObject on input page
-        if bbox.isInfinite:  # no associated valid bbox?
+        if bbox.is_infinite:  # no associated valid bbox?
             continue  # skip
         if xobj[0] in xrefs_encountered:  # already extracted?
             continue  # skip
@@ -55,14 +55,14 @@ for pno in range(len(src)):
         # (2) from that page remove everything except the XObject invocation
         # (3) modify page size to match the XObject bbox
         # ----------------------------------------------------------------------
-        doc.insertPDF(src, from_page=pno, to_page=pno, rotate=0)
+        doc.insert_pdf(src, from_page=pno, to_page=pno, rotate=0)
         ref_name = xobj[1]  # the symbolic name
         ref_cmd = ("/%s Do" % ref_name).encode()  # build invocation command
         page = doc[-1]  # page just inserted
-        page.setMediaBox(bbox)  # set its page size to XObject bbox
-        page.cleanContents()  # consolidate contents of copied page
-        xref = page.getContents()[0]  # and read resulting singular xref
-        doc.updateStream(xref, ref_cmd)  # replace it by our one-line command
+        page.set_mediabox(bbox)  # set its page size to XObject bbox
+        page.clean_contents()  # consolidate contents of copied page
+        xref = page.get_contents()[0]  # and read resulting singular xref
+        doc.update_stream(xref, ref_cmd)  # replace it by our one-line command
         xobj_count += 1  # increase counter
     if xobj_count > 0:
         print(  # tell number of extracted XObjects of input page

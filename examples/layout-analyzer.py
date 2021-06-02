@@ -25,26 +25,26 @@ green = (0, 1, 0)
 gray = (0.9, 0.9, 0.9)
 
 for page1 in doc1:
-    blks = page1.getTextBlocks(images=True)  # read text blocks of input page
+    blks = page1.get_textBlocks(images=True)  # read text blocks of input page
     # create new page in output with /MediaBox dimensions
-    page2 = doc2.newPage(-1, width=page1.MediaBoxSize[0], height=page1.MediaBoxSize[1])
+    page2 = doc2.new_page(-1, width=page1.mediaboxSize[0], height=page1.mediaboxSize[1])
     # the text font we use
-    page2.insertFont(fontfile=None, fontname="Helvetica")
-    img = page2.newShape()  # prepare /Contents object
+    page2.insert_font(fontfile=None, fontname="Helvetica")
+    img = page2.new_shape()  # prepare /Contents object
 
     # calculate /CropBox & displacement
-    disp = fitz.Rect(page1.CropBoxPosition, page1.CropBoxPosition)
+    disp = fitz.Rect(page1.cropboxPosition, page1.cropboxPosition)
     croprect = page1.rect + disp
 
     # draw original /CropBox rectangle
-    img.drawRect(croprect)
+    img.draw_rect(croprect)
     img.finish(color=gray, fill=gray)
 
     for b in blks:  # loop through the blocks
         r = fitz.Rect(b[:4])  # block rectangle
         # add dislacement of original /CropBox
         r += disp
-        img.drawRect(r)  # surround block rectangle
+        img.draw_rect(r)  # surround block rectangle
 
         if b[-1] == 1:  # if image block ...
             color = red
@@ -55,14 +55,14 @@ for page1 in doc1:
 
         img.finish(width=0.3, color=color)
 
-        if r.isEmpty:  # do not rely on meaningful rects
+        if r.is_empty:  # do not rely on meaningful rects
             print(
                 "skipping text of empty rect at (%g, %g) on page %i"
                 % (r.x0, r.y0, page1.number)
             )
         else:
             # insert text of the block using a small, indicative fontsize
-            img.insertTextbox(
+            img.insert_textbox(
                 r, b[4], fontname="/Helvetica", fontsize=8, color=color, align=a
             )
 

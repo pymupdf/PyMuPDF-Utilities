@@ -14,7 +14,7 @@ src = fitz.open("source.pdf")
 
 # new PDF with one page
 doc = fitz.open()
-page = doc.newPage()
+page = doc.new_page()
 
 # define 2 rectangles: upper and lower half page
 r0 = page.rect
@@ -34,8 +34,8 @@ ocmd0 = doc.set_ocmd(  # to be used for lower rect
 # ocmd0 = doc.set_ocmd(ve=["not", ocg0])
 
 # insert the 2 source page images, each connected to one OCG
-page.showPDFpage(r0, src, 0, oc=ocg0, rotate=90)
-page.showPDFpage(r1, src, 1, oc=ocmd0, rotate=-90)
+page.show_pdf_page(r0, src, 0, oc=ocg0, rotate=90)
+page.show_pdf_page(r1, src, 1, oc=ocmd0, rotate=-90)
 
 doc.save(  # save the file
     __file__.replace(".py", ".pdf"),

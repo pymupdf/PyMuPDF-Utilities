@@ -33,7 +33,7 @@ factor = 25 / rect.height  # logo height is fixed to 25
 rect *= factor  # adjust width accordingly
 doc = fitz.open(doc_fn)  # open PDF to be modified
 for page in doc:  # scan through PDF pages
-    xref = page.showPDFpage(
+    xref = page.show_pdf_page(
         rect, src, 0, overlay=True  # put page src[0] in rect
     )  # put in forground
 doc.save("logo-" + doc_fn, garbage=4)

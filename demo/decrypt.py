@@ -16,7 +16,7 @@ assert len(sys.argv) == 4, (
 
 doc = fitz.Document(sys.argv[1])
 # the document should be password protected
-assert doc.needsPass, sys.argv[0] + " not password protected"
+assert doc.needs_pass, sys.argv[0] + " not password protected"
 
 # decrypt the document
 # return non-zero if failed

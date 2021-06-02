@@ -39,13 +39,13 @@ print(fitz.__doc__)
 if not list(map(int, fitz.VersionBind.split("."))) >= [1, 14, 5]:
     raise SystemExit("need PyMuPDF v1.14.5 for this script")
 
-py2 = str is bytes  # this is Python 2!
-if not py2:
-    import PySimpleGUI as sg
-    import tkinter as tk
-else:
-    import PySimpleGUI27 as sg
-    import Tkinter as tk
+if sys.platform == "win32":
+    import ctypes
+
+    ctypes.windll.shcore.SetProcessDpiAwareness(2)
+
+import PySimpleGUI as sg
+import tkinter as tk
 
 if len(sys.argv) == 1:
     fname = sg.PopupGetFile(
@@ -89,7 +89,7 @@ def get_page(pno, zoom=False, max_size=None):
     """
     dlist = dlist_tab[pno]  # get display list of page number
     if not dlist:  # create if not yet there
-        dlist_tab[pno] = doc[pno].getDisplayList()
+        dlist_tab[pno] = doc[pno].get_displaylist()
         dlist = dlist_tab[pno]
     r = dlist.rect  # the page rectangle
     clip = r
@@ -100,10 +100,11 @@ def get_page(pno, zoom=False, max_size=None):
         zoom_0 = min(1, max_size[0] / r.width, max_size[1] / r.height)
         if zoom_0 == 1:
             zoom_0 = min(max_size[0] / r.width, max_size[1] / r.height)
+
     mat_0 = fitz.Matrix(zoom_0, zoom_0)
 
     if not zoom:  # show the total page
-        pix = dlist.getPixmap(matrix=mat_0, alpha=False)
+        pix = dlist.get_pixmap(matrix=mat_0, alpha=False)
     else:
         w2 = r.width / 2  # we need these ...
         h2 = r.height / 2  # a few times
@@ -118,9 +119,8 @@ def get_page(pno, zoom=False, max_size=None):
         clip = fitz.Rect(tl, tl.x + w2, tl.y + h2)
         # clip rect is ready, now fill it
         mat = mat_0 * fitz.Matrix(2, 2)  # zoom matrix
-        pix = dlist.getPixmap(alpha=False, matrix=mat, clip=clip)
-
-    img = pix.getImageData("ppm")  # make PPM image from pixmap for tkinter
+        pix = dlist.get_pixmap(alpha=False, matrix=mat, clip=clip)
+    img = pix.tobytes("ppm")  # make PPM image from pixmap for tkinter
     return img, clip.tl  # return image, clip position
 
 
@@ -266,4 +266,3 @@ while True:
     # update page number field
     if is_MyKeys(btn):
         goto.Update(str(cur_page + 1))
-

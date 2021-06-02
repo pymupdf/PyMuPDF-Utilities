@@ -119,9 +119,9 @@ class PDFdisplay(wx.Dialog):
         # open the document with MuPDF when dialog gets created
         #======================================================================
         self.doc = fitz.open(filename) # create Document object
-        if self.doc.needsPass:         # check password protection
+        if self.doc.needs_pass:         # check password protection
             self.decrypt_doc()
-        if self.doc.isEncrypted:       # quit if we cannot decrpt
+        if self.doc.is_encrypted:       # quit if we cannot decrpt
             self.Destroy()
             return
         self.dl_array = [0] * len(self.doc)
@@ -273,7 +273,7 @@ class PDFdisplay(wx.Dialog):
 
     def NextPage(self, event):                   # means: page forward
         page = getint(self.TextToPage.Value) + 1 # current page + 1
-        page = min(page, self.doc.pageCount)     # cannot go beyond last page
+        page = min(page, self.doc.page_count)     # cannot go beyond last page
         self.TextToPage.Value = str(page)        # put target page# in screen
         self.NeuesImage(page)                    # refresh the layout
         event.Skip()
@@ -366,15 +366,15 @@ class PDFdisplay(wx.Dialog):
     def pdf_show(self, pg_nr):
         pno = int(pg_nr) - 1
         if self.dl_array[pno] == 0:
-            self.dl_array[pno] = self.doc[pno].getDisplayList()
+            self.dl_array[pno] = self.doc[pno].get_displaylist()
         dl = self.dl_array[pno]
-        pix = dl.getPixmap(matrix = self.matrix, alpha = False)
+        pix = dl.get_pixmap(matrix = self.matrix, alpha = False)
         bmp = bmp_buffer(pix.w, pix.h, pix.samples)
         r = dl.rect
         paper = FindFit(r.x1, r.y1)
         self.paperform.Label = "Page format: " + paper
         if self.links.Value:
-            self.current_lnks = self.doc[pno].getLinks()
+            self.current_lnks = self.doc[pno].get_links()
             self.pg_ir = dl.rect.irect
         pix = None
         return bmp
@@ -392,7 +392,7 @@ class PDFdisplay(wx.Dialog):
                 self.doc.authenticate(pw)
             else:
                 return
-            if self.doc.isEncrypted:
+            if self.doc.is_encrypted:
                 pw = None
                 dlg.SetTitle("Wrong password. Enter correct one or cancel.")
         return

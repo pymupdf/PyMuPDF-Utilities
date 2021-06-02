@@ -27,7 +27,7 @@ import sys
 if not fitz.VersionBind.split(".") >= ["1", "17", "4"]:
     raise ValueError("Need PyMuPDF v.1.17.4 at least.")
 if len(sys.argv) != 2:
-    startyear = fitz.getPDFnow()[2:6]  # take current year
+    startyear = fitz.get_pdf_now()[2:6]  # take current year
 else:
     startyear = sys.argv[1]
 
@@ -45,7 +45,7 @@ cal = calendar.LocaleTextCalendar(locale="de")  # use your locale
 # cal = calendar.TextCalendar()  # or stick with English
 
 
-page_rect = fitz.PaperRect("a4-l")  # A4 landscape paper
+page_rect = fitz.paper_rect("a4-l")  # A4 landscape paper
 w = page_rect.width
 h = page_rect.height
 print_rect = page_rect + (36, 72, -36, -36)  # fill this rectangle
@@ -57,10 +57,10 @@ fontsize = print_rect.width / (char_width * 100)
 
 
 def page_out(doc, text):
-    page = doc.newPage(width=w, height=h)  # make new page
+    page = doc.new_page(width=w, height=h)  # make new page
     tw = fitz.TextWriter(page_rect)  # make text writer
-    tw.fillTextbox(print_rect, text, font=font, fontsize=fontsize)
-    tw.writeText(page)  # write the text to the page
+    tw.fill_textbox(print_rect, text, font=font, fontsize=fontsize)
+    tw.write_text(page)  # write the text to the page
 
 
 for i in range(3):  # make calendar for 3 years

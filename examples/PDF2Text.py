@@ -34,7 +34,7 @@ pages = len(doc)
 fout = open(ofile,"w")
 
 for page in doc:
-    text = page.getText()
+    text = page.get_text()
     fout.write(text.encode("utf-8"))
 
 fout.close()

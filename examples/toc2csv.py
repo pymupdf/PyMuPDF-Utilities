@@ -12,7 +12,7 @@ delim = args.d               # requested CSV delimiter character
 fname = args.doc          # input document filename
 
 doc = fitz.open(fname)
-toc = doc.getToC(simple = False)
+toc = doc.get_toc(simple = False)
 ext = fname[-3:].lower()
 fname1 = fname[:-4] + "-toc.csv"
 outf = open(fname1, "w")

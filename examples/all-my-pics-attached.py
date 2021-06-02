@@ -43,10 +43,10 @@ if not imgdir:
 
 t0 = mytime()  # set start timer
 
-width, height = fitz.PaperSize("a6-l")  # get paper format
+width, height = fitz.paper_size("a6-l")  # get paper format
 
 doc = fitz.open()  # open empty PDF
-page = doc.newPage(width=width, height=height)  # make new page
+page = doc.new_page(width=width, height=height)  # make new page
 
 # define sub rect to receive text and annotation symbols
 rect = fitz.Rect(0, 0, width, height) + (36, 36, -36, -36)
@@ -63,8 +63,8 @@ text = "Contains the following %i files from '%s':\n\n" % (imgcount, imgdir)
 pno = 1
 
 # insert header and footer
-page.insertText(rect.tl, text)
-page.insertText(rect.bl, "Page %i of %i" % (pno, pages))
+page.insert_text(rect.tl, text)
+page.insert_text(rect.bl, "Page %i of %i" % (pno, pages))
 
 point = rect.tl + (0, 20)  # insertion point of first symbol
 
@@ -82,17 +82,17 @@ for i, f in enumerate(imglist):
         print("attaching file '%s', (%i / %i)" % (f, i + 1, imgcount))
 
     img = open(path, "rb").read()  # file content
-    page.addFileAnnot(point, img, filename=f)  # add as attachment
+    page.add_file_annot(point, img, filename=f)  # add as attachment
 
     point += (25, 0)  # position of next symbol
     if point.x >= rect.width:  # beyond right limit?
         point = fitz.Point(rect.x0, point.y + 35)  # start next line
     if point.y >= rect.height and i < imgcount - 1:  # beyond bottom limit?
         # prepare another page
-        page = doc.newPage(width=width, height=height)
+        page = doc.new_page(width=width, height=height)
         pno += 1
-        page.insertText(rect.tl, text)
-        page.insertText(rect.bl, "Page %i of %i" % (pno, pages))
+        page.insert_text(rect.tl, text)
+        page.insert_text(rect.bl, "Page %i of %i" % (pno, pages))
         point = rect.tl + (0, 20)
 
 doc.save("all-my-pics-attached.pdf")

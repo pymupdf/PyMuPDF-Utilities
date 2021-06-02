@@ -47,7 +47,7 @@ def ParseTab(page, bbox, columns=None):
     tab_rect = fitz.Rect(bbox).irect
     xmin, ymin, xmax, ymax = tuple(tab_rect)
 
-    if tab_rect.isEmpty or tab_rect.isInfinite:
+    if tab_rect.is_empty or tab_rect.is_infinite:
         print("Warning: incorrect rectangle coordinates!")
         return []
 
@@ -61,7 +61,7 @@ def ParseTab(page, bbox, columns=None):
     if xmax > coltab[-1]:
         coltab.append(xmax)
 
-    words = page.getTextWords()
+    words = page.get_textWords()
 
     if words == []:
         print("Warning: page contains no text")

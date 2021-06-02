@@ -51,7 +51,7 @@ def get_tessocr(page, bbox):
         matrix=mat,
         clip=bbox,
     )
-    image = pix.getImageData("png")  # make a PNG image
+    image = pix.tobytes("png")  # make a PNG image
     t1 = time.perf_counter()
     # Step 2: Invoke Tesseract to OCR the image. Text is stored in stdout.
     rc = subprocess.run(

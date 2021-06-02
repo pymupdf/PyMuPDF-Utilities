@@ -37,7 +37,7 @@ pages = len(doc)
 fout = open(ofile, "wb")
 
 for page in doc:
-    blocks = page.getTextBlocks()
+    blocks = page.get_textBlocks()
     sb = sorted(blocks, key=itemgetter(1, 0))
     for b in sb:
         fout.write(b[4].encode("utf-8"))

@@ -61,7 +61,7 @@ def table(rect=(0, 0, 1, 1), cols=1, rows=1):
         PyMuPDF Rect objects of equal sizes.
     """
     rect = fitz.Rect(rect)  # ensure that this is a Rect
-    if rect.isEmpty or rect.isInfinite:
+    if rect.is_empty or rect.is_infinite:
         raise ValueError("rect must be finite and not empty")
     tl = rect.tl
 
@@ -92,8 +92,8 @@ def table(rect=(0, 0, 1, 1), cols=1, rows=1):
 
 
 doc = fitz.open()  # new PDF
-page = doc.newPage()  # new page
-shape = page.newShape()  # make a page draw area
+page = doc.new_page()  # new page
+shape = page.new_shape()  # make a page draw area
 opacity = 0.3  # all annotation use this opacity
 tcol = (0, 0, 1)  # text color
 gold = (1, 1, 0)  # highlight color
@@ -113,14 +113,14 @@ rects = table(  # define a table with 2 cells per blend mode
 
 # paint page background
 # will provide better visibility of highlighted text
-shape.drawRect(page.rect)
+shape.draw_rect(page.rect)
 shape.finish(fill=background, color=background)
 
 # fill the table
 for i, bmode in enumerate(blend_modes):
     r = rects[i]  # contains 2 rectangles
     text = "\n" + bmode  # try to center the name a bit
-    shape.insertTextbox(  # blend mode name in left rectangle
+    shape.insert_textbox(  # blend mode name in left rectangle
         r[0],
         text,
         fontsize=fsize,
@@ -128,7 +128,7 @@ for i, bmode in enumerate(blend_modes):
         fontname=fname,
         align=fitz.TEXT_ALIGN_CENTER,
     )
-    shape.insertTextbox(  # blend mode name in right rectangle
+    shape.insert_textbox(  # blend mode name in right rectangle
         r[1],
         text,
         fontsize=fsize,
@@ -137,7 +137,7 @@ for i, bmode in enumerate(blend_modes):
         align=fitz.TEXT_ALIGN_CENTER,
     )
 
-shape.insertTextbox(
+shape.insert_textbox(
     (80, 36, page.rect.width - 80, 70),
     "Show how blend mode, opacity %g and background\ncolor '%s' affect a highlight annotation"
     % (opacity, bg_color.upper()),
@@ -153,7 +153,7 @@ shape.commit()  # this commits text and paintings to the page
 # To find the respective text, we search for the blend mode name,
 # then take its second occurrence for highlighting
 for i, bmode in enumerate(blend_modes):
-    annot = page.addHighlightAnnot(rects[i][1])  # take second one
+    annot = page.add_highlight_annot(rects[i][1])  # take second one
     annot.update(blend_mode=bmode, opacity=opacity)  # and finish the annotation
 
 doc.save(thisdir("test-blendmode.pdf"), garbage=3, deflate=True)

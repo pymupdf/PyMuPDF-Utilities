@@ -45,7 +45,7 @@ t0 = mytime()  # set start timer
 
 doc = fitz.open()
 
-width, height = fitz.PaperSize("a4")
+width, height = fitz.paper_size("a4")
 rect = fitz.Rect(0, 0, width, height) + (36, 36, -36, -36)
 imglist = os.listdir(imgdir)
 imgcount = len(imglist)
@@ -64,9 +64,9 @@ for i, f in enumerate(imglist):
         print("embedding file '%s', (%i / %i)" % (f, i + 1, imgcount))
 
     img = open(path, "rb").read()
-    doc.embeddedFileAdd(f, img, filename=f, ufilename=f, desc=f)
+    doc.embfile_add(f, img, filename=f, ufilename=f, desc=f)
 
-page = doc.newPage()  # every doc needs at least one page
+page = doc.new_page()  # every doc needs at least one page
 
 doc.save("all-my-pics-embedded.pdf")
 t1 = mytime()

@@ -40,8 +40,8 @@ for i in range(1, len(tlist)):  # fill in all the rectangles
     rlist.append(rlist[i - 1] + d)
 
 doc = fitz.open()  # create empty PDF
-page = doc.newPage()  # create an empty page
-img = page.newShape()  # start a Shape (canvas)
+page = doc.new_page()  # create an empty page
+img = page.new_shape()  # start a Shape (canvas)
 
 for i, r in enumerate(rlist):
     tlist[i][0](img, rlist[i])  # execute symbol creation

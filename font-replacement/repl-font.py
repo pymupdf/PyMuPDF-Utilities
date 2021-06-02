@@ -18,7 +18,7 @@ Approach and features
 ---------------------
 Iterate through the pages and ...
 
-* Extract the text via page.getText("dict"). Then remove all existing text from
+* Extract the text via page.get_text("dict"). Then remove all existing text from
   the page that is written with a font to be replaced. Non-text page elements
   stay intact (images, links, annotations, ...) as well as text with a not
   replaced font.
@@ -161,7 +161,7 @@ def get_font(searchname, flags):
         This function is at the core of the script and highly depends on each
         individual input PDF. To be successful, the fonts actually used by any
         page must be known and an action for each original font must be defined
-        here. I.e. for each item in 'page.getFontList()' it must be clear what
+        here. I.e. for each item in 'page.get_fonts()' it must be clear what
         should happen.
         Even if an original font should not be replaced, it still must be
         converted to a fitz.Font and as such be returned here.
@@ -330,9 +330,9 @@ def clean_fontnames(page):
     This function removes these duplicates and thus reduces the size of the
     /Resources object.
     """
-    cont = bytearray(page.readContents())  # read and concat all /Contents
+    cont = bytearray(page.read_contents())  # read and concat all /Contents
     font_xrefs = {}  # key: xref, value: set of font refs using it
-    for f in page.getFontList():
+    for f in page.get_fonts():
         xref = f[0]
         name = f[4]  # font ref name, 'Fnnn'
         names = font_xrefs.get(xref, set())
@@ -412,11 +412,11 @@ def tilted_span(page, wdir, span, font):
     if sin > 0:  # clockwise rotation
         origin.y = bbox.y0
     tw.append(origin, text, font=font, fontsize=fontsize)
-    tw.writeText(page, morph=(origin, matrix))
+    tw.write_text(page, morph=(origin, matrix))
 
 
 def get_page_fontrefs(page):
-    fontlist = page.getFontList(full=True)
+    fontlist = page.get_fonts(full=True)
     # Ref names for each font to replace.
     # Each contents stream has a separate entry here: keyed by xref,
     # 0 = page /Contents, otherwise xref of XObject
@@ -449,7 +449,7 @@ if new_fontnames == {}:
     sys.exit("\n***** There are no fonts to replace. *****")
 print(
     "Processing PDF '%s' with %i page%s.\n"
-    % (indoc.name, indoc.pageCount, "s" if indoc.pageCount > 1 else "")
+    % (indoc.name, indoc.page_count, "s" if indoc.page_count > 1 else "")
 )
 
 t0 = time.perf_counter()
@@ -462,7 +462,7 @@ for page in indoc:
     fontrefs = get_page_fontrefs(page)
     if fontrefs == {}:  # page has no fonts to replace
         continue
-    for block in page.getText("dict", flags=extr_flags)["blocks"]:
+    for block in page.get_text("dict", flags=extr_flags)["blocks"]:
         for line in block["lines"]:
             for span in line["spans"]:
                 new_fontname = get_new_fontname(span["font"])
@@ -509,7 +509,7 @@ print()
 print("Phase 2: rebuild document.")
 for page in indoc:
     # extract text again
-    blocks = page.getText("dict", flags=extr_flags)["blocks"]
+    blocks = page.get_text("dict", flags=extr_flags)["blocks"]
 
     # clean contents streams of the page and any XObjects.
     page.clean_contents(sanitize=True)
@@ -561,7 +561,7 @@ for page in indoc:
     for color in textwriters.keys():  # output the stored text per color
         tw = textwriters[color]
         outcolor = fitz.sRGB_to_pdf(color)  # recover (r,g,b)
-        tw.writeText(page, color=outcolor)
+        tw.write_text(page, color=outcolor)
 
     clean_fontnames(page)
 

@@ -13,12 +13,12 @@ ofn = sys.argv[2]                      # output PDF
 docin = fitz.open(ifn)
 docout = fitz.open(ofn)
 print("Copying embedded files from '%s' to '%s'" % (ifn, ofn))
-for i in range(docin.embeddedFileCount):
-    d = docin.embeddedFileInfo(i)      # file metadata
-    b = docin.embeddedFileGet(i)       # file content
+for i in range(docin.embfile_count):
+    d = docin.embfile_info(i)      # file metadata
+    b = docin.embfile_get(i)       # file content
     try:                               # safeguarding against duplicate entries
         print ("copying entry:", d["name"])
-        docout.embeddedFileAdd(b, d["name"], d["file"], d["desc"])
+        docout.embfile_add(b, d["name"], d["file"], d["desc"])
     except:
         pass
 

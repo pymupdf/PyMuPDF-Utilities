@@ -16,7 +16,7 @@ alphabetic characters without punctuations (dots, commas, ...), digits,
 special characters etc.
 
 The approach is as follows:
-1. Make a list of "technical" words of the page via page.getText("words"), i.e.
+1. Make a list of "technical" words of the page via page.get_text("words"), i.e.
    strings without spaces.
 2. Inspect each list item and compute a list of sub-rectangles surrounding
    strings of alphabetic characters. If selection criteria (prefix / suffix)
@@ -52,7 +52,7 @@ def find_words(page, word_tuple, prefix="", suffix="", lower=True):
     strings only.
 
     Args:
-        word_tuple: an item of page.getText("words")
+        word_tuple: an item of page.get_text("words")
         prefix: select, if starting like this
         suffix: select, if ending like this
         lower: ignore case - increases hit rate.
@@ -73,7 +73,7 @@ def find_words(page, word_tuple, prefix="", suffix="", lower=True):
     rect = fitz.Rect(word_tuple[:4])  # this is the word bbox
 
     # make dict of character details
-    blocks = page.getText("rawdict", clip=rect, flags=0)[  # restrict to word bbox
+    blocks = page.get_text("rawdict", clip=rect, flags=0)[  # restrict to word bbox
         "blocks"
     ]
 
@@ -105,7 +105,7 @@ if __name__ == "__main__":
     page = doc[0]
     time0 = time.perf_counter()
     # make a list of "technical" words
-    wordlist = page.getText("words")
+    wordlist = page.get_text("words")
     m = ("seife", "wissenschaft")  # only accept these full words
     for word_tuple in wordlist:
         """
@@ -124,12 +124,12 @@ if __name__ == "__main__":
             lower=True,  # comparisons ignore upper / lower case
         )  # get list of sub-rects and matching words
         for item in items:
-            if item[0].isEmpty:  # skip empty ones
+            if item[0].is_empty:  # skip empty ones
                 continue
             if not item[1].lower() in m:
                 continue  # skip what does not exactly fit.
-            annot = page.addRectAnnot(item[0])  # else surround the word with a thin
-            annot.setBorder(width=0.3)  # border (cosmetics)
+            annot = page.add_rect_annot(item[0])  # else surround the word with a thin
+            annot.set_border(width=0.3)  # border (cosmetics)
             annot.update()
 
     time1 = time.perf_counter()

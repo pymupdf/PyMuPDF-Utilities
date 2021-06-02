@@ -92,9 +92,9 @@ class PDFdisplay(wx.Dialog):
         # open the document with MuPDF when dialog gets created
         #======================================================================
         self.doc = fitz.open(filename) # create Document object
-        if self.doc.needsPass:         # check password protection
+        if self.doc.needs_pass:         # check password protection
             self.decrypt_doc()
-        if self.doc.isEncrypted:       # quit if we cannot decrypt
+        if self.doc.is_encrypted:       # quit if we cannot decrypt
             self.Destroy()
             return
         self.pdf_vsn_ok = self.doc.metadata["format"].split()[1] > "1.1"
@@ -453,7 +453,7 @@ class PDFdisplay(wx.Dialog):
 
     def on_next_page(self, event):                # means: page forward
         page = getint(self.TextToPage.Value) + 1  # current page + 1
-        page = min(page, self.doc.pageCount)      # cannot go beyond last page
+        page = min(page, self.doc.page_count)      # cannot go beyond last page
         self.TextToPage.ChangeValue(str(page))    # put target page# in screen
         self.new_image(page)                      # refresh the layout
         event.Skip()
@@ -483,11 +483,11 @@ class PDFdisplay(wx.Dialog):
             l = self.page_links[i]
             if l.get("update", False):            # "update" must be True
                 if l["xref"] == 0:                # no xref => new link
-                    pg.insertLink(l)
+                    pg.insert_link(l)
                 elif l["kind"] == fitz.LINK_NONE:
-                    pg.deleteLink(l)              # delete invalid link
+                    pg.delete_link(l)              # delete invalid link
                 else:
-                    pg.updateLink(l)              # else update link
+                    pg.update_link(l)              # else update link
             l["update"] = False                   # reset update indicator
             self.page_links[i] = l                # update page links list
         self.btn_Update.Disable()                 # disable update button
@@ -641,7 +641,7 @@ class PDFdisplay(wx.Dialog):
         indir, infile = os.path.split(self.doc.name)
         odir = indir
         ofile = infile
-        if self.doc.needsPass or not self.doc.can_save_incrementally():
+        if self.doc.needs_pass or not self.doc.can_save_incrementally():
             ofile = ""
         sdlg = wx.FileDialog(self, "Specify Output", odir, ofile,
                                    "PDF files (*.pdf)|*.pdf", wx.FD_SAVE)
@@ -649,7 +649,7 @@ class PDFdisplay(wx.Dialog):
             evt.Skip()
             return
         outfile = sdlg.GetPath()
-        if self.doc.needsPass or not self.doc.can_save_incrementally():
+        if self.doc.needs_pass or not self.doc.can_save_incrementally():
             title =  "Repaired / decrypted PDF requires new output file"
             while outfile == self.doc.name:
                 sdlg = wx.FileDialog(self, title, odir, "",
@@ -978,17 +978,17 @@ class PDFdisplay(wx.Dialog):
 
     def pdf_show(self, pno):
         page = self.doc[getint(pno) - 1]         # load page & get Pixmap
-        pix = page.getPixmap(matrix = self.zoom, alpha = False)
+        pix = page.get_pixmap(matrix = self.zoom, alpha = False)
         bmp = wx.Bitmap.FromBuffer(pix.w, pix.h, pix.samples)
         paper = FindFit(page.rect.width, page.rect.height)
         self.paperform.Label = "Page format: " + paper
-        self.page_links = page.getLinks()
+        self.page_links = page.get_links()
         self.update_links = True
         if len(self.page_links) > 0:
             if self.page_links[0]["xref"] < 1:
                 self.update_links = False
         self.page_height = page.rect.height
-        self.text_blocks = page.getTextBlocks()
+        self.text_blocks = page.get_textBlocks()
         return bmp
 
     def decrypt_doc(self):
@@ -1004,7 +1004,7 @@ class PDFdisplay(wx.Dialog):
                 self.doc.authenticate(pw)
             else:
                 return
-            if self.doc.isEncrypted:
+            if self.doc.is_encrypted:
                 pw = None
                 dlg.SetTitle("Wrong password. Enter correct one or cancel.")
         return

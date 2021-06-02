@@ -51,14 +51,14 @@ if ol:
 
 # get the page number, which should start from 0
 pn = int(sys.argv[2]) - 1
-if pn > doc.pageCount:
-    sys.exit("%s has %d pages only" % (sys.argv[1], doc.pageCount))
+if pn > doc.page_count:
+    sys.exit("%s has %d pages only" % (sys.argv[1], doc.page_count))
 
 # get the page
-page = doc.loadPage(pn)
+page = doc.load_page(pn)
 
 # we can also get all the links in the current page
-ln = page.loadLinks()
+ln = page.load_links()
 
 # Links are a forward-connected list of entries. For each entry we need to
 # check what type of information we are having.
@@ -74,7 +74,7 @@ while ln:
 # we create a transformation matrix here
 zoom = int(sys.argv[3])
 rotate = int(sys.argv[4])
-trans = fitz.Matrix(zoom / 100.0, zoom / 100.0).preRotate(rotate)
+trans = fitz.Matrix(zoom / 100.0, zoom / 100.0).prerotate(rotate)
 
 """
 here we introduce the display list, which provides caching-mechanisms
@@ -94,7 +94,7 @@ rect = mediabox.transform(trans)
 # create a pixmap with RGB as colorspace and bounded by irect
 pm = fitz.Pixmap(fitz.Colorspace(fitz.CS_RGB), rect.round())
 # clear it with 0xff white
-pm.clearWith(0xFF)
+pm.clear_with(0xFF)
 
 # fitz.Device(pm, None) is a device for drawing
 # we run the display list above through this drawing device
@@ -103,7 +103,7 @@ dl.run(fitz.Device(pm, None), fitz.Identity, rect)
 
 # the drawing device save the result into the pixmap
 # and we save the pixmap as a PNG file
-pm.writePNG(sys.argv[5])
+pm.save(sys.argv[5])
 
 # and the page is no longer needed for drawing pixmap now
 # we can drop those resources
@@ -114,7 +114,7 @@ pm = None
 # In order to re-draw the pixmap, we just need to run the display list again
 # first, setup the pixmap and its drawing device
 pm1 = fitz.Pixmap(fitz.Colorspace(fitz.CS_RGB), rect.round())
-pm1.clearWith(0xFF)
+pm1.clear_with(0xFF)
 # then, run the display list, which already contains drawing commands
 dl.run(fitz.Device(pm1, None), fitz.Identity, rect)
 
@@ -132,7 +132,7 @@ dl.run(fitz.Device(ts, tp), fitz.Identity, rect)
 res = tp.search(sys.argv[6], 4)
 for r in res:
     # we invert the pixmap at the hit irect to highlight the search result
-    pm1.invertIRect(r.round())
+    pm1.invert_irect(r.round())
 
 # and finally write to another PNG
-pm1.writePNG("dl-" + sys.argv[5])
+pm1.save("dl-" + sys.argv[5])

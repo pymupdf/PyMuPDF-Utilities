@@ -17,7 +17,7 @@ text1 = (
     "Europäischen Südsternwarte ESO.",
 )
 
-rl = page.searchFor(
+rl = page.search_for(
     " ".join(text1),  # reconstruct full sentence for searching
 )
 
@@ -28,7 +28,7 @@ clip = fitz.Rect()  # build clip as union of the hit rectangles
 for r in rl:
     clip |= r
 
-page.addHighlightAnnot(
+page.add_highlight_annot(
     start=start,
     stop=stop,
     clip=clip,

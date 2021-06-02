@@ -46,13 +46,13 @@ t0 = mytime()
 ir = (0, 0, d, d)  # the pixmap rectangle
 
 pm = fitz.Pixmap(fitz.csRGB, ir, False)
-pm.setRect(pm.irect, (255, 255, 0))  # fill it with some background color
+pm.set_rect(pm.irect, (255, 255, 0))  # fill it with some background color
 
 color = (0, 0, 255)  # color to fill the punch holes
 
 # define 'fill' pixmap for the punch holes
 fill = fitz.Pixmap(pm, pm.alpha)  # copy pm
-fill.invertIRect()  # inverted colors of pm
+fill.invert_irect()  # inverted colors of pm
 
 
 def punch(x, y, step):
@@ -66,9 +66,9 @@ def punch(x, y, step):
                 if s >= 3:  # else prevent going down another level
                     punch(x + i * s, y + j * s, s)
             else:
-                pm.setRect((x + s, y + s, x + 2 * s, y + 2 * s), color)
-                # pm.copyPixmap(fill, (x+s, y+s, x+2*s, y+2*s))
-                # pm.invertIRect((x+s, y+s, x+2*s, y+2*s))
+                pm.set_rect((x + s, y + s, x + 2 * s, y + 2 * s), color)
+                # pm.copy(fill, (x+s, y+s, x+2*s, y+2*s))
+                # pm.invert_irect((x+s, y+s, x+2*s, y+2*s))
 
     return
 
@@ -79,7 +79,7 @@ def punch(x, y, step):
 # now start punching holes into the pixmap
 punch(0, 0, d)
 t1 = mytime()
-pm.writeImage("sierpinski-punch.png")
+pm.save("sierpinski-punch.png")
 t2 = mytime()
 print("Sierpinski's carpet 'punch'")
 print("---------------------------")

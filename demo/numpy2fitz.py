@@ -39,7 +39,7 @@ samples = image.tostring()
 ttab = [(time.perf_counter(), "")]
 
 pix = fitz.Pixmap(fitz.csRGB, width, height, samples, 0)
-pix.writePNG("numpy2fitz.png")
+pix.save("numpy2fitz.png")
 ttab.append((time.perf_counter(), "fitz"))
 
 pix = Image.frombuffer("RGB", [width, height], samples,

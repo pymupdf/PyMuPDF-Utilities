@@ -36,7 +36,7 @@ infile = sys.argv[1]
 src = fitz.open(infile)
 doc = fitz.open()                      # empty output PDF
 
-width, height = fitz.PaperSize("a4")   # A4 portrait output page format
+width, height = fitz.paper_size("a4")   # A4 portrait output page format
 r = fitz.Rect(0, 0, width, height)
 
 # define the 4 rectangles per page
@@ -51,11 +51,11 @@ r_tab = [r1, r2, r3, r4]
 # now copy input pages to output
 for spage in src:
     if spage.number % 4 == 0:           # create new output page
-        page = doc.newPage(-1,
+        page = doc.new_page(-1,
                       width = width,
                       height = height)
     # insert input page into the correct rectangle
-    page.showPDFpage(r_tab[spage.number % 4],    # select output rect
+    page.show_pdf_page(r_tab[spage.number % 4],    # select output rect
                      src,               # input document
                      spage.number)      # input page number
 

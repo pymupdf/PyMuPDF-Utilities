@@ -1,6 +1,6 @@
 # Handling of Table of Contents
 
-Tables of Content - TOC - can be created for any PyMuPDF document type by method `doc.getToC(simple: bool = True/False)`. The new alias of this method if `get_toc`.
+Tables of Content - TOC - can be created for any PyMuPDF document type by method `doc.get_toc(simple: bool = True/False)` - the old name `getTOC` is deprecated and kept as an alias.
 
 The method returns a Python list like this:
 
@@ -89,52 +89,55 @@ Respectively this:
   {'kind': 1, 'page': 8, 'to': Point(72.0, 36.0), 'xref': 23, 'zoom': 0.0}]]
 ```
 
-The second version provides an additional entry with more detail for each item.
+perhe second version provides an additional entry with more detail per item.
 
 > Please note that the items occur in the sequence as defined in the document. They are **_not sorted_**, specifically not by page number.
 
-> Page numbers may be -1 to indicate that the item does not point to somewhere in the document. In that case the detail dictionary will tell, whether a different document, an internet resource or indeed nothing is the target.
+> Page numbers may be -1 to indicate that the item does not point to anywhere in the document. In that case the detail dictionary will tell, whether a different document, an internet resource or indeed nothing at all is the target.
 
-# PDFs Support Additional Features
+# PDF Documents Support Additional Features
 ## (A) - Set the Complete TOC
-In PDF documents, a list like a TOC can be used as argument to method `doc.setToC` / `doc.set_toc`. This will either **_completely replace_** any existing TOC or **_create a new one_**.
+In PDF documents, a list like a TOC can be used as argument for method `doc.set_toc`. This will either **_completely replace_** any existing TOC or **_create a new one_**.
 
-Both of the above formats are supported here. For items with the simple format, a default detail dictionary will be created internally.
+Both of the above formats are supported. For items with the simple format, a default detail dictionary will be created internally.
 
 The important thing to note is, that **_you can manipulate the TOC list_** to your liking before using the method. The following rules must be adhered to, however:
 
-* The first item in the list must have a level of 1.
-* The level of a successor item must either be (a) smaller, (b) the same, or (c) 1 larger than that of the previous item.
+* The first item in the list **_must have a level of 1_**.
+* The level of a successor item must either be (a) smaller (= a higher level), (b) the same, or (c) 1 larger than that of the previous item.
 * Page numbers must be 1-based. The maximum value is the document's page count.
 
 If you follow these rules, you can add or remove items, change titles, page numbers, page target points, and target types.
 
 PDF viewers normally support collapsed or expanded views for the TOC.
-In PyMuPDF you have the following options to support this:
+In PyMuPDF you have the following options to use this:
 
 * Use the `collapse` method parameter: `doc.set_toc(toc, collapse=n)`. This will collapse all items with a hierarchy level greater than `n`. The default is 1, so only top level items are initially shown. To show all items expanded, use 0 or `None` (or some crazily large integer).
 * Use key `"collapse"` of the item detail dictionary. If set to `True`, items below this one are collapsed. In this case set the `collapse` **_parameter_** of the method to 0.
 
-Advanced PDF viewers also support colored TOC views and more sophisticated text properties like bold and italics.
+Advanced PDF viewers also support colored TOC views and more sophisticated properties like **bold** and _italics_.
 
-In PyMuPDF you can use the item detail dictionary to support this:
+In PyMuPDF you can use the item detail dictionary to achieve this:
 * set the `"color"` key to a PDF RGB color triple (red, green, blue) - each of the three entries is a float in range 0 to 1.
 * set the `"bold"` key to `True` / `False`.
 * set the `"italic"` key to `True` / `False`.
 
-## (B) Manipulate Selected TOC Items
+## (B) - Manipulate Selected TOC Items
 
-Replacing the complete TOC as offered by `doc.set_toc` may not always be desired. Large PDFs tend to also have large TOCs.
+Replacing the complete TOC as offered by `doc.set_toc` may not always be desireable:
 
-So if all you want is changing e.g. a few bookmark titles out of several hundred or even thousands of TOC items, then replacing the whole bunch may be a waste of disk space and / or processing time.
+If all you want is changing e.g. a few bookmark titles out of several hundred or even thousands of TOC items, then replacing the whole bunch may be a waste of disk space and / or processing time.
 
 > For example, the Adobe manual has about 800 TOC items, the Pandas manual over 500 and the SWIG manual about 1240.
 
 To modify a single item, use method `doc.set_toc_item`. All properties are available for change - please see the following call pattern:
 
 ```python
-toc = doc.get_toc(False)  # recommended to always use this
-doc.set_toc_item(idx,  # item index in above list
+toc = doc.get_toc(False)  # recommended to always use False
+item = toc[idx]  # some item of the list
+dest = item[3]  # the detail dictionary of the destination
+# now manipulate the 'dest' values, then:
+doc.set_toc_item(idx,  # index of an item in above list
     dest_dict=dest,  # modified detail dict of item
     kind=int,  # link kind, only if dest_dict omitted
     pno=int,  # target page, only if dest_dict omitted
@@ -147,8 +150,8 @@ doc.set_toc_item(idx,  # item index in above list
 ```
 Here is a "live" script that reads the PDF file in this folder and does the following:
 1. expand all items
-2. set level 1 to red & bold
-3. set level 2 to blue & italic
+2. set level 1 to red and bold
+3. set level 2 to blue and italic
 4. set other levels to green
 
 ```python
@@ -180,11 +183,10 @@ This is how the result looks like:
 ![screen](colored-toc.png)
 
 
-Obviously in this case, because we in fact changed every single item, the same result could have been achieved by applying the changes directly to the ``toc`` list and then setting that as the new TOC.
 
-There are however more or less subtle differences in favor of this function:
-* `doc.set_toc_item()` reuses the old xref number, whereas `doc.set_toc()` acquires new xref numbers (currently - we may be changing this going forward). The old ones must be regained using garbage option of 2 or more on `save()`.
-* If an exception occurs within underlying MuPDF functions, `doc.set_toc_item()` is better recoverable because of its granular approach (changes only one xref at a time). `doc.set_toc()` consists of two internal steps, both of which are bulk changes to all xref numbers dealing with TOC storage, making it impossible to roll back except by discarding all changes to the PDF completely.
+There are differences in favor of using this function:
+* `doc.set_toc_item()` reuses the old xref number, whereas `doc.set_toc()` acquires new xref numbers. The old ones must be regained using garbage option of 2 or more on `save()`.
+* If an exception occurs within underlying MuPDF functions, `doc.set_toc_item()` is better recoverable because of its granular approach (changes only one xref at a time). `doc.set_toc()` consists of two internal steps, both of which are bulk changes to all xref numbers dealing with TOC storage, making it impossible to roll back.
 
 Other advantages of using `doc.set_toc_item()`:
 
@@ -192,4 +194,4 @@ Other advantages of using `doc.set_toc_item()`:
 
 There are disadvantages, too:
 * You cannot change the overall TOC structure with `doc.set_toc_item()` - only the content of each item. You cannot add items, or change hierarchy levels, or positions inside the TOC list.
-* You cannot delete TOC items either ... but there is method `doc.del_toc_item(idx)`, which removes an item's title string and sets the item's target to empty.
+* You cannot delete TOC items either ... but there is method `doc.del_toc_item(idx)`, which sets the item's target to empty and its color to some gray.

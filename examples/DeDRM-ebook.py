@@ -66,8 +66,8 @@ while 1:
         break
     old_samples = samples              # store this page image
     pix = fitz.Pixmap(fitz.csGRAY, img.size[0], img.size[1], samples, 0)
-    page = doc.newPage(-1, width = width, height = height)
-    page.insertImage(page.rect, pixmap = pix)    # insert screen print as image
+    page = doc.new_page(-1, width = width, height = height)
+    page.insert_image(page.rect, pixmap = pix)    # insert screen print as image
     pyautogui.hotkey("pagedown")       # next page in e-book reader
     time.sleep(2)                      # allow for slow response time
     i += 1

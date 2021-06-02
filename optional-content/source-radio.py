@@ -16,7 +16,7 @@ src = fitz.open("source.pdf")
 
 # new PDF with one page
 doc = fitz.open()
-page = doc.newPage()
+page = doc.new_page()
 
 # define the 4 rectangle quadrants to receive the source pages
 r0 = page.rect / 2
@@ -29,16 +29,16 @@ xref0 = doc.add_ocg("ocg0", on=True)
 xref1 = doc.add_ocg("ocg1", on=False)
 xref2 = doc.add_ocg("ocg2", on=False)
 xref3 = doc.add_ocg("ocg3", on=False)
-doc.setOCStates(
+doc.set_ocStates(
     -1,  # the default OC configuration
     rbgroups=[[xref0, xref1, xref2, xref3]],  # one radio-button group
 )
 
 # insert the 4 source page images, each connected to one OCG
-page.showPDFpage(r0, src, 0, oc=xref0)
-page.showPDFpage(r1, src, 1, oc=xref1)
-page.showPDFpage(r2, src, 2, oc=xref2)
-page.showPDFpage(r3, src, 3, oc=xref3)
+page.show_pdf_page(r0, src, 0, oc=xref0)
+page.show_pdf_page(r1, src, 1, oc=xref1)
+page.show_pdf_page(r2, src, 2, oc=xref2)
+page.show_pdf_page(r3, src, 3, oc=xref3)
 
 doc.save(  # save the file
     __file__.replace(".py", ".pdf"),

@@ -26,14 +26,14 @@ if not (list(map(int, fitz.VersionBind.split("."))) >= [1,13,3]):
     raise SystemExit("insufficient PyMuPDF version")
 fn = sys.argv[1]
 doc = fitz.open(fn)
-if doc.isPDF:
+if doc.is_pdf:
     raise SystemExit("document is PDF already")
 print("Converting '%s' to '%s.pdf'" % (fn, fn))
-b = doc.convertToPDF()            # convert to pdf
+b = doc.convert_to_pdf()            # convert to pdf
 pdf = fitz.open("pdf", b)         # open as pdf
 
-toc= doc.getToC()                 # table of contents of input
-pdf.setToC(toc)                   # simply set it for output
+toc= doc.get_toc()                 # table of contents of input
+pdf.set_toc(toc)                   # simply set it for output
 meta = doc.metadata               # read and set metadata
 if not meta["producer"]:
     meta["producer"] = "PyMuPDF v" + fitz.VersionBind
@@ -41,20 +41,20 @@ if not meta["producer"]:
 if not meta["creator"]:
     meta["creator"] = "PyMuPDF PDF converter"
 
-pdf.setMetadata(meta)
+pdf.set_metadata(meta)
 
 # now process the links
 link_cnti = 0
 link_skip = 0
 for pinput in doc:                # iterate through input pages
-    links = pinput.getLinks()     # get list of links
+    links = pinput.get_links()     # get list of links
     link_cnti += len(links)       # count how many
     pout = pdf[pinput.number]     # read corresp. output page
     for l in links:               # iterate though the links
         if l["kind"] == fitz.LINK_NAMED:    # we do not handle named links
             link_skip += 1        # count them
             continue
-        pout.insertLink(l)        # simply output the others
+        pout.insert_link(l)        # simply output the others
 
 # save the conversion result
 pdf.save(fn + ".pdf", garbage=4, deflate=True)

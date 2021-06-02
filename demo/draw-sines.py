@@ -118,8 +118,8 @@ if __name__ == "__main__":
     from fitz.utils import getColor
 
     doc = fitz.open()  # a new PDF
-    page = doc.newPage()  # a new page in it
-    img = page.newShape()  # start a Shape
+    page = doc.new_page()  # a new page in it
+    img = page.new_shape()  # start a Shape
     red = getColor("red")  # line color for sine
     blue = getColor("blue")  # line color for cosine
     yellow = getColor("py_color")  # background color
@@ -138,7 +138,7 @@ if __name__ == "__main__":
     # first draw a rectangle in which the functions graphs will later appear
     f = abs(pe - pb) * 0.5 / math.pi  # represents 1 unit
     rect = fitz.Rect(pb.x - 5, pb.y - f - 5, pe1.x + 5, pb.y + f + 5)
-    img.drawRect(rect)  # draw it
+    img.draw_rect(rect)  # draw it
 
     # compute morph parameter for image adjustments
     morph = (pb, fitz.Matrix(math.degrees(-alfa)))
@@ -154,7 +154,7 @@ if __name__ == "__main__":
     points = rot_points(pntsin, pb, alfa)
 
     for i in (0, 3, 6, 9):  # draw all 4 function segments
-        img.drawBezier(points[i], points[i + 1], points[i + 2], points[i + 3])
+        img.draw_bezier(points[i], points[i + 1], points[i + 2], points[i + 3])
 
     img.finish(color=red, width=w, closePath=False)
 
@@ -163,17 +163,17 @@ if __name__ == "__main__":
     points = rot_points(pntcos, pb, alfa)
 
     for i in (0, 3, 6, 9):  # draw all 4 function segments
-        img.drawBezier(points[i], points[i + 1], points[i + 2], points[i + 3])
+        img.draw_bezier(points[i], points[i + 1], points[i + 2], points[i + 3])
     img.finish(color=blue, width=w, closePath=False)
 
-    img.drawLine(pb, pe)
+    img.draw_line(pb, pe)
     img.finish(width=w)  # draw x-axis (default color)
 
     # insert "sine" / "cosine" legend text
     r1 = fitz.Rect(rect.x0 + 15, rect.y1 - 20, rect.br)
-    img.insertTextbox(r1, "sine", color=red, fontsize=8, morph=morph)
+    img.insert_textbox(r1, "sine", color=red, fontsize=8, morph=morph)
     r2 = fitz.Rect(rect.x0 + 15, rect.y1 - 10, rect.br)
-    img.insertTextbox(r2, "cosine", color=blue, fontsize=8, morph=morph)
+    img.insert_textbox(r2, "cosine", color=blue, fontsize=8, morph=morph)
 
     img.commit()  # commit with overlay = True
 

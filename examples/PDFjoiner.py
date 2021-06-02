@@ -437,7 +437,7 @@ class PDFDialog (wx.Dialog):
         pdf = event.GetPath()
         if pdf not in self.FileList:
             doc = fitz.Document(pdf)
-            if doc.needsPass:
+            if doc.needs_pass:
                 wx.MessageBox("Cannot process encrypted file\n" + pdf,
                       "Encrypted File Error")
                 doc.close()
@@ -466,7 +466,7 @@ def make_pdf(dlg):
     if not len(dlg.szr02.Table.data):       # no files there - quit
         return None
     # create time zone value in PDF format
-    cdate = fitz.getPDFnow()
+    cdate = fitz.get_pdf_now()
     ausgabe = dlg.btn_aus.GetPath()
     pdf_out = fitz.open()              # empty new PDF document
     aus_nr = 0                         # current page number in output
@@ -478,7 +478,7 @@ def make_pdf(dlg):
                 "author": dlg.ausaut.Value,
                 "subject": dlg.aussub.Value,
                 "keywords": dlg.keywords.Value}
-    pdf_out.setMetadata(pdf_dict)      # put in meta data
+    pdf_out.set_metadata(pdf_dict)      # put in meta data
     total_toc = []                     # initialize TOC
 #==============================================================================
 # process one input file
@@ -498,7 +498,7 @@ def make_pdf(dlg):
         bis = min(max(0, bis), max_seiten - 1)   # "to" must be in range
         rot = int(zeile[4])                 # get rotation angle
         # now copy the page range
-        pdf_out.insertPDF(doc, from_page = von, to_page = bis,
+        pdf_out.insert_pdf(doc, from_page = von, to_page = bis,
                           rotate = rot)
         if dlg.noToC.Value:                 # no ToC wanted - get next file
             continue
@@ -514,7 +514,7 @@ def make_pdf(dlg):
                bis + 1, max_seiten)
         # insert standard bookmark ahead of any page range
         total_toc.append([1, bm_main_title, aus_nr + 1])
-        toc = doc.getToC(simple = False)    # get file's TOC
+        toc = doc.get_toc(simple = False)    # get file's TOC
         last_lvl = 1                        # immunize against hierarchy gaps
         for t in toc:
             lnk_type = t[3]["kind"]         # if "goto", page must be in range
@@ -538,7 +538,7 @@ def make_pdf(dlg):
 # all input files processed
 #==============================================================================
     if total_toc:
-        pdf_out.setToC(total_toc)
+        pdf_out.set_toc(total_toc)
     pdf_out.save(ausgabe)
     pdf_out.close()
     return ausgabe

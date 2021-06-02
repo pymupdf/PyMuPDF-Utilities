@@ -16,7 +16,7 @@ doc = fitz.open(pdffn)            # open PDF
 outfile = open(expfn, "wb")       # to be on the safe side always open binary
 
 # extract file content. Will get exception on any error.
-content = doc.embeddedFileGet(name)
+content = doc.embfile_get(name)
 
 outfile.write(content)
 outfile.close()

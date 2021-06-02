@@ -14,7 +14,7 @@ outfile = os.path.abspath(__file__).replace(".py", ".pdf")
 
 
 doc = fitz.open()  # new PDF
-page = doc.newPage()  # new page
+page = doc.new_page()  # new page
 
 text = r"""This is a text of mixed languages to generate FreeText annotations with automatic font selection - a feature new in MuPDF v1.17.
 Euro: €, general Latin and other signs: | ~ ° ² ³ ñ ä ö ü ß â ¿ ¡ µ ¶ œ ¼ ½ ¾ ‰
@@ -37,7 +37,7 @@ rect = fitz.Rect(tl, br)  # put all annots inside this rectangle
 cells = fitz.make_table(rect, cols=1, rows=len(text))
 shrink = (0, 5, 0, 0)  # makes distance between annots
 for i in range(len(text)):
-    annot = page.addFreetextAnnot(
+    annot = page.add_freetext_annot(
         cells[i][0] + shrink,
         text[i],
         fontsize=16,
@@ -45,7 +45,7 @@ for i in range(len(text)):
         align=fitz.TEXT_ALIGN_CENTER,
         text_color=blue,
     )
-    annot.setBorder(width=1.0)
+    annot.set_border(width=1.0)
     annot.update(fill_color=gold, border_color=green)
 
 doc.save(outfile, garbage=3, deflate=True)

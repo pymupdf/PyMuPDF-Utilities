@@ -68,13 +68,13 @@ for i, f in enumerate(imglist):
     try:
         img = fitz.open(os.path.join(imgdir, f))  # open pic as document
         rect = img[0].rect  # pic dimension
-        pdfbytes = img.convertToPDF()  # make a PDF stream
+        pdfbytes = img.convert_to_pdf()  # make a PDF stream
         img.close()  # no longer needed
         imgPDF = fitz.open("pdf", pdfbytes)  # open stream as PDF
-        page = doc.newPage(
+        page = doc.new_page(
             width=rect.width, height=rect.height  # new page with ...
         )  # pic dimension
-        page.showPDFpage(rect, imgPDF, 0)  # image fills the page
+        page.show_pdf_page(rect, imgPDF, 0)  # image fills the page
     except:
         print("unsupported document '%s'!" % f)
 

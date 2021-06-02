@@ -60,7 +60,7 @@ def recoverpix(doc, x, imgdict):
 
     try:
         fpx = io.BytesIO(imgdict["image"])
-        fps = io.BytesIO(doc.extractImage(s)["image"])
+        fps = io.BytesIO(doc.extract_image(s)["image"])
         img0 = Image.open(fpx)
         mask = Image.open(fps)
         img = Image.new("RGBA", img0.size)
@@ -109,7 +109,7 @@ for xref in range(1, lenXREF):  # scan through all PDF objects
     if xref in smasks:  # ignore smasks
         continue
 
-    imgdict = doc.extractImage(xref)
+    imgdict = doc.extract_image(xref)
 
     if not imgdict:  # not an image
         continue

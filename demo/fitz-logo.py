@@ -27,8 +27,8 @@ Notes
 
     pix = fitz.Pixmap(logo_fn)
     src = fitz.open()
-    src_page = src.newPage(-1, width = pix.width, height = pix.height)
-    src_page.insertImage(src_page.rect, pixmap = pix)
+    src_page = src.new_page(-1, width = pix.width, height = pix.height)
+    src_page.insert_image(src_page.rect, pixmap = pix)
 
 Dependencies
 -------------
@@ -41,8 +41,8 @@ doc_fn = sys.argv[1]                        # name of PDF file
 logo_fn = sys.argv[2]                       # name of logo file
 
 src = fitz.open(logo_fn)                    # open logo document
-if not src.isPDF:                           # convert if not PDF
-    pdfbytes = src.convertToPDF             # convert to PDF
+if not src.is_pdf:                           # convert if not PDF
+    pdfbytes = src.convert_to_pdf             # convert to PDF
     src.close()
     src = fitz.open("pdf", pdfbytes)        # open logo as a PDF
 rect = src[0].rect                          # rectangle of the logo
@@ -51,7 +51,7 @@ rect *= factor                              # adjust width accordingly
 doc = fitz.open(doc_fn)                     # open the PDF to be modified
 xref = 0
 for page in doc:                            # scan through PDF pages
-    xref = page.showPDFpage(rect, src, 0,
+    xref = page.show_pdf_page(rect, src, 0,
                             reuse_xref = xref,
                             overlay = False)
 

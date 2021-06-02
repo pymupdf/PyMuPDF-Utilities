@@ -33,8 +33,8 @@ doc = fitz.open()                           # empty output PDF
 for spage in src:                           # for each page in input
     xref = 0                                # force initial page copy to output
     r = spage.rect                          # input page rectangle
-    d = fitz.Rect(spage.CropBoxPosition,    # CropBox displacement if not
-                  spage.CropBoxPosition)    # starting at (0, 0)
+    d = fitz.Rect(spage.cropboxPosition,    # CropBox displacement if not
+                  spage.cropboxPosition)    # starting at (0, 0)
     #--------------------------------------------------------------------------                  
     # example: cut input page into 2 x 2 parts
     #--------------------------------------------------------------------------
@@ -46,10 +46,10 @@ for spage in src:                           # for each page in input
     
     for rx in rect_list:                    # run thru rect list
         rx += d                             # add the CropBox displacement
-        page = doc.newPage(-1,              # new output page with rx dimensions
+        page = doc.new_page(-1,              # new output page with rx dimensions
                            width = rx.width,
                            height = rx.height)
-        xref = page.showPDFpage(page.rect,  # fill all new page with the image
+        xref = page.show_pdf_page(page.rect,  # fill all new page with the image
                                 src,        # input document
                                 spage.number, # input page number
                                 clip = rx,  # which part to use of input page

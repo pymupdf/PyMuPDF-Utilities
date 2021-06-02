@@ -45,7 +45,7 @@ lheight = fsize * 1.2  # line height
 idx = 0  # index in color database
 doc = fitz.open()  # empty PDF
 while idx < num_colors:
-    page = doc.newPage(-1, width=w, height=h)  # new empty page
+    page = doc.new_page(-1, width=w, height=h)  # new empty page
     for i in range(10):  # row index
         if idx >= num_colors:
             break
@@ -54,11 +54,11 @@ while idx < num_colors:
             cname = mylist[idx][0].lower()  # color name
             col = mylist[idx][1:]  # color tuple -> to floats
             col = (col[0] / 255.0, col[1] / 255.0, col[2] / 255.0)
-            page.drawRect(rect, color=col, fill=col)  # draw color rect
+            page.draw_rect(rect, color=col, fill=col)  # draw color rect
             pnt1 = rect.top_left + (0, rh * 0.3)  # pos of color name in white
             pnt2 = pnt1 + (0, lheight)  # pos of color name in black
-            page.insertText(pnt1, cname, fontsize=fsize, color=white)
-            page.insertText(pnt2, cname, fontsize=fsize, color=black)
+            page.insert_text(pnt1, cname, fontsize=fsize, color=white)
+            page.insert_text(pnt2, cname, fontsize=fsize, color=black)
             idx += 1
             if idx >= num_colors:
                 break
@@ -67,13 +67,13 @@ m = {
     "author": "Jorj X. McKie",
     "producer": "PyMuPDF",
     "creator": "colordb.py",
-    "creationDate": fitz.getPDFnow(),
-    "modDate": fitz.getPDFnow(),
+    "creationDate": fitz.get_pdf_now(),
+    "modDate": fitz.get_pdf_now(),
     "title": "PyMuPDF Color Database",
     "subject": "Sorted down by RGB values",
 }
 
-doc.setMetadata(m)
+doc.set_metadata(m)
 path = os.path.dirname(os.path.abspath(__file__))
 ofn = os.path.join(path, "colordbRGB.pdf")
 print("Writing:", ofn)

@@ -133,14 +133,14 @@ infilename = sys.argv[1]
 font_list = set()
 doc = fitz.open(infilename)
 for i in range(len(doc)):
-    for f in doc.getPageFontList(i, full=True):
+    for f in doc.get_page_fonts(i, full=True):
         msg = ""
         subset, fontname = get_fontnames(doc, f)
 
         if f[1] == "n/a":
             msg = "Not embedded!"
         else:
-            extr = doc.extractFont(f[0])
+            extr = doc.extract_font(f[0])
             font = fitz.Font(fontbuffer=extr[-1])
             msg = make_msg(font)
 

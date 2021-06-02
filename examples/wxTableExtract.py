@@ -89,9 +89,9 @@ class PDFdisplay (wx.Dialog):
         # open the document with MuPDF when dialog gets created
         #======================================================================
         self.doc = fitz.Document(filename)
-        if self.doc.needsPass:
+        if self.doc.needs_pass:
             self.decrypt_doc()
-        if self.doc.isEncrypted:
+        if self.doc.is_encrypted:
             self.Destroy()
             return
         #======================================================================
@@ -114,7 +114,7 @@ class PDFdisplay (wx.Dialog):
         # displays total pages
         #======================================================================
         self.statPageMax = wx.StaticText(self, wx.ID_ANY,
-                              "of " + str(self.doc.pageCount) + " pages.",
+                              "of " + str(self.doc.page_count) + " pages.",
                               defPos, defSiz, 0)
         #======================================================================
         # displays page format
@@ -616,9 +616,9 @@ class PDFdisplay (wx.Dialog):
 
     def NextPage(self, event):                   # means: page forward
         page = getint(self.TextToPage.Value) + 1 # current page + 1
-        if page > self.doc.pageCount:
+        if page > self.doc.page_count:
             return
-        page = min(page, self.doc.pageCount)     # cannot go beyond last page
+        page = min(page, self.doc.page_count)     # cannot go beyond last page
         self.TextToPage.Value = str(page)        # put target page# in screen
         self.bitmap = self.pdf_show(page)        # get page image
         self.NeuesImage(page)                    # refresh the layout
@@ -635,7 +635,7 @@ class PDFdisplay (wx.Dialog):
 
     def GotoPage(self, event):                   # means: go to page number
         page = getint(self.TextToPage.Value)     # get screen page number
-        page = min(page, self.doc.pageCount)     # cannot go beyond last page
+        page = min(page, self.doc.page_count)     # cannot go beyond last page
         page = max(page, 1)                      # cannot go before page 1
         self.TextToPage.Value = str(page)        # make sure it's on the screen
         self.NeuesImage(page)
@@ -654,7 +654,7 @@ class PDFdisplay (wx.Dialog):
     def pdf_show(self, pg_nr):
         # get Pixmap of a page
         p = self.doc[pg_nr - 1]
-        pix = p.getPixmap(alpha = 0)
+        pix = p.get_pixmap(alpha = 0)
         bitmap = bmp_from_buffer(pix.width, pix.height, pix.samples)
         self.paperform.Label = "Format: " + FindFit(pix.w, pix.h)
         return bitmap
@@ -672,7 +672,7 @@ class PDFdisplay (wx.Dialog):
                 self.doc.authenticate(pw)
             else:
                 return
-            if self.doc.isEncrypted:
+            if self.doc.is_encrypted:
                 pw = None
                 dlg.SetTitle("Wrong password, enter correct one or cancel")
         return

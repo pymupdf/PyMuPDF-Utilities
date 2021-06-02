@@ -24,5 +24,5 @@ if pic_fn:
     pix = fitz.Pixmap(fitz.csRGB, img.size[0], img.size[1], samples, 0)
     outputFileName = pic_fn + "-from-PIL.png"
     print("Writing %s" % outputFileName)
-    pix.writePNG(outputFileName)
+    pix.save(outputFileName)
     pic_f.close()
