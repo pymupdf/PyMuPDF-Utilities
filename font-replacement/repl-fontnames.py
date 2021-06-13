@@ -67,8 +67,8 @@ def norm_name(name):
         p = name.find("#")
         c = int(name[p + 1 : p + 3], 16)
         name = name.replace(name[p : p + 3], chr(c))
-    if name.find("+") == 5:  # only if '+' at position 5
-        return True, name[6:]
+    if name.find("+") == 6:  # only if '+' at position 5
+        return True, name[7:]
     return False, name
 
 
