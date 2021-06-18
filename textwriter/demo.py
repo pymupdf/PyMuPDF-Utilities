@@ -25,7 +25,7 @@ wrt2.write_text(page, morph=(point, matrix))  # also preserves the joint text.
 
 # make a new page
 page = doc.new_page()
-rect = wrt1.textRect | wrt2.textRect  # join rect of blue and red text
+rect = wrt1.text_rect | wrt2.text_rect  # join rect of blue and red text
 # make new rectangle from it, rotated by 90 degrees
 nrect = fitz.Rect(
     rect.tl,  # same top-left, but width and height exchanged
@@ -34,7 +34,7 @@ nrect = fitz.Rect(
 )
 
 # use the page method for joint rotated output
-page.write_text(nrect, writers=(wrt1, wrt2), rotate=90)
+page.write_text(rect=nrect, writers=(wrt1, wrt2), rotate=90)
 
 # one more time with rotation by 270 degrees
 nrect += (
@@ -43,20 +43,22 @@ nrect += (
     2 * nrect.width,
     0,
 )
-page.write_text(nrect, writers=(wrt1, wrt2), rotate=-90)
+page.write_text(rect=nrect, writers=(wrt1, wrt2), rotate=-90)
 
 # more outputs with 45 degrees
 page = doc.new_page()
 page.write_text(
-    page.rect, writers=(wrt1, wrt2), color=(0.2, 0.6, 1), rotate=-45  # or recoloring
+    rect=page.rect,
+    writers=(wrt1, wrt2),
+    color=(0.2, 0.6, 1),
+    rotate=-45,  # or recoloring
 )
 page.write_text(
-    page.rect,
+    rect=page.rect,
     writers=(wrt1, wrt2),
     opacity=0.5,  # can be used for watermarking
     rotate=45,
 )
-
 doc.save(
     outfile,
     garbage=4,  # makes sense here to combine identical binary data

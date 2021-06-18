@@ -66,14 +66,14 @@ writer.write_text(page)
 
 # To show what happened, draw the rectangles, etc.
 shape = page.new_shape()
-shape.draw_rect(writer.textRect)  # the generated TextWriter rectangle
-shape.draw_circle(writer.lastPoint, 2)  # coordinates of end of text
+shape.draw_rect(writer.text_rect)  # the generated TextWriter rectangle
+shape.draw_circle(writer.last_point, 2)  # coordinates of end of text
 shape.finish(color=blue, width=0.3)  # show with blue color
 shape.draw_rect(fill_rect)  # the rect within which we had to stay
 shape.finish(color=red, width=0.3)  # show in red color
 shape.commit()
 
-textbox = writer.textRect & fill_rect  # calculate rect intersection
+textbox = writer.text_rect & fill_rect  # calculate rect intersection
 
 """
 Write once more, but shifted, scaled and rotated by some amount.
@@ -100,7 +100,7 @@ Method 'Page.write_text' supports:
     - controlling aspect ratio
     - using rotation
     - put in foreground or background
-It internally uses method 'showPDFpage'.
+It internally uses method 'show_pdf_page'.
 """
 page = doc.new_page()
 # Rotation by 180 degrees can use the same textbox. The same effect can be

@@ -97,33 +97,33 @@ mat = fitz.Matrix(-15)
 writer = fitz.TextWriter(page_rect)  # create TextWriter object
 writer.append(pos, highlight, font=font)  # append text
 writer.write_text(page, morph=(pos, mat))  # write to the page with rotation
-writer.textRect.x0 = pos.x  # use actual text start / end
-writer.textRect.x1 = writer.lastPoint.x
-quad_highlight = writer.textRect.morph(pos, ~mat)  # calculate text quad
+writer.text_rect.x0 = pos.x  # use actual text start / end
+writer.text_rect.x1 = writer.last_point.x
+quad_highlight = writer.text_rect.morph(pos, ~mat)  # calculate text quad
 pos = quad_highlight.rect.bl  # the next writing position
 
 writer = fitz.TextWriter(page_rect)
 writer.append(pos, underline, font=font)
 writer.write_text(page, morph=(pos, mat))
-writer.textRect.x0 = pos.x
-writer.textRect.x1 = writer.lastPoint.x
-quad_underline = writer.textRect.morph(pos, ~mat)
+writer.text_rect.x0 = pos.x
+writer.text_rect.x1 = writer.last_point.x
+quad_underline = writer.text_rect.morph(pos, ~mat)
 pos = quad_underline.rect.bl
 
 writer = fitz.TextWriter(page_rect)
 writer.append(pos, strikeout, font=font)
 writer.write_text(page, morph=(pos, mat))
-writer.textRect.x0 = pos.x
-writer.textRect.x1 = writer.lastPoint.x
-quad_strikeout = writer.textRect.morph(pos, ~mat)
+writer.text_rect.x0 = pos.x
+writer.text_rect.x1 = writer.last_point.x
+quad_strikeout = writer.text_rect.morph(pos, ~mat)
 pos = quad_strikeout.rect.bl
 
 writer = fitz.TextWriter(page_rect)
 writer.append(pos, squiggled, font=font)
 writer.write_text(page, morph=(pos, mat))
-writer.textRect.x0 = pos.x
-writer.textRect.x1 = writer.lastPoint.x
-quad_squiggled = writer.textRect.morph(pos, ~mat)
+writer.text_rect.x0 = pos.x
+writer.text_rect.x1 = writer.last_point.x
+quad_squiggled = writer.text_rect.morph(pos, ~mat)
 pos = quad_squiggled.rect.bl
 
 # we now add the four text marker annots
@@ -205,4 +205,4 @@ annot = page.add_redact_annot(r)
 print_descr(annot)
 
 outpdf = os.path.abspath(__file__).replace(".py", "-%i.pdf" % page.rotation)
-doc.save(outpdf, garbage=3, deflate=True)
+doc.ez_save(outpdf)
