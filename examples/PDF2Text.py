@@ -3,38 +3,39 @@
 Created on Sun Jul 12 07:00:00 2015
 
 @author: Jorj McKie
-Copyright (c) 2015 Jorj X. McKie
+Copyright (c) 2015-2021 Jorj X. McKie
 
-The license of this program is governed by the GNU GENERAL PUBLIC LICENSE
-Version 3, 29 June 2007. See the "COPYING" file of this repository.
+The license of this program is governed by GNU AGPL 3.0.
+See the "COPYING" file of this repository.
 
 This is an example for using the Python binding PyMuPDF of MuPDF.
 
-This program extracts the text of any supported input document
-and writes it in a text file.
-The input file name is provided as a parameter to this script (sys.argv[1])
-The output file name is input-filename + ".txt".
-Encoding of the text in the PDF is assumed to be UTF-8.
-Change ENCODING as required.
+This program extracts the text of any supported input document and writes it
+to a text file named input-filename + ".txt".
+
+Changes
+-------
+2021-06-21: add formfeed after each page of text.
 """
 
 import fitz
 import sys
 
-assert len(sys.argv) == 2, "need filename as parameter"
-#==============================================================================
-# Main Program
-#==============================================================================
-ifile = sys.argv[1]
-ofile = ifile + ".txt"
 
-doc = fitz.open(ifile)
-pages = len(doc)
+def main(*args):
+    if not args:
+        filename = sys.argv[1]
+    else:
+        filename = args[0]
+    ofile = filename + ".txt"
+    doc = fitz.open(filename)
+    fout = open(ofile, "wb")
 
-fout = open(ofile,"w")
+    for page in doc:
+        fout.write(page.get_text().encode("utf-8") + bytes((12,)))
 
-for page in doc:
-    text = page.get_text()
-    fout.write(text.encode("utf-8"))
+    fout.close()
 
-fout.close()
+
+if __name__ == "__main__":
+    main()

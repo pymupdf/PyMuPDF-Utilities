@@ -55,7 +55,7 @@ writer = fitz.TextWriter(page_rect, color=blue)  # start a text writer
 writer.fill_textbox(  # fill in above text
     fill_rect,  # keep text inside this
     text,  # the text
-    align=fitz.TEXT_ALIGN_JUSTIFY,  # alignment
+    align=fitz.TEXT_ALIGN_LEFT,  # alignment
     warn=True,  # keep going if too much text
     fontsize=fsize,
     font=font,
@@ -90,6 +90,7 @@ writer.write_text(
     color=0,  # choose a different text color
     opacity=0.5,  # also override opacity property
 )
+page.clean_contents()
 
 """
 Write the text box also in a number of other ways on subsequent pages.
@@ -107,10 +108,11 @@ page = doc.new_page()
 # achieved with TextWriter by using morph=(M, Matrix(180)), where M is the
 # middle point of textbox.
 page.write_text(
-    textbox,  # content will always be contained in this rect
+    rect=textbox,  # content will always be contained in this rect
     rotate=180,  # other angles will result in scaling down
     writers=writer,
 )
+page.clean_contents()
 
 page = doc.new_page()
 # now rotate by 90 and by 270 degrees. For this we exchange width and height
@@ -119,14 +121,15 @@ textbox1 = fitz.Rect(
     textbox.tl, textbox.x0 + textbox.height / 2, textbox.y0 + textbox.width / 2
 )
 textbox2 = textbox1 + fitz.Rect(0, 1, 0, 1) * textbox1.height
-page.write_text(textbox1, writers=writer, rotate=90)
-page.write_text(textbox2, writers=writer, rotate=-90, color=red)
+page.write_text(rect=textbox1, writers=writer, rotate=90)
+page.write_text(rect=textbox2, writers=writer, rotate=-90, color=red)
 
 page = doc.new_page()
 # now a rotation by other than 90-degree-multiples
-page.write_text(page.rect, writers=writer, rotate=-45)
+page.write_text(rect=page.rect, writers=writer, rotate=-45)
+page.clean_contents()
 
-
+doc.subset_fonts()
 doc.save(
     outfile,
     garbage=4,  # this eliminates duplicates of large binary objects!
