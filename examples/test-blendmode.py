@@ -4,7 +4,7 @@ Purpose
 This utility is an example application of PyMuPDF to demonstrate the
 (rather complex) influencing factors background and text colors, opacity and
 blend mode for the appearance of an annotation.
-For each of the standard PDF blend modes (as defined in the manual
+For each of the PDF blend modes (as defined in
 http://www.adobe.com/content/dam/Adobe/en/devnet/acrobat/pdfs/pdf_reference_1-7.pdf
 pages 520+) it generates a highlight annotation which uses it.
 
@@ -25,7 +25,6 @@ import os
 import fitz
 
 print(fitz.__doc__)
-thisdir = lambda f: os.path.join(os.path.dirname(__file__), f)
 
 blend_modes = (
     fitz.PDF_BM_ColorBurn,
@@ -47,50 +46,6 @@ blend_modes = (
 )
 
 
-def table(rect=(0, 0, 1, 1), cols=1, rows=1):
-    """Return a list of (rows x cols) equal sized rectangles.
-
-    Notes:
-        A little utility to fill a given area with table cells of equal size.
-    Args:
-        rect: rect_like to use as the table area
-        rows: number of rows
-        cols: number of columns
-    Returns:
-        A list with <rows> items, where each item is a list of <cols>
-        PyMuPDF Rect objects of equal sizes.
-    """
-    rect = fitz.Rect(rect)  # ensure that this is a Rect
-    if rect.is_empty or rect.is_infinite:
-        raise ValueError("rect must be finite and not empty")
-    tl = rect.tl
-
-    # compute width and height of one table cell
-    height = rect.height / rows
-    width = rect.width / cols
-
-    # first rectangle
-    r = fitz.Rect(tl, tl.x + width, tl.y + height)
-
-    delta_h = (width, 0, width, 0)  # diff to next right rect
-    delta_v = (0, height, 0, height)  # diff to next lower rect
-
-    row = [r]  # make the first row
-    for i in range(1, cols):
-        r += delta_h  # build next rect to the right
-        row.append(r)
-
-    rects = [row]  # make the result starting with the first row
-    for i in range(1, rows):
-        row = rects[i - 1]  # take previously appended row
-        nrow = []  # the new row to append
-        for r in row:  # for each previous cell add its downward copy
-            nrow.append(r + delta_v)
-        rects.append(nrow)  # append new row to result
-
-    return rects
-
-
 doc = fitz.open()  # new PDF
 page = doc.new_page()  # new page
 shape = page.new_shape()  # make a page draw area
@@ -105,7 +60,8 @@ tl = page.rect.tl + (150, 100)
 br = page.rect.br - (150, 62)
 rect = fitz.Rect(tl, br)  # only use this area of the page
 
-rects = table(  # define a table with 2 cells per blend mode
+
+rects = fitz.make_table(  # define a table with 2 cells per blend mode
     rows=len(blend_modes),  # one row per blend mode
     cols=2,  # for the blend mode and its highlighted version
     rect=rect,  # inside this rectangle
@@ -147,7 +103,7 @@ shape.insert_textbox(
     align=fitz.TEXT_ALIGN_CENTER,
 )
 
-shape.commit()  # this commits text and paintings to the page
+shape.commit()  # this commits text and drawings to the page
 
 # Now add highlight annotations for text in the right column.
 # To find the respective text, we search for the blend mode name,
@@ -156,4 +112,4 @@ for i, bmode in enumerate(blend_modes):
     annot = page.add_highlight_annot(rects[i][1])  # take second one
     annot.update(blend_mode=bmode, opacity=opacity)  # and finish the annotation
 
-doc.save(thisdir("test-blendmode.pdf"), garbage=3, deflate=True)
+doc.ez_save(__file__.replace(".py", ".pdf"))
