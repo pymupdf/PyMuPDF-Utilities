@@ -16,16 +16,20 @@ Dependencies:
 -------------
 * PyMuPDF v1.17.4
 * calendar (either use LocaleTextCalendar or just TextCalendar)
+* pymupdf-fonts
 
 This program creates calendars for three years in a row (starting with
 the one given as parameter) and stores the result in a PDF.
 """
-import fitz
 import calendar
 import sys
 
-if not fitz.VersionBind.split(".") >= ["1", "17", "4"]:
+import fitz
+
+if not tuple(map(int, fitz.VersionBind.split("."))) >= (1, 17, 4):
     raise ValueError("Need PyMuPDF v.1.17.4 at least.")
+if "spacemo" not in fitz.fitz_fontdescriptors.keys():
+    raise ValueError("Need pymupdf-fonts package")
 if len(sys.argv) != 2:
     startyear = fitz.get_pdf_now()[2:6]  # take current year
 else:
@@ -67,6 +71,5 @@ for i in range(3):  # make calendar for 3 years
     text = cal.formatyear(startyear + i, m=4)
     page_out(doc, text)
 
-
+doc.subset_fonts()
 doc.save(outfile, garbage=4, deflate=True, pretty=True)
-

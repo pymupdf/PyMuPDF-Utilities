@@ -5,15 +5,13 @@ Instead it should contain complete, working programs, or at least snippets of wo
 
 Licensing:
 ===========
-Please only include code for which the same licensing applies as for the rest of this repository (GNU GPL V3).
-
 See the COPYING file.
 
 Disclaimer
 ===========
-These are quite a number of examples by now. Many of them have originated in early times of the package. Therefore discrepancies may have occurred with any API changes implemented over time. We cannot spare the time to scan through these scripts for every release, so please regard them as **examples** which should give you a start -- there is no guaranty that everything here works unchanged for all times.
+These are quite a number of examples by now. Many of them have originated in early times of the package. Therefore discrepancies may have occurred with any API changes implemented over time. We we will not scan through these scripts for every release, so please regard them as what they are intended for: **examples** which should give you a start - there is no guaranty that everything here works unchanged for all times.
 
-If you find issues please submit a PR, and we will gladly incorporate it.
+If you find an issue, please fix it and submit a PR, and we will gladly incorporate it.
 
 
 Some Files in this Directory
