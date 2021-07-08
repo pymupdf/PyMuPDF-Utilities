@@ -79,7 +79,9 @@ def process_page(page, textout):
         Returns:
             text: (str) text string for this line
         """
-        chars.sort(key=lambda c: (c["bbox"][0]))  # sort chars by left coordinate
+        chars.sort(
+            key=lambda c: (c["bbox"][2], c["bbox"][0])
+        )  # sort chars by horizontal coordinates
         text = ""  # we output this
         old_x1 = 0  # end coordinate of last char written
         for c in chars:  # walk through characters
@@ -105,7 +107,7 @@ def process_page(page, textout):
     # keep white space and ligatures, omit images
     blocks = page.get_text(
         "rawdict",
-        flags=fitz.TEXT_PRESERVE_LIGATURES | fitz.TEXT_PRESERVE_WHITESPACE,
+        flags=fitz.TEXT_PRESERVE_WHITESPACE,
         clip=page.rect,
     )["blocks"]
     chars = []
@@ -137,7 +139,8 @@ def process_page(page, textout):
         i = find_line_index(rows, c["bbox"][3])
         y = rows[i]  # coord of appropriate line
         lchars = lines.get(y, [])
-        lchars.append(c)
+        if c not in lchars:
+            lchars.append(c)
         lines[y] = lchars
 
     # ensure line coordinates are ascending
