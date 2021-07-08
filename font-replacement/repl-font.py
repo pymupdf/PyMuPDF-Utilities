@@ -83,6 +83,9 @@ Changes
   is now handled as a binary file (read / write options "rb", resp. "wb") to
   support fontnames encoded as general UTF-8.
 
+* Version 2021-07-04:
+- Remove font subsetting logic and instead use "subset_fonts()" of the library.
+
 * Version 2020-09-10:
 - Change the CSV parameter file to JSON format. This hopefully covers more
   peculiarities for fontname specifications.
@@ -101,7 +104,8 @@ from pprint import pprint
 
 import fitz
 
-
+timer = time.perf_counter
+times = []
 # Contains sets of unicodes in use by font.
 # "new fontname": unicode-list
 font_subsets = {}
@@ -277,51 +281,6 @@ def cont_clean(page, fontrefs):
             doc.update_stream(xref0, cont)  # replace command source
 
 
-def build_subset(buffer, unc_set):
-    """Build font subsets using fontTools.
-
-    Args:
-        buffer: (bytes) the font given as a binary buffer.
-        unc_set: (set) required unicodes.
-    Returns:
-        Either None if subsetting is unsuccessful or the subset font buffer.
-    """
-    import fontTools.subset as fts
-
-    unc_list = list(unc_set)
-    unc_list.sort()
-    unc_file = open("uncfile.txt", "w")  # store unicodes as text file
-    for unc in unc_list:
-        unc_file.write("%04x\n" % unc)
-    unc_file.close()
-    fontfile = open("oldfont.ttf", "wb")  # store fontbuffer as a file
-    fontfile.write(buffer)
-    fontfile.close()
-    try:
-        os.remove("newfont.ttf")  # remove old file
-    except:
-        pass
-    try:  # invoke fontTools subsetter
-        fts.main(
-            [
-                "oldfont.ttf",
-                "--unicodes-file=uncfile.txt",
-                "--output-file=newfont.ttf",
-                "--recalc-bounds",
-            ]
-        )
-        fd = open("newfont.ttf", "rb")
-        new_buffer = fd.read()  # subset font
-        fd.close()
-    except:
-        new_buffer = None
-    os.remove("uncfile.txt")
-    os.remove("oldfont.ttf")
-    if new_buffer is not None:
-        os.remove("newfont.ttf")
-    return new_buffer
-
-
 def clean_fontnames(page):
     """Remove multiple references to one font.
 
@@ -452,12 +411,12 @@ print(
     % (indoc.name, indoc.page_count, "s" if indoc.page_count > 1 else "")
 )
 
-t0 = time.perf_counter()
+times.append(("", timer()))
 # the following flag prevents images from being extracted:
 extr_flags = fitz.TEXT_PRESERVE_LIGATURES | fitz.TEXT_PRESERVE_WHITESPACE
 
 # Phase 1
-print("Phase 1: Create sets of used unicodes per new font.")
+print("Phase 1: Analyze use of fonts.")
 for page in indoc:
     fontrefs = get_page_fontrefs(page)
     if fontrefs == {}:  # page has no fonts to replace
@@ -478,35 +437,15 @@ for page in indoc:
                 font_subsets[new_fontname] = subset  # store back extended set
 
 
-t0_1 = time.perf_counter()
-print("End of phase 1, %g seconds.\n" % round(t0_1 - t0, 2))
-print()
+times.append(("Analyzing:", timer()))
 print("Font replacement overview:")
 
 max_len = max([len(k) for k in new_fontnames.keys()]) + 1
 for k in new_fontnames.keys():
     print(k.rjust(max_len), "replaced by: %s." % new_fontnames[k])
 print()
-print("Building font subsets:")
-for fontname in font_subsets.keys():
-    msg = "Used %i glyphs of font '%s'." % (len(font_subsets[fontname]), fontname)
-    old_buffer = font_buffers[fontname]
-
-    new_buffer = build_subset(old_buffer, font_subsets[fontname])
-    if new_buffer is not None:
-        s = round((len(old_buffer) - len(new_buffer)) / 1024)
-        msg += " %g KB saved." % s
-        font_buffers[fontname] = new_buffer
-    else:
-        msg += " Cannot subset!"
-    print(msg)
-    del old_buffer
-
-t0_2 = time.perf_counter()
-print("Font subsets built, %g seconds." % round(t0_2 - t0_1, 2))
-print()
 # Phase 2
-print("Phase 2: rebuild document.")
+print("Phase 2: Rebuild document with new fonts.")
 for page in indoc:
     # extract text again
     blocks = page.get_text("dict", flags=extr_flags)["blocks"]
@@ -565,11 +504,19 @@ for page in indoc:
 
     clean_fontnames(page)
 
-t1 = time.perf_counter()
-print("End of phase 2, %g seconds" % round(t1 - t0_2, 2))
-print("Total duration %g seconds" % round(t1 - t0, 2))
+times.append(("Rebuilding:", timer()))
+print("PHase 3: Build font subsets.")
+indoc.subset_fonts()
+times.append(("Font subsetting:", timer()))
+
 indoc.save(
     indoc.name.replace(".pdf", "-new.pdf"),
     garbage=4,
     deflate=True,
 )
+print()
+print("Timings")
+times.append(("Saving:", timer()))
+for i, item in enumerate(times[1:], start=1):
+    print(item[0].rjust(20), "%.3f seconds" % (item[1] - times[i - 1][1]))
+print("Total time:".rjust(20), "%0.3f seconds" % (times[-1][1] - times[0][1]))

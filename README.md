@@ -1,7 +1,7 @@
 # PyMuPDF-Utilities
 This repository contains demos, examples and for using PyMuPDF in the respective folders.
 
-> These scripts were written over an extended period of time - each for the then existing PyMuPDF version. I will not (reliably) go over each of them and ensure they still work. Occasionally a script may therefore no longer be compatible with the **current** version. If you find such inconsistencies, please **do not submit issues**, but try to repair the script and submit the corrected script via a Pull Request instead. Thank you.
+> These scripts were written over an extended period of time - each for the then existing PyMuPDF version. I will not (reliably) go over each of them and ensure they still work. Occasionally a script may therefore no longer be compatible with the **current** version. If you find such inconsistencies, please **do not submit issues**, but try to repair the script and submit the corrections via a Pull Request instead. Thank you.
 
 > Up to version 1.18.x of PyMupdf a major effort was undertaken to rename (almost) all methods and attributes to the **_snake_case_** standard. This task is now finished. For the time being and including versions 1.19.x, old and new names will coexist. For example, the old name `doc.newPage()` can be used as well as the new name `doc.new_page()` to create a new page. In versions 1.19.x, a deprecation warning will be issued when old method names are used. In versions thereafter, only the new names will remain being valid. To help migrating your scripts to new names, you may want to use ``alias-changer.py`` in this folder.
 
@@ -47,7 +47,9 @@ From the [examples](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/exa
 
 * **doc-browser.py** - a complete GUI document displaying script using **Tkinter**! It features a zooming facility and can display all document types supported by MuPDF (i.e. **not just PDFs!**). It requires [PySimpleGUI](https://pypi.org/project/PySimpleGUI/), an awesome pure Python package exclusively based on Tkinter. For response time improvements, we are also using [Pillow](https://pypi.org/project/Pillow/).
 
-* **layout-analyzer.py** - create an output PDF for a given PDF with text and graphics layout analysis. Each text and graphics block is surrounded by a rectangle (graphics content is not shown, only some metadata). Output PDF has page dimensions of the input's /MediaBox. The input's /CropBox is indicated by a gray background rectangle - see example files in this repo: demo1.pdf and layout-demo1.pdf.
+* **layout-analyzer.py** - create an output PDF for a given PDF with text and graphics layout analysis. Each text and graphics block is surrounded by a rectangle (only metadata is shown, no image content). Output PDF has page dimensions of the input's `/MediaBox`. The input's `/CropBox` is indicated by a gray background rectangle - see example files in this repo: demo1.pdf and layout-demo1.pdf in folder `text-extraction`.
+
+* **textlayout.py** - in folder `text-extraction` extracts the text of a document in a **_layout-preserving_** manner: text in tables, text surrounding images, multi-column pages, etc. should be reproduced fairly faithfully.
 
 * **clean-cont.py** - **(requires v1.13.5)** Inspect PDF pages whether any have multiple /Contents objects. If not, exit immediately. If **yes**, check if any contents are shared between pages. If **yes**, save the document using the "clean" option and exit. If **not,**  join multiple page contents into one and save with option "garbage=3" (which removes now unused objects).
 

@@ -19,7 +19,7 @@ import fitz
 outfile = __file__.replace(".py", ".pdf")
 
 w = 150  # PDF page width, also determines triangle size.
-h = 0.5 * math.sqrt(3) * w  # this makes it equal-sided
+h = 0.5 * math.sqrt(3) * w  # this makes triangle equal-sided
 doc = fitz.open()  # empty new PDF
 page = doc.new_page(-1, width=w, height=h)  # make a new page
 color1 = (0, 0, 1)  # start triangle is filled with this (blue)
