@@ -15,7 +15,7 @@ Iterate through the pages and ...
 * Extract the text via page.get_text("rawdict").
 
 * Place each character in the most appropriate position to resemble
-  the original
+  the original.
 
 
 TODOs, Missing Features, Limitations
