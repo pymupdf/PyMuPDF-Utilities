@@ -110,6 +110,7 @@ def process_page(page, textout):
         flags=fitz.TEXT_PRESERVE_WHITESPACE,
         clip=page.rect,
     )["blocks"]
+
     chars = []
     for b in blocks:
         for l in b["lines"]:
@@ -183,7 +184,8 @@ def main(*args):
     doc = fitz.open(filename)
     textout = open(filename.replace(".pdf", ".txt"), "wb")
     for page in doc:
-        process_page(page, textout)
+        if page.get_text():
+            process_page(page, textout)
     textout.close()
 
 
