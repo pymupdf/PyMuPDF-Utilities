@@ -49,26 +49,30 @@ import fitz
 if not tuple(map(int, fitz.VersionBind.split("."))) >= (1, 18, 14):
     raise ValueError("Need PyMuPDF v1.18.14 or higher.")
 
-GRID = 1  # join lines with distances less than this
+GRID = 3  # join lines with distances less than this
 
 
 def process_page(page, textout):
     left = page.rect.width  # left most used coordinate
     right = 0  # rightmost coordinate
-    rowheight = page.rect.height  # the minimum row height in use
+    rowheight = page.rect.height  # smallest row height in use
+    chars = []  # list of all char dicts here
+    rows = []  # bottom coordinates of the lines
 
-    def find_line_index(values, item):
+    # --------------------------------------------------------------------
+    def find_line_index(values, value):
         """Find the right row coordinate.
 
         Args:
             values: (list) y-coordinates of rows.
+            value: (float) lookup for this value
         Returns:
-            index (int) for the appropriate line.
+            Index (int) for the appropriate line of value.
         """
-        diffs = [abs(item - v) for v in values]
-        i = diffs.index(min(diffs))
-        return i
+        diffs = [abs(value - v) for v in values]
+        return diffs.index(min(diffs))
 
+    # --------------------------------------------------------------------
     def get_textline(left, slot, chars):
         """Produce the text of one line.
 
@@ -79,12 +83,9 @@ def process_page(page, textout):
         Returns:
             text: (str) text string for this line
         """
-        chars.sort(
-            key=lambda c: (c["bbox"][2], c["bbox"][0])
-        )  # sort chars by horizontal coordinates
         text = ""  # we output this
         old_x1 = 0  # end coordinate of last char written
-        for c in chars:  # walk through characters
+        for c in chars:  # loop over characters
             bbox = fitz.Rect(c["bbox"])  # char bbox
             x0 = bbox.x0 - left  # its (relative) start coordinate
             x1 = bbox.x1 - left  # ending coordinate
@@ -93,14 +94,15 @@ def process_page(page, textout):
                 text += char  # append to output
                 old_x1 = x1  # new end coord
                 continue
-            # char starts at a greater distance:
-            # fill gap with appropriate spaces
-            if x0 > old_x1 and x0 / slot > len(text):
-                spaces = int((x0 / slot - len(text)))
-                text += " " * spaces
+            # next char starts after some gap:
+            # fill it with right number of spaces, so char is positioned
+            # in the right slot of the line
+            delta = x0 / slot - len(text)
+            if x0 > old_x1 and delta > 0:
+                text += " " * int(round(delta))
             # now append char
             text += char
-            old_x1 = x1
+            old_x1 = x1  # new end coordinate
         return text
 
     # extract page text by single characters ("rawdict")
@@ -111,60 +113,63 @@ def process_page(page, textout):
         clip=page.rect,
     )["blocks"]
 
-    chars = []
     for b in blocks:
+        bbox = fitz.Rect(b["bbox"])
+        left = min(left, bbox.x0)  # update left coordinate
+        right = max(right, bbox.x1)  # update right coordinate
         for l in b["lines"]:
             if l["dir"] != (1, 0):  # ignore non-horizontal text
                 continue
+            bbox = fitz.Rect(l["bbox"])  # line bbox
+            rowheight = min(rowheight, bbox.height)  # upd row height
+            rows.append(bbox.y1)
             for s in l["spans"]:
                 for c in s["chars"]:
                     chars.append(c)  # list of all chars on page
-                    bbox = fitz.Rect(c["bbox"])
-                    left = min(left, bbox.x0)  # update left coordinate
-                    right = max(right, bbox.x1)  # update right coordinate
-                    rowheight = min(rowheight, bbox.height)  # upd row height
 
-    # compute list of line coordinates - ignore minute differences
-    rows = [c["bbox"][3] for c in chars]
+    # compute list of line coordinates - ignoring 'GRID' differences
     rows = list(set(rows))  # omit duplicates
     rows.sort()  # sort ascending
     nrows = [rows[0]]
     for h in rows[1:]:
         if h >= nrows[-1] + GRID:  # only keep significant differences
             nrows.append(h)
-    rows = nrows
+    rows = nrows  # curated list of line bottom coordinates
 
-    # assign char dicts to the lines on page
+    # sort char dicts by x-coordinates
+    chars.sort(key=lambda c: (c["bbox"][2], c["bbox"][0]))
+    # assign char dicts to the right lines on page
     lines = {}  # key: y1-ccordinate, value: char list
     for c in chars:
-        i = find_line_index(rows, c["bbox"][3])
-        y = rows[i]  # coord of appropriate line
-        lchars = lines.get(y, [])
+        i = find_line_index(rows, c["bbox"][3])  # index of the right y
+        y = rows[i]  # the right line
+        lchars = lines.get(y, [])  # read line chars so far
         if c not in lchars:
-            lchars.append(c)
-        lines[y] = lchars
+            lchars.append(c)  # append this char
+        lines[y] = lchars  # write back to line
 
     # ensure line coordinates are ascending
     keys = list(lines.keys())
     keys.sort()
 
-    # compute char count per line and minimum char width
-    chars_per_line = 0  # max chars in any line
+    # Compute minimum char width ("slot"):
+    # For each line compute how many of its chars would fit in between
+    # left and right. Take the max of these numbers.
+
+    chars_per_line = 0  # max chars per line
     for k in keys:
         lchars = lines[k]
-        widths = 0
-        for c in lchars:
-            bbox = fitz.Rect(c["bbox"])
-            widths += bbox.width
-        char_count = round(len(lchars) / widths * (right - left))
-        chars_per_line = max(chars_per_line, char_count)
+        widths = sum([fitz.Rect(c["bbox"]).width for c in lchars])
+        chars_this_line = len(lchars) / widths * (right - left)
+        chars_per_line = max(chars_per_line, chars_this_line)
 
     # smallest char width
     slot = (right - left) / chars_per_line
 
     # compute line advance in text output
-    rowheight = rowheight * page.rect.height / (rowheight * len(rows))
-    rowpos = rowheight  # first line positioned after this
+    rowheight = rowheight * (rows[-1] - rows[0]) / (rowheight * len(rows)) * 1.2
+    rowpos = rows[0]  # first line positioned here
+    textout.write(b"\n")
     for k in keys:  # walk through the lines
         while rowpos < k:  # honor distance between lines
             textout.write(b"\n")
