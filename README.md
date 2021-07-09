@@ -23,6 +23,11 @@ PyMuPDF's features have been extended in this respect. We therefore created this
 ## Textbox Extraction
 PyMuPDF's features have been extended in this respect. We therefore move example scripts and an extended description to its [own](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/textbox-extraction) folder.
 
+## Text Extraction, Layout Preservation
+Text extraction scripts have been moved into [this](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/text-extraction) separate folder. They demonstrate alternate ways extracting text from general documents (not only PDF), bargaining simplicity versus layout-faithful text output.
+
+The most advanced script, [textlayout.py](https://github.com/pymupdf/PyMuPDF-Utilities/blob/master/text-extraction/textlayout.py) produces text which closeley resembles the original layout of the document, including multi-column text, text thats surrounds images, etc.
+
 ## Examples
 From the [examples](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/examples) folder, here is a synopsis of some scripts that you may find interesting.
 
@@ -48,8 +53,6 @@ From the [examples](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/exa
 * **doc-browser.py** - a complete GUI document displaying script using **Tkinter**! It features a zooming facility and can display all document types supported by MuPDF (i.e. **not just PDFs!**). It requires [PySimpleGUI](https://pypi.org/project/PySimpleGUI/), an awesome pure Python package exclusively based on Tkinter. For response time improvements, we are also using [Pillow](https://pypi.org/project/Pillow/).
 
 * **layout-analyzer.py** - create an output PDF for a given PDF with text and graphics layout analysis. Each text and graphics block is surrounded by a rectangle (only metadata is shown, no image content). Output PDF has page dimensions of the input's `/MediaBox`. The input's `/CropBox` is indicated by a gray background rectangle - see example files in this repo: demo1.pdf and layout-demo1.pdf in folder `text-extraction`.
-
-* **textlayout.py** - in folder `text-extraction` extracts the text of a document in a **_layout-preserving_** manner: text in tables, text surrounding images, multi-column pages, etc. should be reproduced fairly faithfully.
 
 * **clean-cont.py** - **(requires v1.13.5)** Inspect PDF pages whether any have multiple /Contents objects. If not, exit immediately. If **yes**, check if any contents are shared between pages. If **yes**, save the document using the "clean" option and exit. If **not,**  join multiple page contents into one and save with option "garbage=3" (which removes now unused objects).
 
