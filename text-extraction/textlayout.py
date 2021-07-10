@@ -41,8 +41,9 @@ Copyright
 Changes
 -------
 2021-07-10:
-Use the character's origin to define the line y-coordinate, instead of the
+Use the span's origin to define the line y-coordinate, instead of the
 bbox. This improves matching characters belonging to the same line.
+There also is a small performance doing this on span level.
 """
 import sys
 
@@ -115,18 +116,18 @@ def process_page(page, textout):
         clip=page.rect,
     )["blocks"]
 
-    for b in blocks:
-        left = min(left, b["bbox"][0])  # update left coordinate
-        right = max(right, b["bbox"][2])  # update right coordinate
-        for l in b["lines"]:
-            if l["dir"] != (1, 0):  # ignore non-horizontal text
+    for block in blocks:
+        left = min(left, block["bbox"][0])  # update left coordinate
+        right = max(right, block["bbox"][2])  # update right coordinate
+        for line in block["lines"]:
+            if line["dir"] != (1, 0):  # ignore non-horizontal text
                 continue
             # upd row height
-            rowheight = min(rowheight, l["bbox"][3] - l["bbox"][1])
-            for s in l["spans"]:
-                for c in s["chars"]:
-                    chars.append(c)  # list of all chars on page
-                    rows.append(round(c["origin"][1]))
+            rowheight = min(rowheight, line["bbox"][3] - line["bbox"][1])
+            for span in line["spans"]:
+                rows.append(round(span["origin"][1]))
+                for char in span["chars"]:
+                    chars.append(char)  # list of all chars on page
 
     # compute list of line coordinates - ignoring 'GRID' differences
     rows = list(set(rows))  # omit duplicates
