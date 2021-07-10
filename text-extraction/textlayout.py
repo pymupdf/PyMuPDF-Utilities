@@ -40,7 +40,9 @@ Copyright
 
 Changes
 -------
-
+2021-07-10:
+Use the character's origin to define the line y-coordinate, instead of the
+bbox. This improves matching characters belonging to the same line.
 """
 import sys
 
@@ -114,18 +116,17 @@ def process_page(page, textout):
     )["blocks"]
 
     for b in blocks:
-        bbox = fitz.Rect(b["bbox"])
-        left = min(left, bbox.x0)  # update left coordinate
-        right = max(right, bbox.x1)  # update right coordinate
+        left = min(left, b["bbox"][0])  # update left coordinate
+        right = max(right, b["bbox"][2])  # update right coordinate
         for l in b["lines"]:
             if l["dir"] != (1, 0):  # ignore non-horizontal text
                 continue
-            bbox = fitz.Rect(l["bbox"])  # line bbox
-            rowheight = min(rowheight, bbox.height)  # upd row height
-            rows.append(bbox.y1)
+            # upd row height
+            rowheight = min(rowheight, l["bbox"][3] - l["bbox"][1])
             for s in l["spans"]:
                 for c in s["chars"]:
                     chars.append(c)  # list of all chars on page
+                    rows.append(round(c["origin"][1]))
 
     # compute list of line coordinates - ignoring 'GRID' differences
     rows = list(set(rows))  # omit duplicates
@@ -141,7 +142,7 @@ def process_page(page, textout):
     # assign char dicts to the right lines on page
     lines = {}  # key: y1-ccordinate, value: char list
     for c in chars:
-        i = find_line_index(rows, c["bbox"][3])  # index of the right y
+        i = find_line_index(rows, c["origin"][1])  # index of the right y
         y = rows[i]  # the right line
         lchars = lines.get(y, [])  # read line chars so far
         if c not in lchars:
