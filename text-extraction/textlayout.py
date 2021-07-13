@@ -44,6 +44,10 @@ Changes
 Use the span's origin to define the line y-coordinate, instead of the
 bbox. This improves matching characters belonging to the same line.
 There also is a small performance doing this on span level.
+
+2021-07-11:
+Add logic to eliminate character duplicates, i.e. multiple same characters
+in (almost) the same place.
 """
 import sys
 
@@ -87,15 +91,24 @@ def process_page(page, textout):
             text: (str) text string for this line
         """
         text = ""  # we output this
-        old_x1 = 0  # end coordinate of last char written
+        old_x0 = 0  # start coordinate of last char
+        old_x1 = 0  # end coordinate of last char
+        old_orig = 0  # x-origin of last char
         for c in chars:  # loop over characters
             bbox = fitz.Rect(c["bbox"])  # char bbox
             x0 = bbox.x0 - left  # its (relative) start coordinate
             x1 = bbox.x1 - left  # ending coordinate
+            ox = c["origin"][0] - left  # char origin.x
             char = c["c"]  # the character
+            if (
+                old_x0 <= ox < old_x1 and char == text[-1] and abs(ox - old_orig) <= 1
+            ):  # eliminate overprints
+                continue
             if x0 < old_x1 + slot / 2:  # close enough after previous?
                 text += char  # append to output
                 old_x1 = x1  # new end coord
+                old_x0 = x0
+                old_orig = ox
                 continue
             # next char starts after some gap:
             # fill it with right number of spaces, so char is positioned
@@ -106,6 +119,8 @@ def process_page(page, textout):
             # now append char
             text += char
             old_x1 = x1  # new end coordinate
+            old_x0 = x0  # new start coordinate
+            old_orig = ox  # new origin
         return text
 
     # extract page text by single characters ("rawdict")
