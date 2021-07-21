@@ -56,7 +56,7 @@ import fitz
 if not tuple(map(int, fitz.VersionBind.split("."))) >= (1, 18, 14):
     raise ValueError("Need PyMuPDF v1.18.14 or higher.")
 
-GRID = 3  # join lines with distances less than this
+GRID = 2  # join lines with distances less than this
 
 
 def process_page(page, textout):
