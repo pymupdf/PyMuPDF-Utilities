@@ -20,9 +20,7 @@ Iterate through the pages and ...
 
 TODOs, Missing Features, Limitations
 ------------------------------------
-* Doubled text mimicking bold or similar effects are not yet handled.
-* Can only handle text in horizontal, top-left to bottom-right mode,
-  other text is ignored.
+* Can only handle text in horizontal mode, other text is ignored.
 
 
 Dependencies
@@ -56,13 +54,13 @@ import fitz
 if not tuple(map(int, fitz.VersionBind.split("."))) >= (1, 18, 14):
     raise ValueError("Need PyMuPDF v1.18.14 or higher.")
 
-GRID = 2  # join lines with distances less than this
+GRID = 3  # join lines with distances less than this
 
 
-def process_page(page, textout):
-    left = page.rect.width  # left most used coordinate
+def process_page(textpage, textout):
+    left = textpage.rect.width  # left most used coordinate
     right = 0  # rightmost coordinate
-    rowheight = page.rect.height  # smallest row height in use
+    rowheight = textpage.rect.height  # smallest row height in use
     chars = []  # list of all char dicts here
     rows = []  # bottom coordinates of the lines
 
@@ -72,9 +70,9 @@ def process_page(page, textout):
 
         Args:
             values: (list) y-coordinates of rows.
-            value: (float) lookup for this value
+            value: (float) lookup for this value (y-origin of char).
         Returns:
-            Index (int) for the appropriate line of value.
+            Index (int) of appropriate line for value.
         """
         diffs = [abs(value - v) for v in values]
         return diffs.index(min(diffs))
@@ -84,7 +82,7 @@ def process_page(page, textout):
         """Produce the text of one line.
 
         Args:
-            left: (float) left most coordinate used
+            left: (float) left most coordinate used on page
             slot: (float) minimum width of one character in any font in use.
             chars: (list[dict]) characters of this line
         Returns:
@@ -102,16 +100,16 @@ def process_page(page, textout):
             char = c["c"]  # the character
             if (
                 old_x0 <= ox < old_x1 and char == text[-1] and abs(ox - old_orig) <= 1
-            ):  # eliminate overprints
+            ):  # eliminate overprint
                 continue
             if x0 < old_x1 + slot / 2:  # close enough after previous?
                 text += char  # append to output
                 old_x1 = x1  # new end coord
-                old_x0 = x0
-                old_orig = ox
+                old_x0 = x0  # new start coord
+                old_orig = ox  # new origin.x
                 continue
-            # next char starts after some gap:
-            # fill it with right number of spaces, so char is positioned
+            # else next char starts after some gap:
+            # fill in right number of spaces, so char is positioned
             # in the right slot of the line
             delta = x0 / slot - len(text)
             if x0 > old_x1 and delta > 0:
@@ -121,15 +119,10 @@ def process_page(page, textout):
             old_x1 = x1  # new end coordinate
             old_x0 = x0  # new start coordinate
             old_orig = ox  # new origin
-        return text
+        return text.rstrip()
 
     # extract page text by single characters ("rawdict")
-    # keep white space and ligatures, omit images
-    blocks = page.get_text(
-        "rawdict",
-        flags=fitz.TEXT_PRESERVE_WHITESPACE,
-        clip=page.rect,
-    )["blocks"]
+    blocks = textpage.extractRAWDICT()["blocks"]
 
     for block in blocks:
         left = min(left, block["bbox"][0])  # update left coordinate
@@ -138,13 +131,16 @@ def process_page(page, textout):
             if line["dir"] != (1, 0):  # ignore non-horizontal text
                 continue
             # upd row height
-            rowheight = min(rowheight, line["bbox"][3] - line["bbox"][1])
+            height = line["bbox"][3] - line["bbox"][1]
+            if height <= GRID:  # ignore micro lines alltogether
+                continue
+            rowheight = min(rowheight, height)
             for span in line["spans"]:
                 rows.append(round(span["origin"][1]))
                 for char in span["chars"]:
                     chars.append(char)  # list of all chars on page
 
-    # compute list of line coordinates - ignoring 'GRID' differences
+    # compute list of line coordinates - ignoring small (GRID) differences
     rows = list(set(rows))  # omit duplicates
     rows.sort()  # sort ascending
     nrows = [rows[0]]
@@ -153,15 +149,17 @@ def process_page(page, textout):
             nrows.append(h)
     rows = nrows  # curated list of line bottom coordinates
 
-    # sort char dicts by x-coordinates
+    # sort all char dicts by x-coordinates, so every line will receive
+    # them sorted.
     chars.sort(key=lambda c: (c["bbox"][2], c["bbox"][0]))
-    # assign char dicts to the right lines on page
+
+    # populate the lines with their char dicts
     lines = {}  # key: y1-ccordinate, value: char list
     for c in chars:
-        i = find_line_index(rows, c["origin"][1])  # index of the right y
+        i = find_line_index(rows, c["origin"][1])  # index of origin.y
         y = rows[i]  # the right line
         lchars = lines.get(y, [])  # read line chars so far
-        if c not in lchars:
+        if c not in lchars:  # omit duplicates early
             lchars.append(c)  # append this char
         lines[y] = lchars  # write back to line
 
@@ -169,10 +167,13 @@ def process_page(page, textout):
     keys = list(lines.keys())
     keys.sort()
 
-    # Compute minimum char width ("slot"):
-    # For each line compute how many of its chars would fit in between
-    # left and right. Take the max of these numbers.
-
+    # -------------------------------------------------------------------------
+    # Compute "char resolution" for the page: the char width corresponding to
+    # 1 text char position on output - call it 'slot'.
+    # For each line compute average of its char widths and from there, how many
+    # text char positions would represent the line ('chars_this_line').
+    # The max of this, 'chars_per_line', is taken to compute 'slot'.
+    # -------------------------------------------------------------------------
     chars_per_line = 0  # max chars per line
     for k in keys:
         lchars = lines[k]
@@ -180,7 +181,6 @@ def process_page(page, textout):
         chars_this_line = len(lchars) / widths * (right - left)
         chars_per_line = max(chars_per_line, chars_this_line)
 
-    # smallest char width
     slot = (right - left) / chars_per_line
 
     # compute line advance in text output
@@ -206,8 +206,9 @@ def main(*args):
     doc = fitz.open(filename)
     textout = open(filename.replace(".pdf", ".txt"), "wb")
     for page in doc:
-        if page.get_text():
-            process_page(page, textout)
+        textpage = page.get_textpage(clip=page.rect, flags=0)
+        if textpage.extractText():  # only process if any text there
+            process_page(textpage, textout)
     textout.close()
 
 
