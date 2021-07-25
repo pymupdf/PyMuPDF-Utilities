@@ -27,4 +27,6 @@ In this folder you find examples for PDFs and corresponding text output images f
 
 `python textlayout.py file.ext`
 
-Version updates may include parameter support for specifying passwords, filtering out page ranges, etc.
+The next version of PyMuPDF v1.18.16, will include this functionality in its CLI module. You can then simply execute
+
+``python -m fitz gettext [options] file.ext``.
