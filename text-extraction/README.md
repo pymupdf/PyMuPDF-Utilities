@@ -13,7 +13,13 @@ This folder contains a number of scripts for extracting and analyzing text from 
 
 Via its subcommand `gettext`, script `fitzcli.py` offers text extraction in different formats. Of special interest is probably **_layout preservation_**, which produces text in a layout as close to the original physical layout as possible, thus surrounding areas where there are images, or reproducing text in tables and multi-column text.
 
-The command produces results comparable to (and sometimes even better than) the CLI utility `pdftotext -layout ...` of Xpdf software, http://www.foolabs.com/xpdf/.
+It strives to position the text in a layout as close to the original as possible, thus surrounding areas where there are images, or reproducing text in tables and multi-column text. Numerous document files (especially PDFs) contain "irregular" text like
+* simulation of bold / shadowed text by double "printing" it with a small horizontal / vertical shift or inclination
+* arbitrary arrangements of each single character to prevent or impede copy-pasting text from within a PDF viewer window (what you see is **_not_** what you get in such cases)
+* unintended specification errors like writing spaces over preceeding non-space characters
+* etc.
+
+Many of these pesky situations are being corrected.
 
 In this folder you find examples for PDFs and corresponding text output images for your review.
 
