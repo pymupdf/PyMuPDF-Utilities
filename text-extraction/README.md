@@ -7,11 +7,11 @@ This folder contains a number of scripts for extracting and analyzing text from 
 
 * `pdf2textblocks.py`: extracts the text portioned in so-called "blocks", as collected by the underlying MuPDF library. These text blocks are sorted by their accompanying coordinates to establish a "Western" reading order: top-left to bottom-right. In many cases, this output should produce satisfactory results in reading order, while maintaining a high extraction speed. There are however cases, where this expectation cannot be met. For example, multi-column text or text in tables will not show up satisfactorily.
 
-* `fitzcli.py`: is a duplicate of the PyMuPDF batch / CLI module. So it offers all functions and commans described [here](https://pymupdf.readthedocs.io/en/latest/module.html) **_plus_** the new command `gettext`, which offers text extraction from arbitrary MuPDF documents. Most impartantly, you can now etract text in a **_layout-preserving_** manner. In the next section we will describe this in detail.
+* `fitzcli.py`: is a duplicate of the PyMuPDF batch / CLI module. So it offers all functions and commands described [here](https://pymupdf.readthedocs.io/en/latest/module.html) **_plus_** the new command `gettext`, which offers text extraction from arbitrary MuPDF documents. Most impartantly, you can now etract text in a **_layout-preserving_** manner. In the next section we will describe this in detail.
 
 # Layout-preserving Text Extraction
 
-Via its subcommand `gettext`, script `fitzcli.py` offers text extraction in different formats. Of special interest is probably **_layout preservation_**, which produces text in a layout as close to the original physical layout as possible, thus surrounding areas where there are images, or reproducing text in tables and multi-column text. Numerous document files (especially PDFs) contain "irregular" text like
+Via its subcommand `gettext`, script `fitzcli.py` offers text extraction in different formats. Of special interest is probably **_layout preservation_**, which produces text as close to the original physical layout as possible, thus surrounding areas where there are images, or reproducing text in tables and multi-column text. Numerous document files (especially PDFs) contain "irregular" text like
 * simulation of bold / shadowed text by double "printing" it with a small horizontal / vertical shift or inclination
 * arbitrary arrangements of each single character to prevent or impede copy-pasting text from within a PDF viewer window (what you see is **_not_** what you get in such cases)
 * unintended specification errors like writing spaces over preceeding non-space characters
@@ -23,14 +23,14 @@ In this folder you find examples for PDFs and corresponding text output images f
 
 ## Invocation
 
-In its simplest form, the following command extracts text from all pages of `filename.ext` and generates file `filename.txt` in "UTF-8" encoding, where all pages contain text in the original physical layout.
+In its simplest form, the following the following extracts text from all pages of `filename.ext` and generates file `filename.txt` in "UTF-8" encoding, where all pages contain text in the original physical layout.
 
 `python fitzcli.py gettext filename.ext`
 
-> Version PyMuPDF 1.18.16 will support exactly this via `python -m fitz gettext filename.ext`.
+> Version PyMuPDF 1.18.16 will support exactly the same via `python -m fitz gettext filename.ext`.
 
 ```
-py fitzcli.py gettext -h
+python fitzcli.py gettext -h
 usage: fitzcli.py gettext [-h] [-password PASSWORD] [-mode {simple,blocks,layout}] [-pages PAGES] [-noligatures]
                           [-whitespace] [-extra-spaces] [-noformfeed] [-skip-empty] [-output OUTPUT] [-grid GRID]
                           input
