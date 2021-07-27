@@ -7,7 +7,7 @@ This folder contains a number of scripts for extracting and analyzing text from 
 
 * `pdf2textblocks.py`: extracts the text portioned in so-called "blocks", as collected by the underlying MuPDF library. These text blocks are sorted by their accompanying coordinates to establish a "Western" reading order: top-left to bottom-right. In many cases, this output should produce satisfactory results in reading order, while maintaining a high extraction speed. There are however cases, where this expectation cannot be met. For example, multi-column text or text in tables will not show up satisfactorily.
 
-* `fitzcli.py`: is a duplicate of the PyMuPDF batch / CLI module. So it offers all functions and commands described [here](https://pymupdf.readthedocs.io/en/latest/module.html) **_plus_** the new command `gettext`, which offers text extraction from arbitrary MuPDF documents. Most importantly, you can now etract text in a **_layout-preserving_** manner. In the next section we will describe this in detail.
+* `fitzcli.py`: is a duplicate of the PyMuPDF batch / CLI module. So it offers all functions and commands described [here](https://pymupdf.readthedocs.io/en/latest/module.html) **_plus_** the new command `gettext`, which offers text extraction from arbitrary MuPDF documents. Most importantly, you can now etract text in a **_layout-preserving_** manner. The next section describes this in detail.
 
 # Layout-preserving Text Extraction
 
