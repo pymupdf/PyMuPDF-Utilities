@@ -64,7 +64,7 @@ As with other commands, you can select page ranges in ``mutool`` format as indic
 * **extra-spaces:**  corresponds to **not** `TEXT_INHIBIT_SPACES`. If specified, large gaps between adjacent characters will be filled with one or more spaces. Default is off.
 * **noformfeed:**  instead of ``hex(12)`` (formfeed), write linebreaks ``\n`` at end of output pages.
 * **skip-empty:**  skip pages with no text.
-* **grid:** lines with a vertical coordinate difference of no more than this value (in points) will be merged into the same output line. In addition, lines with a ``bbox.height < grid`` **will be ignored**. Only relevant for "layout" mode. **Use with care:** the default 2 should be adequate in most cases. If **too large**, lines intended to be different will result in garbled and / or incomplete merged output -- plus lines may be suppressed unintendedly. If **too low**, separate, artifact output lines may be generated for text spans just because they are coded in a different font with slightly deviating properties.
+* **grid:** lines with a vertical coordinate difference of no more than this value (float, in points) will be merged into the same output line. In addition, lines with a ``bbox.height < grid`` **will be ignored**. Only relevant for "layout" mode. **Use with care:** the default 2 should be adequate in most cases. If **too large**, lines intended to be different will result in garbled and / or incomplete merged output -- plus lines may be suppressed unintendedly. If **too low**, separate, artifact output lines may be generated for text spans just because they are coded in a different font with slightly deviating properties.
 
 > Command options may be abbreviated as long as no ambiguities are introduced. So instead of:
 ```
