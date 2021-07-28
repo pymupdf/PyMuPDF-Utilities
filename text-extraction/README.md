@@ -58,7 +58,7 @@ optional arguments:
 The output filename defaults to the input with its extension replaced by ``.txt``.
 As with other commands, you can select page ranges in ``mutool`` format as indicated above.
 
-* **mode:** select a formatting mode -- default is "layout". Output of "simple" is the same as for script `pdf2text.py`, and "blocks" produces the output of `pdf2textblocks.py. So this script is an extended replacement for all of them.
+* **mode:** select a formatting mode -- default is "layout". Output of "simple" is the same as for script `pdf2text.py`, and "blocks" produces the output of `pdf2textblocks.py`. So this script is an extended replacement for all of them.
 * **noligatures:** corresponds to **not** `TEXT_PRESERVE_LIGATURES`. If specified, ligatures (present in advanced fonts: glyphs combining multiple characters like "fi") are split up into their components (i.e. "f", "i"). Default is passing them through.
 * **whitespace:** corresponds to `TEXT_PRESERVE_WHITESPACE`. If specified, all white space characters (like tabs) are replaced with one or more spaces. Default is passing them through.
 * **extra-spaces:**  corresponds to **not** `TEXT_INHIBIT_SPACES`. If specified, large gaps between adjacent characters will be filled with one or more spaces. Default is off.
