@@ -580,10 +580,10 @@ def page_blocksort(
 def page_layout(
     textpage, textout, GRID, page_width, page_height, noformfeed, skip_empty
 ):
-    left = 1000  # left most used coordinate
+    left = page_width  # left most used coordinate
     right = 0  # rightmost coordinate
-    rowheight = 1000  # smallest row height in use
-    chars = set()  # all chars here
+    rowheight = page_height  # smallest row height in use
+    chars = []  # all chars here
     rows = set()  # bottom coordinates of lines
     eop = b"\n" if noformfeed else bytes([12])
 
@@ -613,47 +613,46 @@ def page_layout(
             text: (str) text string for this line
         """
         text = ""  # we output this
-        old_x0 = 0  # start coordinate of last char
         old_x1 = 0  # end coordinate of last char
-        old_orig = 0  # x-origin of last char
+        old_ox = 0  # x-origin of last char
         if minslot <= fitz.EPSILON:
             raise RuntimeError("program error: minslot too small = %g" % minslot)
         for c in chars:  # loop over characters
-            char, x0, x1, ox, _ = c
-            x0 = x0 - left  # its (relative) start coordinate
-            x1 = x1 - left  # ending coordinate
-            cwidth = x1 - x0
-            ox = ox - left  # char origin.x
+            char, ox, _, cwidth = c
+            ox = ox - left  # its (relative) start coordinate
+            x1 = ox + cwidth  # ending coordinate
 
             # eliminate overprint effect
-            if old_x0 <= ox < old_x1 and char == text[-1] and abs(ox - old_orig) <= 1:
+            if (
+                old_ox <= ox < old_x1
+                and char == text[-1]
+                and abs(ox - old_ox) <= cwidth * 0.1
+            ):
                 continue
 
             # omit spaces overlapping the previous char
-            if char == " " and x0 < old_x1:
-                overlap = (old_x1 - x0) / cwidth  # overlap ratio
+            if char == " " and ox < old_x1:
+                overlap = (old_x1 - ox) / cwidth  # overlap ratio
                 if overlap > 0.8:
                     continue
 
             # close enough to previous?
-            if x0 < old_x1 + minslot:  # assume char adjacent to previous
+            if ox < old_x1 + minslot:  # assume char adjacent to previous
                 text += char  # append to output
                 old_x1 = x1  # new end coord
-                old_x0 = x0  # new start coord
-                old_orig = ox  # new origin.x
+                old_ox = ox  # new origin.x
                 continue
 
             # else next char starts after some gap:
             # fill in right number of spaces, so char is positioned
             # in the right slot of the line
-            delta = int(x0 / slot) - len(text)
-            if x0 > old_x1 and delta > 1:
+            delta = int(ox / slot) - len(text)
+            if ox > old_x1 and delta > 1:
                 text += " " * delta
             # now append char
             text += char
             old_x1 = x1  # new end coordinate
-            old_x0 = x0  # new start coordinate
-            old_orig = ox  # new origin
+            old_ox = ox  # new origin
         return text.rstrip()
 
     # extract page text by single characters ("rawdict")
@@ -666,27 +665,38 @@ def page_layout(
         for line in block["lines"]:
             if line["dir"] != (1, 0):  # ignore non-horizontal text
                 continue
-            if (
-                line["bbox"][3] < 0 or line["bbox"][1] > page_height
-            ):  # ignore if outside CropBox
+            x0, y0, x1, y1 = line["bbox"]
+            if y1 < 0 or y0 > page_height:  # ignore if outside CropBox
                 continue
             # upd row height
-            height = line["bbox"][3] - line["bbox"][1]
+            height = y1 - y0
             if height <= GRID:  # ignore micro lines alltogether
                 continue
             if rowheight > height:
                 rowheight = height
             for span in line["spans"]:
-                rows.add(round(span["origin"][1]))
-                for char in span["chars"]:
-                    x0, _, x1, _ = char["bbox"]
-                    ox, oy = char["origin"]
-                    ch = char["c"]
-                    if left > x0 and ch != " ":
-                        left = x0  # update left coordinate
+                for c in span["chars"]:
+                    x0, _, x1, _ = c["bbox"]
+                    cwidth = x1 - x0
+                    ox, oy = c["origin"]
+                    oy = int(round(oy))
+                    rows.add(oy)
+                    ch = c["c"]
+                    if left > ox and ch != " ":
+                        left = ox  # update left coordinate
                     if right < x1:
                         right = x1  # update right coordinate
-                    chars.add((ch, x0, x1, ox, oy))  # all chars on page
+                    if cwidth == 0 and len(chars) > 0:  # potential ligature
+                        old_ch, old_ox, old_oy, old_cwidth = chars.pop()
+                        if old_oy != oy:  # not same line: no ligature
+                            chars.append(
+                                (old_ch, old_ox, old_oy, cwidth)
+                            )  # append again
+                            continue  # ignore current char
+                        cwidth = old_cwidth / 2  # reduce old cwidth
+                        chars.append((old_ch, old_ox, old_oy, cwidth))
+                        ox -= cwidth  # advance 2nd ligature part
+                    chars.append((ch, ox, oy, cwidth))  # all chars on page
 
     # compute list of line coordinates - ignoring small (GRID) differences
     rows = list(rows)
@@ -696,25 +706,18 @@ def page_layout(
         if h >= nrows[-1] + GRID:  # only keep significant differences
             nrows.append(h)
     rows = nrows  # curated list of line bottom coordinates
-
-    # sort all char dicts by x-coordinates, so every line will receive
+    # sort all chars by x-coordinates, so every line will receive
     # them sorted.
-    chars = list(chars)
-    chars.sort(key=lambda c: (c[2], c[1]))
+    chars.sort(key=lambda c: c[1])
 
     # populate the lines with their char dicts
     lines = {}  # key: y1-ccordinate, value: char list
     for c in chars:
-        ch, x0, x1, ox, oy = c
-        if x1 < left:
-            continue
-        if x1 - x0 <= fitz.EPSILON:
-            continue
+        _, _, oy, _ = c
         i = find_line_index(rows, oy)  # index of origin.y
         y = rows[i]  # the right line
         lchars = lines.get(y, [])  # read line chars so far
-        if c not in lchars:  # omit duplicates early
-            lchars.append(c)  # append this char
+        lchars.append(c)  # append this char
         lines[y] = lchars  # write back to line
 
     # ensure line coordinates are ascending
@@ -736,7 +739,7 @@ def page_layout(
         if ccount < 2:
             minslots[k] = 1
             continue
-        widths = [(c[2] - c[1]) for c in lchars]
+        widths = [c[3] for c in lchars]
         this_slot = sum(widths) / ccount
         if this_slot < slot:
             slot = this_slot
