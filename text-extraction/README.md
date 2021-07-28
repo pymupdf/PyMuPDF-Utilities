@@ -7,14 +7,16 @@ This folder contains a number of scripts for extracting and analyzing text from 
 
 * `pdf2textblocks.py`: extracts the text portioned in so-called "blocks", as collected by the underlying MuPDF library. These text blocks are sorted by their accompanying coordinates to establish a "Western" reading order: top-left to bottom-right. In many cases, this output should produce satisfactory results in reading order, while maintaining a high extraction speed. There are however cases, where this expectation cannot be met. For example, multi-column text or text in tables will not show up satisfactorily.
 
-* `fitzcli.py`: is a duplicate of the PyMuPDF batch / CLI module. So it offers all functions and commands described [here](https://pymupdf.readthedocs.io/en/latest/module.html) **_plus_** the new command `gettext`, which offers text extraction from arbitrary MuPDF documents. Most importantly, you can now etract text in a **_layout-preserving_** manner. The next section describes this in detail.
+* `fitzcli.py`: is a duplicate of the PyMuPDF batch / CLI module. So it offers all functions and commands described [here](https://pymupdf.readthedocs.io/en/latest/module.html), **_plus_** the new command `"gettext"`, which offers text extraction from arbitrary MuPDF documents. Most importantly, you can now etract text in a **_layout-preserving_** manner. The next section describes this in detail.
 
 # Layout-preserving Text Extraction
 
-Via its subcommand `gettext`, script `fitzcli.py` offers text extraction in different formats. Of special interest is probably **_layout preservation_**, which produces text as close to the original physical layout as possible, thus surrounding areas where there are images, or reproducing text in tables and multi-column text. Numerous document files (especially PDFs) contain "irregular" text like
-* simulation of bold / shadowed text by double "printing" it with a small horizontal / vertical shift or inclination
-* arbitrary arrangements of each single character to prevent or impede copy-pasting text from within a PDF viewer window (what you see is **_not_** what you get in such cases)
-* unintended specification errors like writing spaces over preceeding non-space characters
+Via its subcommand `"gettext"`, script `fitzcli.py` offers text extraction in different formats. Of special interest surely is **_layout preservation_**, which produces text as close to the original physical layout as possible, surrounding areas where there are images, or reproducing text in tables and multi-column text.
+
+Numerous document files (especially PDFs) contain "irregular" text like
+* Simulation of bold / shadowed text by double "printing" it (with a small horizontal / vertical offset or inclination). "Naive" extractions may hence deliver multiple copies of the same.
+* Permutating the specification sequence of each single character to prevent or impede copy-pasting text from within a PDF viewer window. What you see is **_not_** what you get in such cases: naive extractions might deliver "eci JM .ojrXM" (instead of "Jorj X. McKie") etc. Similar effects may also occur for technical, non-malevolent reasons.
+* Unintended specification errors like writing spaces over preceeding non-space characters. You may extract "Notifi cation", although no space is visible in a PDF viewer.
 * etc.
 
 Many of these pesky situations are being corrected.
@@ -23,11 +25,13 @@ In this folder you find examples for PDFs and corresponding text output images f
 
 ## Invocation
 
-In its simplest form, the following the following extracts text from all pages of `filename.ext` and generates file `filename.txt` in "UTF-8" encoding, where all pages contain text in the original physical layout.
+In its simplest form, the following the following extracts layouted text from all pages of `filename.ext` and generates file `filename.txt` in "UTF-8" encoding.
 
 `python fitzcli.py gettext filename.ext`
 
-> Version PyMuPDF 1.18.16 will support exactly the same via `python -m fitz gettext filename.ext`.
+> The script is a preview feature of PyMuPDF v1.18.16 where this will be available via `python -m fitz gettext filename.ext`. To use this script, your PyMuPDF version must at least be 1.18.14.
+
+---------------------------------------
 
 ```
 python fitzcli.py gettext -h
@@ -61,7 +65,7 @@ As with other commands, you can select page ranges in ``mutool`` format as indic
 * **mode:** select a formatting mode -- default is "layout". Output of "simple" is the same as for script `pdf2text.py`, and "blocks" produces the output of `pdf2textblocks.py`. So this script is an extended replacement for all of them.
 * **noligatures:** corresponds to **not** `TEXT_PRESERVE_LIGATURES`. If specified, ligatures (present in advanced fonts: glyphs combining multiple characters like "fi") are split up into their components (i.e. "f", "i"). Default is passing them through.
 * **whitespace:** corresponds to `TEXT_PRESERVE_WHITESPACE`. If specified, all white space characters (like tabs) are replaced with one or more spaces. Default is passing them through.
-* **extra-spaces:**  corresponds to **not** `TEXT_INHIBIT_SPACES`. If specified, large gaps between adjacent characters will be filled with one or more spaces. Default is generating spaces for whitespace.
+* **extra-spaces:**  corresponds to **not** `TEXT_INHIBIT_SPACES`. If specified, large gaps between adjacent characters will be filled with one or more spaces. Default is generating spaces to fill gaps.
 * **noformfeed:**  instead of ``hex(12)`` (formfeed), write linebreaks ``\n`` at end of output pages.
 * **skip-empty:**  skip pages with no text.
 * **grid:** lines with a vertical coordinate difference of no more than this value (float, in points) will be merged into the same output line. In addition, lines with a ``bbox.height < grid`` **will be ignored**. Only relevant for "layout" mode. **Use with care:** the default 2 should be adequate in most cases. If **too large**, lines intended to be different will result in garbled and / or incomplete merged output -- plus lines may be suppressed unintendedly. If **too low**, separate, artifact output lines may be generated for text spans just because they are coded in a different font with slightly deviating properties.
