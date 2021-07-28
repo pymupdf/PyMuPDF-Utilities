@@ -26,7 +26,7 @@ PyMuPDF's features have been extended in this respect. We therefore move example
 ## Text Extraction, Layout Preservation
 Text extraction scripts have been moved into [this](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/text-extraction) separate folder. They demonstrate alternate ways extracting text from general documents (not only PDF), bargaining simplicity versus layout-faithful text output.
 
-The most advanced script, [textlayout.py](https://github.com/pymupdf/PyMuPDF-Utilities/blob/master/text-extraction/textlayout.py) produces text which closeley resembles the original layout of the document, including multi-column text, text thats surrounds images, etc.
+The most advanced script, [fitzcli.py](https://github.com/pymupdf/PyMuPDF-Utilities/blob/master/text-extraction/fitzcli.py) produces text which closeley resembles the original layout of the document, including multi-column text, text thats surrounds images, etc.
 
 ## Examples
 From the [examples](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/examples) folder, here is a synopsis of some scripts that you may find interesting.
