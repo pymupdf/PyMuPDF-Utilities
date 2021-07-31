@@ -25,7 +25,7 @@ In this folder you find examples for PDFs and corresponding text output images f
 
 ## Invocation
 
-In its simplest form, the following the following extracts layouted text from all pages of `filename.ext` and generates file `filename.txt` in "UTF-8" encoding.
+In its simplest form, the following extracts layouted text from all pages of `filename.ext` and generates file `filename.txt` in "UTF-8" encoding.
 
 `python fitzcli.py gettext filename.ext`
 
