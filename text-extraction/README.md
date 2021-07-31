@@ -29,7 +29,7 @@ In its simplest form, the following extracts layouted text from all pages of `fi
 
 `python fitzcli.py gettext filename.ext`
 
-> The script is a preview feature of PyMuPDF v1.18.16 where this will be available via `python -m fitz gettext filename.ext`. To use this script today, your PyMuPDF version must at least be 1.18.14.
+> This script is a preview of PyMuPDF v1.18.16, where this feature will be available via `python -m fitz gettext filename.ext`. To use the script today, your PyMuPDF version must at least be 1.18.14.
 
 ---------------------------------------
 
