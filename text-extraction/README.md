@@ -70,9 +70,7 @@ As with other commands, you can select page ranges in ``mutool`` format as indic
 * **skip-empty:**  skip pages with no text.
 * **grid:** lines with a vertical coordinate difference of no more than this value (float, in points) will be merged into the same output line. In addition, lines with a ``bbox.height < grid`` **will be ignored**. Only relevant for "layout" mode. **Use with care:** the default 2 should be adequate in most cases. If **too large**, lines intended to be different will result in garbled and / or incomplete merged output -- plus lines may be suppressed unintendedly. If **too low**, separate, artifact output lines may be generated for text spans just because they are coded in a different font with slightly deviating properties.
 
-> Command options may be abbreviated as long as no ambiguities are introduced. So instead of:
-```
-... -output text.txt -noligatures -noformfeed -whitespace -grid 3 -extra-spaces ...
-```
-> you can also write: ``... -o text.txt -nol -nof -w -g 3 -e ...``.
+Command options may be abbreviated as long as no ambiguities are introduced. So the following specifications have the same effect:
+* `... -output text.txt -noligatures -noformfeed -whitespace -grid 3 -extra-spaces ...`
+* `... -o text.txt -nol -nof -w -g 3 -e ...`
 
