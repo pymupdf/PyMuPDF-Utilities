@@ -29,15 +29,16 @@ In its simplest form, the following extracts layouted text from all pages of `fi
 
 `python fitzcli.py gettext filename.ext`
 
-> This script is a preview of PyMuPDF v1.18.16, where this feature will be available via `python -m fitz gettext filename.ext`. To use the script today, your PyMuPDF version must at least be 1.18.14.
+> This script is a preview of PyMuPDF v1.18.16, where this same feature will be available via `python -m fitz gettext filename.ext`. You can use the script **today**, if your PyMuPDF is v1.18.14+.
 
 ---------------------------------------
 
 ```
 python fitzcli.py gettext -h
-usage: fitzcli.py gettext [-h] [-password PASSWORD] [-mode {simple,blocks,layout}] [-pages PAGES] [-noligatures]
-                          [-whitespace] [-extra-spaces] [-noformfeed] [-skip-empty] [-output OUTPUT] [-grid GRID]
-                          input
+usage: fitz gettext [-h] [-password PASSWORD] [-mode {simple,blocks,layout}] [-pages PAGES]
+                    [-noligatures] [-whitespace] [-extra-spaces] [-noformfeed] [-skip-empty]
+                    [-output OUTPUT] [-grid GRID] [-fontsize FONTSIZE]
+                    input
 
 ----------------- extract text in various formatting modes ----------------
 
@@ -57,6 +58,7 @@ optional arguments:
   -skip-empty           suppress pages with no text (default False)
   -output OUTPUT        store text in this file (default inputfilename.txt)
   -grid GRID            merge lines if closer than this (default 2)
+  -fontsize FONTSIZE    only include text with a larger fontsize (default 3)
 ```
 
 The output filename defaults to the input with its extension replaced by ``.txt``.
@@ -68,7 +70,8 @@ As with other commands, you can select page ranges in ``mutool`` format as indic
 * **extra-spaces:**  corresponds to **not** `TEXT_INHIBIT_SPACES`. If specified, large gaps between adjacent characters will be filled with one or more spaces. Default is generating spaces to fill gaps.
 * **noformfeed:**  instead of ``hex(12)`` (formfeed), write linebreaks ``\n`` at end of output pages.
 * **skip-empty:**  skip pages with no text.
-* **grid:** lines with a vertical coordinate difference of no more than this value (float, in points) will be merged into the same output line. In addition, lines with a ``bbox.height < grid`` **will be ignored**. Only relevant for "layout" mode. **Use with care:** the default 2 should be adequate in most cases. If **too large**, lines intended to be different will result in garbled and / or incomplete merged output -- plus lines may be suppressed unintendedly. If **too low**, separate, artifact output lines may be generated for text spans just because they are coded in a different font with slightly deviating properties.
+* **grid:** lines with a vertical coordinate difference of no more than this value (float, in points) will be merged into the same output line. Only relevant for "layout" mode. **Use with care:** the default 2 should be adequate in most cases. If **too large**, lines intended to be different will result in garbled and / or incomplete merged output. If **too low**, separate, artifact output lines may be generated for text spans just because they are coded in a different font with slightly deviating properties.
+* **fontsize:** ignore text with fontsize of less or equal this (float) value, default is 3.
 
 Command options may be abbreviated as long as no ambiguities are introduced. So the following specifications have the same effect:
 * `... -output text.txt -noligatures -noformfeed -whitespace -grid 3 -extra-spaces ...`
