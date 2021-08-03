@@ -61,7 +61,7 @@ def ParseTab(page, bbox, columns=None):
     if xmax > coltab[-1]:
         coltab.append(xmax)
 
-    words = page.getTextWords()
+    words = page.get_text("words")
 
     if words == []:
         print("Warning: page contains no text")

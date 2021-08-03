@@ -1,15 +1,13 @@
 # -----------------------------------------------------------------------------
 # Copyright 2020-2021, Harald Lieder, mailto:harald.lieder@outlook.com
 # License: GNU AFFERO GPL 3.0, https://www.gnu.org/licenses/agpl-3.0.html
-
 # Part of "PyMuPDF", a Python binding for "MuPDF" (http://mupdf.com), a
 # lightweight PDF, XPS, and E-book viewer, renderer and toolkit which is
 # maintained and developed by Artifex Software, Inc. https://artifex.com.
 # -----------------------------------------------------------------------------
+import argparse
 import os
 import sys
-import argparse
-
 
 import fitz
 from fitz.fitz import (
@@ -548,7 +546,7 @@ def extract_objects(args):
 
 
 def page_simple(
-    textpage, textout, GRID, page_width, page_height, noformfeed, skip_empty
+    textpage, textout, GRID, page_width, page_height, noformfeed, skip_empty, fontsize
 ):
     eop = b"\n" if noformfeed else bytes([12])
     text = textpage.extractText()
@@ -562,7 +560,7 @@ def page_simple(
 
 
 def page_blocksort(
-    textpage, textout, GRID, page_width, page_height, noformfeed, skip_empty
+    textpage, textout, GRID, page_width, page_height, noformfeed, skip_empty, fontsize
 ):
     eop = b"\n" if noformfeed else bytes([12])
     blocks = textpage.extractBLOCKS()
@@ -578,7 +576,7 @@ def page_blocksort(
 
 
 def page_layout(
-    textpage, textout, GRID, page_width, page_height, noformfeed, skip_empty
+    textpage, textout, GRID, page_width, page_height, noformfeed, skip_empty, fontsize
 ):
     left = page_width  # left most used coordinate
     right = 0  # rightmost coordinate
@@ -617,6 +615,7 @@ def page_layout(
         old_ox = 0  # x-origin of last char
         if minslot <= fitz.EPSILON:
             raise RuntimeError("program error: minslot too small = %g" % minslot)
+
         for c in chars:  # loop over characters
             char, ox, _, cwidth = c
             ox = ox - left  # its (relative) start coordinate
@@ -630,7 +629,7 @@ def page_layout(
             ):
                 continue
 
-            # omit spaces overlapping the previous char
+            # omit spaces overlapping previous char
             if char == " " and ox < old_x1:
                 overlap = (old_x1 - ox) / cwidth  # overlap ratio
                 if overlap > 0.8:
@@ -646,6 +645,8 @@ def page_layout(
             # else next char starts after some gap:
             # fill in right number of spaces, so char is positioned
             # in the right slot of the line
+            if char == " ":  # rest relevant for non-space only
+                continue
             delta = int(ox / slot) - len(text)
             if ox > old_x1 and delta > 1:
                 text += " " * delta
@@ -670,11 +671,12 @@ def page_layout(
                 continue
             # upd row height
             height = y1 - y0
-            if height <= GRID:  # ignore micro lines alltogether
-                continue
+
             if rowheight > height:
                 rowheight = height
             for span in line["spans"]:
+                if span["size"] <= fontsize:
+                    continue
                 for c in span["chars"]:
                     x0, _, x1, _ = c["bbox"]
                     cwidth = x1 - x0
@@ -791,13 +793,17 @@ def gettext(args):
             page.rect.height,
             args.noformfeed,
             args.skip_empty,
+            args.fontsize,
         )
     textout.close()
 
 
 def main():
     """Define command configurations."""
-    parser = argparse.ArgumentParser(description=mycenter("Basic PyMuPDF Functions"))
+    parser = argparse.ArgumentParser(
+        prog="fitz",
+        description=mycenter("Basic PyMuPDF Functions"),
+    )
     subps = parser.add_subparsers(
         title="Subcommands", help="Enter 'command -h' for subcommand specific help"
     )
@@ -1071,6 +1077,12 @@ def main():
         type=float,
         help="merge lines if closer than this (default 2)",
         default=2,
+    )
+    ps_gettext.add_argument(
+        "-fontsize",
+        type=float,
+        help="only include text with a larger fontsize (default 3)",
+        default=3,
     )
     ps_gettext.set_defaults(func=gettext)
 
