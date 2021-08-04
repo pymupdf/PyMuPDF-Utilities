@@ -8,7 +8,7 @@
 import argparse
 import os
 import sys
-
+import time
 import fitz
 from fitz.fitz import (
     TEXT_INHIBIT_SPACES,
@@ -545,11 +545,9 @@ def extract_objects(args):
     doc.close()
 
 
-def page_simple(
-    textpage, textout, GRID, page_width, page_height, noformfeed, skip_empty, fontsize
-):
+def page_simple(page, textout, GRID, fontsize, noformfeed, skip_empty, flags):
     eop = b"\n" if noformfeed else bytes([12])
-    text = textpage.extractText()
+    text = page.get_text("text", flags=flags)
     if not text:
         if not skip_empty:
             textout.write(eop)  # write formfeed
@@ -559,11 +557,9 @@ def page_simple(
     return
 
 
-def page_blocksort(
-    textpage, textout, GRID, page_width, page_height, noformfeed, skip_empty, fontsize
-):
+def page_blocksort(page, textout, GRID, fontsize, noformfeed, skip_empty, flags):
     eop = b"\n" if noformfeed else bytes([12])
-    blocks = textpage.extractBLOCKS()
+    blocks = page.get_text("blocks", flags=flags)
     if blocks == []:
         if not skip_empty:
             textout.write(eop)  # write formfeed
@@ -575,18 +571,16 @@ def page_blocksort(
     return
 
 
-def page_layout(
-    textpage, textout, GRID, page_width, page_height, noformfeed, skip_empty, fontsize
-):
-    left = page_width  # left most used coordinate
+def page_layout(page, textout, GRID, fontsize, noformfeed, skip_empty, flags):
+    left = page.rect.width  # left most used coordinate
     right = 0  # rightmost coordinate
-    rowheight = page_height  # smallest row height in use
+    rowheight = page.rect.height  # smallest row height in use
     chars = []  # all chars here
     rows = set()  # bottom coordinates of lines
     eop = b"\n" if noformfeed else bytes([12])
 
     # --------------------------------------------------------------------
-    def find_line_index(values, value):
+    def find_line_index(values, value, GRID):
         """Find the right row coordinate.
 
         Args:
@@ -595,18 +589,101 @@ def page_layout(
         Returns:
             Index (int) of appropriate line for value.
         """
-        diffs = [abs(value - v) for v in values]
-        return diffs.index(min(diffs))
+        for v in values:
+            if value - v < GRID:
+                return v
+        raise RuntimeError("Line for %g not found" % value)
 
     # --------------------------------------------------------------------
-    def make_textline(left, slot, minslot, chars):
+    def curate_rows(rows, GRID):
+        rows = list(rows)
+        rows.sort()  # sort ascending
+        nrows = [rows[0]]
+        for h in rows[1:]:
+            if h >= nrows[-1] + GRID:  # only keep significant differences
+                nrows.append(h)
+        return nrows  # curated list of line bottom coordinates
+
+    def process_blocks(blocks, rows, chars, rowheight, left, right, page):
+        for block in blocks:
+            for line in block["lines"]:
+                if line["dir"] != (1, 0):  # ignore non-horizontal text
+                    continue
+                x0, y0, x1, y1 = line["bbox"]
+                if y1 < 0 or y0 > page.rect.height:  # ignore if outside CropBox
+                    continue
+                # upd row height
+                height = y1 - y0
+
+                if rowheight > height:
+                    rowheight = height
+                for span in line["spans"]:
+                    if span["size"] <= fontsize:
+                        continue
+                    for c in span["chars"]:
+                        x0, _, x1, _ = c["bbox"]
+                        cwidth = x1 - x0
+                        ox, oy = c["origin"]
+                        oy = int(round(oy))
+                        rows.add(oy)
+                        ch = c["c"]
+                        if left > ox and ch != " ":
+                            left = ox  # update left coordinate
+                        if right < x1:
+                            right = x1  # update right coordinate
+                        # handle ligatures:
+                        if cwidth == 0 and chars != []:  # potential ligature
+                            old_ch, old_ox, old_oy, old_cwidth = chars[-1]
+                            if old_oy == oy:  # ligature
+                                if old_ch != chr(0xFB00):  # previous "ff" char lig?
+                                    lig = joinligature(old_ch + ch)  # no
+                                # convert to one of the 3-char ligatures:
+                                elif ch == "i":
+                                    lig = chr(0xFB03)  # "ffi"
+                                elif ch == "l":
+                                    lig = chr(0xFB04)  # "ffl"
+                                else:  # something wrong, leave old char in place
+                                    lig = old_ch
+                                chars[-1] = (lig, old_ox, old_oy, old_cwidth)
+                                continue
+                        chars.append((ch, ox, oy, cwidth))  # all chars on page
+        return left, right
+
+    def joinligature(lig):
+        """Return ligature character for a given pair / triple of characters.
+
+        Args:
+            lig: (str) 2/3 characters, e.g. "ff"
+
+        Returns:
+            Ligature, e.g. "ff" -> chr(0xFB00)
+        """
+
+        if lig == "ff":
+            return chr(0xFB00)
+        elif lig == "fi":
+            return chr(0xFB01)
+        elif lig == "fl":
+            return chr(0xFB02)
+        elif lig == "ffi":
+            return chr(0xFB03)
+        elif lig == "ffl":
+            return chr(0xFB04)
+        elif lig == "ft":
+            return chr(0xFB05)
+        elif lig == "st":
+            return chr(0xFB06)
+        return lig
+
+    # --------------------------------------------------------------------
+    def make_textline(left, slot, minslot, lchars):
         """Produce the text of one output line.
 
         Args:
             left: (float) left most coordinate used on page
             slot: (float) avg width of one character in any font in use.
             minslot: (float) min width for the characters in this line.
-            chars: (list[dict]) characters of this line.
+            chars: (list[tuple]) characters of this line.
         Returns:
             text: (str) text string for this line
         """
@@ -616,7 +693,7 @@ def page_layout(
         if minslot <= fitz.EPSILON:
             raise RuntimeError("program error: minslot too small = %g" % minslot)
 
-        for c in chars:  # loop over characters
+        for c in lchars:  # loop over characters
             char, ox, _, cwidth = c
             ox = ox - left  # its (relative) start coordinate
             x1 = ox + cwidth  # ending coordinate
@@ -630,10 +707,8 @@ def page_layout(
                 continue
 
             # omit spaces overlapping previous char
-            if char == " " and ox < old_x1:
-                overlap = (old_x1 - ox) / cwidth  # overlap ratio
-                if overlap > 0.8:
-                    continue
+            if char == " " and (old_x1 - ox) / cwidth > 0.8:
+                continue
 
             # close enough to previous?
             if ox < old_x1 + minslot:  # assume char adjacent to previous
@@ -657,57 +732,19 @@ def page_layout(
         return text.rstrip()
 
     # extract page text by single characters ("rawdict")
-    blocks = textpage.extractRAWDICT()["blocks"]
+    t0 = time.perf_counter()
+    blocks = page.get_text("rawdict", flags=flags)["blocks"]
+    t1 = time.perf_counter()
+    # print("RAWDICT: %g sec" % (t1 - t0))
     if blocks == []:
         if not skip_empty:
             textout.write(eop)  # write formfeed
         return
-    for block in blocks:
-        for line in block["lines"]:
-            if line["dir"] != (1, 0):  # ignore non-horizontal text
-                continue
-            x0, y0, x1, y1 = line["bbox"]
-            if y1 < 0 or y0 > page_height:  # ignore if outside CropBox
-                continue
-            # upd row height
-            height = y1 - y0
 
-            if rowheight > height:
-                rowheight = height
-            for span in line["spans"]:
-                if span["size"] <= fontsize:
-                    continue
-                for c in span["chars"]:
-                    x0, _, x1, _ = c["bbox"]
-                    cwidth = x1 - x0
-                    ox, oy = c["origin"]
-                    oy = int(round(oy))
-                    rows.add(oy)
-                    ch = c["c"]
-                    if left > ox and ch != " ":
-                        left = ox  # update left coordinate
-                    if right < x1:
-                        right = x1  # update right coordinate
-                    if cwidth == 0 and len(chars) > 0:  # potential ligature
-                        old_ch, old_ox, old_oy, old_cwidth = chars.pop()
-                        if old_oy != oy:  # not same line: no ligature
-                            chars.append(
-                                (old_ch, old_ox, old_oy, cwidth)
-                            )  # append again
-                            continue  # ignore current char
-                        cwidth = old_cwidth / 2  # reduce old cwidth
-                        chars.append((old_ch, old_ox, old_oy, cwidth))
-                        ox -= cwidth  # advance 2nd ligature part
-                    chars.append((ch, ox, oy, cwidth))  # all chars on page
-
+    left, right = process_blocks(blocks, rows, chars, rowheight, left, right, page)
     # compute list of line coordinates - ignoring small (GRID) differences
-    rows = list(rows)
-    rows.sort()  # sort ascending
-    nrows = [rows[0]]
-    for h in rows[1:]:
-        if h >= nrows[-1] + GRID:  # only keep significant differences
-            nrows.append(h)
-    rows = nrows  # curated list of line bottom coordinates
+    rows = curate_rows(rows, GRID)
+
     # sort all chars by x-coordinates, so every line will receive
     # them sorted.
     chars.sort(key=lambda c: c[1])
@@ -716,8 +753,7 @@ def page_layout(
     lines = {}  # key: y1-ccordinate, value: char list
     for c in chars:
         _, _, oy, _ = c
-        i = find_line_index(rows, oy)  # index of origin.y
-        y = rows[i]  # the right line
+        y = find_line_index(rows, oy, GRID)  # index of origin.y
         lchars = lines.get(y, [])  # read line chars so far
         lchars.append(c)  # append this char
         lines[y] = lchars  # write back to line
@@ -770,31 +806,32 @@ def gettext(args):
         filename, _ = os.path.splitext(doc.name)
         output = filename + ".txt"
     textout = open(output, "wb")
-    flags = 0
-    if args.whitespace:
-        flags |= TEXT_PRESERVE_WHITESPACE
-    if not args.noligatures:
-        flags |= TEXT_PRESERVE_LIGATURES
+    flags = TEXT_PRESERVE_LIGATURES | TEXT_PRESERVE_WHITESPACE
+    if args.convert_white:
+        flags ^= TEXT_PRESERVE_WHITESPACE
+    if args.noligatures:
+        flags ^= TEXT_PRESERVE_LIGATURES
     if args.extra_spaces:
-        flags |= not TEXT_INHIBIT_SPACES
+        flags ^= TEXT_INHIBIT_SPACES
     func = {
         "simple": page_simple,
         "blocks": page_blocksort,
         "layout": page_layout,
     }
+    t0 = time.perf_counter()
     for pno in pagel:
         page = doc[pno - 1]
-        textpage = page.get_textpage(flags=flags)
         func[args.mode](
-            textpage,
+            page,
             textout,
             args.grid,
-            page.rect.width,
-            page.rect.height,
+            args.fontsize,
             args.noformfeed,
             args.skip_empty,
-            args.fontsize,
+            flags=flags,
         )
+    t1 = time.perf_counter()
+    # print("Timing: %g sec" % (t1 - t0))
     textout.close()
 
 
@@ -1045,9 +1082,9 @@ def main():
         default=False,
     )
     ps_gettext.add_argument(
-        "-whitespace",
+        "-convert-white",
         action="store_true",
-        help="keep whitespace characters (default False)",
+        help="convert whitespace characters to white (default False)",
         default=False,
     )
     ps_gettext.add_argument(
