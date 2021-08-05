@@ -9,6 +9,7 @@ import argparse
 import os
 import sys
 import time
+import bisect
 import fitz
 from fitz.fitz import (
     TEXT_INHIBIT_SPACES,
@@ -580,19 +581,19 @@ def page_layout(page, textout, GRID, fontsize, noformfeed, skip_empty, flags):
     eop = b"\n" if noformfeed else bytes([12])
 
     # --------------------------------------------------------------------
-    def find_line_index(values, value, GRID):
+    def find_line_index(values: list[int], value: int) -> int:
         """Find the right row coordinate.
 
         Args:
             values: (list) y-coordinates of rows.
-            value: (float) lookup for this value (y-origin of char).
+            value: (int) lookup for this value (y-origin of char).
         Returns:
-            Index (int) of appropriate line for value.
+            y-ccordinate of appropriate line for value.
         """
-        for v in values:
-            if value - v < GRID:
-                return v
-        raise RuntimeError("Line for %g not found" % value)
+        i = bisect.bisect_right(values, value)
+        if i:
+            return values[i - 1]
+        raise RuntimeError("Line for %g not found in %s" % (value, values))
 
     # --------------------------------------------------------------------
     def curate_rows(rows, GRID):
@@ -654,7 +655,6 @@ def page_layout(page, textout, GRID, fontsize, noformfeed, skip_empty, flags):
 
         Args:
             lig: (str) 2/3 characters, e.g. "ff"
-
         Returns:
             Ligature, e.g. "ff" -> chr(0xFB00)
         """
@@ -732,10 +732,7 @@ def page_layout(page, textout, GRID, fontsize, noformfeed, skip_empty, flags):
         return text.rstrip()
 
     # extract page text by single characters ("rawdict")
-    t0 = time.perf_counter()
     blocks = page.get_text("rawdict", flags=flags)["blocks"]
-    t1 = time.perf_counter()
-    # print("RAWDICT: %g sec" % (t1 - t0))
     if blocks == []:
         if not skip_empty:
             textout.write(eop)  # write formfeed
@@ -749,11 +746,11 @@ def page_layout(page, textout, GRID, fontsize, noformfeed, skip_empty, flags):
     # them sorted.
     chars.sort(key=lambda c: c[1])
 
-    # populate the lines with their char dicts
-    lines = {}  # key: y1-ccordinate, value: char list
+    # populate the lines with their char tuples
+    lines = {}  # key: y-ccordinate, value: char tuples in that line
     for c in chars:
         _, _, oy, _ = c
-        y = find_line_index(rows, oy, GRID)  # index of origin.y
+        y = find_line_index(rows, oy)  # find line for this char
         lchars = lines.get(y, [])  # read line chars so far
         lchars.append(c)  # append this char
         lines[y] = lchars  # write back to line
@@ -763,11 +760,12 @@ def page_layout(page, textout, GRID, fontsize, noformfeed, skip_empty, flags):
     keys.sort()
 
     # -------------------------------------------------------------------------
-    # Compute "char resolution" for the page: the char width corresponding to
+    # Compute "char resolution" for the page: the width corresponding to
     # 1 text char position on output - call it 'slot'.
-    # For each line compute average of its char widths and from there, how many
-    # text char positions would represent the line ('chars_this_line').
-    # The max of this, 'chars_per_line', is taken to compute 'slot'.
+    # For each line, compute median of its char widths. The minimum across all
+    # lines is 'slot'.
+    # The minimum char width of each line is used to determine if spaces must
+    # be inserted in between two characters.
     # -------------------------------------------------------------------------
     slot = right - left
     minslots = {}
@@ -778,7 +776,9 @@ def page_layout(page, textout, GRID, fontsize, noformfeed, skip_empty, flags):
             minslots[k] = 1
             continue
         widths = [c[3] for c in lchars]
-        this_slot = sum(widths) / ccount
+        widths.sort()
+        i = int(ccount / 2 + 0.5)  # index of median
+        this_slot = widths[i]  # take the median value
         if this_slot < slot:
             slot = this_slot
         minslots[k] = min(widths)
@@ -795,7 +795,7 @@ def page_layout(page, textout, GRID, fontsize, noformfeed, skip_empty, flags):
         textout.write((text + "\n").encode("utf8"))
         rowpos = k + rowheight
 
-    textout.write(eop)  # write formfeed
+    textout.write(eop)  # write end-of-page
 
 
 def gettext(args):
@@ -818,7 +818,6 @@ def gettext(args):
         "blocks": page_blocksort,
         "layout": page_layout,
     }
-    t0 = time.perf_counter()
     for pno in pagel:
         page = doc[pno - 1]
         func[args.mode](
@@ -830,8 +829,7 @@ def gettext(args):
             args.skip_empty,
             flags=flags,
         )
-    t1 = time.perf_counter()
-    # print("Timing: %g sec" % (t1 - t0))
+
     textout.close()
 
 
