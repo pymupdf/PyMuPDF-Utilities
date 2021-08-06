@@ -870,7 +870,6 @@ class PDFdisplay(wx.Dialog):
                     evt.Skip()
                     return
                 outfile = sdlg.GetPath()
-        self.doc._delXmlMetadata()
         if outfile == self.doc.name:
             self.doc.saveIncr()  # equal: update input file
         else:

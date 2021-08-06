@@ -35,9 +35,9 @@ In its simplest form, the following extracts layouted text from all pages of `fi
 
 ```
 python fitzcli.py gettext -h
-usage: fitz gettext [-h] [-password PASSWORD] [-mode {simple,blocks,layout}] [-pages PAGES]
-                    [-noligatures] [-whitespace] [-extra-spaces] [-noformfeed] [-skip-empty]
-                    [-output OUTPUT] [-grid GRID] [-fontsize FONTSIZE]
+usage: fitz gettext [-h] [-password PASSWORD] [-mode {simple,blocks,layout}] [-pages PAGES] [-noligatures]
+                    [-convert-white] [-extra-spaces] [-noformfeed] [-skip-empty] [-output OUTPUT] [-grid GRID]
+                    [-fontsize FONTSIZE]
                     input
 
 ----------------- extract text in various formatting modes ----------------
@@ -52,7 +52,7 @@ optional arguments:
                         mode: simple, block sort, or layout (default)
   -pages PAGES          select pages, format: 1,5-7,50-N
   -noligatures          expand ligature characters (default False)
-  -whitespace           keep whitespace characters (default False)
+  -convert-white        convert whitespace characters to space (default False)
   -extra-spaces         fill gaps with spaces (default False)
   -noformfeed           write linefeeds, no formfeeds (default False)
   -skip-empty           suppress pages with no text (default False)
@@ -66,7 +66,7 @@ As with other commands, you can select page ranges in ``mutool`` format as indic
 
 * **mode:** select a formatting mode -- default is "layout". Output of "simple" is the same as for script `pdf2text.py`, and "blocks" produces the output of `pdf2textblocks.py`. So this script is an extended replacement for all of them.
 * **noligatures:** corresponds to **not** `TEXT_PRESERVE_LIGATURES`. If specified, ligatures (present in advanced fonts: glyphs combining multiple characters like "fi") are split up into their components (i.e. "f", "i"). Default is passing them through.
-* **whitespace:** corresponds to `TEXT_PRESERVE_WHITESPACE`. If specified, all white space characters (like tabs) are replaced with one or more spaces. Default is passing them through.
+* **convert-white:** corresponds to **not** `TEXT_PRESERVE_WHITESPACE`. If specified, all white space characters (like tabs) are replaced with one or more spaces. Default is passing them through.
 * **extra-spaces:**  corresponds to **not** `TEXT_INHIBIT_SPACES`. If specified, large gaps between adjacent characters will be filled with one or more spaces. Default is generating spaces to fill gaps.
 * **noformfeed:**  instead of ``hex(12)`` (formfeed), write linebreaks ``\n`` at end of output pages.
 * **skip-empty:**  skip pages with no text.
@@ -74,6 +74,6 @@ As with other commands, you can select page ranges in ``mutool`` format as indic
 * **fontsize:** ignore text with fontsize of less or equal this (float) value, default is 3.
 
 Command options may be abbreviated as long as no ambiguities are introduced. So the following specifications have the same effect:
-* `... -output text.txt -noligatures -noformfeed -whitespace -grid 3 -extra-spaces ...`
-* `... -o text.txt -nol -nof -w -g 3 -e ...`
+* `... -output text.txt -noligatures -noformfeed -convert-white -grid 3 -extra-spaces ...`
+* `... -o text.txt -nol -nof -c -g 3 -e ...`
 
