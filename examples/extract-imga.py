@@ -12,7 +12,7 @@ from PIL import Image
 """
 PyMuPDF utility
 ----------------
-For a given entry in a page's getImageList() list, function "recoverpix"
+For a given entry in a page's get_images() list, function "recoverpix"
 returns a dictionary like the one produced by "Document.extract_image".
 It preprocesses the following special cases:
 * The PDF image has an /SMask (soft mask) entry. We use Pillow for recovering
@@ -57,7 +57,7 @@ def recoverpix(doc, item):
     xref = item[0]  # xref of PDF image
     smask = item[1]  # xref of its /SMask
 
-    # special case: /SMask exists
+    # special case: /SMask or /Mask exists
     # use Pillow to recover original image
     if smask > 0:
         fpx = io.BytesIO(  # BytesIO object from image binary
