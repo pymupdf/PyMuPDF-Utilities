@@ -11,6 +11,7 @@ import sys
 import time
 import bisect
 import fitz
+from typing import List
 from fitz.fitz import (
     TEXT_INHIBIT_SPACES,
     TEXT_PRESERVE_LIGATURES,
@@ -547,7 +548,10 @@ def extract_objects(args):
 
 
 def page_simple(page, textout, GRID, fontsize, noformfeed, skip_empty, flags):
-    eop = b"\n" if noformfeed else bytes([12])
+    if noformfeed:
+        eop = b'\n'
+    else:
+        eop = bytes([12])
     text = page.get_text("text", flags=flags)
     if not text:
         if not skip_empty:
@@ -559,7 +563,10 @@ def page_simple(page, textout, GRID, fontsize, noformfeed, skip_empty, flags):
 
 
 def page_blocksort(page, textout, GRID, fontsize, noformfeed, skip_empty, flags):
-    eop = b"\n" if noformfeed else bytes([12])
+    if noformfeed:
+        eop = b'\n'
+    else:
+        eop = bytes([12])
     blocks = page.get_text("blocks", flags=flags)
     if blocks == []:
         if not skip_empty:
@@ -578,10 +585,13 @@ def page_layout(page, textout, GRID, fontsize, noformfeed, skip_empty, flags):
     rowheight = page.rect.height  # smallest row height in use
     chars = []  # all chars here
     rows = set()  # bottom coordinates of lines
-    eop = b"\n" if noformfeed else bytes([12])
+    if noformfeed:
+        eop = b'\n'
+    else:
+        eop = bytes([12])
 
     # --------------------------------------------------------------------
-    def find_line_index(values: list[int], value: int) -> int:
+    def find_line_index(values: List[int], value: int) -> int:
         """Find the right row coordinate.
 
         Args:
@@ -786,10 +796,10 @@ def page_layout(page, textout, GRID, fontsize, noformfeed, skip_empty, flags):
     # compute line advance in text output
     rowheight = rowheight * (rows[-1] - rows[0]) / (rowheight * len(rows)) * 1.2
     rowpos = rows[0]  # first line positioned here
-    textout.write(b"\n")
+    textout.write(b'\n')
     for k in keys:  # walk through the lines
         while rowpos < k:  # honor distance between lines
-            textout.write(b"\n")
+            textout.write(b'\n')
             rowpos += rowheight
         text = make_textline(left, slot, minslots[k], lines[k])
         textout.write((text + "\n").encode("utf8"))
