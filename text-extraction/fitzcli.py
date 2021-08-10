@@ -642,7 +642,7 @@ def page_layout(page, textout, GRID, fontsize, noformfeed, skip_empty, flags):
         return nrows  # curated list of line bottom coordinates
 
     # --------------------------------------------------------------------
-    def find_line_index(values: list[int], value: int) -> int:
+    def find_line_index(values: List[int], value: int) -> int:
         """Find the right row coordinate (using bisect std package).
 
         Args:
