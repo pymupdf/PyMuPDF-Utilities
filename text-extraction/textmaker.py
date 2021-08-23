@@ -25,7 +25,7 @@ The only adequate solution will be layout preservation.
 """
 import fitz
 
-font = fitz.Font("helv")
+font = fitz.Font("cjk")
 doc = fitz.open()
 page = doc.new_page(width=300, height=300)
 # define a page area without border
@@ -53,4 +53,5 @@ tw.fill_textbox(rightrect, right, font=font, align=fitz.TEXT_ALIGN_CENTER)
 tw.fill_textbox(leftrect, left, font=font, align=fitz.TEXT_ALIGN_CENTER)
 tw.fill_textbox(headrect, header, font=font, align=fitz.TEXT_ALIGN_CENTER)
 tw.write_text(page)
+doc.subset_fonts()
 doc.ez_save(__file__.replace(".py", ".pdf"))

@@ -16,12 +16,12 @@ The only possible solution to recover the text is layout preservation.
 import fitz
 import random
 
+font = fitz.Font("cjk")  # use same font for output
 doc = fitz.open("textmaker.pdf")
 page = doc[0]
 w = page.rect.width
 h = page.rect.height
 chars = []  # save extracted characters here
-font = fitz.Font("helv")  # use same font for output
 for b in page.get_text("rawdict")["blocks"]:
     for l in b["lines"]:
         for s in l["spans"]:
@@ -36,4 +36,5 @@ tw = fitz.TextWriter(page.rect)
 for c in chars:
     tw.append(c["origin"], c["c"], font=font)
 tw.write_text(page)
+doc.subset_fonts()
 doc.ez_save(__file__.replace(".py", ".pdf"))

@@ -15,8 +15,8 @@ Via its subcommand `"gettext"`, script `fitzcli.py` offers text extraction in di
 
 Numerous document files (especially PDFs) contain "irregular" text like
 * Simulation of bold / shadowed text by double "printing" it (with a small horizontal / vertical offset or inclination). "Naive" extractions may hence deliver multiple copies of the same.
-* Permutating the specification sequence of each single character to prevent or impede copy-pasting text from within a PDF viewer window. What you see is **_not_** what you get in such cases: naive extractions might deliver "eci JM .ojrXM" (instead of "Jorj X. McKie") etc. Similar effects may also occur for technical, non-malignant reasons. An example file for this type of thing is `garbled.pdf` in this folder. Copy-paste the text using your PDF viewer or internet browser: many will deliver nonsense (e.g. Linux `evince`, Mozilla Firefox), some do a decent job.
-* Unintended specification errors like writing spaces over preceeding non-space characters. You may extract "Notifi cation", although no space is visible within the word in any PDF viewer.
+* Permutating the specification sequence of each single character to prevent or impede copy-pasting text from within a PDF viewer window. What you see is **_not_** what you get in such cases: naive extractions might deliver "eci JM .ojrXM" (instead of "Jorj X. McKie") etc. Similar effects may also occur for technical, non-malignant reasons. An example file for this type of thing is `garbled.pdf` in this folder. Copy-paste the text using your PDF viewer or internet browser: many will deliver nonsense (e.g. Linux `evince`, Mozilla Firefox), some do a decent job. File ``textmaker2.pdf`` is another such an example created with PyMuPDF - try it out!
+* Unintended specification errors, like writing spaces over preceeding, non-space characters. You may extract "Notifi cation", although no space is visible within the word in any PDF viewer.
 * etc.
 
 Many of these pesky situations are being corrected.
@@ -29,7 +29,7 @@ In its simplest form, the following extracts layouted text from all pages of `fi
 
 `python fitzcli.py gettext filename.ext`
 
-> This script is a preview of PyMuPDF v1.18.16, where this same feature will be available via `python -m fitz gettext filename.ext`. You can use the script **today**, if your PyMuPDF is v1.18.14+.
+> Since PyMuPDF v1.18.16, the same feature is available via `python -m fitz gettext filename.ext`. You can use the script **earlier**, as long as your PyMuPDF is v1.18.14+.
 
 ---------------------------------------
 
