@@ -54,8 +54,7 @@ if not os.path.exists(imgdir):
 
 
 def recoverpix(doc, x, imgdict):
-    """Return pixmap for item, if an /SMask exists.
-    """
+    """Return pixmap for item, if an /SMask exists."""
     s = imgdict["smask"]  # xref of its /SMask
 
     try:
@@ -94,7 +93,7 @@ print(__file__, "PDF: %s, pages: %i, objects: %i" % (fname, len(doc), lenXREF - 
 
 t0 = time.time()  # start the timer
 
-smasks = []  # stores xrefs of /SMask objects
+smasks = set()  # stores xrefs of /SMask objects
 # ------------------------------------------------------------------------------
 # loop through PDF images
 # ------------------------------------------------------------------------------
@@ -106,7 +105,9 @@ for xref in range(1, lenXREF):  # scan through all PDF objects
         "*** Scanning Cross Reference ***",
     )
 
-    if xref in smasks:  # ignore smasks
+    if doc.xref_get_key(xref, "Subtype") != "/Image":  # not an image
+        continue
+    if xref in smasks:  # ignore smask
         continue
 
     imgdict = doc.extract_image(xref)
@@ -118,7 +119,7 @@ for xref in range(1, lenXREF):  # scan through all PDF objects
 
     smask = imgdict["smask"]
     if smask > 0:  # store /SMask xref
-        smasks.append(smask)
+        smasks.add(smask)
 
     width = imgdict["width"]
     height = imgdict["height"]
