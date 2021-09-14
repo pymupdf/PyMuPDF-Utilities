@@ -25,15 +25,15 @@ green = (0, 1, 0)
 gray = (0.9, 0.9, 0.9)
 
 for page1 in doc1:
-    blks = page1.get_textBlocks(images=True)  # read text blocks of input page
+    blks = page1.get_text("blocks")  # read text blocks of input page
     # create new page in output with /MediaBox dimensions
-    page2 = doc2.new_page(-1, width=page1.mediaboxSize[0], height=page1.mediaboxSize[1])
+    page2 = doc2.new_page(-1, width=page1.mediabox_size[0], height=page1.mediabox_size[1])
     # the text font we use
     page2.insert_font(fontfile=None, fontname="Helvetica")
     img = page2.new_shape()  # prepare /Contents object
 
     # calculate /CropBox & displacement
-    disp = fitz.Rect(page1.cropboxPosition, page1.cropboxPosition)
+    disp = fitz.Rect(page1.cropbox_position, page1.cropbox_position)
     croprect = page1.rect + disp
 
     # draw original /CropBox rectangle
