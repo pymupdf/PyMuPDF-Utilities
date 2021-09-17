@@ -7,7 +7,6 @@ import time
 
 import fitz
 import PySimpleGUI as sg
-from PIL import Image
 
 """
 PyMuPDF utility
@@ -31,18 +30,19 @@ with xref being the PDF cross reference number of the image.
 
 Dependencies
 ------------
-PyMuPDF v1.13.17+, Pillow
+PyMuPDF v1.18.18
 
 Changes
 -------
+* 2021-09-17: remove PIL and use extended pixmap features instead
 * 2020-10-04: for images with an /SMask, we use Pillow to recover original
 * 2020-11-21: convert cases with special /ColorSpace definitions to RGB PNG
 
 """
 print(fitz.__doc__)
 
-if not tuple(map(int, fitz.version[0].split("."))) >= (1, 13, 17):
-    raise SystemExit("require PyMuPDF v1.13.17+")
+if not tuple(map(int, fitz.version[0].split("."))) >= (1, 18, 18):
+    raise SystemExit("require PyMuPDF v1.18.18+")
 
 dimlimit = 0  # 100  # each image side must be greater than this
 relsize = 0  # 0.05  # image : image size ratio must be larger than this (5%)
@@ -58,35 +58,28 @@ def recoverpix(doc, item):
     smask = item[1]  # xref of its /SMask
 
     # special case: /SMask or /Mask exists
-    # use Pillow to recover original image
     if smask > 0:
-        fpx = io.BytesIO(  # BytesIO object from image binary
-            doc.extract_image(xref)["image"],
-        )
-        fps = io.BytesIO(  # BytesIO object from smask binary
-            doc.extract_image(smask)["image"],
-        )
-        img0 = Image.open(fpx)  # Pillow Image
-        mask = Image.open(fps)  # Pillow Image
-        img = Image.new("RGBA", img0.size)  # prepare result Image
-        img.paste(img0, None, mask)  # fill in base image and mask
-        bf = io.BytesIO()
-        img.save(bf, "png")  # save to BytesIO
+        pix0 = fitz.Pixmap(doc.extract_image(xref)["image"])
+        mask = fitz.Pixmap(doc.extract_image(smask)["image"])
+        pix = fitz.Pixmap(pix0, mask)
+        if pix0.n > 3:
+            pix = fitz.Pixmap(fitz.csRGB, pix)
+
         return {  # create dictionary expected by caller
             "ext": "png",
-            "colorspace": 3,
-            "image": bf.getvalue(),
+            "colorspace": pix.colorspace.n,
+            "image": pix.tobytes(),
         }
 
     # special case: /ColorSpace definition exists
     # to be sure, we convert these cases to RGB PNG images
     if "/ColorSpace" in doc.xref_object(xref, compressed=True):
-        pix1 = fitz.Pixmap(doc, xref)
-        pix2 = fitz.Pixmap(fitz.csRGB, pix1)
+        pix = fitz.Pixmap(doc, xref)
+        pix = fitz.Pixmap(fitz.csRGB, pix)
         return {  # create dictionary expected by caller
             "ext": "png",
             "colorspace": 3,
-            "image": pix2.tobytes("png"),
+            "image": pix.tobytes("png"),
         }
     return doc.extract_image(xref)
 
