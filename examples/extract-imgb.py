@@ -7,7 +7,6 @@ import time
 
 import fitz
 import PySimpleGUI as sg  # show a pogress  meter with this
-from PIL import Image
 
 """
 This demo extracts all images of a PDF as PNG files, whether they are
@@ -37,12 +36,17 @@ Found images are stored in a directory one level below the input PDF, called
 
 Dependencies
 ------------
-PyMuPDF v1.13.17+, Pillow
+PyMuPDF v1.18.18
+
+Changes
+--------
+2021-09-17: Removed PIL dependency
+
 """
 
 print(fitz.__doc__)
-if not tuple(map(int, fitz.version[0].split("."))) >= (1, 13, 17):
-    raise SystemExit("require PyMuPDF v1.13.17+")
+if not tuple(map(int, fitz.version[0].split("."))) >= (1, 18, 18):
+    raise SystemExit("require PyMuPDF v1.18.18+")
 
 dimlimit = 100  # each image side must be greater than this
 relsize = 0.05  # image : pixmap size ratio must be larger than this (5%)
@@ -54,19 +58,16 @@ if not os.path.exists(imgdir):
 
 
 def recoverpix(doc, x, imgdict):
-    """Return pixmap for item, if an /SMask exists."""
-    s = imgdict["smask"]  # xref of its /SMask
+    """Return pixmap for item with an image mask."""
+    s = imgdict["smask"]  # xref of its image mask
 
     try:
-        fpx = io.BytesIO(imgdict["image"])
-        fps = io.BytesIO(doc.extract_image(s)["image"])
-        img0 = Image.open(fpx)
-        mask = Image.open(fps)
-        img = Image.new("RGBA", img0.size)
-        img.paste(img0, None, mask)
-        bf = io.BytesIO()
-        img.save(bf, "png")
-        return {"ext": "png", "colorspace": 3, "image": bf.getvalue()}
+        pix0 = fitz.Pixmap(imgdict["image"])
+        mask = fitz.Pixmap(doc.extract_image(s)["image"])
+        pix = fitz.Pixmap(pix0, mask)
+        if pix0.n > 3:
+            pix = fitz.Pixmap(fitz.csRGB, pix)
+        return {"ext": "png", "colorspace": pix.colorspace.n, "image": pix.tobytes()}
     except:
         return None
 
