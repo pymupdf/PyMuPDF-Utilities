@@ -1,9 +1,9 @@
-This folder contain scripts with document conversions.
+This folder contains scripts for document conversions.
 
 Over time, more examples will be added. Currently there are:
 
-* `make-cbz.py` - convert a document to a Comic Book
-* `make-imagepdf.py` - convert a document to a PDF with original pages rendered to images.
+* `make-cbz.py` - convert any document to a Comic Book
+* `make-imagepdf.py` - convert any document to a PDF with original pages rendered to images.
 
 
-Any contribution is welcome. This may include more conversion types, or better handling / supporting parameters of existing scripts.
+Your contribution is welcome. This may include more conversion types, or improvements like better handling / supporting parameters of existing scripts.
