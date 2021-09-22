@@ -1,0 +1,14 @@
+
+
+
+
+       PyMuPDF— the Python
+          bindings for MuPDF
+
+PyMuPDF Documentation
+                            Release 1.18.19
+
+                               Jorj X. McKie
+
+                                     Sep 17, 2021
+

@@ -27,3 +27,15 @@ With the same example PDF, the duration per OCR action is about three times long
 
 There are also a few unresolved issues with the correct OCR results: if text contains a hyphen "-", then the resulting OCR-ed text tends to be mutilated.
 
+## Script `ocrpages.py`
+A very basic script that uses Python package ocrmypdf.
+Loops over a PDF's pages and passes each to ocrmypdf. To be used like:
+
+```
+python ocrpages.py scanned.pdf
+```
+
+I hope it is obvious how this script can be adapted to a specific need - for example:
+* one could decide whether or not OCR-ing a page based on criteria like (1) is it a fullpage image, (2) normal text extractions deliver nothing or deliver a lot of unrecognized characters, etc.
+* one could OCR **_all_** pages of the input and work with the fully OCR-ed output PDF instead.
+* Instead of naive text extraction, more advanced forms can be used, like "dict", "html", etc.
