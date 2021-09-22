@@ -30,9 +30,10 @@ def ocr_the_page(page):
     ocrmypdf.ocr(
         inbytes,  # input 1-pager
         outbytes,  # ouput 1-pager
-        language="eng",  # modify as required
+        language="eng",  # modify as required e.g. ("eng", "ger")
         output_type="pdf",  # only need simple PDF format
-        # add more paramneters, e.g. to enforce OCR-ing, etc.
+        # add more paramneters, e.g. to enforce OCR-ing, etc., e.g.
+        # force_ocr=True, redo_ocr=True
     )
     ocr_pdf = fitz.open("pdf", outbytes.getvalue())  # read output as fitz PDF
     text = ocr_pdf[0].get_text()  # ...and extract text from the page
