@@ -63,12 +63,14 @@ def recoverpix(doc, item):
         mask = fitz.Pixmap(doc.extract_image(smask)["image"])
         pix = fitz.Pixmap(pix0, mask)
         if pix0.n > 3:
-            pix = fitz.Pixmap(fitz.csRGB, pix)
+            ext = "pam"
+        else:
+            ext = "png"
 
         return {  # create dictionary expected by caller
-            "ext": "png",
+            "ext": ext,
             "colorspace": pix.colorspace.n,
-            "image": pix.tobytes(),
+            "image": pix.tobytes(ext),
         }
 
     # special case: /ColorSpace definition exists
