@@ -66,8 +66,10 @@ def recoverpix(doc, x, imgdict):
         mask = fitz.Pixmap(doc.extract_image(s)["image"])
         pix = fitz.Pixmap(pix0, mask)
         if pix0.n > 3:
-            pix = fitz.Pixmap(fitz.csRGB, pix)
-        return {"ext": "png", "colorspace": pix.colorspace.n, "image": pix.tobytes()}
+            ext = "pam"
+        else:
+            ext = "png"
+        return {"ext": ext, "colorspace": pix.colorspace.n, "image": pix.tobytes(ext)}
     except:
         return None
 
