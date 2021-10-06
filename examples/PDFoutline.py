@@ -1008,7 +1008,7 @@ def make_pdf(dlg):
     indir, infile = os.path.split(f)
     odir = indir
     ofile = infile
-    if spad.doc.needs_pass or spad.doc.openErrCode:
+    if not spad.doc.can_save_incrementally():
         ofile = ""
     sdlg = wx.FileDialog(
         None, "Specify Output", odir, ofile, "PDF files (*.pdf)|*.pdf", wx.FD_SAVE
@@ -1018,7 +1018,7 @@ def make_pdf(dlg):
         return None
 
     outfile = sdlg.GetPath()
-    if spad.doc.needs_pass or spad.doc.openErrCode:
+    if not spad.doc.can_save_incrementally():
         title = "Repaired / decrypted PDF requires new output file"
         while outfile == spad.file:
             sdlg = wx.FileDialog(
