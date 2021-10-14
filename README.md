@@ -6,7 +6,9 @@ This repository contains demos, examples and for using PyMuPDF in the respective
 > Up to version 1.18.x of PyMupdf a major effort was undertaken to rename (almost) all methods and attributes to the **_snake_case_** standard. This task is now finished. For the time being and including versions 1.19.x, old and new names will coexist. For example, the old name `doc.newPage()` can be used as well as the new name `doc.new_page()` to create a new page. In versions 1.19.x, a deprecation warning will be issued when old method names are used. In versions thereafter, only the new names will remain being valid. To help migrating your scripts to new names, you may want to use ``alias-changer.py`` in this folder.
 
 ## OCR Support
-While PyMuPDF does not yet support MuPDF's seamless support of Tesseract OCR, there are nonetheless ways to use OCR tools in PyMuPDF scripts.
+Starting with version 1.19.0, PyMuPDF supports MuPDF's integrated Tesseract OCR features. Over time, we will add examples for using this.
+
+There are nonetheless also other ways to use OCR tools in PyMuPDF scripts.
 
 There are now two demo examples in the new folder [OCR](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/OCR) which use Tesseract OCR and `easyocr` respectively.
 
@@ -27,6 +29,10 @@ PyMuPDF's features have been extended in this respect. We therefore move example
 Text extraction scripts have been moved into [this](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/text-extraction) separate folder. They demonstrate alternate ways extracting text from general documents (not only PDF), bargaining simplicity versus layout-faithful text output.
 
 The most advanced script, [fitzcli.py](https://github.com/pymupdf/PyMuPDF-Utilities/blob/master/text-extraction/fitzcli.py) produces text which closeley resembles the original layout of the document, including multi-column text, text thats surrounds images, etc.
+
+## Jupyter Notebooks
+
+A new folder with notebooks explaining basic concepts in an interactive way. Will be extended over time.
 
 ## Examples
 From the [examples](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/examples) folder, here is a synopsis of some scripts that you may find interesting.
