@@ -10,7 +10,7 @@ Starting with version 1.19.0, PyMuPDF supports MuPDF's integrated Tesseract OCR 
 
 There are nonetheless also other ways to use OCR tools in PyMuPDF scripts.
 
-There are now two demo examples in the new folder [OCR](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/OCR) which use Tesseract OCR and `easyocr` respectively.
+There are now two demo examples in the new folder [OCR](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/OCR) which use MuPDF OCR, Tesseract OCR and `easyocr` respectively.
 
 ## Advanced TOC Handling
 Handling of table of contents (TOC) has been significantly improved in v1.18.6. I have therefore created another new [folder](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/advanced-toc) dealing specifically with this subject.
@@ -32,7 +32,7 @@ The most advanced script, [fitzcli.py](https://github.com/pymupdf/PyMuPDF-Utilit
 
 ## Jupyter Notebooks
 
-A new folder with notebooks explaining basic concepts in an interactive way. Will be extended over time.
+A new [folder](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/jupyter-notebooks) with notebooks explaining basic concepts in an interactive way. Will be extended over time.
 
 ## Examples
 From the [examples](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/examples) folder, here is a synopsis of some scripts that you may find interesting.
