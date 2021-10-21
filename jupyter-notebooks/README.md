@@ -15,4 +15,4 @@ Over time this script collection should be extended. Your contribution is very w
 * `journalling2.ipynb` - second chapter of PDF Journalling 
 * `new-circle-annot.ipynb` - simple example for adding an annotation with desired properties
 * `ocr-illegible.ipynb` - OCR: how to dynamically make unrecognized characters readable
-* `testpage-performance.ipynb` - compare performance of text extraction and search methods, with and without a repared `TextPage` object.
+* `testpage-performance.ipynb` - compare performance of text extraction and search methods, with and without a separately prepared `TextPage` object.
