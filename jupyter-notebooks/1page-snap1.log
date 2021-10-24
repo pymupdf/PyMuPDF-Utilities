@@ -1,0 +1,49 @@
+%!MuPDF-Journal-100
+
+journal
+<<
+/NumSections 1
+/FileSize 210794
+/Fingerprint <57c84501e4baddef56fd26959a808cfc>
+/HistoryPos 6
+>>
+entry
+(new page)
+44 0 newobj
+45 0 newobj
+2 0 newobj
+entry
+(insert-0)
+46 0 newobj
+44 0 obj
+<<>>
+endobj
+47 0 newobj
+45 0 obj
+<</Type/Page/MediaBox[0 0 595 842]/Rotate 0/Resources 44 0 R/Parent 2 0 R>>
+endobj
+entry
+(insert-1)
+48 0 newobj
+45 0 obj
+<</Type/Page/MediaBox[0 0 595 842]/Rotate 0/Resources 44 0 R/Parent 2 0 R/Contents[47 0 R]>>
+endobj
+entry
+(insert-2)
+49 0 newobj
+45 0 obj
+<</Type/Page/MediaBox[0 0 595 842]/Rotate 0/Resources 44 0 R/Parent 2 0 R/Contents[47 0 R 48 0 R]>>
+endobj
+entry
+(insert-3)
+50 0 newobj
+45 0 obj
+<</Type/Page/MediaBox[0 0 595 842]/Rotate 0/Resources 44 0 R/Parent 2 0 R/Contents[47 0 R 48 0 R 49 0 R]>>
+endobj
+entry
+(insert-4)
+51 0 newobj
+45 0 obj
+<</Type/Page/MediaBox[0 0 595 842]/Rotate 0/Resources 44 0 R/Parent 2 0 R/Contents[47 0 R 48 0 R 49 0 R 50 0 R]>>
+endobj
+endjournal

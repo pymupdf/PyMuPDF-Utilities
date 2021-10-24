@@ -14,6 +14,7 @@ Over time this script collection should be extended. Your contribution is very w
 * `detect-hidden.ipynb` - shows how to **_detect text which is hidden_** by objects "drawn above" it.
 * `journalling1.ipynb` - introduction to using PDF Journalling
 * `journalling2.ipynb` - second chapter of PDF Journalling 
+* `journalling3.ipynb` - third chapter of PDF Journalling 
 * `new-circle-annot.ipynb` - simple example for adding an annotation with desired properties
 * `ocr-illegible.ipynb` - OCR: how to dynamically make unrecognized characters readable
 * `testpage-performance.ipynb` - compare performance of text extraction and search methods, with and without a separately prepared `TextPage` object.
