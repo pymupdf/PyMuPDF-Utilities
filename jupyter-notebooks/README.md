@@ -17,5 +17,5 @@ Over time this script collection should be extended. Your contribution is very w
 * `journalling3.ipynb` - third chapter of PDF Journalling 
 * `new-circle-annot.ipynb` - simple example for adding an annotation with desired properties
 * `ocr-illegible.ipynb` - OCR: how to dynamically make unrecognized characters readable
-* `testpage-performance.ipynb` - compare performance of text extraction and search methods, with and without a separately prepared `TextPage` object.
 * `partial-ocr.ipynb` - OCRs a page in full and in partial mode and explain the difference. Requires PyMuPDF v1.19.1.
+* `testpage-performance.ipynb` - compare performance of text extraction and search methods, with and without a separately prepared `TextPage` object.
