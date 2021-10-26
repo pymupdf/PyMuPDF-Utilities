@@ -3,23 +3,6 @@ Starting with its version 1.18.0, MuPDF supports dynamically invoking Tesseract 
 
 The folder contains examples for using OCR alternatives - with and without using the MuPDF interface.
 
-## Script `mixspans.py` - Uses MuPDF OCR
-
-Extract and merge a page's normal text with text that can be OCR-ed from displayed images. This has a number of advantages es explained in the source code.
-
-Requires PyMuPDF v1.19.0 and an installed Tesseract-OCR. No other Python packages are needed.
-
-For functioning correctly, the environment variable ``"TESSDATE_PREFIX"`` must be set outside the Python script and contain the path name of Tesseract's `tessdata` folder. This can be done via CLI commands in Unix systems:
-
-```bash
-export TESSDATA_PREFIX=/usr/share/tesseract-ocr/4.00/tessdata
-```
-And in Windows systems via
-```bash
-set TESSDATA_PREFIX=TESSDATA_PREFIX=C:\Program Files\Tesseract-OCR\tessdata
-```
-
-
 ## Script `tesseract1.py` - Direct Use of Tesseract
 This demo script reads the text of a document containing characters that cannot be interpreted. Such characters are coded as `chr(65533)` by MuPDF. On every encounter of a text span with this a character, Tesseract OCR is invoked via Python's `subprocess` for interpretation. There is no other / direct connection between the script and the Tesseract installation.
 
@@ -47,7 +30,7 @@ With the same example PDF, the duration per OCR action is about three times long
 There are also a few unresolved issues with the correct OCR results: if text contains a hyphen "-", then the resulting OCR-ed text tends to be mutilated.
 
 ## Script `ocrpages.py` - Uses Python Package `ocrmypdf`
-A very basic script that uses Python package ocrmypdf.
+A very basic script that uses Python package OCRmyPDF.
 Loops over a PDF's pages and passes each to ocrmypdf. To be used like:
 
 ```
@@ -59,5 +42,7 @@ I hope it is obvious how this script can be adapted to a specific need - for exa
 * one could OCR **_all_** pages of the input and work with the fully OCR-ed output PDF instead.
 * Instead of naive text extraction, more advanced forms can be used, like "dict", "html", etc.
 
-Apart from explaining the general interface to OCRmyPDF, this script is really no longer necessary with PyMuPDF verion 1.19.0 - or even better PyMuPDF v1.19.1.
+> This script is no longer necessary with PyMuPDF verion 1.19.0 or higher. Its only value is that it shows how to **_interface with OCRmyPDF_** from within Python.
 
+## Script ``images-to-ocr-pdf.py`` - Convert List of Images to an OCR PDF
+Walks through some list of image filenames, OCRs the image and appends the result as a page of a new PDF.
