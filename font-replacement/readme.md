@@ -60,7 +60,7 @@ Keep in mind however, that this latter information (provided by the font creator
 Use the following values to replace **"keep"** with a new font name:
 
 * One of the Base-14 builtin reserved fontnames for Times-Roman, Helvetica, Courier, Symbol or ZapfDingbats (like "heit" = Helvetica-Oblique, "cobi" = "Courier-BoldOblique", etc.).
-* One of the CJK reserved builtin fontnames, e.g. "china-t" for Traditional Chinese.
+* One of the CJK reserved builtin fontnames, e.g. "china-t" for Traditional Chinese ... or simply "cjk", and everything will be covered!
 * One of the builtin fontnames available when [pymupdf-fonts](https://pypi.org/search/?q=pymupdf-fonts) is installed, e.g. "figo" for "FiraGO Regular", or "spacemo" for "Space Mono Regular".
 * The file name of a font installed on your system, e.g. `C:/Windows/Fonts/DejaVuSerif-Bold.ttf`. In this case, make sure that the string contains at least one of "`.`", "`/`" or "`\`" to be recognizable as such.
 
@@ -70,28 +70,28 @@ The above example was created for a page with Japanese text. The following chang
 [
   {
     "oldfont": "",
-    "newfont": "japan",
+    "newfont": "cjk",
     "info": "Not embedded!"
   },
   {
     "oldfont": "Helvetica",
-    "newfont": "japan",
+    "newfont": "cjk",
     "info": "44 glyphs, size 3047, serifed, subset font"
   },
   {
     "oldfont": "Helvetica-BoldOblique",
-    "newfont": "japan",
+    "newfont": "cjk",
     "info": "7 glyphs, size 689, serifed, italic, bold, subset font"
   },
   {
     "oldfont": "TT5A5Ao00",
-    "newfont": "japan",
+    "newfont": "cjk",
     "info": "6 glyphs, size 1651, serifed, subset font"
   }
 ]
 ```
 
-All text was rewritten using ``fitz.Font("japan")``, the "Droid Sans Fallback Regular" font. The PDF size was **reduced** from 111 KB to 17 KB.
+All text was rewritten using ``fitz.Font("cjk")``, the "Droid Sans Fallback Regular" font. The PDF size was **reduced** from 111 KB to 17 KB.
 
 ## Limitations, TODOs, Quality Checks
 While this is a set of cool scripts, providing a long-awaited feature, it is not a "silver bullet": it does have its limitations and shortcomings.
