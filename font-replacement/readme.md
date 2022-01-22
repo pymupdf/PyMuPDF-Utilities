@@ -115,21 +115,21 @@ Existing text is extracted via `page.get_text("dict")`. This dictionary is criti
 ## Notes on Font Subsetting
 A font contains basically two things: (1) code that generates a character's visual appearance (the "glyph") and (2) a mapping between the character code and its glyph. In a simplistic view, a font can be thought of being an array which does this mapping.
 
-Obviously, the larger the set of characters a font supports, the larger will be its size. There are fonts which support many hundred or thousands of characters. For example "Droid Sans Fallback Regular" contains over 50,000 glyphs and has a file size of 3.6 MB.
+Obviously, the number of glyphs in a font controls its file size. There are fonts which support many hundred or thousands of characters. For example **"Droid Sans Fallback Regular"** contains over 50,000 glyphs and has a file size of 3.6 MB.
 
-On the other hand, for any given font in any given PDF, comparatively few of its glpyhs will **actually ever be used**. This used subset is often in the range of low two digit percentages, or even much less. Getting rid of the unused font portions is therefore an important vehicle to control PDF file sizes.
+But for any given font in any given PDF, only a few of its glpyhs will **actually ever be used**. This used subset is often in the range 10% of all supported glyphs, or even much less. Getting rid of the unused glyphs is therefore an important vehicle to control PDF file sizes.
 
 This is what **_font subsetting_** is all about. We use package [fontTools](https://pypi.org/project/fontTools/) to do this for OTF and TTF font types.
 
 **fontTools** cannot create subsets for **_CFF type fonts_** (as far as we know).
 
-However, the embeddable alternatives of the PDF-defined Base-14 fonts included in MuPDF are non-subsettable **CFF** fonts: the **_"Nimbus"_** font families by **URW++** (developed by _URW Type Foundry GmbH_). So, if you choose any of these, the resulting PDF may become **_larger_**.
+The embeddable alternatives of the PDF-defined Base-14 fonts included in MuPDF are non-subsettable **CFF** fonts: the **_"Nimbus"_** font families by **URW++** (developed by _URW Type Foundry GmbH_). So, if you choose any of these, the resulting PDF may become **_larger_**.
 
 This is not necessarily a big problem: the Nimbus fonts are relatively small (around 50 KB or less - albeit per font weight). But you still may want to consider alternatives that do support subsetting.
 
 There also exist free versions of the Nimbus fonts, **which are subsettable** (OTF or TTF formats). They can be downloaded from [this](https://www.fontsquirrel.com/fonts/) website. Search for nimbus-sans, nimbus-mono or nimbus-roman.
 
-Another option: convert the CFF format to TTF, e.g. by using the free software [FontForge](https://fontforge.org/).
+Another option: convert the CFF format to TTF by yourself using the free software [FontForge](https://fontforge.org/).
 
 To illustrate the effect of font subsetting, look at the following example numbers of a 4-page PDF, once created as a PDF export of a Word document.
 
@@ -144,78 +144,12 @@ Replacing these by (the non-subsettable CFF fonts) **"helv"** (33 KB), **"hebo"*
 When instead taking **"Noto Sans Regular"**, **"Noto Sans Bold"**, **"Space Mono Bold"** and **"Space Mono Regular"** (which all support font subsetting), the resulting file size is only **53 KB** ... and it looks nicer, too!
 
 
-## How to replace a font with itself
-This may sound ridiculous. But imagine you have inserted text in a PDF and now you are disappointed with the resulting file size: large-sized fonts have been pulled in.
-
-You can use this facility as a font subsetting mechanism and **_"replace" fonts with themselves_**.
-
-![screen](multi-language.jpg)
-
-The above multi language page had been created using the large font "Droid Sans Fallback Regular", which resulted in a file size of **1.62 MB**.
-
-The produced JSON file is this:
-```json
-[
-  {
-    "oldfont": "Droid Sans Fallback Regular",
-    "newfont": "keep",
-    "info": "50483 glyphs, size 3556308"
-  }
-]
-```
-We replace with "cjk" (could also have been any of "korea", "japan", "china-s" or "china-t"):
-
-```json
-[
-  {
-    "oldfont": "Droid Sans Fallback Regular",
-    "newfont": "cjk",
-    "info": "50483 glyphs, size 3556308"
-  }
-]
-```
-
-... yielded a new file size of only **16.1 KB** - less than 1% of the original!
-
-A very significant file size reduction in this case!
-
-The run protocol looked like this:
-
-```
-python repl-font.py tw-textbox3.pdf
-Processing PDF 'tw-textbox3.pdf' with 1 page.
-
-Phase 1: Create unicode subsets.
-End of phase 1, 0.03 seconds.
-
-Font replacement overview:
- Droid Sans Fallback Regular replaced by: Droid Sans Fallback Regular.
-
-Building font subsets:
-Used 179 glyphs of font 'Droid Sans Fallback Regular'. 3453 KB saved.
-Font subsets built, 0.77 seconds.
-
-Phase 2: rebuild document.
-End of phase 2, 0.01 seconds
-Total duration 0.81 seconds
-```
-> As you can see, although 6 different languages where used, it was only 180 glyphs out of over 50,000 in this font - about 0.36 percent. Subsetting saved us over 99.5% of the font's original size. The saved amount is displayed in uncompressed kilobytes - savings in this case therefore are about 1.6 MB compressed.
-
 ### Integrated Font Subsetting
-Since its version 1.18.8, PyMuPDF also has an **_integrated support_** for reducing font binary sizes by building font subsets.
+Since its version 1.18.8, PyMuPDF offers **_integrated support_** for reducing font binary sizes by building font subsets.
 
-It is implemented by a new, **_experimental_** method `Document.subset_fonts()`. Do use this option instead of font replacement, where possible.
+This is implemented by method `Document.subset_fonts()` and is available if package fontTools is installed.
 
-Use this method directly before saving the PDF to a new file like this. For details check out the [PyMuPDF documentation](https://readthedocs.org/projects/pymupdf/):
-
-```python
-# doc is a new or modified PDF document
-doc.subset_fonts()
-doc.save("newfile.pdf", garbage=3, deflate=True, ...)
-```
-
-The method scans the complete document for eligible fonts (embedded OTF or TTF, that are no subsets yet) and replaces them with smaller binaries, which are computed based on their use.
-
+This invocation is also done ba font subsetting.
 
 ## Changes
 * Version 2020-09-02:
