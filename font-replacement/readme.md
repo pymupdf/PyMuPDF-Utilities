@@ -149,7 +149,7 @@ Since its version 1.18.8, PyMuPDF offers **_integrated support_** for reducing f
 
 This is implemented by method `Document.subset_fonts()` and is available if package fontTools is installed.
 
-This invocation is also done ba font subsetting.
+This invocation is also done by font subsetting.
 
 ## Changes
 * Version 2020-09-02:
