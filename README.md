@@ -21,6 +21,9 @@ Handling of table of contents (TOC) has been significantly improved in v1.18.6. 
 ## Font Replacement
 New for PyMuPDF v1.17.6 is the ability to replace selected fonts in existing PDFs. This is a set of two scripts and their documentation in [this](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/font-replacement) folder.
 
+## Image Replacement
+[This](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/font-replacement) folder demonstrates the various options to **_replace_** or **_remove_** an image in a PDF.
+
 ## Marking Words and Lines
 PyMuPDF's features have been extended in this respect. We therefore created this [own](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/word&line-marking) folder to contain dedicated scripts, descriptions and examples.
 
