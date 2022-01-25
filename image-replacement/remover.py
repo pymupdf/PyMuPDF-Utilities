@@ -58,5 +58,5 @@ cont_xrefs = page.get_contents()
 
 # make sure that new /Contents is forgotten again
 page.set_contents(cont_xrefs[0])
-
+page.clean_contents()
 doc.ez_save("no-image.pdf", garbage=4)
