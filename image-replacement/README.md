@@ -26,7 +26,7 @@ The demo script `remover.py` replaces the PNG image by a small empty, fully tran
 
 An image can be removed using redaction annotations. Its vacant bbox can then be filled with any image. This approach may therefore lead to a similar result as the one presented here. The following table compares the two options:
 
-| Citeria | Redaction | XREF modification |
+| Citeria | Redaction | XREF copy |
 |---------|-----------|-------------------|
 | **Specificity** | Removes **everything** in the bbox - which may be more than you wanted.| Nothing else is touched.|
 | **Visibility** | Original image visibility is unknown, so you must decide: foreground or background.| No change.|
@@ -40,3 +40,6 @@ When removing an image **_via redactions,_** MuPDF locates the respective displa
 > **Note 1:** If an image is shown by one page only, it will also be completely removed on saves with garbage collection.
 
 > **Note 2:** Using a "hacky" approach, a similar result is also achievable using PyMuPDF. If global removal of an image is no problem, the approach presented here should however be preferred.
+
+## Announcment for Version 1.19.5
+The new version will facilitate this process with a new method `Document.xref_copy()`. This will obsolete the respective function ``replace_object()`` in the example scripts.
