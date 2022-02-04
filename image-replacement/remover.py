@@ -1,37 +1,7 @@
 import fitz
 
-
-def replace_object(doc, target: int, source: int, *, keep: list = []) -> None:
-    """Makes the old xref a duplicate of new xref.
-
-    Notes:
-        Also supports cases where new xref is a stream object.
-    Args:
-        target: target xref
-        source: source xref
-        keep: do not remove these keys in target xref
-    """
-    if doc.xref_is_stream(source):
-        # read new xref stream maintaining compression
-        stream = doc.xref_stream_raw(source)
-        doc.update_stream(
-            target,
-            stream,
-            compress=False,  # keeps source compression
-            new=True,  # in case target is no stream
-        )
-
-    # empty target completely, except optional content definition
-    for key in doc.xref_get_keys(target):
-        if key in keep:
-            continue
-        doc.xref_set_key(target, key, "null")
-    # copy over all source dict items
-    for key in doc.xref_get_keys(source):
-        item = doc.xref_get_key(source, key)
-        doc.xref_set_key(target, key, item[1])
-    return None
-
+if tuple(map(int, fitz.VersionBind.split("."))) < (1, 19, 5):
+    raise ValueError("Need v1.19.5+")
 
 # This script variant does a pseudo-removal:
 # replace image by a fully transparent pixmap with same dimensions
@@ -43,7 +13,7 @@ images = page.get_images()  # we only are interested in first image here
 item = images[0]
 old_xref = item[0]  # old image xref
 
-# make pixmap of just any dimension
+# make a small 100% transparent pixmap (of just any dimension)
 pix = fitz.Pixmap(fitz.csGRAY, (0, 0, 5, 5), 1)
 pix.clear_with()  # clear all samples bytes to 0x00
 
@@ -51,7 +21,7 @@ pix.clear_with()  # clear all samples bytes to 0x00
 new_xref = page.insert_image(page.rect, pixmap=pix)
 
 # copy over definition and stream of new image
-replace_object(doc, old_xref, new_xref, keep=["OC"])
+doc.xref_copy(new_xref, old_xref)
 
 # there now is a second /Contents object, showing new image
 cont_xrefs = page.get_contents()
