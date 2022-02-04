@@ -4,7 +4,7 @@ if tuple(map(int, fitz.VersionBind.split("."))) < (1, 19, 5):
     raise ValueError("Need v1.19.5+")
 
 # This script variant does a pseudo-removal:
-# replace image by a fully transparent pixmap with same dimensions
+# replace image by a fully transparent pixmap
 doc = fitz.open("original.pdf")
 
 page = doc[0]
