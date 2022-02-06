@@ -36,8 +36,8 @@ image-maintenance.py    GUI to modify images in an existing PDF (new with v1.17.
 meta2csv.py             export a document metadata dictionary to a CSV file
 PageFormat.py           function returns a page's paper format
 ParseTab.py             a function to parse tables within documents
-PDF2Text.py             a program to extract all text of a PDF
-PDF2TextJS.py           a program to extract all text of a PDF preserving normal reading sequence
+PDF2Text.py             a program to extract all text of a PDF [moved to PyMuPDF-Utilities/text-extraction](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/text-extraction)
+PDF2TextJS.py           a program to extract all text of a PDF preserving normal reading sequence [moved to PyMuPDF-Utilities/text-extraction](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/text-extraction)
 PDFjoiner.py            a full-featured program to join PDF files
 PDFoptimizer.py         a wrapper for FileOptimizer - see WIKI page
 PDFoutline.py           a program to edit a PDF's table of contents
