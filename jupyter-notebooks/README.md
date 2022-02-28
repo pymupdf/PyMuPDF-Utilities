@@ -19,3 +19,4 @@ Over time this script collection will be extended. Your contribution is very wel
 * `ocr-illegible.ipynb` - OCR: how to dynamically make unrecognized characters readable
 * `partial-ocr.ipynb` - OCRs a page in full and in partial mode and explain the difference. Requires PyMuPDF v1.19.1.
 * `testpage-performance.ipynb` - compare performance of text extraction and search methods, with and without a separately prepared `TextPage` object.
+* `object-algebra.ipynb` - explains details on how points, rectangles quads can be added and multiplied as if they were ordinary numbers. This is an extension to the respective [chapter](https://pymupdf.readthedocs.io/en/latest/algebra.html) of the documentation.

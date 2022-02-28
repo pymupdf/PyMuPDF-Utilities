@@ -14,7 +14,7 @@ item = images[0]
 old_xref = item[0]  # old image xref
 
 # make a small 100% transparent pixmap (of just any dimension)
-pix = fitz.Pixmap(fitz.csGRAY, (0, 0, 5, 5), 1)
+pix = fitz.Pixmap(fitz.csGRAY, (0, 0, 1, 1), 1)
 pix.clear_with()  # clear all samples bytes to 0x00
 
 # insert new image just anywhere
