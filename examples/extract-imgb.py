@@ -88,7 +88,7 @@ fpref = "img"
 doc = fitz.open(fname)
 img_ocnt = 0
 img_icnt = 0
-lenXREF = doc._getXrefLength()  # PDF object count - do not use entry 0!
+lenXREF = doc.xref_length()  # PDF object count - do not use entry 0!
 
 # display some file info
 print("")
