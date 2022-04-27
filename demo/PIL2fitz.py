@@ -1,8 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import sys
+
 import fitz
 from PIL import Image
-import sys
 
 print(fitz.__doc__)
 """

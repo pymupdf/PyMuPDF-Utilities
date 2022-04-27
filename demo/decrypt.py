@@ -6,8 +6,9 @@ password and save as a new PDF document.
 
 usage: removePass.py <input file> <password> <output file>
 """
-import fitz
 import sys
+
+import fitz
 
 print(fitz.__doc__)
 assert len(sys.argv) == 4, (

@@ -1,4 +1,4 @@
-'''
+"""
 Copy an input PDF to output with a logo in topleft corner
 ----------------------------------------------------------
 License: GNU GPL V3
@@ -33,26 +33,27 @@ Notes
 Dependencies
 -------------
 PyMuPDF 1.13.3 or later
-'''
+"""
 from __future__ import print_function
-import fitz
+
 import sys
-doc_fn = sys.argv[1]                        # name of PDF file
-logo_fn = sys.argv[2]                       # name of logo file
 
-src = fitz.open(logo_fn)                    # open logo document
-if not src.is_pdf:                           # convert if not PDF
-    pdfbytes = src.convert_to_pdf             # convert to PDF
+import fitz
+
+doc_fn = sys.argv[1]  # name of PDF file
+logo_fn = sys.argv[2]  # name of logo file
+
+src = fitz.open(logo_fn)  # open logo document
+if not src.is_pdf:  # convert if not PDF
+    pdfbytes = src.convert_to_pdf  # convert to PDF
     src.close()
-    src = fitz.open("pdf", pdfbytes)        # open logo as a PDF
-rect = src[0].rect                          # rectangle of the logo
-factor = 25 / rect.height                   # logo height is fixed to 25
-rect *= factor                              # adjust width accordingly
-doc = fitz.open(doc_fn)                     # open the PDF to be modified
+    src = fitz.open("pdf", pdfbytes)  # open logo as a PDF
+rect = src[0].rect  # rectangle of the logo
+factor = 25 / rect.height  # logo height is fixed to 25
+rect *= factor  # adjust width accordingly
+doc = fitz.open(doc_fn)  # open the PDF to be modified
 xref = 0
-for page in doc:                            # scan through PDF pages
-    xref = page.show_pdf_page(rect, src, 0,
-                            reuse_xref = xref,
-                            overlay = False)
+for page in doc:  # scan through PDF pages
+    xref = page.show_pdf_page(rect, src, 0, reuse_xref=xref, overlay=False)
 
-doc.save("fitzlogo-" + doc_fn, garbage = 4)
+doc.save("fitzlogo-" + doc_fn, garbage=4)

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-import fitz
 import sys
+
+import fitz
 from PIL import Image
 
 print(fitz.__doc__)

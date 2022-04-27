@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import fitz
 import sys
+
+import fitz
 
 print(fitz.__doc__)
 """

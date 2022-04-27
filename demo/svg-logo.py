@@ -17,8 +17,9 @@ Dependencies
 PyMuPDF 1.12.2 or later
 svglib, reportlab
 """
-from __future__ import print_function
+
 import sys
+
 import fitz
 from svglib.svglib import svg2rlg
 
@@ -37,4 +38,3 @@ for page in doc:  # scan through PDF pages
         rect, src, 0, overlay=True  # put page src[0] in rect
     )  # put in forground
 doc.save("logo-" + doc_fn, garbage=4)
-

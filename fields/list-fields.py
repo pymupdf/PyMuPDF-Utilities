@@ -5,11 +5,11 @@ A demo showing all PDF form fields of a document.
 """
 import sys
 import fitz
-
-print(fitz.__doc__)
 import time
 
-t0 = time.clock() if str is bytes else time.process_time()
+print(fitz.__doc__)
+
+t0 = time.perf_counter() if str is bytes else time.process_time()
 
 
 def flag_values(ff):
@@ -67,6 +67,9 @@ def print_widget(w):
     for k in d.keys():
         if k.startswith("_"):
             continue
+        if k in ("next", "parent"):
+            print(k, "=", type(d[k]))
+            continue
         if k != "field_flags":
             print(k, "=", repr(d[k]))
         else:
@@ -76,49 +79,16 @@ def print_widget(w):
 
 doc = fitz.open(sys.argv[1])
 if not doc.is_form_pdf:
-    raise SystemExit("'%s' has no form fields." % doc.name)
+    sys.exit("'%s' has no form fields." % doc.name)
 print("".ljust(80, "-"))
 print("Form field synopsis of file '%s'" % sys.argv[1])
 print("".ljust(80, "-"))
 for page in doc:
-    a = page.first_widget
     header_shown = False
-
-    while a:
+    for w in page.widgets():
         if not header_shown:
-            print("\nShowing the form fields of page", page.number)
             header_shown = True
-        print_widget(a.widget)
-        a = a.next
-doc.close()
-t1 = time.clock() if str is bytes else time.process_time()
+            print("Fields on page %i" % page.number)
+        print_widget(w)
+t1 = time.perf_counter() if str is bytes else time.process_time()
 print("total CPU time %g" % (t1 - t0))
-"""
-Above script produces the following type of output:
-
-Form field synopsis of file 'widgettest.pdf'
---------------------------------------------------------------------------------
-
-Showing the form fields of page 0
---------------------------------------------------------------------------------
-
-border_color = None
-border_style = 'Solid'
-border_width = 1.0
-border_dashes = None
-choice_values = None
-field_name = 'textfield-2'
-field_value = 'this\ris\ra\rmulti-\rline\rtext.'
-field_flags = 4096 (Multiline)
-fill_color = [0.8999999761581421, 0.8999999761581421, 0.8999999761581421]
-button_caption = None
-rect = fitz.Rect(50.0, 235.0, 545.0, 792.0)
-text_color = [0.0, 0.0, 1.0]
-text_font = 'TiRo'
-text_fontsize = 11.0
-text_maxlen = 0
-text_type = 0
-field_type = 3
-field_type_string = 'Text'
-
-"""

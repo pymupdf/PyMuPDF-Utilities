@@ -3,8 +3,9 @@
 # It also contains misc feature like displaying document outline
 # usage: demo.py <filename> <page> <zoom> <degree> <output filename> <needle>
 
-import fitz
 import sys
+
+import fitz
 
 print(fitz.__doc__)
 

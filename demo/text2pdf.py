@@ -1,6 +1,6 @@
-from __future__ import print_function
-import fitz
 import sys
+
+import fitz
 
 assert len(sys.argv) == 2, "usage: python %s text.file" % (sys.argv[0],)
 ifn = sys.argv[1]
@@ -22,9 +22,8 @@ lineheight = fontsz * 1.2  # line height is 20% larger
 nlines = int((height - 108.0) / lineheight)
 
 # choose a nice mono-spaced font of the system, instead of 'Courier'.
-# To use a standard PDF base14 font, e.g. set font='Courier' and ffile=None
-ffile = "C:/windows/fonts/consola.ttf"  # font file
-font = "F0"  # fontname
+font = fitz.Font("cascadia")
+fontname = "F0"  # fontname
 
 sourcefile = open(ifn)  # we are going to convert this file
 line_ctr = 0  # page line counter
@@ -36,18 +35,17 @@ doc = fitz.open()  # new empty PDF
 
 
 def page_out(b):  # only a shortcut
-    return doc.insert_page(
-        -1,
-        fontsize=fontsz,
+    page = doc.new_page(width=width, height=height)
+    page.insert_font(fontname=fontname, fontbuffer=font.buffer)
+    return page.insert_text(
+        (50, 72),
         text=b,
-        fontname=font,
-        fontfile=ffile,
-        width=width,
-        height=height,
+        fontsize=fontsz,
+        fontname=fontname,
     )
 
 
-while 1:
+while True:
     line = sourcefile.readline()  # read a text line
     if line == "":
         break  # eof encountered
@@ -70,18 +68,15 @@ print(ofn, "contains", len(doc), "pages.")
 
 hdr_fontsz = 16  # header fontsize
 ftr_fontsz = 8  # footer fontsize
-blue = (0, 0, 1)  # header / footer color
+blue = fitz.pdfcolor["blue"]  # header / footer color
 pspace = 500  # available line width
 
 for page in doc:
     footer = "%i (%i)" % (page.number + 1, len(doc))  # footer text
-    plen_ftr = fitz.get_textlength(footer, fontname="Helvetica", fontsize=ftr_fontsz)
+    plen_ftr = fitz.get_text_length(footer, fontname="Helvetica", fontsize=ftr_fontsz)
 
     page.insert_text(
-        fitz.Point(50, 50),
-        ifn,  # header = input filename
-        color=blue,
-        fontsize=hdr_fontsz,
+        (50, 50), ifn, color=blue, fontsize=hdr_fontsz  # header = input filename
     )
 
     page.draw_line(
@@ -99,13 +94,12 @@ for page in doc:
     )
 
     page.insert_text(
-        fitz.Point(
-            50 + pspace - plen_ftr, height - 33 + ftr_fontsz * 1.2  # insert footer
-        ),
+        (50 + pspace - plen_ftr, height - 33 + ftr_fontsz * 1.2),  # insert footer
         footer,
         fontsize=ftr_fontsz,
         color=blue,
     )
+    page.clean_contents()
 
 # finally provide some metadata
 m = {
@@ -114,13 +108,13 @@ m = {
     "creator": "text2pdf.py",
     "producer": "PyMuPDF %s" % fitz.VersionBind,
     "title": "Content of file " + ifn,
-    "subject": "Demonstrate the use of methods insertPage, insertText and drawLine",
+    "subject": "Demonstrate methods new_page, insert_text and draw_line",
     "author": "Jorj McKie",
 }
 
 doc.set_metadata(m)
 
 # and save the PDF
-doc.save(ofn, garbage=3, deflate=True)
+doc.subset_fonts()
+doc.ez_save(ofn, garbage=4, pretty=True)
 doc.close()
-

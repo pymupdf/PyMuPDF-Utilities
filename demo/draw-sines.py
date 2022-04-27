@@ -1,5 +1,8 @@
 from __future__ import print_function
-import fitz, math
+
+import math
+
+import fitz
 
 """
 Copyright 2017-2019, Jorj McKie, mailto:<jorj.x.mckie@outlook.de>

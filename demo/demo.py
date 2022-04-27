@@ -23,8 +23,9 @@ interested in more low level information, have a look at "demo-lowlevel.py" in
 the same directory.
 
 """
-import fitz
 import sys
+
+import fitz
 
 print(fitz.__doc__)
 assert len(sys.argv) == 7, (

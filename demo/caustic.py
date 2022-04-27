@@ -1,11 +1,12 @@
 from __future__ import print_function
-import math
-import fitz
-from fitz.utils import getColor
+
 import gzip
+import math
+
+import fitz
 
 """
-@Copyright 2017-2019, Jorj McKie, mailto:<jorj.x.mckie@outlook.de>
+@Copyright 2017-2022, Jorj McKie, mailto:<jorj.x.mckie@outlook.de>
 
 @created: 2017-06-18 10:00:00
 
@@ -43,9 +44,9 @@ def pbis(a):
 
 
 fileprfx = "catacaustic"  # filename prefix
-coffee = getColor("coffee")  # color: latte macchiato?
-yellow = getColor("yellow")  # color of sun rays
-blue = getColor("blue")  # color cup border
+coffee = fitz.pdfcolor["coffee"]  # color: latte macchiato?
+yellow = fitz.pdfcolor["yellow"]  # color of sun rays
+blue = fitz.pdfcolor["blue"]  # color cup border
 doc = fitz.open()  # new empty PDF
 page = doc.new_page(-1, width=800, height=800)  # create square sized page
 center = fitz.Point(

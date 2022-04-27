@@ -9,8 +9,10 @@ For "input.pdf" the generated files are named "input-%i.pdf".
 PyMuPDF license
 """
 
-import fitz
 import sys
+
+import fitz
+
 fn = sys.argv[1]
 
 fn1 = fn[:-4]
@@ -19,7 +21,6 @@ src = fitz.open(fn)
 
 for i in range(len(src)):
     doc = fitz.open()
-    doc.insert_pdf(src, from_page = i, to_page = i)
+    doc.insert_pdf(src, from_page=i, to_page=i)
     doc.save("%s-%i.pdf" % (fn1, i))
     doc.close()
-    

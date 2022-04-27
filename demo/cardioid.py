@@ -17,21 +17,21 @@ page = doc.new_page(width=500, height=500)
 center = (page.rect.tl + page.rect.br) / 2.0  # center of the page
 radius = 200  # we will draw a circle with this radius
 n = 523  # number of points on circle perimeter
-curve = 4  # type of curve, 2 = cardioid, 3 = nephroid, etc.
+curve = 5  # type of curve, 2 = cardioid, 3 = nephroid, etc.
 
 p0 = center - (radius, 0)  # leftmost point of circle perimeter
 theta = -360 / n  # the angle corresponding to number of points
 
 # define the colors we will use
-stroke = (1, 0, 0)  # color of the lines
-fill = (1, 1, 0)  # fill color of circle
-border = (0, 0, 1)  # border color of circle
+stroke = fitz.pdfcolor["red"]  # color of the lines
+fill = fitz.pdfcolor["wheat"]  # fill color of circle
+border = fitz.pdfcolor["black"]  # border color of circle
 
 shape = page.new_shape()  # make a drawing canvas for the page
 
 # draw the circle
 shape.draw_circle(center, radius)
-shape.finish(color=border, fill=fill, width=3)
+shape.finish(color=border, fill=fill, width=1)
 
 """
 ------------------------------------------------------------------------------
