@@ -27,9 +27,9 @@ colordbRGB.py           creates a PDF showing all available color database color
 csv2meta.py             load a PDF metadata dictionary from a CSV file's contents
 csv2toc.py              load a PDF TOC (table of contents) from a CSV file's contents
 embedded-copy.py        copies embedded files between source and target PDF
-embedded-export.py      exports an emdedded file from a PDF
+embedded-export.py      exports an embedded file from a PDF
 embedded-import.py      embeds a new file into a PDF
-embedded-list.py        lists emdedded file infos of a PDF
+embedded-list.py        lists embedded file infos of a PDF
 extract-imga.py         extract images of a page to separate files
 extract-imgb.py         extract images of a PDF to separate files
 image-maintenance.py    GUI to modify images in an existing PDF (new with v1.17.5)
