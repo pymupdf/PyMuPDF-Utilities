@@ -563,7 +563,9 @@ class PDFdisplay (wx.Dialog):
         dc = wx.ClientDC(self.PDFimage)     # make a device control out of img
         dc.SetPen(wx.Pen(c))
         # only draw inside the rectangle
-        dc.DrawLine(x, self.rect_y, x, self.rect_y + self.rect_h)
+        xoffset, yoffset = self.PDFimage.GetPosition()
+        dc.DrawLine(x + xoffset, self.rect_y + yoffset,
+                    x + xoffset, self.rect_y + self.rect_h + yoffset)
         self.adding_column = False
 
     def DrawRect(self, x, y, w, h):
@@ -572,7 +574,8 @@ class PDFdisplay (wx.Dialog):
         dc.SetPen(wx.Pen("RED"))
         dc.SetBrush(wx.Brush("RED", style=wx.BRUSHSTYLE_TRANSPARENT))
         self.redraw_bitmap()
-        dc.DrawRectangle(x, y, w, h)
+        xoffset, yoffset = self.PDFimage.GetPosition()
+        dc.DrawRectangle(x + xoffset, y + yoffset, w, h)
 
     def GetMatrix(self, evt):
         # parse table contained in rectangle
@@ -603,8 +606,9 @@ class PDFdisplay (wx.Dialog):
         x = y = 0
         rect = wx.Rect(x, y, w, h)
         bm = self.bitmap.GetSubBitmap(rect)
-        dc = wx.ClientDC(self.PDFimage)     # make a device control out of img
-        dc.DrawBitmap(bm, x, y)             # refresh bitmap before draw
+        dc = wx.ClientDC(self.PDFimage)                 # make a device control out of img
+        xoffset, yoffset = self.PDFimage.GetPosition()
+        dc.DrawBitmap(bm, x + xoffset, y + yoffset)     # refresh bitmap before draw
         return
 
     def ActivateRect(self, evt):
