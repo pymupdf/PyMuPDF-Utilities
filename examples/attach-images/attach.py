@@ -95,7 +95,6 @@ for i, f in enumerate(imglist):
         page.insert_text(rect.bl, "Page %i of %i" % (pno, pages))
         point = rect.tl + (0, 20)
 
-doc.save("all-my-pics-attached.pdf")
+doc.save("output.pdf")
 t1 = mytime()
 print("%g" % round(t1 - t0, 3), "sec processing time")
-
