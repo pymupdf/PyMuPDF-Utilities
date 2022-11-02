@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import io
 import os
 import sys
@@ -60,6 +58,8 @@ def recoverpix(doc, item):
     # special case: /SMask or /Mask exists
     if smask > 0:
         pix0 = fitz.Pixmap(doc.extract_image(xref)["image"])
+        if pix0.alpha:  # catch irregular situation
+            pix0 = fitz.Pixmap(pix0, 0)  # remove alpha channel
         mask = fitz.Pixmap(doc.extract_image(smask)["image"])
         pix = fitz.Pixmap(pix0, mask)
         if pix0.n > 3:
