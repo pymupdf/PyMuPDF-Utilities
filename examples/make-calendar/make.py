@@ -38,14 +38,12 @@ else:
 if len(startyear) != 4 or not startyear.isnumeric():
     raise ValueError("Start year must be 4 digits")
 
-suffix = "-%s.pdf" % startyear
-outfile = __file__.replace(".py", suffix)
 startyear = int(startyear)
 
 doc = fitz.open()  # new empty PDF
 # font = fitz.Font("cour")  # use the built-in font Courier
 font = fitz.Font("spacemo")  # use Space Mono - a nicer mono-spaced font
-cal = calendar.LocaleTextCalendar(locale="de")  # use your locale
+cal = calendar.LocaleTextCalendar(locale="")  # use a locale setting
 # cal = calendar.TextCalendar()  # or stick with English
 
 
@@ -72,4 +70,4 @@ for i in range(3):  # make calendar for 3 years
     page_out(doc, text)
 
 doc.subset_fonts()
-doc.save(outfile, garbage=4, deflate=True, pretty=True)
+doc.save("output.pdf", garbage=4, deflate=True, pretty=True)
