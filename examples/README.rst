@@ -33,7 +33,6 @@ embedded-list.py        lists embedded file infos of a PDF
 extract-imga.py         extract images of a page to separate files
 extract-imgb.py         extract images of a PDF to separate files
 image-maintenance.py    GUI to modify images in an existing PDF (new with v1.17.5)
-meta2csv.py             export a document metadata dictionary to a CSV file
 ParseTab.py             a function to parse tables within documents
 PDF2Text.py             a program to extract all text of a PDF `moved to PyMuPDF-Utilities/text-extraction <https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/text-extraction>`_
 PDF2TextJS.py           a program to extract all text of a PDF preserving normal reading sequence `moved to PyMuPDF-Utilities/text-extraction <https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/text-extraction>`_
