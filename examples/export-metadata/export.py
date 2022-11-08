@@ -8,6 +8,7 @@ Usage
 -----
 python export.py -d "," input.pdf
 """
+
 from __future__ import print_function
 import fitz
 import argparse

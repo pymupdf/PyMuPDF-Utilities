@@ -26,8 +26,10 @@ Dependencies
 ------------
 PyMuPDF 1.12.1 or later
 """
+
 from __future__ import print_function
 import fitz, sys
+
 infile = sys.argv[1]
 src = fitz.open(infile)
 doc = fitz.open()                      # empty output PDF

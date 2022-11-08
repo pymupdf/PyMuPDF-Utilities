@@ -15,9 +15,9 @@ Dependencies
 * calendar (either use LocaleTextCalendar or just TextCalendar)
 * pymupdf-fonts
 """
+
 import calendar
 import sys
-
 import fitz
 
 if not tuple(map(int, fitz.VersionBind.split("."))) >= (1, 17, 4):

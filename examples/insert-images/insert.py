@@ -14,6 +14,7 @@ Dependencies
 PyMuPDF
 PySimpleGUI, optional: requires Python 3 if used
 """
+
 from __future__ import print_function
 import os, time, sys, fitz
 
