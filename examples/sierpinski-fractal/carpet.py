@@ -1,14 +1,15 @@
-from __future__ import print_function
-
 """
-Created on Wed Jan 30 07:00:00 2019
+Draw the Sierpinski carpet
+-------------------------------------------------------------------------------
+License: GNU AFFERO GPL V3
+(c) 2019 Jorj X. McKie
 
-@author: Jorj
-@copyright: (c) 2019 Jorj X. McKie
-@license: GNU AFFERO GPL V3
+Usage
+-----
+python carpet.py
 
 Purpose
---------
+-------
 Demonstrate the use of PyMuPDF Pixmaps by creating Sierpinski's carpet.
 The final picture will be a square with each edge having a length of 3**n.
 
@@ -28,8 +29,9 @@ Whichever method you use, the punch function should show a similar performance.
 The time required to save the resulting PNG image very much depends on image
 "complexity": it will be longer if you used some photo image in method 2
 (copyPixmap) above.
-
 """
+
+from __future__ import print_function
 import fitz, time
 
 print(fitz.__doc__)
@@ -67,8 +69,7 @@ for lvl in range(0, n + 1):
                     # pm.copy(fill, (y0, x0, y0 + step, x0 + step))
 
 t1 = mytime()
-outfile = __file__.replace(".py", ".png")
-pm.save(outfile)
+pm.save("output_carpet.png")
 t2 = mytime()
 print("Sierpinski's carpet fitz")
 print("------------------------")

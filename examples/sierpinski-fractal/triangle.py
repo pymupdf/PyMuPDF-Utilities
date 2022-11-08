@@ -8,8 +8,8 @@ Usage
 -----
 python triangle.py
 
-Notes
------
+Purpose
+-------
 This is a mathematical fractal created by taking a start triangle
 (equal-sided in this example) and recursively "cutting out" the middle
 triangle with points as the middle points of the starting triangle's
