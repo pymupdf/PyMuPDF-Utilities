@@ -10,7 +10,7 @@ python carpet.py
 
 Purpose
 -------
-Demonstrate the use of PyMuPDF Pixmaps by creating Sierpinski's carpet.
+Demonstrate the use of PyMuPDF Pixmaps by drawing the Sierpinski carpet.
 The final picture will be a square with each edge having a length of 3**n.
 
 This is one of several alternative versions, which directly fills the
@@ -71,7 +71,7 @@ for lvl in range(0, n + 1):
 t1 = mytime()
 pm.save("output_carpet.png")
 t2 = mytime()
-print("Sierpinski's carpet fitz")
-print("------------------------")
+print("Sierpinski carpet fitz")
+print("----------------------")
 print("%g sec filling the pixmap" % round(t1 - t0, 3))
 print("%g sec saving the picture" % round(t2 - t1, 3))
