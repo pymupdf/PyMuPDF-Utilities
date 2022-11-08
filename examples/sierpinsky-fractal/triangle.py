@@ -1,22 +1,25 @@
 """
-PyMuPDF demonstration program drawing Sierpinski's Triangle.
+Draw the Sierpinski triangle
+-------------------------------------------------------------------------------
+License: GNU AFFERO GPL V3
+(c) 2020 Jorj X. McKie
 
+Usage
+-----
+python triangle.py
+
+Notes
+-----
 This is a mathematical fractal created by taking a start triangle
 (equal-sided in this example) and recursively "cutting out" the middle
 triangle with points as the middle points of the starting triangle's
 sides.
-
-@author: Jorj X. McKie
-@copyright: (c) 2020, Jorj X. McKie
-@license: GNU AFFERO GPL V3
 """
 import math
 import os
 import time
 
 import fitz
-
-outfile = __file__.replace(".py", ".pdf")
 
 w = 150  # PDF page width, also determines triangle size.
 h = 0.5 * math.sqrt(3) * w  # this makes triangle equal-sided
@@ -88,7 +91,7 @@ meta = {
     "modDate": fitz.get_pdf_now(),
 }
 doc.set_metadata(meta)
-doc.save(outfile, deflate=True)
+doc.save("output_triangle.pdf", deflate=True)
 print(
     "Computation time %g seconds, triangle side %g pixels, %i sub-triangles."
     % (compute_time, abs(b - a), triangle_count)

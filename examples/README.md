@@ -18,7 +18,9 @@ If you find an issue, please fix it and submit a PR, and we will gladly incorpor
 
 At the moment the `examples` folder is being restructured by using a self-explanatory naming convention.
 
-Subfolders are named `<verb-object>`. The Python scripts are named `verb.py`. Input files and folders are provided in order to run the examples. Document files are distributed under [Creative Commons](https://creativecommons.org/licenses/) licenses while images are shared under the [Unsplash](https://unsplash.com/license) license.
+As a rule of thumb, subfolders are named `<action-object>` as if pointing out an action to be performed on an object, e.g. `attach-images`. Python scripts are then named `<action.py>`, e.g. `attach.py`.
+
+Input files and folders are provided in order to run the examples. Document files are distributed under [Creative Commons](https://creativecommons.org/licenses/) licenses while images are shared under the [Unsplash](https://unsplash.com/license) license.
 
 For further information please read the documentation section at the beginning of each script.
 
