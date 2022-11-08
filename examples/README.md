@@ -18,11 +18,7 @@ If you find an issue, please fix it and submit a PR, and we will gladly incorpor
 
 At the moment the `examples` folder is being restructured by using a self-explanatory naming convention.
 
-As a rule of thumb, subfolders are named `<action-object>` as if pointing out an action to be performed on an object, e.g. `attach-images`. Python scripts are then named `<action.py>`, e.g. `attach.py`. Thus, the `attach.py` script in the `attach-images` folder is meant to attach all files found in the `attach-images/input` a directory.
-
-Input files and folders are provided to run the examples. The input files are distributed under [Creative Commons](https://creativecommons.org/licenses/) licenses while images are shared under the [Unsplash](https://unsplash.com/license) license.
-
-Output filenames are called `output`, e.g. `output.pdf`.
+As a rule of thumb, subfolders are named `<action-object>` as if pointing out an action to be performed on an object, e.g. `attach-images`. Python scripts are then named `<action.py>`, e.g. `attach.py`. Thus, the `attach.py` script in the `attach-images` folder is meant to attach all images found in the `attach-images/input` a directory. Input files and folders are provided to run the examples. The input files are distributed under [Creative Commons](https://creativecommons.org/licenses/) licenses while images are shared under the [Unsplash](https://unsplash.com/license) license. Output filenames are called `output`, e.g. `output.pdf`.
 
 For further information on how a particular example is to be run please read the documentation section at the beginning of each script.
 
