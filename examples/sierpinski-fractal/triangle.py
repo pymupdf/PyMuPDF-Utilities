@@ -15,6 +15,7 @@ This is a mathematical fractal created by taking a start triangle
 triangle with points as the middle points of the starting triangle's
 sides.
 """
+
 import math
 import os
 import time
