@@ -13,7 +13,7 @@ These are quite a number of examples by now. Many of them have originated in ear
 
 If you find an issue, please fix it and submit a PR, and we will gladly incorporate it.
 
-At the moment the examples folder is being restructured by using a self-explanatory naming convention. The subfolders are named `<verb-object>`. The example Python scripts are named `verb.py`. Input files and folders are provided in order to run the examples. For further information on how to run a particular script please read its documentation section.
+At the moment the examples folder is being restructured by using a self-explanatory naming convention. Subfolders are named `<verb-object>`. The example Python scripts are named `verb.py`. Input files and folders are provided in order to run the examples. For further information on how to run a particular script please read its documentation section. Books and novels are distributed under a Creative Commons license while images are shared under the [Unsplash](https://unsplash.com/license) license.
 
 
 Some Files in this Directory
