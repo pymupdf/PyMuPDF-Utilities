@@ -1,5 +1,5 @@
 """
-Prints a paper size to the screen given a document width and a height.
+Print a paper size to the screen given a document width and a height.
 -------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2018 Jorj X. McKie

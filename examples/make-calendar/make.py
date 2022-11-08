@@ -1,6 +1,6 @@
 """
-Create calendars for three years in a row (starting with
-the one given as parameter) and stores the result in a PDF.
+Create calendars for three years in a row (starting with the one given as
+parameter) and stores the result in a PDF.
 -------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2018 Jorj X. McKie

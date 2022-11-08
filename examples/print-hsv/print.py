@@ -1,17 +1,21 @@
-#! /usr/bin/python
 """
-Created on Sun Jul 30 08:21:13 2017
-
-@author: (c) 2017, Jorj X. McKie
-
+Create a PDF document showing the database of stored RGB colors in sort order:
+"Hue, Saturation, Value."
+-------------------------------------------------------------------------------
 License: GNU GPL V3
+(c) 2017 Jorj X. McKie
 
-PyMuPDF demo program to print the the database of stored RGB colors as a PDF
-----------------------------------------------------------------------------
+Usage
+-----
+python print.py
+
+Notes
+-----
 The colors are sorted depending on color tuple. Each color is drawn in a
 rectangle together with its name (in back and in white to ensure readability).
 A PDF page has dimensions 800 x 600 pixels.
 """
+
 from __future__ import print_function
 import fitz, sys, os
 from fitz.utils import getColor, getColorInfoList
@@ -36,9 +40,9 @@ def sortkey(x):
         hue = 60. * (((b - r)/delta) + 2)
     else:
         hue = 60. * (((r - g)/delta) + 4)
-        
+
     H = str(int(round(hue))).zfill(3)
-    
+
     if cmax == 0:
         sat = 0
     else:
@@ -88,6 +92,6 @@ m = {"author": "Jorj X. McKie", "producer": "PyMuPDF", "creator": "colordb.py",
 
 doc.set_metadata(m)
 path = os.path.dirname(os.path.abspath(__file__))
-ofn = os.path.join(path, "colordbHSV.pdf")
+ofn = os.path.join(path, "output.pdf")
 print("Writing:", ofn)
 doc.save(ofn, garbage = 4, deflate = True, clean=True)

@@ -1,5 +1,5 @@
 """
-Creates a PDF document showing the database of stored RGB colors.
+Create a PDF document showing the database of stored RGB colors.
 -------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2017 Jorj X. McKie

@@ -26,8 +26,6 @@ For further information on how a particular example is to be run please read the
 
 File | Purpose
 -----| -------
-`colordbHSV.py` | Like `colordbRGB.py` but in sort order "Hue, Saturation, Value"
-`colordbRGB.py` | Creates a PDF showing all available color database colors
 `csv2meta.py` | Load a PDF metadata dictionary from a CSV file's contents
 `csv2toc.py` | Load a PDF TOC (table of contents) from a CSV file's contents
 `embedded-copy.py` | Copies embedded files between source and target PDF
