@@ -1,22 +1,17 @@
-# -*- coding: utf-8 -*-
 """
-@created: 2018-09-02 18:00:00
-@author: (c) 2018 Jorj X. McKie
-
 Embed all files from a directory
 -------------------------------------------------------------------------------
-Dependencies:
--------------
+License: GNU GPL V3
+(c) 2018 Jorj X. McKie
+
+Usage
+-----
+python attach.py input
+
+Dependencies
+------------
 PyMuPDF
 PySimpleGUI, optional: requires Python 3 if used
-
-License:
---------
-GNU GPL V3+
-
-Description
-------------
-Take all files from a directory and attach them to pages in a new PDF.
 """
 from __future__ import print_function
 import os, time, sys, fitz

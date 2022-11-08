@@ -1,25 +1,19 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
 """
-Created on Sun June 11 16:00:00 2017
+Create calendars for three years in a row (starting with
+the one given as parameter) and stores the result in a PDF.
+-------------------------------------------------------------------------------
+License: GNU GPL V3
+(c) 2018 Jorj X. McKie
 
-@author: Jorj McKie
-Copyright (c) 2017-2020 Jorj X. McKie
+Usage
+-----
+python make.py
 
-The license of this program is governed by the GNU GENERAL PUBLIC LICENSE
-Version 3, 29 June 2007 or later.
-
-Demo program for the Python binding PyMuPDF of MuPDF.
-
-Dependencies:
--------------
+Dependencies
+------------
 * PyMuPDF v1.17.4
 * calendar (either use LocaleTextCalendar or just TextCalendar)
 * pymupdf-fonts
-
-This program creates calendars for three years in a row (starting with
-the one given as parameter) and stores the result in a PDF.
 """
 import calendar
 import sys

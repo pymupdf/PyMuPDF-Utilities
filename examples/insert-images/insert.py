@@ -1,21 +1,18 @@
 """
-@created: 2018-09-02 18:00:00
-@author: (c) 2018 Jorj X. McKie
-Create a PDF with images as its pages
--------------------------------------------------------------------------------
-Dependencies:
--------------
-PyMuPDF
-PySimpleGUI, optional: requires Python 3 if used
-
-License:
---------
-GNU GPL V3+
-
-Description
-------------
 Take all images in a file directory and make a PDF page from each image.
 Pages retain the dimension of the image shown.
+-------------------------------------------------------------------------------
+License: GNU GPL V3
+(c) 2018 Jorj X. McKie
+
+Usage
+-----
+python insert.py input
+
+Dependencies
+------------
+PyMuPDF
+PySimpleGUI, optional: requires Python 3 if used
 """
 from __future__ import print_function
 import os, time, sys, fitz

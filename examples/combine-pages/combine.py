@@ -1,16 +1,12 @@
-'''
+"""
 Copy an input PDF to output combining every 4 pages
----------------------------------------------------
+-------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2018 Jorj X. McKie
 
 Usage
-------
-python 4up.py input.pdf
-
-Result
--------
-A file "4up-input.pdf" with 1 output page for every 4 input pages.
+-----
+python combine.py input.pdf
 
 Notes
 -----
@@ -27,9 +23,9 @@ Notes
     results in a bigger file.
 
 Dependencies
--------------
+------------
 PyMuPDF 1.12.1 or later
-'''
+"""
 from __future__ import print_function
 import fitz, sys
 infile = sys.argv[1]
