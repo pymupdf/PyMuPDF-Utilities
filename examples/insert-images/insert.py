@@ -7,7 +7,7 @@ License: GNU GPL V3
 
 Usage
 -----
-python insert.py input
+python insert.py
 
 Dependencies
 ------------

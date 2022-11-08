@@ -6,7 +6,7 @@ License: GNU GPL V3
 
 Usage
 -----
-python attach.py input
+python attach.py
 
 Dependencies
 ------------
