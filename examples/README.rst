@@ -20,8 +20,6 @@ Some Files in this Directory
 ======================= ===========================================================================================
 File                    Purpose
 ======================= ===========================================================================================
-4-up.py                 Combines 4 PDF input pages to 1 output PDF page
-cal-maker.py            creates a PDF with 3-year calendars
 colordbHSV.py           like colordbRGB.py but in sort order "Hue, Saturation, Value"
 colordbRGB.py           creates a PDF showing all available color database colors
 csv2meta.py             load a PDF metadata dictionary from a CSV file's contents
