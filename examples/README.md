@@ -18,7 +18,9 @@ If you find an issue, please fix it and submit a PR, and we will gladly incorpor
 
 At the moment the `examples` folder is being restructured by using a self-explanatory naming convention.
 
-As a rule of thumb, subfolders are named `<action-object>` as if pointing out an action to be performed on an object, e.g. `attach-images`. Python scripts are then named `<action.py>`, e.g. `attach.py`. Thus, the `attach.py` script in the `attach-images` folder is meant to attach all images found in the `attach-images/input` directory. Input files and folders are provided to run the examples. The input files are distributed under [Creative Commons](https://creativecommons.org/licenses/) licenses while images are shared under the [Unsplash](https://unsplash.com/license) license. Output filenames are called `output`, e.g. `output.pdf`.
+As a rule of thumb, subfolders are named `<action-object>` as if pointing out an action to be performed on an object, e.g. `attach-images`. Python scripts are then named `<action.py>`, e.g. `attach.py`. Thus, the `attach.py` script in the `attach-images` folder is meant to attach all images found in the `attach-images/input` directory. Input files and folders are provided to run the examples. Input filenames are called `input`, e.g. `input.pdf`. Output filenames are called `output`, e.g. `output.pdf`. 
+
+The input files are distributed under either a [Creative Commons](https://creativecommons.org/licenses/) license or a [GNU Free Documentation License](https://www.gnu.org/licenses/fdl-1.3.html) (GFDL) while images are shared under the [Unsplash](https://unsplash.com/license) license.
 
 For further information on how a particular example is to be run please read the documentation section at the beginning of each script.
 
