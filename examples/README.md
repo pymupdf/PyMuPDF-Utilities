@@ -40,5 +40,4 @@ File | Purpose
 `PDFoptimizer.py` | A wrapper for FileOptimizer - see WIKI page
 `posterize.py` | Splits up input PDF pages
 `TableExtract.py` | Example CLI program using ParseTab
-`toc2csv.py` | Export a document TOC (Table of contents) to a CSV file
 `wxTableExtract.py` | Full-featured GUI using ParseTab. Supports automatic and manual column definitions

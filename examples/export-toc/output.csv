@@ -1,0 +1,378 @@
+1,Table of Contents,3,89.349979
+1,Copyright Notice,13,89.349979
+1,Foreword,14,89.349979
+1,Preface,16,89.349979
+2,How and why I came to use Python,16,314.57
+2,Finding a textbook,17,134.65003
+2,Introducing programming with Python,18,89.349979
+2,Building a community,19,450.38
+1,Contributor List,20,89.349979
+2,Second Edition,20,472.82
+2,First Edition,21,322.78
+1,Chapter 1: The way of the program,23,89.349979
+2,1.1. The Python programming language,23,394.89
+2,1.2. What is a program?,25,89.349979
+2,1.3. What is debugging?,25,563.74
+2,1.4. Syntax errors,26,120.20001
+2,1.5. Runtime errors,26,328.39
+2,1.6. Semantic errors,26,469.68
+2,1.7. Experimental debugging,26,637.3
+2,1.8. Formal and natural languages,27,376.07
+2,1.9. The first program,29,350.85
+2,1.10. Comments,30,89.349979
+2,1.11. Glossary,30,455.48
+2,1.12. Exercises,32,493.64
+1,Chapter 2: Variables, expressions and statements,35,89.349979
+2,2.1. Values and data types,35,234.12
+2,2.2. Variables,37,408.95
+2,2.3. Variable names and keywords,39,324.35
+2,2.4. Statements,40,408.81
+2,2.5. Evaluating expressions,40,544.77
+2,2.6. Operators and operands,41,299.7
+2,2.7. Type converter functions,42,446.03
+2,2.8. Order of operations,43,622.46
+2,2.9. Operations on strings,44,507.38
+2,2.10. Input,45,308.62
+2,2.11. Composition,46,89.349979
+2,2.12. The modulus operator,47,149.04999
+2,2.13. Glossary,47,639.67
+2,2.14. Exercises,50,89.349979
+1,Chapter 3: Hello, little turtles!,52,89.349979
+2,3.1. Our first turtle program,52,282.32
+2,3.2. Instances — a herd of turtles,55,235.78998
+2,3.3. The for loop,57,233.79999
+2,3.4. Flow of Execution of the for loop,58,236.52002
+2,3.5. The loop simplifies our turtle program,59,452.93
+2,3.6. A few more turtle methods and tricks,61,191.39002
+2,3.7. Glossary,64,89.349979
+2,3.8. Exercises,65,168.64002
+1,Chapter 4: Functions,68,89.349979
+2,4.1. Functions,68,167.53998
+2,4.2. Functions can call other functions,71,324.62
+2,4.3. Flow of execution,72,475.39
+2,4.4. Functions that require arguments,75,89.349979
+2,4.5. Functions that return values,75,594.23
+2,4.6. Variables and parameters are local,77,577.29
+2,4.7. Turtles Revisited,78,377.94
+2,4.8. Glossary,79,365.78
+2,4.9. Exercises,81,467.64
+1,Chapter 5: Conditionals,85,89.349979
+2,5.1. Boolean values and expressions,85,218.40003
+2,5.2. Logical operators,86,389.08
+2,5.3. Truth Tables,87,89.349979
+2,5.4. Simplifying Boolean Expressions,87,456.09
+2,5.5. Conditional execution,88,389.98
+2,5.6. Omitting the else clause,90,162.51001
+2,5.7. Chained conditionals,91,372.54
+2,5.8. Nested conditionals,93,89.349979
+2,5.9. The return statement,94,323.91
+2,5.10. Logical opposites,94,606.52
+2,5.11. Type conversion,96,491.08
+2,5.12. A Turtle Bar Chart,97,624.23
+2,5.13. Glossary,101,400.54
+2,5.14. Exercises,102,627.71
+1,Chapter 6: Fruitful functions,105,89.349979
+2,6.1. Return values,105,167.53998
+2,6.2. Program development,107,321.65
+2,6.3. Debugging with print,110,547.96
+2,6.4. Composition,111,318.05
+2,6.5. Boolean functions,112,289.77
+2,6.6. Programming with style,113,364.78
+2,6.7. Unit testing,114,89.349979
+2,6.8. Glossary,116,391.81
+2,6.9. Exercises,117,447.68
+1,Chapter 7: Iteration,122,89.349979
+2,7.1. Assignment,122,310.99
+2,7.2. Updating variables,123,248.59003
+2,7.3. The for loop revisited,124,89.349979
+2,7.4. The while statement,124,577.25
+2,7.5. The Collatz 3n + 1 sequence,126,298.9
+2,7.6. Tracing a program,128,268.71998
+2,7.7. Counting digits,129,545.94
+2,7.8. Abbreviated assignment,130,551.33
+2,7.9. Help and meta-notation,131,561.63
+2,7.10. Tables,133,120.20001
+2,7.11. Two-dimensional tables,134,339.59
+2,7.12. Encapsulation and generalization,135,89.349979
+2,7.13. More encapsulation,136,189.70001
+2,7.14. Local variables,136,437.61
+2,7.15. The break statement,137,644.62
+2,7.16. Other flavours of loops,138,506.93
+2,7.17. An example,140,330.99
+2,7.18. The continue statement,141,381.54
+2,7.19. More generalization,142,89.349979
+2,7.20. Functions,143,523.7
+2,7.21. Paired Data,144,178.14002
+2,7.22. Nested Loops for Nested Data,145,89.349979
+2,7.23. Newton’s method for finding square roots,146,175.69
+2,7.24. Algorithms,147,428.43
+2,7.25. Glossary,148,213.06
+2,7.26. Exercises,150,635.97
+1,Chapter 8: Strings,155,89.349979
+2,8.1. A compound data type,155,167.53998
+2,8.2. Working with strings as single things,155,337.52
+2,8.3. Working with the parts of a string,156,677.43
+2,8.4. Length,158,191.44
+2,8.5. Traversal and the for loop,158,525.15
+2,8.6. Slices,159,409.74
+2,8.7. String comparison,160,580.05
+2,8.8. Strings are immutable,161,177.98999
+2,8.9. The in and not in operators,161,375.05
+2,8.10. A find function,162,505.57
+2,8.11. Looping and counting,163,387.03
+2,8.12. Optional parameters,163,607.83999
+2,8.13. The built-in find method,165,322.04
+2,8.14. The split method,165,582.69
+2,8.15. Cleaning up your strings,166,162.47998
+2,8.16. The string format method,167,443.41
+2,8.17. Summary,170,633.87
+2,8.18. Glossary,171,541.46
+2,8.19. Exercises,172,645.44
+1,Chapter 9: Tuples,177,89.349979
+2,9.1. Tuples are used for grouping data,177,159.54999
+2,9.2. Tuple assignment,178,310.66
+2,9.3. Tuples as return values,179,531.57998
+2,9.4. Composability of Data Structures,180,176.96002
+2,9.5. Glossary,180,639.06
+2,9.6. Exercises,181,341.0
+1,Chapter 10: Event handling,182,89.349979
+2,10.1. Event-driven programming,182,167.53998
+2,10.2. Keypress events,182,285.3
+2,10.3. Mouse events,183,445.89
+2,10.4. Automatic events from a timer,185,252.85999
+2,10.5. An example: state machines,186,350.3
+2,10.6. Glossary,189,349.26
+2,10.7. Exercises,189,554.54
+1,Chapter 11: Lists,192,89.349979
+2,11.1. List values,192,240.54999
+2,11.2. Accessing elements,192,614.81
+2,11.3. List length,193,613.08999
+2,11.4. List membership,194,275.56
+2,11.5. List operations,195,89.349979
+2,11.6. List slices,195,386.73
+2,11.7. Lists are mutable,195,607.58999
+2,11.8. List deletion,197,205.78998
+2,11.9. Objects and references,197,539.4
+2,11.10. Aliasing,198,579.17
+2,11.11. Cloning lists,199,458.45
+2,11.12. Lists and for loops,200,240.16999
+2,11.13. List parameters,201,503.88
+2,11.14. List methods,202,563.66006
+2,11.15. Pure functions and modifiers,203,589.85
+2,11.16. Functions that produce lists,204,647.05
+2,11.17. Strings and lists,205,339.55
+2,11.18. list and range,206,283.42
+2,11.19. Nested lists,207,400.45
+2,11.20. Matrices,208,177.03003
+2,11.21. Glossary,208,605.22
+2,11.22. Exercises,210,411.1
+1,Chapter 12: Modules,214,89.349979
+2,12.1. Random numbers,214,267.18
+2,12.2. The time module,217,517.3
+2,12.3. The math module,218,622.08
+2,12.4. Creating your own modules,219,479.27
+2,12.5. Namespaces,220,244.62
+2,12.6. Scope and lookup rules,222,315.59
+2,12.7. Attributes and the dot operator,223,510.23
+2,12.8. Three import statement variants,224,89.349979
+2,12.9. Turn your unit tester into a module,225,89.349979
+2,12.10. Glossary,225,229.45001
+2,12.11. Exercises,226,591.81
+1,Chapter 13: Files,231,89.349979
+2,13.1. About files,231,167.53998
+2,13.2. Writing our first file,231,448.43
+2,13.3. Reading a file line-at-a-time,232,338.88
+2,13.4. Turning a file into a list of lines,233,368.54
+2,13.5. Reading the whole file at once,234,89.349979
+2,13.6. Working with binary files,234,478.3
+2,13.7. An example,235,387.5
+2,13.8. Directories,236,351.96
+2,13.9. What about fetching something from the web?,237,169.68
+2,13.10. Glossary,238,232.29999
+2,13.11. Exercises,239,262.53999
+1,Chapter 14: List Algorithms,240,89.349979
+2,14.1. Test-driven development,240,312.18
+2,14.2. The linear search algorithm,240,616.87
+2,14.3. A more realistic problem,242,177.97998
+2,14.4. Binary Search,246,89.349979
+2,14.5. Removing adjacent duplicates from a list,250,89.349979
+2,14.6. Merging sorted lists,251,561.67
+2,14.7. Alice in Wonderland, again!,253,162.28003
+2,14.8. Eight Queens puzzle, part 1,255,89.349979
+2,14.9. Eight Queens puzzle, part 2,259,610.4
+2,14.10. Glossary,261,407.04
+2,14.11. Exercises,262,319.95
+1,Chapter 15: Classes and Objects — the Basics,266,89.349979
+2,15.1. Object-oriented programming,266,197.64002
+2,15.2. User-defined compound data types,266,481.06
+2,15.3. Attributes,268,399.44
+2,15.4. Improving our initializer,269,358.37
+2,15.5. Adding other methods to our class,270,522.67007
+2,15.6. Instances as arguments and parameters,272,169.68
+2,15.7. Converting an instance to a string,272,421.04
+2,15.8. Instances as return values,273,554.29
+2,15.9. A change of perspective,275,133.62
+2,15.10. Objects can have state,275,479.66
+2,15.11. Glossary,276,89.349979
+2,15.12. Exercises,277,89.349979
+1,Chapter 16: Classes and Objects — Digging a little deeper,279,89.349979
+2,16.1. Rectangles,279,197.47998
+2,16.2. Objects are mutable,280,376.96
+2,16.3. Sameness,281,326.81
+2,16.4. Copying,283,206.88
+2,16.5. Glossary,284,452.64
+2,16.6. Exercises,285,89.349979
+1,Chapter 17: PyGame,287,89.349979
+2,17.1. The game loop,287,325.71
+2,17.2. Displaying images and text,291,594.83999
+2,17.3. Drawing a board for the N queens puzzle,294,627.76
+2,17.4. Sprites,300,460.55
+2,17.5. Events,304,325.07
+2,17.6. A wave of animation,307,509.28
+2,17.7. Aliens - a case study,312,258.56
+2,17.8. Reflections,313,166.88
+2,17.9. Glossary,313,345.49
+2,17.10. Exercises,314,341.0
+1,Chapter 18: Recursion,315,89.349979
+2,18.1. Drawing Fractals,315,297.22
+2,18.2. Recursive data structures,318,299.74
+2,18.3. Processing recursive number lists,319,222.76001
+2,18.4. Case study: Fibonacci numbers,321,180.60999
+2,18.5. Example with recursive directories and files,322,268.90998
+2,18.6. An animated fractal, using PyGame,323,319.7
+2,18.7. Glossary,326,451.08
+2,18.8. Exercises,327,210.35999
+1,Chapter 19: Exceptions,331,89.349979
+2,19.1. Catching exceptions,331,167.25
+2,19.2. Raising our own exceptions,333,238.46997
+2,19.3. Revisiting an earlier example,334,243.72998
+2,19.4. The finally clause of the try statement,334,495.39
+2,19.5. Glossary,335,562.46
+2,19.6. Exercises,336,234.84998
+1,Chapter 20: Dictionaries,337,89.349979
+2,20.1. Dictionary operations,338,521.57998
+2,20.2. Dictionary methods,339,408.02
+2,20.3. Aliasing and copying,341,312.47
+2,20.4. Sparse matrices,342,89.349979
+2,20.5. Memoization,343,258.31
+2,20.6. Counting letters,344,366.37
+2,20.7. Glossary,345,208.44
+2,20.8. Exercises,346,160.81
+1,Chapter 21: A Case Study: Indexing your files,349,89.349979
+2,21.1. The Crawler,349,384.02
+2,21.2. Saving the dictionary to disk,352,342.47
+2,21.3. The Query Program,352,657.77
+2,21.4. Compressing the serialized dictionary,354,159.89002
+2,21.5. Glossary,355,89.349979
+1,Chapter 22: Even more OOP,356,89.349979
+2,22.1. MyTime,356,167.53998
+2,22.2. Pure functions,356,584.16006
+2,22.3. Modifiers,358,173.59998
+2,22.4. Converting increment to a method,359,89.349979
+2,22.5. An ``Aha!'' insight,359,514.04006
+2,22.6. Generalization,361,191.88
+2,22.7. Another example,362,89.349979
+2,22.8. Operator overloading,363,232.02002
+2,22.9. Polymorphism,365,89.349979
+2,22.10. Glossary,366,670.97
+2,22.11. Exercises,367,639.33
+1,Chapter 23: Collections of objects,369,89.349979
+2,23.1. Composition,369,167.53998
+2,23.2. Card objects,369,358.1
+2,23.3. Class attributes and the __str__ method,370,544.06
+2,23.4. Comparing cards,372,258.31
+2,23.5. Decks,374,89.349979
+2,23.6. Printing the deck,374,474.69
+2,23.7. Shuffling the deck,376,120.20001
+2,23.8. Removing and dealing cards,377,191.51001
+2,23.9. Glossary,378,162.51001
+2,23.10. Exercises,378,394.81
+1,Chapter 24: Inheritance,379,89.349979
+2,24.1. Inheritance,379,166.28003
+2,24.2. A hand of cards,379,527.19
+2,24.3. Dealing cards,380,515.47
+2,24.4. Printing a Hand,381,380.85
+2,24.5. The CardGame class,382,372.59
+2,24.6. OldMaidHand class,383,241.95001
+2,24.7. OldMaidGame class,384,583.23
+2,24.8. Glossary,388,613.27
+2,24.9. Exercises,389,247.47998
+1,Chapter 25: Linked lists,390,89.349979
+2,25.1. Embedded references,390,167.53998
+2,25.2. The Node class,390,388.46
+2,25.3. Lists as collections,391,626.6
+2,25.4. Lists and recursion,392,538.71
+2,25.5. Infinite lists,393,615.86
+2,25.6. The fundamental ambiguity theorem,394,355.43
+2,25.7. Modifying lists,395,259.09999
+2,25.8. Wrappers and helpers,396,256.38
+2,25.9. The LinkedList class,396,530.45
+2,25.10. Invariants,398,89.349979
+2,25.11. Glossary,398,365.6
+2,25.12. Exercises,399,350.41
+1,Chapter 26: Stacks,400,89.349979
+2,26.1. Abstract data types,400,165.18
+2,26.2. The Stack ADT,400,557.38
+2,26.3. Implementing stacks with Python lists,401,250.03003
+2,26.4. Pushing and popping,402,146.37
+2,26.5. Using a stack to evaluate postfix,402,515.23
+2,26.6. Parsing,403,166.88
+2,26.7. Evaluating postfix,403,570.94
+2,26.8. Clients and providers,404,495.63
+2,26.9. Glossary,405,89.349979
+2,26.10. Exercises,406,162.62
+1,Chapter 27: Queues,407,89.349979
+2,27.1. The Queue ADT,407,404.12
+2,27.2. Linked Queue,407,633.52
+2,27.3. Performance characteristics,408,661.46
+2,27.4. Improved Linked Queue,409,336.75
+2,27.5. Priority queue,410,596.7
+2,27.6. The Golfer class,412,490.85
+2,27.7. Glossary,413,478.45
+2,27.8. Exercises,414,379.2
+1,Chapter 28: Trees,415,89.349979
+2,28.1. Building trees,416,89.349979
+2,28.2. Traversing trees,416,597.73
+2,28.3. Expression trees,417,203.46002
+2,28.4. Tree traversal,418,89.349979
+2,28.5. Building an expression tree,419,510.2
+2,28.6. Handling errors,423,412.94
+2,28.7. The animal tree,424,89.349979
+2,28.8. Glossary,426,320.99
+2,28.9. Exercises,427,306.97
+1,Appendix A: Debugging,428,89.349979
+2,A.1. Syntax errors,428,489.73
+2,A.2. I can't get my program to run no matter what I do.,429,449.63
+2,A.3. Runtime errors,429,642.26
+2,A.4. My program does absolutely nothing.,430,89.349979
+2,A.5. My program hangs.,430,220.57
+2,A.6. Infinite Loop,430,609.89
+2,A.7. Infinite Recursion,431,373.72
+2,A.8. Flow of Execution,431,645.47
+2,A.9. When I run the program I get an exception.,432,161.46002
+2,A.10. I added so many print statements I get inundated with output.,433,189.72998
+2,A.11. Semantic errors,433,620.96
+2,A.12. My program doesn't work.,434,213.06
+2,A.13. I've got a big hairy expression and it doesn't do what I expect.,435,89.349979
+2,A.14. I've got a function or method that doesn't return what I expect.,435,618.2
+2,A.15. I'm really, really stuck and I need help.,436,243.85999
+2,A.16. No, I really need help.,436,537.23
+1,Appendix B: An odds-and-ends Workbook,438,89.349979
+2,B.1. The Five Strands of Proficiency,438,233.47998
+2,B.2. Sending Email,439,429.66
+2,B.3. Write your own Web Server,440,397.37
+2,B.4. Using a Database,442,325.09
+1,Appendix C: Configuring Ubuntu for Python Development,445,89.349979
+2,C.1. Vim,445,461.03
+2,C.2. $HOME environment,446,265.93
+2,C.3. Making a Python script executable and runnable from anywhere,447,89.349979
+1,Appendix D: Customizing and Contributing to the Book,448,89.349979
+2,D.1. Getting the Source,448,442.84
+2,D.2. Making the HTML Version,449,89.349979
+1,Appendix E: Some Tips, Tricks, and Common Errors,450,89.349979
+2,E.1. Functions,450,248.48999
+2,E.2. Problems with logic and flow of control,451,275.99
+2,E.3. Local variables,453,195.77002
+2,E.4. Event handler functions,454,89.349979
+2,E.5. String handling,454,447.4
+2,E.6. Looping and lists,456,208.84998
