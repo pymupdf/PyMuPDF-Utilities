@@ -34,8 +34,6 @@ File | Purpose
 `embedded-list.py` | Lists embedded file infos of a PDF
 `extract-imgb.py` | Extract images of a PDF to separate files
 `ParseTab.py` | A function to parse tables within documents
-`PDF2Text.py` | A program to extract all text of a PDF moved to [PyMuPDF-Utilities/text-extraction](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/text-extraction)
-`PDF2TextJS.py` | A program to extract all text of a PDF preserving normal reading sequence moved to [PyMuPDF-Utilities/text-extraction](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/text-extraction)
 `PDFjoiner.py` | A full-featured program to join PDF files
 `PDFoptimizer.py` | A wrapper for FileOptimizer - see WIKI page
 `PDFoutline.py` | A program to edit a PDF's table of contents
