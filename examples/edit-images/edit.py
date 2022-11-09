@@ -1,22 +1,18 @@
-# -*- coding: utf-8 -*-
-
 """
-@created: 2020-08-05 13:00:00
+Edit images in a PDF document
+-------------------------------------------------------------------------------
+License: GNU AFFERO GPL 3
+(c) 2020 Jorj X. McKie
 
-@author: Jorj X. McKie
+Usage
+-----
+python edit.py
 
-Let the user select a PDF file to maintain its images.
-
-Dependencies:
+Dependencies
+------------
 PyMuPDF v1.17.5, wxPython Phoenix version
-
-License:
- GNU AFFERO GPL 3
-
-Copyright:
- (c) 2020 Jorj X. McKie
-
 """
+
 import os
 import sys
 

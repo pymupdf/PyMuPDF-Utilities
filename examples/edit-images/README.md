@@ -1,5 +1,6 @@
-# Maintaining Images of a PDF Page
-This is a GUI script written in wxPython to maintain the images shown by a PDF page.
+# Editing Images in a PDF Page
+This is a GUI script written in wxPython to edit the images shown by a PDF page.
+
 ## Main Features
 * Detect images used by a page and display basic information: image reference name, location on the page ("bbox" - boundary box) and rotation.
 * Multiple images can be selected one at a time by stepping through them via a button.
@@ -20,7 +21,7 @@ When starting the script, a file selection dialog is shown ('*.pdf' extensions o
 
 On the panel's left side a number of controls and information fields is shown:
 
-![screen](image-maintenance.jpg)
+![screen](figure-01.jpg)
 
 * **Next img** - _(button)_ Step through the images. This is a wraparound button: after the last image, the first one will be shown again.
 * **Image: 1/2** - _(information)_ Currently selected image (bordered red) and total number of images.

@@ -33,7 +33,6 @@ File | Purpose
 `embedded-import.py` | Embeds a new file into a PDF
 `embedded-list.py` | Lists embedded file infos of a PDF
 `extract-imgb.py` | Extract images of a PDF to separate files
-`image-maintenance.py` | GUI to modify images in an existing PDF (new with v1.17.5)
 `ParseTab.py` | A function to parse tables within documents
 `PDF2Text.py` | A program to extract all text of a PDF moved to [PyMuPDF-Utilities/text-extraction](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/text-extraction)
 `PDF2TextJS.py` | A program to extract all text of a PDF preserving normal reading sequence moved to [PyMuPDF-Utilities/text-extraction](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/text-extraction)
