@@ -32,7 +32,6 @@ File | Purpose
 `embedded-export.py` | Exports an embedded file from a PDF
 `embedded-import.py` | Embeds a new file into a PDF
 `embedded-list.py` | Lists embedded file infos of a PDF
-`extract-imga.py` | Extract images of a page to separate files
 `extract-imgb.py` | Extract images of a PDF to separate files
 `image-maintenance.py` | GUI to modify images in an existing PDF (new with v1.17.5)
 `ParseTab.py` | A function to parse tables within documents
