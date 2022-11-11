@@ -45,7 +45,7 @@ logo_fn = sys.argv[2]  # name of logo file
 
 src = fitz.open(logo_fn)  # open logo document
 if not src.is_pdf:  # convert if not PDF
-    pdfbytes = src.convert_to_pdf  # convert to PDF
+    pdfbytes = src.convert_to_pdf()  # convert to PDF
     src.close()
     src = fitz.open("pdf", pdfbytes)  # open logo as a PDF
 rect = src[0].rect  # rectangle of the logo
