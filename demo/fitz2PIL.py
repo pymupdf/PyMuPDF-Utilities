@@ -14,6 +14,10 @@ Changes
 --------
 - [v1.10.0] adjust image format depending on presence of alpha in image
 - [v1.13.0] convert to non-alpha pixmap for JPEG output
+
+Requires
+--------
+Pillow
 """
 
 assert len(sys.argv) == 2, "Usage: %s <input file>" % sys.argv[0]

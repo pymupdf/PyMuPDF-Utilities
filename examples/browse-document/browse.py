@@ -29,7 +29,7 @@ pixmaps and page re-visits will re-use a once-created display list.
 
 Dependencies
 ------------
-PyMuPDF v1.14.5+, PySimpleGUI, Tkinter
+PyMuPDF v1.14.5+, PySimpleGUI, tkinter
 """
 
 import sys
@@ -37,7 +37,7 @@ import fitz
 
 print(fitz.__doc__)
 
-if not list(map(int, fitz.VersionBind.split("."))) >= [1, 14, 5]:
+if not tuple(map(int, fitz.VersionBind.split("."))) >= (1, 14, 5):
     raise SystemExit("need PyMuPDF v1.14.5 for this script")
 
 if sys.platform == "win32":

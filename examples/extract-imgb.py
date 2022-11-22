@@ -37,6 +37,8 @@ Found images are stored in a directory one level below the input PDF, called
 Dependencies
 ------------
 PyMuPDF v1.18.18
+PySimpleGUI, tkinter
+
 
 Changes
 --------

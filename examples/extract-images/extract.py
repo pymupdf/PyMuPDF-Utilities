@@ -31,6 +31,7 @@ with xref being the PDF cross reference number of the image.
 Dependencies
 ------------
 PyMuPDF v1.18.18
+PySimpleGUI, tkinter
 
 Changes
 -------

@@ -1,3 +1,8 @@
+"""
+Requires
+--------
+wxPython
+"""
 import sys
 
 import wx

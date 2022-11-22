@@ -37,6 +37,10 @@ Notes
 * We are not slowing down the speed of showing new images (i.a.w. "frames per
   second"). The statistics displayed at end of program can hence be used as a
   performance indicator.
+
+Requires
+--------
+PySimpleGUI, tkinter
 """
 
 if not list(map(int, fitz.VersionBind.split("."))) >= [1, 14, 5]:

@@ -26,6 +26,9 @@ Changes
 [v1.10.0] do not use alpha channel to save 25% image memory
 [v1.13.0] include PIL output for comparison timings
 
+Requires
+--------
+Pillow, numpy
 """
 height = 2048  # choose whatever you want here; image will consist
 width = 2028  # of 256 x 256 sized tiles, each colored as follows

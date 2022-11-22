@@ -26,6 +26,11 @@ Notes
 * We are not slowing down the speed of showing new images (= "frames per
   second"). The statistics displayed at end of program can hence be used as a
   performance indicator.
+
+Requires
+--------
+PySimpleGUI, tkinter
+
 """
 import math
 import os

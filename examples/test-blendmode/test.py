@@ -21,7 +21,6 @@ pages 520+) it generates a highlight annotation which uses it.
 Dependencies
 ------------
 PyMuPDF
-PySimpleGUI, optional: requires Python 3 if used
 """
 
 import os

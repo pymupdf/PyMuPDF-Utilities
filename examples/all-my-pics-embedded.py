@@ -8,7 +8,7 @@ Embed all files from a directory
 Dependencies:
 -------------
 PyMuPDF
-PySimpleGUI, optional: requires Python 3 if used
+PySimpleGUI, tkinter, optional: requires Python 3 if used
 
 License:
 --------
@@ -71,4 +71,3 @@ page = doc.new_page()  # every doc needs at least one page
 doc.save("all-my-pics-embedded.pdf")
 t1 = mytime()
 print("%g" % round(t1 - t0, 3), "sec processing time")
-

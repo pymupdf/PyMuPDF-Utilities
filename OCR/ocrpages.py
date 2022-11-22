@@ -12,6 +12,10 @@ Each page is then converted to a 1-page temporary PDF which is
 
 Instead of extracting simple naive text format, one could also use all other
 text extraction formats like "dict" to get text position information.
+
+Requires
+---------
+ocrmypdf
 """
 import fitz
 import ocrmypdf
