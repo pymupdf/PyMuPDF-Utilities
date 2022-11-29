@@ -5,6 +5,8 @@ This repository contains demos, examples and for using PyMuPDF in the respective
 
 > Up to version 1.18.x of PyMupdf a major effort was undertaken to rename (almost) all methods and attributes to the **_snake_case_** standard. This task is now finished. For the time being and including versions 1.19.x, old and new names will coexist. For example, the old name `doc.newPage()` can be used as well as the new name `doc.new_page()` to create a new page. In versions 1.19.x, a deprecation warning will be issued when old method names are used. In versions thereafter, only the new names will remain being valid. To help migrating your scripts to new names, you may want to use ``alias-changer.py`` in this folder.
 
+> If neither of this is an option for you, you can add a statement after `import fitz` that will add old camelCase names: `fitz.restore_aliases()`.
+
 ## OCR Support
 Starting with version 1.19.0, PyMuPDF supports MuPDF's integrated Tesseract OCR features. Over time, we will add examples for using this.
 
