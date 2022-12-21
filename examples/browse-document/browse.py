@@ -67,7 +67,7 @@ else:
 
 if not fname:
     sg.Popup("Cancelling:", "No filename supplied")
-    raise SystemExit("Cancelled: no filename supplied")
+    sys.exit("Cancelled: no filename supplied")
 
 doc = fitz.open(fname)
 page_count = len(doc)

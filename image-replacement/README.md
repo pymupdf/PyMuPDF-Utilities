@@ -1,5 +1,12 @@
 # Replacing an Image in a PDF
 
+
+----------
+
+> Note: The features described here are now (version 1.21.1) **_official methods_** of PyMuPDF's `Page` class, please consult the documentation [here](https://pymupdf.readthedocs.io/en/latest/page.html#Page.replace_image) and [here](https://pymupdf.readthedocs.io/en/latest/page.html#Page.delete_image).
+
+----------
+
 Occasionally it is desireable to replace an image by another one. Reasons may include:
 
 * switch to an image version with higher or lower resolution
@@ -12,7 +19,7 @@ The new image will be displayed exactly with the same commands like the old one.
 
 The demo script `replacer.py` replaces the PNG background image on page 1 of the example file by its JPG equivalent, which is 80% smaller than the original's size.
 
-The demo script `remover.py` replaces that PNG image by a small empty, fully transparent pixmap. The effect is **_like removing_** the image.
+The demo script `remover.py` replaces that PNG image by a small empty, fully transparent pixmap. The visual effect is **_like removing_** the image. If inspecting a page's images by methods like `Page.get_images()` that small pixmap will appear like so: `(xref, smask, 1, 1, 8, 'DeviceGray', '', 'Im1', 'FlateDecode')`. Again, this "virtual" deletion happens throughout the file.
 
 ## Replacement Approach
 
