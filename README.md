@@ -41,13 +41,19 @@ The most advanced script, [fitzcli.py](https://github.com/pymupdf/PyMuPDF-Utilit
 
 A new [folder](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/jupyter-notebooks) with notebooks explaining basic concepts in an interactive way. Will be extended over time.
 
+## Table Analysis
+
+This folder contains a collection of scripts to analyse a table. The intention here, too, is to extend the examples over time.
+Already there is a script which can extract table cells to a CSV file, if they are defined by gridlines. This includes any multi-line cell content.
+
+
 ## Examples
 From the [examples](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/examples) folder, here is a synopsis of some scripts that you may find interesting.
 
 * **image-maintenance.py** a really cool GUI script (wxPython) which allows insertion, deletion and modification of images on PDF pages in a visually controlled mode. Requires v1.17.5 and a Phoenix version of wxPython.
 * **morph-demo1.py, morph-demo2.py, morph-demo3.py** are scripts showing the effect of the ``morph`` parameter in text insertions. Each script creates a PDF page, fills a  text box and then morphs that box using its upper left corner as fixed point. Each morphing result is put on a new PDF page and the resulting pixmap is shown in an endless loop. Now require PyMuPDF v1.14.5 and can be run with Python v2.7.
 
-* **quad-show1.py, quad-show2.py** require PyMuPDF v1.14.5 and can be run with Python v2.7. They demonstrate how the modified version of `drawOval` can be used to create a wide range of shapes, both displaying the results in an endless loop.
+* **quad-show1.py, quad-show2.py** require PyMuPDF v1.14.5 and can be run with Python v2.7. They demonstrate how the modified version of `draw_oval` can be used to create a wide range of shapes, both displaying the results in an endless loop.
 
 * **all-my-pics-attached.py** - take all files from a given directory and **attach** them to pages (as *'FileAttachment'* annotations) of a new PDF. Non-file entries of the directory will be skipped.
 
