@@ -2,7 +2,7 @@
 Remove all text from a document.
 -------------------------------------------------------------------------------
 License: GNU GPL V3
-(c) 2018 Jorj X. McKie
+(c) 2022 Jorj X. McKie
 
 Usage
 -----
