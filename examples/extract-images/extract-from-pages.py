@@ -6,7 +6,7 @@ License: GNU GPL V3
 
 Usage
 -----
-python extract.py input.pdf
+python extract-from-pages.py input.pdf
 
 Description
 -----------
