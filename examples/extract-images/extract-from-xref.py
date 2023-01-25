@@ -1,3 +1,49 @@
+"""
+Extract images from a PDF document
+-------------------------------------------------------------------------------
+License: GNU GPL V3
+(c) 2018 Jorj X. McKie
+
+Usage
+-----
+python extract-from-xref.py input.pdf
+
+Description
+-----------
+This demo extracts all images of a PDF as PNG files, whether they are
+referenced by pages or not.
+
+It scans through all objects and selects /Type/XObject with /Subtype/Image.
+So runtime is determined by number of objects and image volume.
+
+Technically, images with a specified /SMask are correctly recovered and
+should appear as originally stored.
+
+Notes
+-----
+The focus of this script is to be as fault-tolerant as possible:
+
+* It can cope with invalid PDF page trees, invalid PDF objects and more
+* It ignores images with very small dimensions (<= 100 pixels side length)
+* It ignores very small image file sizes (< 2 KB)
+* It ignores too well-compressible images, assuming these are insignificant,
+  like unicolor images: image size : pixmap size <= 5%
+
+Adjust/omit these limits as required.
+
+Found images are stored in a directory one level below the input PDF, called
+"output" (created if not existing). Adjust this as appropriate.
+
+Dependencies
+------------
+PyMuPDF v1.18.18
+PySimpleGUI, tkinter
+
+Changes
+--------
+2021-09-17: Removed PIL dependency
+"""
+
 from __future__ import print_function
 
 import io
@@ -8,44 +54,6 @@ import time
 import fitz
 import PySimpleGUI as sg  # show a pogress  meter with this
 
-"""
-This demo extracts all images of a PDF as PNG files, whether they are
-referenced by pages or not.
-It scans through all objects and selects /Type/XObject with /Subtype/Image.
-So runtime is determined by number of objects and image volume.
-
-Technically, images with a specified /SMask are correctly recovered and
-should appear as originally stored.
-
-Usage:
--------
-python extract_img.py input.pdf img-prefix
-
-The focus of this script is to be as fault-tolerant as possible:
------------------------------------------------------------------
-* It can cope with invalid PDF page trees, invalid PDF objects and more
-* It ignores images with very small dimensions (<= 100 pixels side length)
-* It ignores very small image file sizes (< 2 KB)
-* It ignores too well-compressible images, assuming these are insignificant,
-  like unicolor images: image size : pixmap size <= 5%
-
-Adjust / omit these limits as required.
-
-Found images are stored in a directory one level below the input PDF, called
-"images" (created if not existing). Adjust this as appropriate.
-
-Dependencies
-------------
-PyMuPDF v1.18.18
-PySimpleGUI, tkinter
-
-
-Changes
---------
-2021-09-17: Removed PIL dependency
-
-"""
-
 print(fitz.__doc__)
 if not tuple(map(int, fitz.version[0].split("."))) >= (1, 18, 18):
     raise SystemExit("require PyMuPDF v1.18.18+")
@@ -53,7 +61,7 @@ if not tuple(map(int, fitz.version[0].split("."))) >= (1, 18, 18):
 dimlimit = 100  # each image side must be greater than this
 relsize = 0.05  # image : pixmap size ratio must be larger than this (5%)
 abssize = 2048  # absolute image size limit 2 KB: ignore if smaller
-imgdir = "images"  # found images are stored here
+imgdir = "output"  # found images are stored here
 
 if not os.path.exists(imgdir):
     os.mkdir(imgdir)
