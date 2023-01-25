@@ -36,7 +36,6 @@ File | Purpose
 `embedded-list.py` | Lists embedded file infos of a PDF
 `extract-imgb.py` | Extract images of a PDF to separate files
 `ParseTab.py` | A function to parse tables within documents
-`PDFoptimizer.py` | A wrapper for FileOptimizer - see WIKI page
 `posterize.py` | Splits up input PDF pages
 `TableExtract.py` | Example CLI program using ParseTab
 `wxTableExtract.py` | Full-featured GUI using ParseTab. Supports automatic and manual column definitions
