@@ -34,7 +34,6 @@ File | Purpose
 `embedded-export.py` | Exports an embedded file from a PDF
 `embedded-import.py` | Embeds a new file into a PDF
 `embedded-list.py` | Lists embedded file infos of a PDF
-`extract-imgb.py` | Extract images of a PDF to separate files
 `ParseTab.py` | A function to parse tables within documents
 `PDFoptimizer.py` | A wrapper for FileOptimizer - see WIKI page
 `posterize.py` | Splits up input PDF pages
