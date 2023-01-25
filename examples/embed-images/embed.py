@@ -1,23 +1,19 @@
-# -*- coding: utf-8 -*-
 """
-@created: 2018-09-02 18:00:00
-@author: (c) 2018 Jorj X. McKie
-
-Embed all files from a directory
+Embed the images found in the input directory
 -------------------------------------------------------------------------------
-Dependencies:
--------------
+License: GNU GPL V3+
+(c) 2018 Jorj X. McKie
+
+Usage
+-----
+python embed.py
+
+Dependencies
+------------
 PyMuPDF
 PySimpleGUI, tkinter, optional: requires Python 3 if used
-
-License:
---------
-GNU GPL V3+
-
-Description
-------------
-Take all files from a directory and embed them in a new PDF.
 """
+
 from __future__ import print_function
 import os, time, sys, fitz
 
@@ -68,6 +64,6 @@ for i, f in enumerate(imglist):
 
 page = doc.new_page()  # every doc needs at least one page
 
-doc.save("all-my-pics-embedded.pdf")
+doc.save("output.pdf")
 t1 = mytime()
 print("%g" % round(t1 - t0, 3), "sec processing time")

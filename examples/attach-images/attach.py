@@ -1,5 +1,5 @@
 """
-Attach all images found in a directory
+Attach the images in the input directory to a new document
 -------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2018 Jorj X. McKie
@@ -7,6 +7,10 @@ License: GNU GPL V3
 Usage
 -----
 python attach.py
+
+Description
+-----------
+Attached files are visible in the page through icons.
 
 Dependencies
 ------------

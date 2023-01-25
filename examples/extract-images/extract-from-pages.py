@@ -1,12 +1,12 @@
 """
-Extract images from a PDF document
+Extract the images of a document into the output folder
 -------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2018 Jorj X. McKie
 
 Usage
 -----
-python extract.py input.pdf
+python extract-from-pages.py input.pdf
 
 Description
 -----------
@@ -20,8 +20,8 @@ It preprocesses the following special cases:
   an RGB colorspace.
 
 The main script part implements the following features:
-- prevent multiple extractions of same image
-- prevent extraction of "unimportant" images, like "too small", "unicolor",
+* Prevent multiple extractions of same image
+* Prevent extraction of "unimportant" images, like "too small", "unicolor",
   etc. This can be controlled by parameters.
 
 Apart from above special cases, the script aims to extract images with

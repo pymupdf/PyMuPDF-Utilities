@@ -1,5 +1,5 @@
 """
-Display a PyMuPDF Document using Tkinter
+Display a document using Tkinter
 -------------------------------------------------------------------------------
 License: GNU GPL V3+
 (c) 2018-2019 Jorj X. McKie
@@ -9,7 +9,7 @@ Usage
 python browse.py input.pdf
 
 Description
-------------
+-----------
 Get filename and start displaying page 1. Please note that all file types
 of MuPDF are supported (including EPUB e-books and HTML files for example).
 Pages can be directly jumped to, or buttons can be used for paging.

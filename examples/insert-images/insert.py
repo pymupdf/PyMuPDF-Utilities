@@ -1,6 +1,5 @@
 """
-Take all images in a file directory and make a PDF page from each image.
-Pages retain the dimension of the image shown.
+Create a PDF document by inserting the images found in the input directory.
 -------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2018 Jorj X. McKie
@@ -8,6 +7,10 @@ License: GNU GPL V3
 Usage
 -----
 python insert.py
+
+Description
+-----------
+The pages retain the dimensions of the image being displayed.
 
 Dependencies
 ------------
