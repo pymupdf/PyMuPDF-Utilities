@@ -1,5 +1,5 @@
 """
-Display a PyMuPDF Document using Tkinter
+Display a document using Tkinter
 -------------------------------------------------------------------------------
 License: GNU GPL V3+
 (c) 2018-2019 Jorj X. McKie

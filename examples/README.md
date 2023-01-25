@@ -27,8 +27,8 @@ Folder | Description |
 ------ | ----------- |
 `anonymize-document` | Remove all text from a document. |
 `attach-images` | Attach the images in the input directory to a new document. |
-`browse-document` | Display a PyMuPDF Document using Tkinter. |
-`combine-pages` | Copy an input PDF to output combining every 4 pages. |
+`browse-document` | Display a document using Tkinter. |
+`combine-pages` | Copy a PDF document combining every 4 pages. |
 `edit-images` | Edit images in a PDF document. |
 `edit-toc` | Edit the table of contents (ToC) of a document. |
 `embed-images` | Embed the images found in the input directory. |
@@ -38,6 +38,9 @@ Folder | Description |
 `insert-images` | Create a PDF document by inserting the images found in the input directory. |
 `join-documents` | Create a PDF document by inserting the images in the input directory. |
 `make-calendar` | Create a calendar with three years in a row. |
+`optimize-document` | Optimize a PDF document with FileOptimizer. |
+`print-hsv` | Create a document showing RGB colors based on hue, saturation and value (HSV). |
+`print-page-format` | Print the paper size given a width and height. |
 
 ## Contributing
 

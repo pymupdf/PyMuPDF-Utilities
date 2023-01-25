@@ -1,5 +1,5 @@
 """
-Copy an input PDF to output combining every 4 pages
+Copy a PDF document combining every 4 pages
 -------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2018 Jorj X. McKie
