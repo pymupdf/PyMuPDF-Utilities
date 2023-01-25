@@ -12,7 +12,7 @@ Some of the examples were initially created in the early days of the package. AP
 
 As a rule of thumb, subfolders are named `<action-object>` as if pointing out an action to be performed on an object or set of objects, e.g. `attach-images`. Python scripts are named `<action.py>`, e.g. `attach.py`. Input filenames are called `input`, e.g. `input.pdf` while output filenames are called `output`, e.g. `output.pdf`.
 
-Thus, the `attach.py` script in the `attach-images` folder is meant to attach all images found in the `attach-images/input` directory.
+Thus, the `attach.py` script in the `attach-images` folder is meant to attach the images in `attach-images/input` to a new document.
 
 ```
 cd attach-images
@@ -26,15 +26,18 @@ For further information on how a particular example is to be run please read the
 Folder | Description |
 ------ | ----------- |
 `anonymize-document` | Remove all text from a document. |
-`attach-images` | Attach all images found in a directory. |
+`attach-images` | Attach the images in the input directory to a new document. |
 `browse-document` | Display a PyMuPDF Document using Tkinter. |
 `combine-pages` | Copy an input PDF to output combining every 4 pages. |
 `edit-images` | Edit images in a PDF document. |
 `edit-toc` | Edit the table of contents (ToC) of a document. |
-`embed-images` | Embed all images found in a directory. |
+`embed-images` | Embed the images found in the input directory. |
 `export-metadata` | Export a document metadata dictionary to a CSV file. |
 `export-toc` | Export the table of contents (ToC) of a document to a CSV file. |
-`extract-images` | Extract images from a PDF document. |
+`extract-images` | Extract the images of a document into the output folder. |
+`insert-images` | Create a PDF document by inserting the images found in the input directory. |
+`join-documents` | Create a PDF document by inserting the images in the input directory. |
+`make-calendar` | Create a calendar with three years in a row. |
 
 ## Contributing
 

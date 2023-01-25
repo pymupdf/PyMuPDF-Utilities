@@ -1,5 +1,5 @@
 """
-Embed all images found in a directory
+Embed the images found in the input directory
 -------------------------------------------------------------------------------
 License: GNU GPL V3+
 (c) 2018 Jorj X. McKie

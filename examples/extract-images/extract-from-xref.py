@@ -1,5 +1,5 @@
 """
-Extract images from a PDF document
+Extract the images of a document into the output folder
 -------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2018 Jorj X. McKie

@@ -9,7 +9,7 @@ Usage
 python browse.py input.pdf
 
 Description
-------------
+-----------
 Get filename and start displaying page 1. Please note that all file types
 of MuPDF are supported (including EPUB e-books and HTML files for example).
 Pages can be directly jumped to, or buttons can be used for paging.

@@ -9,7 +9,7 @@ Usage
 python anonymize.py input.pdf
 
 Description
-------------
+-----------
 Scan through all pages of a PDF and remove all text. The metadata dictionary
 will also be cleared with "none" values. Any XML-based metadata will also be
 deleted.

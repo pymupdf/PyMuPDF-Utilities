@@ -1,5 +1,5 @@
 """
-Join PDF files into one output file
+Create a PDF document by inserting the images in the input directory
 -------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2015 Jorj X. McKie
