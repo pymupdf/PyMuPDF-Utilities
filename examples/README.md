@@ -23,24 +23,30 @@ The input files are distributed under either a [Creative Commons](https://creati
 
 For further information on how a particular example is to be run please read the documentation section at the beginning of each script.
 
-Folder | Description |
------- | ----------- |
-`anonymize-document` | Remove all text from a document. |
-`attach-images` | Attach the images in the input directory to a new document. |
-`browse-document` | Display a document using Tkinter. |
-`combine-pages` | Copy a PDF document combining every 4 pages. |
-`edit-images` | Edit images in a PDF document. |
-`edit-toc` | Edit the table of contents (ToC) of a document. |
-`embed-images` | Embed the images found in the input directory. |
-`export-metadata` | Export a document metadata dictionary to a CSV file. |
-`export-toc` | Export the table of contents (ToC) of a document to a CSV file. |
-`extract-images` | Extract the images of a document into the output folder. |
-`insert-images` | Create a PDF document by inserting the images found in the input directory. |
-`join-documents` | Create a PDF document by inserting the images in the input directory. |
-`make-calendar` | Create a calendar with three years in a row. |
-`optimize-document` | Optimize a PDF document with FileOptimizer. |
-`print-hsv` | Create a document showing RGB colors based on hue, saturation and value (HSV). |
-`print-page-format` | Print the paper size given a width and height. |
+Folder | File | Description |
+------ | -----| ----------- |
+`anonymize-document` | `anonymize.py` | Remove all text from a document. |
+`attach-images` | `attach.py` | Attach the images in the input directory to a new document. |
+`browse-document` | `browse.py` | Display a document using Tkinter. |
+`combine-pages` | `combine.py` | Copy a PDF document combining every 4 pages. |
+`edit-images` | `edit.py` | Edit images in a PDF document. |
+`edit-toc` | `edit.py` | Edit the table of contents (ToC) of a document. |
+`embed-images` | `embed.py` | Embed the images found in the input directory. |
+`export-metadata` | `export.py` | Export a document metadata dictionary to a CSV file. |
+`export-toc` | `export.py` | Export the table of contents (ToC) of a document to a CSV file. |
+`extract-images` | `extract-from-pages.py` | Extract the images of a document into the output folder. |
+`extract-images` | `extract-from-xref.py` | Extract the images of a document into the output folder. |
+`insert-images` | `insert.py` | Create a PDF document by inserting the images found in the input directory. |
+`join-documents` | `join.py` | Create a PDF document by inserting the images in the input directory. |
+`make-calendar` | `make.py` | Create a calendar with three years in a row. |
+`optimize-document` | `optimize.py` | Optimize a PDF document with FileOptimizer. |
+`print-hsv` | `print.py` | Create a document showing RGB colors based on hue, saturation and value (HSV). |
+`print-page-format` | `print.py` | Print the paper size given a width and height. |
+`print-rgb` | `print.py` | Create a document showing RGB colors. |
+`sierpinski-fractal` | `carpet.py` | Draw the Sierpinski carpet. |
+`sierpinski-fractal` | `punch.py` | Draw the Sierpinski carpet. |
+`sierpinski-fractal` | `triangle.py` | Draw the Sierpinski triangle. |
+`test-blendmode` | `test.py` | Generate highlight annotations using blend modes. |
 
 ## Contributing
 

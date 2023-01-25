@@ -12,7 +12,7 @@ Notes
 -----
 The colors are sorted according to their HSV tuple. Each color is shown as a
 rectangle containing its name (in black and in white to ensure readability).
-A PDF page has dimensions 800 x 600 pixels.
+The page is 800 x 600 px size.
 """
 
 from __future__ import print_function
