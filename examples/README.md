@@ -19,8 +19,6 @@ cd attach-images
 python attach.py
 ```
 
-The input files are distributed under either a [Creative Commons](https://creativecommons.org/licenses/) license or a [GNU Free Documentation License](https://www.gnu.org/licenses/fdl-1.3.html) (GFDL) while images are shared under the [Unsplash](https://unsplash.com/license) license.
-
 For further information on how a particular example is to be run please read the documentation section at the beginning of each script.
 
 Folder | File | Description |
@@ -51,6 +49,13 @@ Folder | File | Description |
 `sierpinski-fractal` | `triangle.py` | Draw the Sierpinski triangle. |
 `test-blendmode` | `test.py` | Generate highlight annotations using blend modes. |
 
+## Attributions
+So, if you're creating PDF, XPS, and eBook files with PyMuPDF, you may definitely want to check out the input files that have been used in the examples.
+
+Title | Author | Publisher | License |
+----- | ------ | --------- | ------- |
+[Think Python, 2nd ed. for Python 3](https://greenteapress.com/wp/think-python-2e/) | Allen Downey | O'Reilly Media | [Creative Commons Attribution-NonCommercial 3.0 Unported](https://creativecommons.org/licenses/by-nc/3.0/) | |
+
 ## Contributing
 
-If you find an issue or bug, please let us know or send a PR. We'll be happy to review it and merge it into the codebase. Thank you.
+Contributions are more than welcome. If you find a bug or just want to give some feedback, please let us know by opening an issue or sending a PR. We'll be happy to review the code and merge it into the codebase. Thank you.
