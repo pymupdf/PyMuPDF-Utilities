@@ -50,12 +50,12 @@ Folder | File | Description |
 `test-blendmode` | `test.py` | Generate highlight annotations using blend modes. |
 
 ## Attributions
-So, if you're creating PDF, XPS, and eBook files with PyMuPDF, you may definitely want to check out the input files that have been used in the examples.
+Described below are the input files that have been used in the examples to create PDF, XPS files and eBooks with PyMuPDF.
 
 Title | Author | Publisher | License |
 ----- | ------ | --------- | ------- |
-[Dog jumping on grasses](https://unsplash.com/photos/8-sgismcDAQ) | Arjan Stalpers | Unsplash | [Unsplash](https://unsplash.com/license) |
 [Fluffy cockapoo having the time of his life at the park](https://unsplash.com/photos/qO-PIF84Vxg) | Joe Caione | Unsplash | [Unsplash](https://unsplash.com/license) |
+[Silver tabby cat photo](https://unsplash.com/photos/s2mkB4WOl9k) | Erik-Jan Leusink | Unsplash | [Unsplash](https://unsplash.com/license) |
 [Made with Creative Commons](https://creativecommons.org/use-remix/made-with-cc/) | Paul Stacey and Sarah Hinchliff Pearson | Creative Commons | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
 [Think Python, 2nd ed. for Python 3](https://greenteapress.com/wp/think-python-2e/) | Allen Downey | O'Reilly Media | [CC BY-NC 3.0](https://creativecommons.org/licenses/by-nc/3.0/) |
 
