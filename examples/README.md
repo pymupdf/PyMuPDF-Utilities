@@ -55,8 +55,8 @@ Described below are the input files that have been used in the examples to creat
 Title | Author | Publisher | License |
 ----- | ------ | --------- | ------- |
 [Fluffy cockapoo having the time of his life at the park](https://unsplash.com/photos/qO-PIF84Vxg) | Joe Caione | Unsplash | [Unsplash](https://unsplash.com/license) |
-[Silver tabby cat photo](https://unsplash.com/photos/s2mkB4WOl9k) | Erik-Jan Leusink | Unsplash | [Unsplash](https://unsplash.com/license) |
 [Made with Creative Commons](https://creativecommons.org/use-remix/made-with-cc/) | Paul Stacey and Sarah Hinchliff Pearson | Creative Commons | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+[Silver tabby cat photo](https://unsplash.com/photos/s2mkB4WOl9k) | Erik-Jan Leusink | Unsplash | [Unsplash](https://unsplash.com/license) |
 [Think Python, 2nd ed. for Python 3](https://greenteapress.com/wp/think-python-2e/) | Allen Downey | O'Reilly Media | [CC BY-NC 3.0](https://creativecommons.org/licenses/by-nc/3.0/) |
 
 ## Contributing
