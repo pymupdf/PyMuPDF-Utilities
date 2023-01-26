@@ -54,7 +54,8 @@ So, if you're creating PDF, XPS, and eBook files with PyMuPDF, you may definitel
 
 Title | Author | Publisher | License |
 ----- | ------ | --------- | ------- |
-[Think Python, 2nd ed. for Python 3](https://greenteapress.com/wp/think-python-2e/) | Allen Downey | O'Reilly Media | [Creative Commons Attribution-NonCommercial 3.0 Unported](https://creativecommons.org/licenses/by-nc/3.0/) | |
+[Made with Creative Commons](https://creativecommons.org/use-remix/made-with-cc/) | Paul Stacey and Sarah Hinchliff Pearson | Creative Commons | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+[Think Python, 2nd ed. for Python 3](https://greenteapress.com/wp/think-python-2e/) | Allen Downey | O'Reilly Media | [CC BY-NC 3.0](https://creativecommons.org/licenses/by-nc/3.0/) |
 
 ## Contributing
 
