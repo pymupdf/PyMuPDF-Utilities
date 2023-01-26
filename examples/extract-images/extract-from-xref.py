@@ -8,6 +8,11 @@ Usage
 -----
 python extract-from-xref.py input.pdf
 
+Notes
+-----
+The output.pdf file generated in examples/insert-images is renamed as input.pdf
+to be used as the input file in this example.
+
 Description
 -----------
 This demo extracts all images of a PDF as PNG files, whether they are
