@@ -1,14 +1,22 @@
+"""
+Copy the embedded files in the input document to the output document
+-------------------------------------------------------------------------------
+License: GNU AGPL V3
+(c) 2021 Jorj X. McKie
+
+Usage
+-----
+python copy.py input.pdf output.pdf
+
+Dependencies
+------------
+PyMuPDF
+"""
+
 from __future__ import print_function
 import sys
 import fitz
 
-# ------------------------------------------------------------------------------
-# Example script:
-# License: GNU AGPL V3
-# Copy embedded files between PDF documents
-# Invocation line:
-# python embedded-copy.py  in.pdf out.pdf
-# ------------------------------------------------------------------------------
 ifn = sys.argv[1]  # input PDF
 ofn = sys.argv[2]  # output PDF
 docin = fitz.open(ifn)
