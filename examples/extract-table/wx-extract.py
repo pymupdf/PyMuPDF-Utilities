@@ -1,23 +1,54 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
 """
-@created: 2016-04-07 07:00:00
-
-@author: Jorj X. McKie (c) 2017-2018
+Browse a document with a wxPython GUI to extract tables
+-------------------------------------------------------------------------------
 License: GNU GPL V3
+(c) 2018 Jorj X. McKie
 
-Display and parse tables of a document.
+Usage
+-----
+python wx-extract.py
 
-Dependencies:
--------------
+Notes
+-----
+Uses the ParseTab.py file which is found in the current directory.
+
+Description
+-----------
+A file selection dialog is displayed to pick a document. Then, the document's
+first page is displayed. The controls in the dialog allow the following:
+
+* Browse forward and backward.
+
+* Jump to a specific page.
+
+* Paint a rectangle on a page using the "New Rect" button. The selection can be
+  fine-tuned by using the spin controls. Moving the rectangle around with the
+  mouse is now supported as well.
+
+* If pressing the "New Rect" button again or if leaving the page, the existing
+  rectangle and columns will be removed.
+
+* After a rectangle has been painted, the "New Col" button allows to paint
+  columns into it. The columns are shown as vertical lines inside the rectangle,
+  and changes can be undone by selecting a column and then changing its
+  coordinates. A column is deleted by entering "0" or by changing its value to
+  something else outside of the rectangle's left/right borders.
+
+* After a column is painted, rectangles can be changed with the controls.
+  Columns will not be affected by this, however, they will be deleted if leaving
+  the rectangle area. In contrast, if a rectangle is moved with the mouse (hold
+  down the left key) columns will be moved along with it.
+
+* Any time after a rectangle has been painted, its text can be parsed by
+  pressing the "Get Table" button. The current script just prints the table to
+  STDOUT if doing this. Columns can also be added or deleted while repeatedly
+  pressing this button to evaluate any differences.
+
+Dependencies
+------------
 PyMuPDF v1.12.0, wxPython phoenix
-
-License:
---------
-GNU GPL V3
-
 """
+
 from __future__ import print_function
 import fitz
 import wx
@@ -691,7 +722,7 @@ wild = "supported files|*.pdf;*.xps;*.oxps;*.epub;*.cbz"
 # define the file selection dialog
 #==============================================================================
 dlg = wx.FileDialog(None, message = "Choose a document",
-                    defaultDir = os.path.expanduser("~"),
+                    defaultDir = os.getcwd(),
                     defaultFile = "",
                     wildcard = wild, style=wx.FD_OPEN|wx.FD_CHANGE_DIR)
 
