@@ -1,6 +1,5 @@
 """
-Create calendars for three years in a row (starting with the one given as
-parameter) and stores the result in a PDF.
+Create a calendar with three years in a row
 -------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2018 Jorj X. McKie
@@ -8,6 +7,10 @@ License: GNU GPL V3
 Usage
 -----
 python make.py
+
+Description
+------------
+Starts with the year given as a parameter and stores the result in a PDF.
 
 Dependencies
 ------------

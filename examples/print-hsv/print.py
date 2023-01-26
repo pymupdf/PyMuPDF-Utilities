@@ -1,6 +1,5 @@
 """
-Create a PDF document showing the database of stored RGB colors in sort order:
-"Hue, Saturation, Value."
+Create a document showing RGB colors based on hue, saturation and value (HSV)
 -------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2017 Jorj X. McKie
@@ -11,9 +10,9 @@ python print.py
 
 Notes
 -----
-The colors are sorted depending on color tuple. Each color is drawn in a
-rectangle together with its name (in back and in white to ensure readability).
-A PDF page has dimensions 800 x 600 pixels.
+The colors are sorted according to their HSV tuple. Each color is shown as a
+rectangle containing its name (in black and in white to ensure readability).
+The page is 800 x 600 px size.
 """
 
 from __future__ import print_function
