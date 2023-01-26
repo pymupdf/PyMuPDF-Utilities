@@ -8,6 +8,11 @@ Usage
 -----
 python copy.py input.pdf output.pdf
 
+Notes
+-----
+The output.pdf file generated in examples/embed-images is renamed as input.pdf
+to be used as the input file in this example.
+
 Dependencies
 ------------
 PyMuPDF

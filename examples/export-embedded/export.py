@@ -10,8 +10,8 @@ python export.py input.pdf joe-caione-qO-PIF84Vxg-unsplash.jpg output.pdf
 
 Notes
 -----
-The output.pdf file generated in examples/embed-images is used as the input file
-in this example.
+The output.pdf file generated in examples/embed-images is renamed as input.pdf
+to be used as the input file in this example.
 
 Dependencies
 ------------

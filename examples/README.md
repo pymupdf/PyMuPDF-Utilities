@@ -19,8 +19,6 @@ cd attach-images
 python attach.py
 ```
 
-The input files are distributed under either a [Creative Commons](https://creativecommons.org/licenses/) license or a [GNU Free Documentation License](https://www.gnu.org/licenses/fdl-1.3.html) (GFDL) while images are shared under the [Unsplash](https://unsplash.com/license) license.
-
 For further information on how a particular example is to be run please read the documentation section at the beginning of each script.
 
 Folder | File | Description |
@@ -51,6 +49,16 @@ Folder | File | Description |
 `sierpinski-fractal` | `triangle.py` | Draw the Sierpinski triangle. |
 `test-blendmode` | `test.py` | Generate highlight annotations using blend modes. |
 
+## Attributions
+Described below are the input files that have been used in the examples to create PDF, XPS files and eBooks with PyMuPDF.
+
+Title | Author | Publisher | License |
+----- | ------ | --------- | ------- |
+[Fluffy cockapoo having the time of his life at the park](https://unsplash.com/photos/qO-PIF84Vxg) | Joe Caione | Unsplash | [Unsplash](https://unsplash.com/license) |
+[Made with Creative Commons](https://creativecommons.org/use-remix/made-with-cc/) | Paul Stacey and Sarah Hinchliff Pearson | Creative Commons | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+[Silver tabby cat photo](https://unsplash.com/photos/s2mkB4WOl9k) | Erik-Jan Leusink | Unsplash | [Unsplash](https://unsplash.com/license) |
+[Think Python, 2nd ed. for Python 3](https://greenteapress.com/wp/think-python-2e/) | Allen Downey | O'Reilly Media | [CC BY-NC 3.0](https://creativecommons.org/licenses/by-nc/3.0/) |
+
 ## Contributing
 
-If you find an issue or bug, please let us know or send a PR. We'll be happy to review it and merge it into the codebase. Thank you.
+Contributions are more than welcome. If you find a bug or just want to give some feedback, please let us know by opening an issue or sending a PR. We'll be happy to review the code and merge it into the codebase. Thank you.

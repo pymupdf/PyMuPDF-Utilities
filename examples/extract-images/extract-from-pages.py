@@ -4,6 +4,11 @@ Extract the images of a document into the output folder
 License: GNU GPL V3
 (c) 2018 Jorj X. McKie
 
+Notes
+-----
+The output.pdf file generated in examples/insert-images is renamed as input.pdf
+to be used as the input file in this example.
+
 Usage
 -----
 python extract-from-pages.py input.pdf
