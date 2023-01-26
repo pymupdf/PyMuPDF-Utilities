@@ -38,6 +38,7 @@ Folder | File | Description |
 `export-toc` | `export.py` | Export the table of contents (ToC) of a document to a CSV file. |
 `extract-images` | `extract-from-pages.py` | Extract the images of a document into the output folder. |
 `extract-images` | `extract-from-xref.py` | Extract the images of a document into the output folder. |
+`extract-table` | `wx-extract.py` | Browse a document with a wxPython GUI to extract tables. |
 `insert-images` | `insert.py` | Create a PDF document by inserting the images found in the input directory. |
 `join-documents` | `join.py` | Create a PDF document by inserting the images in the input directory. |
 `make-calendar` | `make.py` | Create a calendar with three years in a row. |
