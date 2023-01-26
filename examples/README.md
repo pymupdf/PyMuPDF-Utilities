@@ -33,6 +33,7 @@ Folder | File | Description |
 `edit-images` | `edit.py` | Edit images in a PDF document. |
 `edit-toc` | `edit.py` | Edit the table of contents (ToC) of a document. |
 `embed-images` | `embed.py` | Embed the images found in the input directory. |
+`export-embedded` | `export.py` | Extract an embedded file from the input document to the output document. |
 `export-metadata` | `export.py` | Export a document metadata dictionary to a CSV file. |
 `export-toc` | `export.py` | Export the table of contents (ToC) of a document to a CSV file. |
 `extract-images` | `extract-from-pages.py` | Extract the images of a document into the output folder. |
