@@ -1,22 +1,53 @@
-# -*- coding: utf-8 -*-
-
 """
-@created: 2017-03-10 13:40:00
+Edit the links in a PDF document
+-------------------------------------------------------------------------------
+License: GNU GPL V3
+(c) 2023 Jorj X. McKie
 
-@author: Jorj X. McKie
+Usage
+-----
+python edit.py
 
-Let the user select a Python file to display and update its links.
+Description
+-----------
+A file selection dialog is displayed to pick a document. Then, the document's
+first page is displayed. The controls in the dialog allow the following:
 
-Dependencies:
-PyMuPDF v1.10.x, wxPython Phoenix version
+* Browse forward and backward.
 
-License:
- GNU GPL 3.x, GNU AFFERO GPL 3
+* Jump to a specific page.
 
-Copyright:
- (c) 2017-2018 Jorj X. McKie
+* The links in a page are displayed in a blue rectangle, the so-called hot spot.
+  If hovering the mouse over a link its destination information is displayed.
+  Then, if clicking on the rectangle the color changes to red and the link
+  details are displayed on the left.
 
+* The link details can be changed.
+
+* The "New Link" button allows to paint a new rectangle on the page. The new
+  link can be edited like any other link.
+
+* In order to change the hot spot of a link, press down the left mouse button or
+  change its shape by moving the bottom right corner with the mouse. The values
+  can also be changed directly in the hot spot section.
+
+* After painting a hot spot, click on it and start changing the link attributes.
+  If "GoToR", "Launch" or "URI" are selected the text in the hot spot will be
+  shown in the "File" or "URI" fields, respectively, to be changed as required.
+
+* In order to delete a link, set its link type to "NONE". It will remain
+  available for further modification until the "Update" button is pressed.
+
+* The "Update" button must be clicked on in order to save the changes made on a
+  page; otherwise, the changes made so far will be discarded.
+
+* The "Save" button allows to save the changes.
+
+Dependencies
+------------
+PyMuPDF, wxPython Phoenix version
 """
+
 from __future__ import print_function
 import fitz
 import wx
