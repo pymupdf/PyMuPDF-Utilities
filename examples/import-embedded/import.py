@@ -28,23 +28,16 @@ parser.add_argument("-o", "--output", help="output PDF (default: modify pdf)")
 
 args = parser.parse_args()
 
-delim = args.desc  # requested CSV delimiter character
-pdffn = args.pdf
-impfn = args.file
-
-doc = fitz.open(pdffn)
 if not args.name:
-    name = impfn
+    name = args.file
 desc = args.desc
 if not args.desc:
-    desc = impfn
+    desc = args.file
 
-# to be on the safe side, always open as binary
-content = open(impfn, "rb").read()  # read all file content in
+content = open(args.file, "rb").read()
+doc = fitz.open(args.pdf)
+doc.embfile_add(name, content, args.file, desc)
 
-# import the file into the PDF
-doc.embfile_add(name, content, impfn, desc)
-# save PDF (either incremental or to new PDF file)
 if not args.output:
     doc.saveIncr()
 else:
