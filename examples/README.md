@@ -39,6 +39,7 @@ Folder | File | Description |
 `extract-table` | `wx-extract.py` | Browse a document with a wxPython GUI to extract tables. |
 `insert-images` | `insert.py` | Create a PDF document by inserting the images found in the input directory. |
 `join-documents` | `join.py` | Create a PDF document by inserting the images in the input directory. |
+`load-toc` | `load.py` | Load a table of contents (ToC) from a CSV file into a PDF document. |
 `make-calendar` | `make.py` | Create a calendar with three years in a row. |
 `optimize-document` | `optimize.py` | Optimize a PDF document with FileOptimizer. |
 `print-hsv` | `print.py` | Create a document showing RGB colors based on hue, saturation and value (HSV). |

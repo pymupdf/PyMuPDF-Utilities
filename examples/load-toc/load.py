@@ -1,5 +1,5 @@
 """
-Load a table of contents (ToC) from a CSV file
+Load a table of contents (ToC) from a CSV file into a PDF document
 -------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2023 Jorj X. McKie
