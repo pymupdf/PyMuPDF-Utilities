@@ -1,5 +1,5 @@
 """
-Edit the links in a PDF document
+Edit links in a PDF document
 -------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2023 Jorj X. McKie

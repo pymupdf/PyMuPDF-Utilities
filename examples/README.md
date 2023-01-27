@@ -29,6 +29,7 @@ Folder | File | Description |
 `combine-pages` | `combine.py` | Copy a PDF document combining every 4 pages. |
 `copy-embedded` | `copy.py` | Copy the embedded files in the input document to the output document. |
 `edit-images` | `edit.py` | Edit images in a PDF document. |
+`edit-links` | `edit.py` | Edit links in a PDF document. |
 `edit-toc` | `edit.py` | Edit the table of contents (ToC) of a document. |
 `embed-images` | `embed.py` | Embed the images found in the input directory. |
 `export-embedded` | `export.py` | Extract an embedded file from the input document to the output document. |
