@@ -11,7 +11,8 @@ python load.py -d ";" -csv input.csv -pdf input.pdf
 Description
 -----------
 The output.csv file generated in examples/export-toc is renamed as input.csv
-to be used as an input file in this example.
+to be used as an input file in this example. The input.pdf file behaves as both
+an input and an output file.
 
 Please note that all existing outline entries (bookmarks) in the PDF will be
 replaced if running this script. The document is updated.
