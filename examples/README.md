@@ -26,7 +26,7 @@ Folder | File | Description |
 `edit-links` | `edit.py` | Edit links in a PDF document. |
 `edit-toc` | `edit.py` | Edit the table of contents (ToC) of a document. |
 `embed-images` | `embed.py` | Embed the images found in the input directory. |
-`export-embedded` | `export.py` | Extract an embedded file from the input document to the output document. |
+`export-embedded` | `export.py` | Export an embedded file from the input document to the output document. |
 `export-metadata` | `export.py` | Export a document metadata dictionary to a CSV file. |
 `export-toc` | `export.py` | Export the table of contents (ToC) of a document to a CSV file. |
 `extract-images` | `extract-from-pages.py` | Extract the images of a document into the output folder. |
@@ -35,11 +35,11 @@ Folder | File | Description |
 `extract-table` | `wx-extract.py` | Browse a document with a wxPython GUI to extract tables. |
 `extract-xobj` | `extract.py` | Scan a document and store the embedded XObjects as pages in a new document. |
 `import-embedded` | `import.py` | Import a file to a document. |
+`import-metadata` | `import.py` | Import a metadata dictionary from a CSV file into a PDF document. |
+`import-toc` | `import.py` | Import a table of contents (ToC) from a CSV file into a PDF document. |
 `insert-images` | `insert.py` | Create a PDF document by inserting the images found in the input directory. |
 `join-documents` | `join.py` | Create a PDF document by inserting the images in the input directory. |
 `list-embedded` | `list.py` | Print a list of embedded files in a document. |
-`load-metadata` | `load.py` | Load a metadata dictionary from a CSV file into a PDF document. |
-`load-toc` | `load.py` | Load a table of contents (ToC) from a CSV file into a PDF document. |
 `make-calendar` | `make.py` | Create a calendar with three years in a row. |
 `optimize-document` | `optimize.py` | Optimize a PDF document with FileOptimizer. |
 `print-hsv` | `print.py` | Create a document showing RGB colors based on hue, saturation and value (HSV). |

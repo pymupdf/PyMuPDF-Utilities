@@ -1,12 +1,12 @@
 """
-Load a table of contents (ToC) from a CSV file into a PDF document
+Import a table of contents (ToC) from a CSV file into a PDF document
 -------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2023 Jorj X. McKie
 
 Usage
 -----
-python load.py -d ";" -csv input.csv -pdf input.pdf
+python import.py -d ";" -csv input.csv -pdf input.pdf
 
 Description
 -----------
