@@ -1,12 +1,12 @@
 """
-Load a metadata dictionary from a CSV file into a PDF document
+Import a metadata dictionary from a CSV file into a PDF document
 -------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2023 Jorj X. McKie
 
 Usage
 -----
-python load.py -d ";" -x "n" -csv input.csv -pdf input.pdf
+python import.py -d ";" -x "n" -csv input.csv -pdf input.pdf
 
 Description
 -----------

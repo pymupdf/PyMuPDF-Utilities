@@ -1,5 +1,5 @@
 """
-Extract an embedded file from the input document to the output document
+Export an embedded file from the input document to the output document
 -------------------------------------------------------------------------------
 License: GNU AGPL V3
 (c) 2021 Jorj X. McKie
