@@ -1,5 +1,5 @@
 """
-Return a list of embedded files in a document
+Print a list of embedded files in a document
 -------------------------------------------------------------------------------
 License: GNU AGPL V3
 (c) 2021 Jorj X. McKie
