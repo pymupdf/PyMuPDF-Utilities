@@ -1,22 +1,53 @@
-# -*- coding: utf-8 -*-
-
 """
-@created: 2017-03-10 13:40:00
+Edit links in a PDF document
+-------------------------------------------------------------------------------
+License: GNU GPL V3
+(c) 2023 Jorj X. McKie
 
-@author: Jorj X. McKie
+Usage
+-----
+python edit.py
 
-Let the user select a Python file to display and update its links.
+Description
+-----------
+A file selection dialog is displayed to pick a document. Then, the document's
+first page is displayed. The controls in the dialog allow the following:
 
-Dependencies:
-PyMuPDF v1.10.x, wxPython Phoenix version
+* Browse forward and backward.
 
-License:
- GNU GPL 3.x, GNU AFFERO GPL 3
+* Jump to a specific page.
 
-Copyright:
- (c) 2017-2018 Jorj X. McKie
+* The links in a page are displayed in a blue rectangle, the so-called hot spot.
+  If hovering the mouse over a link its destination information is displayed.
+  Then, if clicking on the rectangle the color changes to red and the link
+  details are displayed on the left.
 
+* The link details can be changed.
+
+* The "New Link" button allows to paint a new rectangle on the page. The new
+  link can be edited like any other link.
+
+* In order to change the hot spot of a link, press down the left mouse button or
+  change its shape by moving the bottom right corner with the mouse. The values
+  can also be changed directly in the hot spot section.
+
+* After painting a hot spot, click on it and start changing the link attributes.
+  If "GoToR", "Launch" or "URI" are selected the text in the hot spot will be
+  shown in the "File" or "URI" fields, respectively, to be changed as required.
+
+* In order to delete a link, set its link type to "NONE". It will remain
+  available for further modification until the "Update" button is pressed.
+
+* The "Update" button must be clicked on in order to save the changes made on a
+  page; otherwise, the changes made so far will be discarded.
+
+* The "Save" button allows to save the changes.
+
+Dependencies
+------------
+PyMuPDF, wxPython Phoenix version
 """
+
 from __future__ import print_function
 import fitz
 import wx
@@ -143,7 +174,7 @@ class PDFdisplay(wx.Dialog):
         self.bitmap = self.pdf_show(1)
         self.PDFimage = wx.StaticBitmap(self, -1, self.bitmap,
                            defPos, defSiz, style = 0)
-        
+
         #======================================================================
         # Fields defining a PDF link
         #======================================================================
@@ -154,19 +185,19 @@ class PDFdisplay(wx.Dialog):
         self.linkType = wx.Choice(self, -1, defPos, defSiz,
                            self.linkTypeStrings)
         self.fromLeft = wx.SpinCtrl(self, -1, "",
-                           defPos, wx.Size(60, -1), 
+                           defPos, wx.Size(60, -1),
                            wx.TE_RIGHT|wx.SP_ARROW_KEYS|wx.TE_PROCESS_ENTER,
                            0, 9999)
         self.fromTop = wx.SpinCtrl(self, -1, "",
-                          defPos, wx.Size(60, -1), 
+                          defPos, wx.Size(60, -1),
                           wx.TE_RIGHT|wx.SP_ARROW_KEYS|wx.TE_PROCESS_ENTER,
                           0, 9999)
         self.fromWidth = wx.SpinCtrl(self, -1, "",
-                            defPos, wx.Size(60, -1), 
+                            defPos, wx.Size(60, -1),
                             wx.TE_RIGHT|wx.SP_ARROW_KEYS|wx.TE_PROCESS_ENTER,
                             0, 9999)
         self.fromHeight = wx.SpinCtrl(self, -1, "",
-                             defPos, wx.Size(60, -1), 
+                             defPos, wx.Size(60, -1),
                              wx.TE_RIGHT|wx.SP_ARROW_KEYS|wx.TE_PROCESS_ENTER,
                              0, 9999)
         self.toFile = wx.TextCtrl(self, -1, "", defPos,
@@ -190,18 +221,18 @@ class PDFdisplay(wx.Dialog):
         #======================================================================
         # sizers of the dialog
         #======================================================================
-        szr00 = wx.BoxSizer(wx.HORIZONTAL)        
+        szr00 = wx.BoxSizer(wx.HORIZONTAL)
         szr10 = wx.BoxSizer(wx.VERTICAL)
         szr20 = wx.BoxSizer(wx.HORIZONTAL)
         szr30 = wx.GridBagSizer(5, 5)
-        
+
         szr20.Add(self.btn_Next, 0, wx.ALL, 5)
         szr20.Add(self.btn_Previous, 0, wx.ALL, 5)
         szr20.Add(self.TextToPage, 0, wx.ALL, 5)
         szr20.Add(self.statPageMax, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
         szr20.Add(self.paperform, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
 #==============================================================================
-#       use GridBagSizer for link details  
+#       use GridBagSizer for link details
 #==============================================================================
         line_span = wx.GBSpan(1, 5)    # use for item taking full line
         #----------------------------------------------------------------------
@@ -287,19 +318,19 @@ class PDFdisplay(wx.Dialog):
         szr30.Add(self.t_Save, (17,1), (1,4))
         szr30.Add(wx.StaticLine(self, -1, defPos, defSiz, wx.LI_HORIZONTAL),
                   (18,0), line_span, wx.EXPAND)
-        
+
         szr10.Add(szr20, 0, wx.EXPAND, 5)
         szr10.Add(self.PDFimage, 0, wx.ALL, 5)
-        
+
         szr00.Add(szr30, 0, wx.ALL, 5)
         szr00.Add(wx.StaticLine(self, -1, defPos, defSiz, wx.LI_VERTICAL),
                   0, wx.EXPAND, 5)
         szr00.Add(szr10, 0, wx.EXPAND, 5)
-        
+
         szr00.Fit(self)
         self.SetSizer(szr00)
         self.Layout()
-        
+
         self.Centre(wx.BOTH)
 
         # Bind dialog items to event handlers
@@ -349,18 +380,18 @@ class PDFdisplay(wx.Dialog):
         self.draw_links()
         evt.Skip()
         return
-    
+
     def on_move_mouse(self, evt):
         pos = evt.GetPosition()
         in_rect = self.get_linkrect_idx(pos)     # rect number we are in
         in_brect = self.get_bottomrect_idx(pos)  # bottom-right corner we are in
         self.PDFimage.SetCursor(cur_norm)        # standard cursor
-            
+
         if in_brect >= 0:                        # cursor if in br corner
             self.PDFimage.SetCursor(cur_nwse)
         elif in_rect >= 0:                       # cursor if in a rect
             self.PDFimage.SetCursor(cur_hand)
-        
+
         if self.adding_link:                     # painting new hot spot?
             if in_rect >= 0 or in_brect >= 0:    # must be outside others
                 evt.Skip()
@@ -391,7 +422,7 @@ class PDFdisplay(wx.Dialog):
         if len(self.page_links) == 0:            # there are no links yet
             evt.Skip()
             return
-        
+
         if self.resize_rect:                     # resizing hot spot?
             self.PDFimage.SetCursor(cur_nwse)    # adjust cursor
             if evt.LeftIsDown():                 # mouse pressed? go!
@@ -402,7 +433,7 @@ class PDFdisplay(wx.Dialog):
                 # if large anough and no overlaps:
                 if w >= 2 * self.sense and h >= 2 * self.sense and \
                     self.is_in_free_area(nr, ok = in_brect):
-                    l = self.page_links[in_brect]     # page link entry 
+                    l = self.page_links[in_brect]     # page link entry
                     l["from"] = self.wxRect_to_Rect(nr)    # get fitz format
                     l["update"] = True
                     self.page_links[in_brect] = l     # store change link
@@ -412,7 +443,7 @@ class PDFdisplay(wx.Dialog):
                     self.draw_links()
             evt.Skip()
             return
-            
+
         if in_rect >= 0:                         # still here and inside a rect?
             self.PDFimage.SetCursor(cur_hand)    # adjust cursor
             self.PDFimage.SetToolTip(self.link_texts[in_rect])
@@ -436,7 +467,7 @@ class PDFdisplay(wx.Dialog):
                         self.draw_links()
             evt.Skip()
             return
-        
+
         self.PDFimage.UnsetToolTip()
 
         evt.Skip()
@@ -497,7 +528,7 @@ class PDFdisplay(wx.Dialog):
         self.current_idx = -1
         evt.Skip()
         return
-    
+
     def on_link_changed(self, evt):
         if self.current_idx < 0:                 # no link selected
             self.clear_link_details()
@@ -536,7 +567,7 @@ class PDFdisplay(wx.Dialog):
             pass
 
         lnk["to"] = new_to                        # destination point
-        
+
         if self.toPage.IsModified:                # dest page modified
             if self.toPage.Value.isdecimal():
                 lnk["page"] = int(self.toPage.Value) - 1
@@ -550,12 +581,12 @@ class PDFdisplay(wx.Dialog):
                 lnk["to"] = self.toName.Value
             repaint = True
             lnk["update"] = True
-               
+
         if self.toFile.IsModified:                # dest file modified
             lnk["file"] = self.toFile.Value
             repaint = True
             lnk["update"] = True
-               
+
         if self.toURI.IsModified:                 # dest URI modified
             lnk["uri"] = self.toURI.Value
             repaint = True
@@ -569,7 +600,7 @@ class PDFdisplay(wx.Dialog):
             self.draw_rect(r.x, r.y, r.width, r.height, "RED")
         evt.Skip()
         return
-    
+
     def on_linkType_changed(self, evt):
         """ Changed link kind - prepare available fields."""
         if self.current_idx < 0:
@@ -580,7 +611,7 @@ class PDFdisplay(wx.Dialog):
         lt_str = self.linkType.GetString(n)
         lt = self.link_code[lt_str]
         self.prep_link_details(lt)
-            
+
         lnk = self.page_links[self.current_idx]
         lnk["update"] = True
         lnk["kind"] = lt
@@ -603,7 +634,7 @@ class PDFdisplay(wx.Dialog):
         elif lt == fitz.LINK_GOTOR:
             if not self.toFile.Value:
                 self.toFile.SetValue(self.text_in_rect())
-                self.toFile.MarkDirty()               
+                self.toFile.MarkDirty()
 
             self.toPage.ChangeValue("-1")
             self.toLeft.ChangeValue("")
@@ -624,19 +655,19 @@ class PDFdisplay(wx.Dialog):
                 self.toURI.MarkDirty()
             lnk["uri"] = self.toURI.Value
             self.toURI.Enable()
-            
+
         elif lt == fitz.LINK_LAUNCH:
             if not self.toFile.Value:
                 self.toFile.SetValue(self.text_in_rect())
                 self.toFile.MarkDirty()
             lnk["file"] = self.toFile.Value
             self.toFile.Enable()
-            
+
         self.page_links[self.current_idx] = lnk
-            
+
         evt.Skip()
         return
-    
+
     def on_save_file(self, evt):
         indir, infile = os.path.split(self.doc.name)
         odir = indir
@@ -663,7 +694,7 @@ class PDFdisplay(wx.Dialog):
             self.doc.saveIncr()                       # equal: update input file
         else:
             self.doc.save(outfile, garbage=4)
-        
+
         sdlg.Destroy()
         self.btn_Save.Disable()
         evt.Skip()
@@ -683,7 +714,7 @@ class PDFdisplay(wx.Dialog):
         self.toHeight.ChangeValue("0")
         evt.Skip()
         return
-    
+
     def on_left_up(self, evt):
         if self.adding_link:
             n = self.linkType.GetSelection()
@@ -694,7 +725,7 @@ class PDFdisplay(wx.Dialog):
                               float(self.toHeight.Value))
             lnk = {"kind": n, "xref": 0, "from": l_from, "to": l_to,
                    "page": int(self.toPage.Value) - 1, "update": True}
-            
+
             self.link_rects.append(wxr)
             self.page_links.append(lnk)
             p = wxr.BottomRight
@@ -721,7 +752,7 @@ class PDFdisplay(wx.Dialog):
         self.PDFimage.SetCursor(cur_norm)
         evt.Skip()
         return
-    
+
     def on_left_down(self, evt):
         pos = evt.GetPosition()
         in_rect = self.get_linkrect_idx(pos)
@@ -737,19 +768,19 @@ class PDFdisplay(wx.Dialog):
                 self.fromLeft.SetValue(pos.x)
             evt.Skip()
             return
-        
+
         if in_brect >= 0:
             self.resize_rect = True
             self.current_idx = in_brect
             evt.Skip()
             return
-        
+
         if in_rect >= 0:
             self.dragging_link = True       # we are about to drag
             r = self.link_rects[in_rect]    # the wx.Rect we will be dragging
             self.dragstart_x = pos.x - r.x  # delta to left
-            self.dragstart_y = pos.y - r.y  # delta to top 
-        
+            self.dragstart_y = pos.y - r.y  # delta to top
+
         if in_rect < 0:
             self.current_idx = -1
             evt.Skip()
@@ -766,7 +797,7 @@ class PDFdisplay(wx.Dialog):
 
         lidx = self.link_to_idx[lnk["kind"]]
         self.linkType.SetSelection(lidx)
-         
+
         self.prep_link_details(lnk["kind"])
         if lnk["kind"] in (fitz.LINK_GOTO, fitz.LINK_GOTOR):
             if lnk["page"] >= 0:
@@ -786,11 +817,11 @@ class PDFdisplay(wx.Dialog):
             self.toHeight.Enable()
             if lnk["kind"] == fitz.LINK_GOTOR or self.pdf_vsn_ok:
                 self.toName.Enable()
-        
+
         elif lnk["kind"] == fitz.LINK_URI:
             self.toURI.ChangeValue(lnk["uri"])
             self.toURI.Enable()
-        
+
         elif lnk["kind"] in (fitz.LINK_GOTOR, fitz.LINK_LAUNCH):
             self.toFile.ChangeValue(lnk["file"])
             self.toFile.Enable()
@@ -806,7 +837,7 @@ class PDFdisplay(wx.Dialog):
             self.btn_Update.Disable()
             self.t_Update.Label = "Contains unsupported links. Cannot update!"
         return
-        
+
     def draw_links(self):
         dc = wx.ClientDC(self.PDFimage)
         dc.SetPen(wx.Pen("BLUE", width=1))
@@ -886,14 +917,14 @@ class PDFdisplay(wx.Dialog):
         self.toPage.Disable()
         self.adding_link = False
         self.resize_rect = False
-        
+
         return
 
     def prep_link_details(self, lt):
         if lt not in (fitz.LINK_GOTOR, fitz.LINK_LAUNCH):
             self.toFile.ChangeValue("")
             self.toFile.Disable()
-        
+
         if lt not in (fitz.LINK_GOTO, fitz.LINK_GOTOR):
             self.toPage.ChangeValue("")
             self.toHeight.ChangeValue("")
@@ -903,11 +934,11 @@ class PDFdisplay(wx.Dialog):
             self.toHeight.Disable()
             self.toPage.Disable()
             self.toName.Disable()
-        
+
         if lt != fitz.LINK_URI:
             self.toURI.ChangeValue("")
             self.toURI.Disable()
-        
+
         return
 
     def text_in_rect(self):
@@ -919,18 +950,18 @@ class PDFdisplay(wx.Dialog):
             if fitz.Rect(b[:4]) in r:
                 text += b[4]
         return text
-        
-        
+
+
     def Rect_to_wxRect(self, fr):
         """ Return a zoomed wx.Rect for given fitz.Rect."""
         r = (fr * self.zoom).irect   # zoomed IRect
         return wx.Rect(r.x0, r.y0, r.width, r.height)   # wx.Rect version
-    
+
     def wxRect_to_Rect(self, wr):
         """ Return a shrunk fitz.Rect for given wx.Rect."""
         r = fitz.Rect(wr.x, wr.y, wr.x + wr.width, wr.y + wr.height)
         return r * self.shrink        # shrunk fitz.Rect version
-    
+
     def is_in_free_area(self, nr, ok = -1):
         """ Determine if rect covers a free area inside the bitmap."""
         for i, r in enumerate(self.link_rects):
@@ -938,14 +969,14 @@ class PDFdisplay(wx.Dialog):
                 return False
         bmrect = wx.Rect(0,0,dlg.bitmap.Size[0],dlg.bitmap.Size[1])
         return bmrect.Contains(nr)
-        
+
     def get_linkrect_idx(self, pos):
         """ Determine if cursor is inside one of the link hot spots."""
         for i, r in enumerate(self.link_rects):
             if r.Contains(pos):
                 return i
         return -1
-        
+
     def get_bottomrect_idx(self, pos):
         """ Determine if cursor is on bottom right corner of a hot spot."""
         for i, r in enumerate(self.link_bottom_rects):
@@ -988,7 +1019,7 @@ class PDFdisplay(wx.Dialog):
             if self.page_links[0]["xref"] < 1:
                 self.update_links = False
         self.page_height = page.rect.height
-        self.text_blocks = page.get_textBlocks()
+        self.text_blocks = page.get_text_blocks()
         return bmp
 
     def decrypt_doc(self):
