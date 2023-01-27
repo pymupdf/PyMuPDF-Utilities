@@ -41,6 +41,7 @@ Folder | File | Description |
 `insert-images` | `insert.py` | Create a PDF document by inserting the images found in the input directory. |
 `join-documents` | `join.py` | Create a PDF document by inserting the images in the input directory. |
 `list-embedded` | `list.py` | Print a list of embedded files in a document. |
+`load-metadata` | `load.py` | Load a metadata dictionary from a CSV file into a PDF document. |
 `load-toc` | `load.py` | Load a table of contents (ToC) from a CSV file into a PDF document. |
 `make-calendar` | `make.py` | Create a calendar with three years in a row. |
 `optimize-document` | `optimize.py` | Optimize a PDF document with FileOptimizer. |
