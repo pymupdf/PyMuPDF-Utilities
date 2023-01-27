@@ -23,47 +23,44 @@ import sys
 import fitz
 
 fn = sys.argv[1]
-doc = fitz.open(fn)  # oprn input
+doc = fitz.open(fn)
 
-name_len = fname_len = 0  # some fields of interest
-tlength = tsize = 0  # total length and compressed sizes
+name_len = fname_len = 0
+tlength = tsize = 0
 
-ef_list = []  # store file infos here, because I wanted
-# to adjust column widths of the report to actually occurring data ...
-# Of yourse, a direct print is perfectly possible.
+ef_list = []
 
-for i in range(doc.embfile_count()):  # number of embedded files
-    info = doc.embfile_info(i)  # get one info dict
+for i in range(doc.embfile_count()):
+    info = doc.embfile_info(i)
     ef = (
         info["name"],
         info["filename"],
         info["length"],
         info["size"],
     )
-    ef_list.append(ef)  # save in the info list
-    name_len = max(len(ef[0]), name_len)  # column width of 'name'
-    fname_len = max(len(ef[1]), fname_len)  # column width of 'filename'
-    tlength += ef[2]  # add to total orignal file size
-    tsize += ef[3]  # add to total compressed file size
+    ef_list.append(ef)
+    name_len = max(len(ef[0]), name_len)
+    fname_len = max(len(ef[1]), fname_len)
+    tlength += ef[2]
+    tsize += ef[3]
 
-if len(ef_list) < 1:  # are we being fooled?
+if len(ef_list) < 1:
     print("no embedded files in", fn)
     exit(1)
 
-ratio = float(tsize) / tlength  # compression ration
-saves = 1 - ratio  # savings percentage
-# define header line
+ratio = float(tsize) / tlength
+saves = 1 - ratio
+
 header = (
     "Name".ljust(name_len + 4)
     + "Filename".ljust(fname_len + 4)
     + "Length".rjust(10)
     + "Size".rjust(11)
 )
-line = "-".ljust(len(header), "-")  # horizontal line
-print(line)  # print header
-print(header)  # ...
-print(line)  # ...
-# now print each file info ...
+line = "-".ljust(len(header), "-")
+print(line)
+print(header)
+print(line)
 for info in ef_list:
     print(
         info[0].ljust(name_len + 3),
@@ -71,7 +68,6 @@ for info in ef_list:
         str(info[2]).rjust(10),
         str(info[3]).rjust(10),
     )
-# print some wrap up information
 print(line)
 print(len(ef_list), "embedded files in '%s'. Totals:" % (fn,))
 print(
