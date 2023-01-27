@@ -3,11 +3,11 @@ This repository contains demos and examples to help you create PDF, XPS, and eBo
 
 ## Disclaimer
 
-Some of the examples were initially created in the early days of the package. API changes implemented over time may have caused discrepancies in the scripts. We may not update them every time an update is released, and there is no guarantee they all will work as originally expected. If you look at the scripts as what they are intended to be, examples, then they will give you a good start.
+Some examples were initially created in the early days of the package. API changes implemented over time may have caused discrepancies in the scripts. We may not update them every time an update is released, so there's no guarantee they all will work as originally expected. If you look at the scripts as what they are intended to be, examples, then they will give you a good start.
 
-Up to PyMupdf 1.18.x, methods and attributes have been renamed according to the **_snake_case_** standard. For the time being and including versions 1.19.x, old and new names will coexist. For example, `doc.newPage()` can be used as well as `doc.new_page()` to create a new page. In versions 1.19.x, a deprecation warning will be issued if **_camelCase_** names are used.
+Up to PyMupdf 1.18.x, methods and attributes have been renamed according to the snake-case standard. For the time being including versions 1.19.x, old and new names will coexist. For example, `doc.newPage()` can be used as well as `doc.new_page()` to create a new page.
 
-In the newest versions only snake-case names will be valid. You may want to use the `alias-changer.py` script in this folder to keep your code up-to-date. Alternatively, add this statement after `import fitz` to use camel-case names: `fitz.restore_aliases()`.
+> In versions 1.19.x, a deprecation warning is issued if camel-case names are used. In newest versions only snake-case names are valid. You may want to use the `alias-changer.py` script in this folder to keep your code up-to-date. Alternatively, use `fitz.restore_aliases()`.
 
 ## OCR Support
 Starting with version 1.19.0, PyMuPDF supports MuPDF's integrated Tesseract OCR features. Over time, we will add examples for using this.
@@ -26,7 +26,7 @@ Handling of table of contents (TOC) has been significantly improved in v1.18.6. 
 New for PyMuPDF v1.17.6 is the ability to replace selected fonts in existing PDFs. This is a set of two scripts and their documentation in [this](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/font-replacement) folder.
 
 ## Image Replacement
-[This](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/image-replacement) folder demonstrates the various options to **_replace_** or **_remove_** an image in a PDF.
+[This](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/image-replacement) folder demonstrates the various options to replace or remove an image in a PDF.
 
 ## Marking Words and Lines
 PyMuPDF's features have been extended in this respect. We therefore created this [own](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/word&line-marking) folder to contain dedicated scripts, descriptions and examples.
