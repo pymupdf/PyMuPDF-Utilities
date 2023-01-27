@@ -26,7 +26,7 @@ fn = sys.argv[1]
 doc = fitz.open(fn)
 
 name_len = filename_len = 0
-tlength = tsize = 0
+total_len = tsize = 0
 
 ef_list = []
 
@@ -41,14 +41,14 @@ for i in range(doc.embfile_count()):
     ef_list.append(ef)
     name_len = max(len(ef[0]), name_len)
     filename_len = max(len(ef[1]), filename_len)
-    tlength += ef[2]
+    total_len += ef[2]
     tsize += ef[3]
 
 if len(ef_list) < 1:
     print("no embedded files in", fn)
     exit(1)
 
-ratio = float(tsize) / tlength
+ratio = float(tsize) / total_len
 saves = 1 - ratio
 
 header = (
@@ -72,6 +72,6 @@ print(line)
 print(len(ef_list), "embedded files in '%s'. Totals:" % (fn,))
 print(
     "File lengths: %s, compressed: %s, ratio: %s%% (savings: %s%%)."
-    % (tlength, tsize, str(round(ratio * 100, 2)), str(round(saves * 100, 2)))
+    % (total_len, tsize, str(round(ratio * 100, 2)), str(round(saves * 100, 2)))
 )
 print(line)
