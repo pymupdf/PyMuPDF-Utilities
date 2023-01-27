@@ -37,6 +37,7 @@ Folder | File | Description |
 `extract-images` | `extract-from-pages.py` | Extract the images of a document into the output folder. |
 `extract-images` | `extract-from-xref.py` | Extract the images of a document into the output folder. |
 `extract-table` | `wx-extract.py` | Browse a document with a wxPython GUI to extract tables. |
+`extract-xobj` | `extract.py` | Scan a document and store the embedded XObjects as pages in a new document. |
 `insert-images` | `insert.py` | Create a PDF document by inserting the images found in the input directory. |
 `join-documents` | `join.py` | Create a PDF document by inserting the images in the input directory. |
 `list-embedded` | `list.py` | Print a list of embedded files in a document. |

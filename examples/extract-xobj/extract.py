@@ -1,29 +1,25 @@
 """
-Purpose
---------
-This utility is an example application of PyMuPDF.
-It scans the pages of a PDF and stores embedded XObjects as pages in a
-new PDF.
+Scan a document and store the embedded XObjects as pages in a new document
+-------------------------------------------------------------------------------
+License: GNU AGPL V3
+(c) 2023 Jorj X. McKie
 
-The new PDF pages can subsequently be used to generate conventional
-raster images of the original XObjects or as sources to be embedded
-in other PDFs.
+Usage
+-----
+python extract.py input.pdf
 
-Date of creation: 2020-03-15
-Dependcy: PyMuPDF v1.16.13 or later
+Description
+-----------
+The new pages can subsequently be used to generate conventional raster images of
+the original XObjects or as sources to be embedded in other documents.
 
-Copyright
-----------
-(c) 2020, Jorj McKie, mailto:<jorj.x.mckie@outlook.de>
-
-License
---------
-GNU AFFERO GPL V3
-
+Dependencies
+------------
+PyMuPDF
 """
+
 import sys
 import time
-
 import fitz
 
 if fitz.VersionBind.split(".") < ["1", "16", "13"]:
@@ -33,7 +29,7 @@ start_time = time.perf_counter()
 infile = sys.argv[1]  # input filename
 src = fitz.open(infile)  # open input
 print("Processing '%s' with %i pages." % (infile, len(src)))
-outfile = infile.replace(".pdf", "-xobjects.pdf")
+outfile = "output.pdf"
 doc = fitz.open()  # output file
 xobj_total = 0  # counts total number of extracted xobjects
 xrefs_encountered = []  # stores already extracted XObjects
