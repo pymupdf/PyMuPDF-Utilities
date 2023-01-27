@@ -44,15 +44,16 @@ parser = argparse.ArgumentParser(description="Enter CSV delimiter [;], CSV filen
 parser.add_argument('-d', help='CSV delimiter [;]', default = ';')
 parser.add_argument('-csv', help='CSV filename')
 parser.add_argument('-pdf', help='PDF filename')
+
 args = parser.parse_args()
-delim = args.d               # requested CSV delimiter character
+
 assert args.csv, "missing CSV filename"
 assert args.pdf, "missing PDF filename"
 
 doc = fitz.open(args.pdf)
 toc = []
 with open(args.csv) as tocfile:
-    tocreader = csv.reader(tocfile, delimiter = delim)
+    tocreader = csv.reader(tocfile, delimiter = args.d)
     for row in tocreader:
         assert len(row) <= 4, "cannot handle more than 4 entries:\n %s" % (str(row),)
         try:
