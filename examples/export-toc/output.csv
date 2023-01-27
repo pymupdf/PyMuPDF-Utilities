@@ -1,240 +1,240 @@
-1,Preface,5,86.01703
-1,The way of the program,23,86.01703
-2,What is a program?,23,482.922
-2,Running Python,24,192.91303
-2,The first program,25,86.01703
-2,Arithmetic operators,25,329.91
-2,Values and types,26,86.01703
-2,Formal and natural languages,26,533.20999
-2,Debugging,28,175.995
-2,Glossary,28,486.809
-2,Exercises,29,461.742
-1,Variables, expressions and statements,31,86.01703
-2,Assignment statements,31,352.101
-2,Variable names,31,551.169
-2,Expressions and statements,32,463.545
-2,Script mode,33,158.331
-2,Order of operations,33,628.706
-2,String operations,34,326.743
-2,Comments,34,625.45
-2,Debugging,35,366.759
-2,Glossary,36,86.01703
-2,Exercises,36,614.13
-1,Functions,39,86.01703
-2,Function calls,39,337.727
-2,Math functions,40,170.85797
-2,Composition,41,86.01703
-2,Adding new functions,41,312.706
-2,Definitions and uses,42,470.151
-2,Flow of execution,43,190.922
-2,Parameters and arguments,43,508.107
-2,Variables and parameters are local,44,474.736
-2,Stack diagrams,45,310.9
-2,Fruitful functions and void functions,46,174.104
-2,Why functions?,46,637.197
-2,Debugging,47,225.51502
-2,Glossary,47,555.554
-2,Exercises,48,567.402
-1,Case study: interface design,51,86.01703
-2,The turtle module,51,464.218
-2,Simple repetition,52,449.192
-2,Exercises,53,356.695
-2,Encapsulation,54,86.01703
-2,Generalization,54,404.324
-2,Interface design,55,288.112
-2,Refactoring,56,223.00897
-2,A development plan,57,227.42401
-2,docstring,57,518.20498
-2,Debugging,58,196.23297
-2,Glossary,58,452.44
-2,Exercises,59,395.806
-1,Conditionals and recursion,61,86.01703
-2,Floor division and modulus,61,341.719
-2,Boolean expressions,62,171.00299
-2,Logical operators,62,526.345
-2,Conditional execution,63,160.66199
-2,Alternative execution,63,440.141
-2,Chained conditionals,63,635.018
-2,Nested conditionals,64,331.185
-2,Recursion,65,141.40302
-2,Stack diagrams for recursive functions,66,375.423
-2,Infinite recursion,66,629.533
-2,Keyboard input,67,323.698
-2,Debugging,68,189.63898
-2,Glossary,69,86.01703
-2,Exercises,69,554.708
-1,Fruitful functions,73,86.01703
-2,Return values,73,359.253
-2,Incremental development,74,432.689
-2,Composition,76,244.43103
-2,Boolean functions,76,571.648
-2,More recursion,77,377.241
-2,Leap of faith,79,251.393
-2,One more example,79,549.681
-2,Checking types,80,227.44098
-2,Debugging,81,211.52899
-2,Glossary,82,266.612
-2,Exercises,82,475.171
-1,Iteration,85,86.01703
-2,Reassignment,85,358.585
-2,Updating variables,86,303.563
-2,The while statement,86,558.68899
-2,break,88,124.15698
-2,Square roots,88,480.505
-2,Algorithms,89,640.873
-2,Debugging,90,350.144
-2,Glossary,90,656.307
-2,Exercises,91,257.64399
-1,Strings,93,86.01703
-2,A string is a sequence,93,340.716
-2,len,94,142.893
-2,Traversal with a for loop,94,416.148
-2,String slices,95,483.338
-2,Strings are immutable,96,267.21003
-2,Searching,96,556.03506
-2,Looping and counting,97,276.67903
-2,String methods,97,535.98
-2,The in operator,98,507.282
-2,String comparison,99,210.401
-2,Debugging,99,488.012
-2,Glossary,101,174.258
-2,Exercises,101,511.235
-1,Case study: word play,105,86.01703
-2,Reading word lists,105,362.875
-2,Exercises,106,280.163
-2,Search,107,86.01703
-2,Looping with indices,108,86.01703
-2,Debugging,109,225.40399
-2,Glossary,109,588.88
-2,Exercises,110,86.01703
-1,Lists,111,86.01703
-2,A list is a sequence,111,357.123
-2,Lists are mutable,112,290.981
-2,Traversing a list,113,86.01703
-2,List operations,113,408.375
-2,List slices,113,645.478
-2,List methods,114,363.369
-2,Map, filter and reduce,115,86.01703
-2,Deleting elements,116,164.33899
-2,Lists and strings,116,578.13699
-2,Objects and values,117,532.48
-2,Aliasing,118,498.083
-2,List arguments,119,335.969
-2,Debugging,120,542.376
-2,Glossary,122,86.01703
-2,Exercises,122,436.149
-1,Dictionaries,125,86.01703
-2,A dictionary is a mapping,125,340.394
-2,Dictionary as a collection of counters,126,636.45
-2,Looping and dictionaries,128,164.01398
-2,Reverse lookup,128,498.958
-2,Dictionaries and lists,129,480.489
-2,Memos,131,317.111
-2,Global variables,132,168.96802
-2,Debugging,133,376.21
-2,Glossary,134,178.10797
-2,Exercises,135,86.01703
-1,Tuples,137,86.01703
-2,Tuples are immutable,137,384.667
-2,Tuple assignment,138,556.529
-2,Tuples as return values,139,360.292
-2,Variable-length argument tuples,140,86.01703
-2,Lists and tuples,140,526.301
-2,Dictionaries and tuples,142,86.01703
-2,Sequences of sequences,143,319.293
-2,Debugging,144,86.01703
-2,Glossary,144,609.758
-2,Exercises,145,266.86299
-1,Case study: data structure selection,147,86.01703
-2,Word frequency analysis,147,411.831
-2,Random numbers,148,165.771
-2,Word histogram,149,168.91999
-2,Most common words,150,238.72101
-2,Optional parameters,151,86.01703
-2,Dictionary subtraction,151,379.654
-2,Random words,152,236.95899
-2,Markov analysis,152,637.945
-2,Data structures,154,217.203
-2,Debugging,155,365.017
-2,Glossary,156,417.008
-2,Exercises,156,639.575
-1,Files,159,86.01703
-2,Persistence,159,333.771
-2,Reading and writing,159,598.348
-2,Format operator,160,315.28
-2,Filenames and paths,161,263.99
-2,Catching exceptions,162,373.354
-2,Databases,163,191.906
-2,Pickling,164,86.01703
-2,Pipes,164,482.554
-2,Writing modules,165,443.409
-2,Debugging,166,401.074
-2,Glossary,167,86.01703
-2,Exercises,167,478.69
-1,Classes and objects,169,86.01703
-2,Programmer-defined types,169,403.427
-2,Attributes,170,470.897
-2,Rectangles,171,455.16
-2,Instances as return values,172,486.612
-2,Objects are mutable,173,86.01703
-2,Copying,173,425.183
-2,Debugging,174,638.73
-2,Glossary,175,446.635
-2,Exercises,176,86.01703
-1,Classes and functions,177,86.01703
-2,Time,177,390.945
-2,Pure functions,178,187.24103
-2,Modifiers,179,310.494
-2,Prototyping versus planning,180,170.40503
-2,Debugging,181,277.68403
-2,Glossary,182,86.01703
-2,Exercises,182,329.835
-1,Classes and methods,183,86.01703
-2,Object-oriented features,183,398.053
-2,Printing objects,184,277.435
-2,Another example,185,468.186
-2,A more complicated example,186,284.01
-2,The init method,186,490.941
-2,The __str__ method,187,350.134
-2,Operator overloading,187,606.601
-2,Type-based dispatch,188,335.285
-2,Polymorphism,189,514.51406
-2,Debugging,190,400.201
-2,Interface and implementation,191,86.01703
-2,Glossary,191,419.814
-2,Exercises,192,86.01703
-1,Inheritance,193,86.01703
-2,Card objects,193,415.113
-2,Class attributes,194,401.238
-2,Comparing cards,195,493.53
-2,Decks,196,348.913
-2,Printing the deck,196,599.53506
-2,Add, remove, shuffle and sort,197,349.831
-2,Inheritance,198,144.24903
-2,Class diagrams,199,379.627
-2,Debugging,200,378.108
-2,Data encapsulation,201,262.58399
-2,Glossary,202,390.269
-2,Exercises,203,194.57
-1,The Goodies,205,86.01703
-2,Conditional expressions,205,390.56
-2,List comprehensions,206,331.895
-2,Generator expressions,207,236.271
-2,any and all,207,637.179
-2,Sets,208,338.395
-2,Counters,209,482.048
-2,defaultdict,210,334.938
-2,Named tuples,211,527.78799
-2,Gathering keyword args,212,591.581
-2,Glossary,213,500.223
-2,Exercises,214,86.01703
-1,Debugging,215,86.01703
-2,Syntax errors,215,554.421
-2,Runtime errors,217,250.56299
-2,Semantic errors,220,312.493
-1,Analysis of Algorithms,223,86.01703
-2,Order of growth,224,294.499
-2,Analysis of basic Python operations,226,86.01703
-2,Analysis of search algorithms,227,344.06
-2,Hashtables,228,86.01703
-2,Glossary,231,366.908
+1;Preface;5;86.01703
+1;The way of the program;23;86.01703
+2;What is a program?;23;482.922
+2;Running Python;24;192.91303
+2;The first program;25;86.01703
+2;Arithmetic operators;25;329.91
+2;Values and types;26;86.01703
+2;Formal and natural languages;26;533.20999
+2;Debugging;28;175.995
+2;Glossary;28;486.809
+2;Exercises;29;461.742
+1;Variables, expressions and statements;31;86.01703
+2;Assignment statements;31;352.101
+2;Variable names;31;551.169
+2;Expressions and statements;32;463.545
+2;Script mode;33;158.331
+2;Order of operations;33;628.706
+2;String operations;34;326.743
+2;Comments;34;625.45
+2;Debugging;35;366.759
+2;Glossary;36;86.01703
+2;Exercises;36;614.13
+1;Functions;39;86.01703
+2;Function calls;39;337.727
+2;Math functions;40;170.85797
+2;Composition;41;86.01703
+2;Adding new functions;41;312.706
+2;Definitions and uses;42;470.151
+2;Flow of execution;43;190.922
+2;Parameters and arguments;43;508.107
+2;Variables and parameters are local;44;474.736
+2;Stack diagrams;45;310.9
+2;Fruitful functions and void functions;46;174.104
+2;Why functions?;46;637.197
+2;Debugging;47;225.51502
+2;Glossary;47;555.554
+2;Exercises;48;567.402
+1;Case study: interface design;51;86.01703
+2;The turtle module;51;464.218
+2;Simple repetition;52;449.192
+2;Exercises;53;356.695
+2;Encapsulation;54;86.01703
+2;Generalization;54;404.324
+2;Interface design;55;288.112
+2;Refactoring;56;223.00897
+2;A development plan;57;227.42401
+2;docstring;57;518.20498
+2;Debugging;58;196.23297
+2;Glossary;58;452.44
+2;Exercises;59;395.806
+1;Conditionals and recursion;61;86.01703
+2;Floor division and modulus;61;341.719
+2;Boolean expressions;62;171.00299
+2;Logical operators;62;526.345
+2;Conditional execution;63;160.66199
+2;Alternative execution;63;440.141
+2;Chained conditionals;63;635.018
+2;Nested conditionals;64;331.185
+2;Recursion;65;141.40302
+2;Stack diagrams for recursive functions;66;375.423
+2;Infinite recursion;66;629.533
+2;Keyboard input;67;323.698
+2;Debugging;68;189.63898
+2;Glossary;69;86.01703
+2;Exercises;69;554.708
+1;Fruitful functions;73;86.01703
+2;Return values;73;359.253
+2;Incremental development;74;432.689
+2;Composition;76;244.43103
+2;Boolean functions;76;571.648
+2;More recursion;77;377.241
+2;Leap of faith;79;251.393
+2;One more example;79;549.681
+2;Checking types;80;227.44098
+2;Debugging;81;211.52899
+2;Glossary;82;266.612
+2;Exercises;82;475.171
+1;Iteration;85;86.01703
+2;Reassignment;85;358.585
+2;Updating variables;86;303.563
+2;The while statement;86;558.68899
+2;break;88;124.15698
+2;Square roots;88;480.505
+2;Algorithms;89;640.873
+2;Debugging;90;350.144
+2;Glossary;90;656.307
+2;Exercises;91;257.64399
+1;Strings;93;86.01703
+2;A string is a sequence;93;340.716
+2;len;94;142.893
+2;Traversal with a for loop;94;416.148
+2;String slices;95;483.338
+2;Strings are immutable;96;267.21003
+2;Searching;96;556.03506
+2;Looping and counting;97;276.67903
+2;String methods;97;535.98
+2;The in operator;98;507.282
+2;String comparison;99;210.401
+2;Debugging;99;488.012
+2;Glossary;101;174.258
+2;Exercises;101;511.235
+1;Case study: word play;105;86.01703
+2;Reading word lists;105;362.875
+2;Exercises;106;280.163
+2;Search;107;86.01703
+2;Looping with indices;108;86.01703
+2;Debugging;109;225.40399
+2;Glossary;109;588.88
+2;Exercises;110;86.01703
+1;Lists;111;86.01703
+2;A list is a sequence;111;357.123
+2;Lists are mutable;112;290.981
+2;Traversing a list;113;86.01703
+2;List operations;113;408.375
+2;List slices;113;645.478
+2;List methods;114;363.369
+2;Map, filter and reduce;115;86.01703
+2;Deleting elements;116;164.33899
+2;Lists and strings;116;578.13699
+2;Objects and values;117;532.48
+2;Aliasing;118;498.083
+2;List arguments;119;335.969
+2;Debugging;120;542.376
+2;Glossary;122;86.01703
+2;Exercises;122;436.149
+1;Dictionaries;125;86.01703
+2;A dictionary is a mapping;125;340.394
+2;Dictionary as a collection of counters;126;636.45
+2;Looping and dictionaries;128;164.01398
+2;Reverse lookup;128;498.958
+2;Dictionaries and lists;129;480.489
+2;Memos;131;317.111
+2;Global variables;132;168.96802
+2;Debugging;133;376.21
+2;Glossary;134;178.10797
+2;Exercises;135;86.01703
+1;Tuples;137;86.01703
+2;Tuples are immutable;137;384.667
+2;Tuple assignment;138;556.529
+2;Tuples as return values;139;360.292
+2;Variable-length argument tuples;140;86.01703
+2;Lists and tuples;140;526.301
+2;Dictionaries and tuples;142;86.01703
+2;Sequences of sequences;143;319.293
+2;Debugging;144;86.01703
+2;Glossary;144;609.758
+2;Exercises;145;266.86299
+1;Case study: data structure selection;147;86.01703
+2;Word frequency analysis;147;411.831
+2;Random numbers;148;165.771
+2;Word histogram;149;168.91999
+2;Most common words;150;238.72101
+2;Optional parameters;151;86.01703
+2;Dictionary subtraction;151;379.654
+2;Random words;152;236.95899
+2;Markov analysis;152;637.945
+2;Data structures;154;217.203
+2;Debugging;155;365.017
+2;Glossary;156;417.008
+2;Exercises;156;639.575
+1;Files;159;86.01703
+2;Persistence;159;333.771
+2;Reading and writing;159;598.348
+2;Format operator;160;315.28
+2;Filenames and paths;161;263.99
+2;Catching exceptions;162;373.354
+2;Databases;163;191.906
+2;Pickling;164;86.01703
+2;Pipes;164;482.554
+2;Writing modules;165;443.409
+2;Debugging;166;401.074
+2;Glossary;167;86.01703
+2;Exercises;167;478.69
+1;Classes and objects;169;86.01703
+2;Programmer-defined types;169;403.427
+2;Attributes;170;470.897
+2;Rectangles;171;455.16
+2;Instances as return values;172;486.612
+2;Objects are mutable;173;86.01703
+2;Copying;173;425.183
+2;Debugging;174;638.73
+2;Glossary;175;446.635
+2;Exercises;176;86.01703
+1;Classes and functions;177;86.01703
+2;Time;177;390.945
+2;Pure functions;178;187.24103
+2;Modifiers;179;310.494
+2;Prototyping versus planning;180;170.40503
+2;Debugging;181;277.68403
+2;Glossary;182;86.01703
+2;Exercises;182;329.835
+1;Classes and methods;183;86.01703
+2;Object-oriented features;183;398.053
+2;Printing objects;184;277.435
+2;Another example;185;468.186
+2;A more complicated example;186;284.01
+2;The init method;186;490.941
+2;The __str__ method;187;350.134
+2;Operator overloading;187;606.601
+2;Type-based dispatch;188;335.285
+2;Polymorphism;189;514.51406
+2;Debugging;190;400.201
+2;Interface and implementation;191;86.01703
+2;Glossary;191;419.814
+2;Exercises;192;86.01703
+1;Inheritance;193;86.01703
+2;Card objects;193;415.113
+2;Class attributes;194;401.238
+2;Comparing cards;195;493.53
+2;Decks;196;348.913
+2;Printing the deck;196;599.53506
+2;Add, remove, shuffle and sort;197;349.831
+2;Inheritance;198;144.24903
+2;Class diagrams;199;379.627
+2;Debugging;200;378.108
+2;Data encapsulation;201;262.58399
+2;Glossary;202;390.269
+2;Exercises;203;194.57
+1;The Goodies;205;86.01703
+2;Conditional expressions;205;390.56
+2;List comprehensions;206;331.895
+2;Generator expressions;207;236.271
+2;any and all;207;637.179
+2;Sets;208;338.395
+2;Counters;209;482.048
+2;defaultdict;210;334.938
+2;Named tuples;211;527.78799
+2;Gathering keyword args;212;591.581
+2;Glossary;213;500.223
+2;Exercises;214;86.01703
+1;Debugging;215;86.01703
+2;Syntax errors;215;554.421
+2;Runtime errors;217;250.56299
+2;Semantic errors;220;312.493
+1;Analysis of Algorithms;223;86.01703
+2;Order of growth;224;294.499
+2;Analysis of basic Python operations;226;86.01703
+2;Analysis of search algorithms;227;344.06
+2;Hashtables;228;86.01703
+2;Glossary;231;366.908

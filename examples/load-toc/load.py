@@ -6,7 +6,7 @@ License: GNU GPL V3
 
 Usage
 -----
-python load.py -d "," -csv input.csv -pdf input.pdf
+python load.py -d ";" -csv input.csv -pdf input.pdf
 
 Description
 -----------
