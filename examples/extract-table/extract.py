@@ -1,25 +1,27 @@
-#!/usr/bin/python
+"""
+CLI program to extract tables using ParseTab
+-------------------------------------------------------------------------------
+License: GNU GPL V3
+(c) 2023 Jorj X. McKie
+
+Usage
+-----
+python extract.py
+
+Description
+-----------
+The ParseTab function parses tables in a document page (PDF, OpenXPS, EPUB) and
+passes back a list of strings representing the original table.
+
+Dependencies
+------------
+PyMuPDF
+"""
+
 from __future__ import print_function
 import fitz
 from ParseTab import ParseTab
-"""
-Created on Mon Apr 05 07:00:00 2016
 
-@author: Jorj McKie
-Copyright (c) 2015 Jorj X. McKie
-
-The license of this program is governed by the GNU GENERAL PUBLIC LICENSE
-Version 3, 29 June 2007. See the "COPYING" file of this repository.
-
-This is an example for using the Python binding PyMuPDF for MuPDF.
-
-The ParseTab function parses tables contained in a page of a PDF
-(or OpenXPS, EPUB) file and passes back a list of lists of strings
-that represents the original table in matrix form.
-
-Dependencies:
-PyMuPDF
-"""
 #==============================================================================
 # Main program
 #==============================================================================
@@ -30,44 +32,38 @@ After reading a page, we
     rectangle. We use zero or large numbers to specify "no limit".
 (3) call ParseTab to get the parsed table
 '''
-doc = fitz.Document("adobe.pdf")
-pno = 61
+doc = fitz.Document("input.pdf")
+pno = 35
 page = doc.load_page(pno)
 
 #==============================================================================
 # search for top of table
 #==============================================================================
-table_title = "Table 3.4 "
+table_title = "2.9 Glossary"
 search1 = page.search_for(table_title, hit_max = 1)
 if not search1:
     raise ValueError("table top delimiter not found")
-rect1 = search1[0]  # the rectangle that surrounds the search string
-ymin = rect1.y1     # table starts below this value
+rect1 = search1[0]  # the rectangle surrounding the search string
+ymin = rect1.y1  # the table starts below this value
 
 #==============================================================================
 # search for bottom of table
 #==============================================================================
-search2 = page.search_for("related tasks", hit_max = 1)
+search2 = page.search_for("2.10", hit_max = 1)
 if not search2:
     print("warning: table bottom delimiter not found - using end of page")
     ymax = 99999
 else:
     rect2 = search2[0]  # the rectangle that surrounds the search string
-    ymax = rect2.y0     # table ends above this value
+    ymax = rect2.y0  # the table ends above this value
 
-if not ymin < ymax:     # something was wrong with the search strings
+if not ymin < ymax:  # something went wrong with searching strings
     raise ValueError("table bottom delimiter higher than top")
 
 #==============================================================================
-# now get the table
+# print the table
 #==============================================================================
 tab = ParseTab(page, [0, ymin, 9999, ymax])
-
-#print(table_title)
-#for t in tab:
-#    print(t)
-csv = open("p%s.csv" % (pno+1,), "w")
-csv.write(table_title + "\n")
+print(table_title)
 for t in tab:
-    csv.write("|".join(t).encode("utf-8","ignore") + "\n")
-csv.close()
+    print(t)
