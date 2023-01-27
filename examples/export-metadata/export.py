@@ -6,7 +6,7 @@ License: GNU GPL V3
 
 Usage
 -----
-python export.py -d "," input.pdf
+python export.py -d ";" input.pdf
 """
 
 from __future__ import print_function
