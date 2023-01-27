@@ -49,7 +49,6 @@ for k,v in oldmeta.items():
 with open(args.csv) as tocfile:
     tocreader = csv.reader(tocfile, delimiter = args.d)
     for row in tocreader:
-        assert len(row) == 2, "each row must contain 2 entries"
         oldmeta[row[0]] = row[1]
 
 print("----------------------------------------")
