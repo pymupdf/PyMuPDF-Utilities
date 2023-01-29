@@ -1,6 +1,6 @@
 """
 Generate highlight annotations using blend modes
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 License: GNU AFFERO GPL V3
 (c) 2020 Jorj X. McKie
 
@@ -8,19 +8,11 @@ Usage
 -----
 python test.py
 
-Purpose
---------
-This utility is an example application of PyMuPDF to demonstrate the
-(rather complex) influencing factors background and text colors, opacity and
-blend mode for the appearance of an annotation.
-
-For each of the PDF blend modes (as defined in
-http://www.adobe.com/content/dam/Adobe/en/devnet/acrobat/pdfs/pdf_reference_1-7.pdf
-pages 520+) it generates a highlight annotation which uses it.
-
-Dependencies
-------------
-PyMuPDF
+Description
+-----------
+It generates a highlight annotation for each PDF blend mode showing the
+(rather complex) factors behind the appearance of an annotation: Background,
+text colors, opacity and blend mode.
 """
 
 import os

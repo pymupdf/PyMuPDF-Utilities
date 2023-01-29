@@ -1,6 +1,6 @@
 """
 Create a PDF document by inserting the images in the input directory
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2015 Jorj X. McKie
 
@@ -10,17 +10,17 @@ python join.py
 
 Description
 ------------
-(1) Selection of page ranges in ascending or descending sequence.
+* Selection of page ranges in ascending or descending sequence.
 
-(2) Optional rotation in steps of 90 degrees.
+* Optional rotation in steps of 90 degrees.
 
-(3) Copy any table of content segments to the output (can be switched off).
+* Copy any table of content segments to the output (can be switched off).
 
-(4) Specify PDF metadata of resulting PDF.
+* Specify PDF metadata of resulting PDF.
 
 Dependencies
 ------------
-wxPython v3.0.x, PyMuPDF v1.9.2
+wxPython
 """
 
 from __future__ import print_function

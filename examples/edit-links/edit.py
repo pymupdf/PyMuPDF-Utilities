@@ -1,6 +1,6 @@
 """
 Edit links in a PDF document
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2023 Jorj X. McKie
 
@@ -45,7 +45,7 @@ first page is displayed. The controls in the dialog allow the following:
 
 Dependencies
 ------------
-PyMuPDF, wxPython Phoenix version
+wxPython Phoenix
 """
 
 from __future__ import print_function

@@ -1,6 +1,6 @@
 """
 Extract the images of a document into the output folder
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2018 Jorj X. McKie
 
@@ -8,45 +8,31 @@ Usage
 -----
 python extract-from-xref.py input.pdf
 
-Notes
------
+Description
+-----------
 The output.pdf file generated in examples/insert-images is renamed as input.pdf
 to be used as the input file in this example.
 
-Description
------------
-This demo extracts all images of a PDF as PNG files, whether they are
-referenced by pages or not.
+All images are extracted as PNG files regardless of whether they are referenced
+by pages or not. It scans through all objects and selects /Type/XObject with
+/Subtype/Image. So runtime is determined by number of objects and image volume.
 
-It scans through all objects and selects /Type/XObject with /Subtype/Image.
-So runtime is determined by number of objects and image volume.
+Images with a specified /SMask are recovered and appear as originally stored.
 
-Technically, images with a specified /SMask are correctly recovered and
-should appear as originally stored.
-
-Notes
------
 The focus of this script is to be as fault-tolerant as possible:
 
 * It can cope with invalid PDF page trees, invalid PDF objects and more
+
 * It ignores images with very small dimensions (<= 100 pixels side length)
+
 * It ignores very small image file sizes (< 2 KB)
+
 * It ignores too well-compressible images, assuming these are insignificant,
   like unicolor images: image size : pixmap size <= 5%
 
-Adjust/omit these limits as required.
-
-Found images are stored in a directory one level below the input PDF, called
-"output" (created if not existing). Adjust this as appropriate.
-
 Dependencies
 ------------
-PyMuPDF v1.18.18
 PySimpleGUI, tkinter
-
-Changes
---------
-2021-09-17: Removed PIL dependency
 """
 
 from __future__ import print_function

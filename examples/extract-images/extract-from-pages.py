@@ -1,11 +1,11 @@
 """
 Extract the images of a document into the output folder
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2018 Jorj X. McKie
 
-Notes
------
+Description
+-----------
 The output.pdf file generated in examples/insert-images is renamed as input.pdf
 to be used as the input file in this example.
 
@@ -19,13 +19,17 @@ For a given entry in a page's get_images() list, function "recoverpix"
 returns a dictionary like the one produced by "Document.extract_image".
 
 It preprocesses the following special cases:
+
 * The PDF image has an /SMask (soft mask) entry. We use Pillow for recovering
   the original image with an alpha channel in RGBA format.
+
 * The PDF image has a /ColorSpace definition. We then convert the image to
   an RGB colorspace.
 
 The main script part implements the following features:
+
 * Prevent multiple extractions of same image
+
 * Prevent extraction of "unimportant" images, like "too small", "unicolor",
   etc. This can be controlled by parameters.
 
@@ -35,14 +39,7 @@ with xref being the PDF cross reference number of the image.
 
 Dependencies
 ------------
-PyMuPDF v1.18.18
 PySimpleGUI, tkinter
-
-Changes
--------
-* 2021-09-17: remove PIL and use extended pixmap features instead
-* 2020-10-04: for images with an /SMask, we use Pillow to recover original
-* 2020-11-21: convert cases with special /ColorSpace definitions to RGB PNG
 """
 
 import io

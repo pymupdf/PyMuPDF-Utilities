@@ -1,6 +1,6 @@
 """
 Optimize a PDF document with FileOptimizer.
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2022 Jorj X. McKie
 
@@ -8,8 +8,8 @@ Usage
 -----
 python optimize.py input.pdf
 
-Notes
------
+Description
+-----------
 Since "/Producer" and "/Creator" get affected by this, the document metadata is
 first saved to be restored after the optimization is completed. This means
 non-compressed object definitions are also accepted as created by FileOptimizer.

@@ -1,6 +1,6 @@
 """
 Import a metadata dictionary from a CSV file into a PDF document
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2023 Jorj X. McKie
 
@@ -13,10 +13,6 @@ Description
 The output.csv file generated in examples/export-metadata is renamed as input.csv
 to be used as an input file in this example. The input.pdf file behaves as both
 an input and an output file.
-
-Dependencies
-------------
-PyMuPDF
 """
 
 import csv

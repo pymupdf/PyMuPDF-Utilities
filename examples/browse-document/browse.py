@@ -1,6 +1,6 @@
 """
 Display a document using Tkinter
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 License: GNU GPL V3+
 (c) 2018-2019 Jorj X. McKie
 
@@ -10,26 +10,25 @@ python browse.py input.pdf
 
 Description
 -----------
-Get filename and start displaying page 1. Please note that all file types
-of MuPDF are supported (including EPUB e-books and HTML files for example).
-Pages can be directly jumped to, or buttons can be used for paging.
+The document is initially displayed on page 1. MuPDF file types are supported:
+EPUB, HTML, etc. Pages can be directly accessed, and page buttons can be used to
+browse the document.
 
-This version contains enhancements:
-* PIL no longer needed
-* Zooming is now flexible: only one button serves as a toggle. Keyboard arrow keys can
-  be used for moving through the window when zooming.
+Zooming is flexible: Only one button serves as a toggle. Keyboard arrow keys
+allow to move through the window when zooming.
 
-We also interpret keyboard events (PageDown / PageUp) and mouse wheel actions
-to support paging as if a button was clicked. Similarly, we do not include
-a 'Quit' button. Instead, the ESCAPE key can be used, or cancelling the form.
-To improve paging performance, we are not directly creating pixmaps from
-pages, but instead from the fitz.DisplayList of the page. Each display list
-will be stored in a list and looked up by page number. This way, zooming
-pixmaps and page re-visits will re-use a once-created display list.
+Paging is supported through keyboard events (PageDown/PageUp) as well as mouse
+wheel actions as if a button is clicked. No "Quit" button is included; instead,
+the ESCAPE key is used in addition to cancelling the form.
+
+To improve performance, pixmaps are created from the page's fitz.DisplayList
+rather than from pages directly. Each display list is stored in a list and
+looked up by page number in order for pixmap zoomings and page re-visits to
+reuse the display list.
 
 Dependencies
 ------------
-PyMuPDF v1.14.5+, PySimpleGUI, tkinter
+PySimpleGUI, tkinter
 """
 
 import sys

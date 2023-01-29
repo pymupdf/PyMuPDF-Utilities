@@ -1,16 +1,12 @@
 """
 Import a file to a document
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 License: GNU AGPL V3
 (c) 2023 Jorj X. McKie
 
 Usage
 -----
 python import.py input.pdf joe-caione-qO-PIF84Vxg-unsplash.jpg -o output.pdf
-
-Dependencies
-------------
-PyMuPDF
 """
 
 from __future__ import print_function

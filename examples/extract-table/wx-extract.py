@@ -1,6 +1,6 @@
 """
 Browse a document with a wxPython GUI to extract tables
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2018 Jorj X. McKie
 
@@ -8,14 +8,14 @@ Usage
 -----
 python wx-extract.py
 
-Notes
------
-Uses the ParseTab.py file which is found in the current directory.
-
 Description
 -----------
+Uses the ParseTab function found in the current directory.
+
 A file selection dialog is displayed to pick a document. Then, the document's
-first page is displayed. The controls in the dialog allow the following:
+first page is displayed.
+
+The controls in the dialog allow the following:
 
 * Browse forward and backward.
 
@@ -46,7 +46,7 @@ first page is displayed. The controls in the dialog allow the following:
 
 Dependencies
 ------------
-PyMuPDF v1.12.0, wxPython phoenix
+wxPython phoenix
 """
 
 from __future__ import print_function

@@ -1,6 +1,6 @@
 """
 CLI program to extract tables using ParseTab
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2023 Jorj X. McKie
 
@@ -10,12 +10,7 @@ python extract.py
 
 Description
 -----------
-The ParseTab function parses tables in a document page (PDF, OpenXPS, EPUB) and
-passes back a list of strings representing the original table.
-
-Dependencies
-------------
-PyMuPDF
+Uses the ParseTab function found in the current directory.
 """
 
 from __future__ import print_function

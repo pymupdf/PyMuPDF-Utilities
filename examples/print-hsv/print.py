@@ -1,6 +1,6 @@
 """
 Create a document showing RGB colors based on hue, saturation and value (HSV)
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2017 Jorj X. McKie
 
@@ -8,8 +8,8 @@ Usage
 -----
 python print.py
 
-Notes
------
+Description
+-----------
 The colors are sorted according to their HSV tuple. Each color is shown as a
 rectangle containing its name (in black and in white to ensure readability).
 The page is 800 x 600 px size.

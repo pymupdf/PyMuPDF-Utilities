@@ -1,6 +1,6 @@
 """
 Copy the embedded files in the input document to the output document
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 License: GNU AGPL V3
 (c) 2021 Jorj X. McKie
 
@@ -8,14 +8,10 @@ Usage
 -----
 python copy.py input.pdf output.pdf
 
-Notes
------
+Description
+-----------
 The output.pdf file generated in examples/embed-images is renamed as input.pdf
 to be used as the input file in this example.
-
-Dependencies
-------------
-PyMuPDF
 """
 
 from __future__ import print_function

@@ -1,6 +1,6 @@
 """
 Export an embedded file from the input document to the output document
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 License: GNU AGPL V3
 (c) 2021 Jorj X. McKie
 
@@ -8,14 +8,10 @@ Usage
 -----
 python export.py input.pdf joe-caione-qO-PIF84Vxg-unsplash.jpg output.pdf
 
-Notes
------
+Description
+-----------
 The output.pdf file generated in examples/embed-images is renamed as input.pdf
 to be used as the input file in this example.
-
-Dependencies
-------------
-PyMuPDF
 """
 
 from __future__ import print_function
