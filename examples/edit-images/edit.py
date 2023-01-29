@@ -1,6 +1,6 @@
 """
 Edit images in a PDF document
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 License: GNU AFFERO GPL 3
 (c) 2020 Jorj X. McKie
 
@@ -10,7 +10,7 @@ python edit.py
 
 Dependencies
 ------------
-PyMuPDF v1.17.5, wxPython Phoenix version
+wxPython Phoenix
 """
 
 import os

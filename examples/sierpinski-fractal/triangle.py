@@ -1,6 +1,6 @@
 """
 Draw the Sierpinski triangle
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 License: GNU AFFERO GPL V3
 (c) 2020 Jorj X. McKie
 
@@ -8,8 +8,8 @@ Usage
 -----
 python triangle.py
 
-Purpose
--------
+Description
+-----------
 This is a mathematical fractal created by taking a start triangle
 (equal-sided in this example) and recursively "cutting out" the middle
 triangle with points as the middle points of the starting triangle's

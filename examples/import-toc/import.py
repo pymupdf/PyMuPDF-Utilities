@@ -1,6 +1,6 @@
 """
 Import a table of contents (ToC) from a CSV file into a PDF document
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2023 Jorj X. McKie
 
@@ -31,10 +31,6 @@ page    An integer representing the page number which value must be in the
 height  An optional, positive float value representing the entry position on the
         page and counting from the bottom. If omitted, 36 points (half an inch)
         below the top of the page are taken.
-
-Dependencies
-------------
-PyMuPDF
 """
 
 import csv

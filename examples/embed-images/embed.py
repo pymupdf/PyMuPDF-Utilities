@@ -1,6 +1,6 @@
 """
 Embed the images found in the input directory
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 License: GNU GPL V3+
 (c) 2018 Jorj X. McKie
 
@@ -10,8 +10,7 @@ python embed.py
 
 Dependencies
 ------------
-PyMuPDF
-PySimpleGUI, tkinter, optional: requires Python 3 if used
+PySimpleGUI, tkinter
 """
 
 from __future__ import print_function

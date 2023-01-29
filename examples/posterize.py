@@ -1,6 +1,6 @@
 """
 Create a PDF copy with split-up pages (posterize)
----------------------------------------------------
+--------------------------------------------------------------------------------
 License: GNU AGPL V3.0+
 (c) 2018 Jorj X. McKie
 
@@ -8,22 +8,17 @@ Usage
 ------
 python posterize.py input.pdf
 
-Result
--------
+Description
+-----------
 The file "poster-input.pdf" with 4 output pages for every input page:
 top-lef, top-right, bottom-left, bottom-right part on separate pages.
 
-Notes
------
-(1) Output file is chosen to have page dimensions of 1/4 of input.
+* Output file is chosen to have page dimensions of 1/4 of input.
 
-(2) Easily adapt the example to make n pages per input, or decide per each
-    input page or whatever.
-
-Dependencies
-------------
-PyMuPDF 1.12.2 or later
+* Easily adapt the example to make n pages per input, or decide per each
+  input page.
 """
+
 from __future__ import print_function
 import fitz, sys
 

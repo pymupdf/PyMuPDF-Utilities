@@ -1,6 +1,6 @@
 """
 Return a Python list of lists from the words found in a fitz.Document page
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2018 Jorj X. McKie
 
@@ -8,18 +8,16 @@ Usage
 -----
 Used by extract.py and wx-extract.py
 
-Notes
------
-(1) Works correctly for simple, non-nested tables only.
+Description
+-----------
+Parses tables in a document page (PDF, OpenXPS, EPUB) and passes back a list of
+strings representing the original table. Works correctly for simple, non-nested
+tables only.
 
-(2) Line recognition depends on the coordinates of the detected words in the
-    rectangle. These will be round to integer (pixel) values. However, use of
-    different fonts, scan inaccuracies, and so on, may lead to artefacts line
-    differences, which must be handled by the caller.
-
-Dependencies
--------------
-PyMuPDF v1.12.0 or later
+Line recognition depends on the coordinates of the detected words in the
+rectangle. These will be round to integer (pixel) values. However, use of
+different fonts, scan inaccuracies, and so on, may lead to artefacts line
+differences, which must be handled by the caller.
 """
 
 from operator import itemgetter

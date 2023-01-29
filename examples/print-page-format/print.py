@@ -1,22 +1,12 @@
 """
 Print the paper size given a width and height
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2018 Jorj X. McKie
 
 Usage
 -----
 python print.py 595 842
-
-Notes
------
-For further information:
-
-(1) www.din-formate.de
-
-(2) www.din-formate.info/amerikanische-formate.html
-
-(3) www.directtools.de/wissen/normen/iso.htm
 """
 
 import sys

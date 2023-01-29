@@ -1,6 +1,6 @@
 """
 Create a calendar with three years in a row
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2018 Jorj X. McKie
 
@@ -14,9 +14,7 @@ Starts with the year given as a parameter and stores the result in a PDF.
 
 Dependencies
 ------------
-* PyMuPDF v1.17.4
-* calendar (either use LocaleTextCalendar or just TextCalendar)
-* pymupdf-fonts
+LocaleTextCalendar or TextCalendar, pymupdf-fonts
 """
 
 import calendar

@@ -1,6 +1,6 @@
 """
 Draw the Sierpinski carpet
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 License: GNU AFFERO GPL V3
 (c) 2019 Jorj X. McKie
 
@@ -8,8 +8,8 @@ Usage
 -----
 python carpet.py
 
-Purpose
--------
+Description
+-----------
 Demonstrate the use of PyMuPDF Pixmaps by drawing the Sierpinski carpet.
 The final picture will be a square with each edge having a length of 3**n.
 

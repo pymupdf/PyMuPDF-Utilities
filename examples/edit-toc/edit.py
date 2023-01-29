@@ -1,6 +1,6 @@
 """
 Edit the table of contents (ToC) of a document
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2015 Jorj X. McKie
 
@@ -47,10 +47,7 @@ Layout of right sizer "ri_szr"
 
 Dependencies
 ------------
-PyMuPDF v1.9.2 or later
-wxPython v3.0.2 or later
-All Python and bitness versions are now supported that are also supported by
-PyMuPDF, MuPDF and wxPython.
+wxPython
 """
 
 import json

@@ -1,6 +1,6 @@
 """
 Scan a document and store the embedded XObjects as pages in a new document
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 License: GNU AGPL V3
 (c) 2023 Jorj X. McKie
 
@@ -12,10 +12,6 @@ Description
 -----------
 The new pages can subsequently be used to generate conventional raster images of
 the original XObjects or as sources to be embedded in other documents.
-
-Dependencies
-------------
-PyMuPDF
 """
 
 import sys

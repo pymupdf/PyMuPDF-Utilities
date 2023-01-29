@@ -1,6 +1,6 @@
 """
 Attach the images in the input directory to a new document
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2018 Jorj X. McKie
 
@@ -14,8 +14,7 @@ Attached files are visible in the page through icons.
 
 Dependencies
 ------------
-PyMuPDF
-PySimpleGUI, tkinter, optional: requires Python 3 if used
+PySimpleGUI, tkinter
 """
 
 from __future__ import print_function
