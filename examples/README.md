@@ -24,10 +24,12 @@ Folder | File | Description |
 `convert-text` | `convert.py` | A basic text-to-PDF converter. |
 `copy-embedded` | `copy.py` | Copy the embedded files in the input document to the output document. |
 `display-document` | `display.py` | Let the user select a document to scroll through it. |
+`draw-cardioid` | `draw.py` | Draw a cardioid. |
 `draw-caustic` | `draw.py` | Draw a caustic curve. |
 `draw-fractal` | `carpet.py` | Draw the Sierpinski carpet fractal. |
 `draw-fractal` | `punch.py` | Draw the Sierpinski carpet fractal. |
 `draw-fractal` | `triangle.py` | Draw the Sierpinski triangle fractal. |
+`draw-sines` | `draw.py` | Draw the sine and cosine functions. |
 `edit-images` | `edit.py` | Edit images in a PDF document. |
 `edit-links` | `edit.py` | Edit links in a PDF document. |
 `edit-toc` | `edit.py` | Edit the table of contents (ToC) of a document. |
