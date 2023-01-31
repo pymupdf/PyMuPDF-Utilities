@@ -6,7 +6,7 @@ License: GNU AFFERO GPL V3
 
 Usage
 -----
-python carpet.py
+python punch.py
 
 Purpose
 -------
