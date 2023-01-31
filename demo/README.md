@@ -20,4 +20,3 @@ sierpinski.py | create a Sierpinski carpet (fractal) fast with pixmaps
 splitter.py | split a PDF into its pages (1 PDF per page)
 spumoni.py | create the ReportLab drawing on page 26 with PyMuPDF
 svg-logo.py | put an SVG as logo an each PDF page.
-text2pdf.py | convert a text file to PDF
