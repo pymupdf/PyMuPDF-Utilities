@@ -42,6 +42,7 @@ Folder | File | Description |
 `list-embedded` | `list.py` | Print a list of embedded files in a document. |
 `make-calendar` | `make.py` | Create a calendar with three years in a row. |
 `optimize-document` | `optimize.py` | Optimize a PDF document with FileOptimizer. |
+`posterize-document` | `posterize.py` | Create a PDF copy with split-up pages. |
 `print-hsv` | `print.py` | Create a document showing RGB colors based on hue, saturation and value (HSV). |
 `print-page-format` | `print.py` | Print the paper size given a width and height. |
 `print-rgb` | `print.py` | Create a document showing RGB colors. |
