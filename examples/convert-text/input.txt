@@ -1,0 +1,24 @@
+Traversal with a for loop
+
+A lot of computations involve processing a string one character at a time.
+Often they start at the beginning, select each character in turn, do something
+to it, and continue until the end. This pattern of processing is called a
+traversal.
+
+One way to write a traversal is with a while loop:
+
+index = 0
+while index < len(fruit):
+    letter = fruit[index]
+    print(letter)
+    index = index + 1
+
+This loop traverses the string and displays each letter on a line by itself. The
+loop condition is index < len(fruit), so when index is equal to the length of
+the string, the condition is false, and the body of the loop doesn’t run. The
+last character accessed is the one with the index len(fruit)-1, which is the
+last character in the string.
+
+Think Python, How to Think Like a Computer Scientist by Allen Downey
+Published by Green Tea Press
+Attribution-NonCommercial 3.0 Unported (CC BY-NC 3.0)

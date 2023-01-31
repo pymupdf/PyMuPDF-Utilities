@@ -21,8 +21,13 @@ Folder | File | Description |
 `attach-images` | `attach.py` | Attach the images in the input directory to a new document. |
 `browse-document` | `browse.py` | Display a document using Tkinter. |
 `combine-pages` | `combine.py` | Copy a PDF document combining every 4 pages. |
+`convert-text` | `convert.py` | A basic text-to-PDF converter. |
 `copy-embedded` | `copy.py` | Copy the embedded files in the input document to the output document. |
 `display-document` | `display.py` | Let the user select a document to scroll through it. |
+`draw-caustic` | `draw.py` | Draw a caustic curve. |
+`draw-fractal` | `carpet.py` | Draw the Sierpinski carpet fractal. |
+`draw-fractal` | `punch.py` | Draw the Sierpinski carpet fractal. |
+`draw-fractal` | `triangle.py` | Draw the Sierpinski triangle fractal. |
 `edit-images` | `edit.py` | Edit images in a PDF document. |
 `edit-links` | `edit.py` | Edit links in a PDF document. |
 `edit-toc` | `edit.py` | Edit the table of contents (ToC) of a document. |
@@ -43,12 +48,10 @@ Folder | File | Description |
 `list-embedded` | `list.py` | Print a list of embedded files in a document. |
 `make-calendar` | `make.py` | Create a calendar with three years in a row. |
 `optimize-document` | `optimize.py` | Optimize a PDF document with FileOptimizer. |
+`posterize-document` | `posterize.py` | Create a PDF copy with split-up pages. |
 `print-hsv` | `print.py` | Create a document showing RGB colors based on hue, saturation and value (HSV). |
 `print-page-format` | `print.py` | Print the paper size given a width and height. |
 `print-rgb` | `print.py` | Create a document showing RGB colors. |
-`sierpinski-fractal` | `carpet.py` | Draw the Sierpinski carpet. |
-`sierpinski-fractal` | `punch.py` | Draw the Sierpinski carpet. |
-`sierpinski-fractal` | `triangle.py` | Draw the Sierpinski triangle. |
 `test-blendmode` | `test.py` | Generate highlight annotations using blend modes. |
 
 ## Attributions
