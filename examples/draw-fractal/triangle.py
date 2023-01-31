@@ -1,5 +1,5 @@
 """
-Draw the Sierpinski triangle
+Draw the Sierpinski triangle fractal
 -------------------------------------------------------------------------------
 License: GNU AFFERO GPL V3
 (c) 2020 Jorj X. McKie
