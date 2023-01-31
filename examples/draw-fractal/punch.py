@@ -1,12 +1,12 @@
 """
-Draw the Sierpinski carpet
+Draw the Sierpinski carpet fractal
 -------------------------------------------------------------------------------
 License: GNU AFFERO GPL V3
 (c) 2019 Jorj X. McKie
 
 Usage
 -----
-python carpet.py
+python punch.py
 
 Purpose
 -------

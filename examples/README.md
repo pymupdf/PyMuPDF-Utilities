@@ -23,6 +23,9 @@ Folder | File | Description |
 `combine-pages` | `combine.py` | Copy a PDF document combining every 4 pages. |
 `convert-text` | `convert.py` | A basic text-to-PDF converter. |
 `copy-embedded` | `copy.py` | Copy the embedded files in the input document to the output document. |
+`draw-fractal` | `carpet.py` | Draw the Sierpinski carpet fractal. |
+`draw-fractal` | `punch.py` | Draw the Sierpinski carpet fractal. |
+`draw-fractal` | `triangle.py` | Draw the Sierpinski triangle fractal. |
 `edit-images` | `edit.py` | Edit images in a PDF document. |
 `edit-links` | `edit.py` | Edit links in a PDF document. |
 `edit-toc` | `edit.py` | Edit the table of contents (ToC) of a document. |
@@ -47,9 +50,6 @@ Folder | File | Description |
 `print-hsv` | `print.py` | Create a document showing RGB colors based on hue, saturation and value (HSV). |
 `print-page-format` | `print.py` | Print the paper size given a width and height. |
 `print-rgb` | `print.py` | Create a document showing RGB colors. |
-`sierpinski-fractal` | `carpet.py` | Draw the Sierpinski carpet. |
-`sierpinski-fractal` | `punch.py` | Draw the Sierpinski carpet. |
-`sierpinski-fractal` | `triangle.py` | Draw the Sierpinski triangle. |
 `test-blendmode` | `test.py` | Generate highlight annotations using blend modes. |
 
 ## Attributions
