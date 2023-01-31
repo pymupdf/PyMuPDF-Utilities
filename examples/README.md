@@ -22,6 +22,7 @@ Folder | File | Description |
 `browse-document` | `browse.py` | Display a document using Tkinter. |
 `combine-pages` | `combine.py` | Copy a PDF document combining every 4 pages. |
 `copy-embedded` | `copy.py` | Copy the embedded files in the input document to the output document. |
+`display-document` | `display.py` | Let the user select a document to scroll through it. |
 `edit-images` | `edit.py` | Edit images in a PDF document. |
 `edit-links` | `edit.py` | Edit links in a PDF document. |
 `edit-toc` | `edit.py` | Edit the table of contents (ToC) of a document. |
