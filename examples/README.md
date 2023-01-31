@@ -23,6 +23,7 @@ Folder | File | Description |
 `combine-pages` | `combine.py` | Copy a PDF document combining every 4 pages. |
 `convert-text` | `convert.py` | A basic text-to-PDF converter. |
 `copy-embedded` | `copy.py` | Copy the embedded files in the input document to the output document. |
+`display-document` | `display.py` | Let the user select a document to scroll through it. |
 `draw-caustic` | `draw.py` | Draw a caustic curve. |
 `draw-fractal` | `carpet.py` | Draw the Sierpinski carpet fractal. |
 `draw-fractal` | `punch.py` | Draw the Sierpinski carpet fractal. |

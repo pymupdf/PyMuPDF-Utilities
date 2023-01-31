@@ -1,33 +1,18 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
 """
-@created: 2015-10-23 13:40:00
+Let the user select a document to scroll through it.
+--------------------------------------------------------------------------------
+License: GNU GPL V3+
+(c) 2018-2019 Jorj X. McKie
 
-@author: Jorj X. McKie
+Usage
+-----
+python display.py
 
-Let the user select a PyMuPDF-supported file and then scroll through it.
-
-Dependencies:
-PyMuPDF, wxPython 3.x
-
-License:
-GNU GPL 3.x, GNU AFFERO GPL 3
-
-Changes in PyMuPDF 1.9.2
-------------------------
-- supporting Python 3 as wxPython now supports it
-- optionally show links in displayed pages
-- when clicking on a link, attempt to follow it
-- remove inline code for dialog icon and import from a library
-
-Changes in PyMuPDF 1.8.0
-------------------------
-- display a fancy icon on the dialogs, defined as inline code in base64 format
-- display pages with a zoom factor of 120%
-- dynamically resize dialog to reflect each page's image size / orientation
-- minor cosmetic changes
+Dependencies
+------------
+PyMuPDF, wxPython
 """
+
 from __future__ import print_function
 
 import sys
