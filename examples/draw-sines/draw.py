@@ -1,19 +1,15 @@
-from __future__ import print_function
-
-import math
-
-import fitz
-
 """
-Copyright 2017-2019, Jorj McKie, mailto:<jorj.x.mckie@outlook.de>
+Draw the sine and cosine functions
+--------------------------------------------------------------------------------
+License: GNU AFFERO GPL V3
+(c) 2019 Jorj X. McKie
 
-Created on 2017-08-17
+Usage
+-----
+python draw.py
 
-License: GNU GPL V3
-
-PyMuPDF Demo Program
----------------------
-Create a PDF with drawings of the sine and the cosine functions using PyMuPDF.
+Description
+-----------
 The begin and end points, pb and pe respectively, are viewed as to providing
 a full phase of length 2*pi = 360 degrees.
 
@@ -22,21 +18,20 @@ curves are used.
 
 Note that the 'cp1' and 'cp2' constants below represent values for use as
 Bezier control points like so:
+
 x-values (deg): [0, 30, 60, 90]
 y-values:       [0, cp1, cp2, 1]
 
 These values have been calculated by the scipy.interpolate.splrep() method.
 They provide an excellent spline approximation of the sine / cosine
 functions - please see the SciPy documentation for background.
--------------------------------------------------------------------------------
-Updates
--------
-2017-09-21: Add legend text, as morphing is also supported by "insertTextbox".
-Other changes are minor performance and documentation improvements.
-
 """
-print(fitz.__doc__)
 
+from __future__ import print_function
+import math
+import fitz
+
+print(fitz.__doc__)
 
 def bsinPoints(pb, pe):
     """Return Bezier control points, when pb and pe stand for a full period
@@ -180,4 +175,4 @@ if __name__ == "__main__":
 
     img.commit()  # commit with overlay = True
 
-    doc.save(__file__.replace(".py", ".pdf"))
+    doc.save("output.pdf")

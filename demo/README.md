@@ -7,7 +7,6 @@ curly-polygon.py | demo draw regular polygon with curly border
 decrypt.py | create a decrypted copy of a PDF file
 demo.py | demonstrates a broad range of PyMuPDF high-level functions
 demo-lowlevel.py | demonstrates PyMuPDF low-level functions
-draw-sines.py | draw sine / cosine functions
 fitz2PIL.py | save a pixmap as a PIL / Pillow supported file
 fitz-logo.py | put any document as logo an each PDF page.
 numpy2fitz.py | how to create pixmaps from NumPy arrays
