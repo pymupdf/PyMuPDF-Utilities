@@ -26,6 +26,7 @@ Folder | File | Description |
 `draw-fractal` | `carpet.py` | Draw the Sierpinski carpet fractal. |
 `draw-fractal` | `punch.py` | Draw the Sierpinski carpet fractal. |
 `draw-fractal` | `triangle.py` | Draw the Sierpinski triangle fractal. |
+`draw-sines` | `draw.py` | Draw the sine and cosine functions. |
 `edit-images` | `edit.py` | Edit images in a PDF document. |
 `edit-links` | `edit.py` | Edit links in a PDF document. |
 `edit-toc` | `edit.py` | Edit the table of contents (ToC) of a document. |
