@@ -1,15 +1,27 @@
 """
-PyMuPDF demo script to generate tangent constructors of mathematical curves
-like Cardioid, Nephroid and similar.
-This works by putting the points of a regular polygon on a circle's
-perimeter and then draw - in clockwise fashion - a line from each point to
-a point following 'curve' places after it.
+Draw a cardioid
+--------------------------------------------------------------------------------
+License: GNU AFFERO GPL V3
+(c) 2019 Jorj X. McKie
+
+Usage
+-----
+python draw.py
+
+Description
+-----------
+This script is intended to generate tangent constructors of mathematical curves
+like Cardioid, Nephroid and similar. It works by putting the points of a regular
+polygon on a circle's perimeter and then draw - in clockwise fashion - a line
+from each point to a point following 'curve' places after it.
+
 The number 'curve' determines the type of the constructed curve. For a
 cardioid ('curve' = 2) we therefore would be doing this:
 Draw lines p0 to p2, p1 to p3, p2 to p4, ..., p[n-1] to p1.
 
 Just change the 'curve' value to create a different curve.
 """
+
 import fitz
 
 doc = fitz.open()
@@ -53,4 +65,4 @@ for i in range(n):
 
 shape.finish(color=stroke, width=0.2)  # finsh the line draws
 shape.commit()
-doc.save(__file__.replace(".py", ".pdf"), deflate=True)
+doc.save("output.pdf", deflate=True)
