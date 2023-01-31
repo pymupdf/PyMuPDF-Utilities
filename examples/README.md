@@ -24,6 +24,7 @@ Folder | File | Description |
 `convert-text` | `convert.py` | A basic text-to-PDF converter. |
 `copy-embedded` | `copy.py` | Copy the embedded files in the input document to the output document. |
 `draw-cardioid` | `draw.py` | Draw a cardioid. |
+`draw-caustic` | `draw.py` | Draw a caustic curve. |
 `draw-fractal` | `carpet.py` | Draw the Sierpinski carpet fractal. |
 `draw-fractal` | `punch.py` | Draw the Sierpinski carpet fractal. |
 `draw-fractal` | `triangle.py` | Draw the Sierpinski triangle fractal. |
