@@ -21,6 +21,7 @@ Folder | File | Description |
 `attach-images` | `attach.py` | Attach the images in the input directory to a new document. |
 `browse-document` | `browse.py` | Display a document using Tkinter. |
 `combine-pages` | `combine.py` | Copy a PDF document combining every 4 pages. |
+`convert-text` | `convert.py` | A basic text-to-PDF converter. |
 `copy-embedded` | `copy.py` | Copy the embedded files in the input document to the output document. |
 `edit-images` | `edit.py` | Edit images in a PDF document. |
 `edit-links` | `edit.py` | Edit links in a PDF document. |
