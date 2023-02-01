@@ -1,12 +1,12 @@
 """
-Insert the MuPDF logo in all pages of a PDF document
+Insert the MuPDF logo in SVG format in all pages of a PDF document
 --------------------------------------------------------------------------------
 License: GNU GPL V3
 (c) 2018-2019 Jorj X. McKie
 
 Usage
 -----
-python insert.py input.pdf logo.svg
+python insert-svg.py input.pdf logo.svg
 
 Dependencies
 ------------
@@ -29,4 +29,4 @@ rect *= factor
 doc = fitz.open(sys.argv[1])
 for page in doc:
     xref = page.show_pdf_page(rect, src, 0, overlay=True)
-doc.save("output.pdf", garbage=4)
+doc.save("output_svg.pdf", garbage=4)
