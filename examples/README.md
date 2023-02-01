@@ -57,6 +57,7 @@ Folder | File | Description |
 `print-hsv` | `print.py` | Create a document showing RGB colors based on hue, saturation and value (HSV). |
 `print-page-format` | `print.py` | Print the paper size given a width and height. |
 `print-rgb` | `print.py` | Create a document showing RGB colors. |
+`split-document` | `split.py` | Split a PDF document into multiple pages (1 per page). |
 `test-blendmode` | `test.py` | Generate highlight annotations using blend modes. |
 
 ## Attributions
