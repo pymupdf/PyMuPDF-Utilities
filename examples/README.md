@@ -22,6 +22,7 @@ Folder | File | Description |
 `browse-document` | `browse.py` | Display a document using Tkinter. |
 `combine-pages` | `combine.py` | Copy a PDF document combining every 4 pages. |
 `convert-document` | `convert.py` | Convert an arbitrary document (XPS, EPUB, CBZ, etc.) to PDF. |
+`convert-image` | `convert.py` | Convert an arbitrary image to a PNG pixmap using Pillow. |
 `convert-pixmap` | `convert.py` | Convert an arbitrary pixmap to JPEG format using Pillow. |
 `convert-text` | `convert.py` | A basic text-to-PDF converter. |
 `copy-embedded` | `copy.py` | Copy the embedded files in the input document to the output document. |
