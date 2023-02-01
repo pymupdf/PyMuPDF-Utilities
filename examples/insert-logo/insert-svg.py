@@ -10,7 +10,7 @@ python insert-svg.py input.pdf logo.svg
 
 Dependencies
 ------------
-PyMuPDF, svglib, reportlab
+PyMuPDF, svglib
 """
 
 import sys
