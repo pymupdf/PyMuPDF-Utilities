@@ -59,6 +59,7 @@ Folder | File | Description |
 `print-rgb` | `print.py` | Create a document showing RGB colors. |
 `split-document` | `split.py` | Split a PDF document into multiple pages (1 per page). |
 `test-blendmode` | `test.py` | Generate highlight annotations using blend modes. |
+`view-document` | `view.py` | Object-oriented (OOP) PDF viewer using wxPython. |
 
 ## Attributions
 Described below are the input files that have been used in the examples to create PDF, XPS files and eBooks with PyMuPDF.
