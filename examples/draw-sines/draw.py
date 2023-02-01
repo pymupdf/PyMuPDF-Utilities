@@ -33,6 +33,7 @@ import fitz
 
 print(fitz.__doc__)
 
+
 def bsinPoints(pb, pe):
     """Return Bezier control points, when pb and pe stand for a full period
     from (0,0) to (2*pi, 0), respectively, in the user's coordinate system.

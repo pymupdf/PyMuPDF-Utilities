@@ -100,6 +100,7 @@ defPos = wx.DefaultPosition  # just an abbreviation
 defSiz = wx.DefaultSize  # just an abbreviation
 khaki = wx.Colour(240, 230, 140)  # our background color
 
+
 # ==============================================================================
 # convenience class for storing information across functions
 # ==============================================================================
@@ -150,7 +151,7 @@ class Slider(wx.Dialog):
             self,
             parent,
             id=wx.ID_ANY,
-            title=u"Slide",
+            title="Slide",
             pos=defPos,
             size=(70, 340),
             style=wx.CLOSE_BOX | wx.DEFAULT_DIALOG_STYLE,

@@ -77,6 +77,7 @@ dlist_tab = [None] * page_count
 
 title = "PyMuPDF display of '%s', pages: %i" % (fname, page_count)
 
+
 # ------------------------------------------------------------------------------
 # read the page data
 # ------------------------------------------------------------------------------
@@ -170,6 +171,7 @@ layout = [  # the form layout
 ]
 
 form.Layout(layout)  # define the form
+
 
 # define the buttons / events we want to handle
 def is_Enter(btn):

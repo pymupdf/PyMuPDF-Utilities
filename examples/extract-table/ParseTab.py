@@ -26,6 +26,7 @@ from operator import itemgetter
 from itertools import groupby
 import fitz
 
+
 # ==============================================================================
 # Function ParseTab - parse a document table into a Python list of lists
 # ==============================================================================

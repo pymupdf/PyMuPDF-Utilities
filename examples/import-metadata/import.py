@@ -23,11 +23,13 @@ import csv
 import fitz
 import argparse
 
-parser = argparse.ArgumentParser(description="Enter CSV delimiter [;], CSV filename and documment filename")
-parser.add_argument('-d', help='CSV delimiter [;]', default = ';')
-parser.add_argument('-x', help='delete XML info [n]', default = 'n')
-parser.add_argument('-csv', help='CSV filename')
-parser.add_argument('-pdf', help='PDF filename')
+parser = argparse.ArgumentParser(
+    description="Enter CSV delimiter [;], CSV filename and documment filename"
+)
+parser.add_argument("-d", help="CSV delimiter [;]", default=";")
+parser.add_argument("-x", help="delete XML info [n]", default="n")
+parser.add_argument("-csv", help="CSV filename")
+parser.add_argument("-pdf", help="PDF filename")
 
 args = parser.parse_args()
 
@@ -43,17 +45,17 @@ print("----------------------------------------")
 doc = fitz.open(args.pdf)
 oldmeta = doc.metadata
 print("old metadata:")
-for k,v in oldmeta.items():
+for k, v in oldmeta.items():
     print(k, ":", v)
 
 with open(args.csv) as tocfile:
-    tocreader = csv.reader(tocfile, delimiter = args.d)
+    tocreader = csv.reader(tocfile, delimiter=args.d)
     for row in tocreader:
         oldmeta[row[0]] = row[1]
 
 print("----------------------------------------")
 print("\nnew metadata:")
-for k,v in oldmeta.items():
+for k, v in oldmeta.items():
     print(k, ":", v)
 
 doc.set_metadata(oldmeta)
