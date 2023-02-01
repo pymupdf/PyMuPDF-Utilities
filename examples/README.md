@@ -24,6 +24,7 @@ Folder | File | Description |
 `convert-document` | `convert.py` | Convert an arbitrary document (XPS, EPUB, CBZ, etc.) to PDF. |
 `convert-text` | `convert.py` | A basic text-to-PDF converter. |
 `copy-embedded` | `copy.py` | Copy the embedded files in the input document to the output document. |
+`decrypt-document` | `decrypt.py` | Decrypt a PDF document with the password provided and save it as a new document. |
 `display-document` | `display.py` | Let the user select a document to scroll through it. |
 `draw-cardioid` | `draw.py` | Draw a cardioid. |
 `draw-caustic` | `draw.py` | Draw a caustic curve. |
