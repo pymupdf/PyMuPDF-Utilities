@@ -63,6 +63,7 @@ Folder | File | Description |
 `print-rgb` | `print.py` | Create a document showing RGB colors. |
 `split-document` | `split.py` | Split a PDF document into multiple pages (1 per page). |
 `test-blendmode` | `test.py` | Generate highlight annotations using blend modes. |
+`tile-image` | `tile.py` | Tile an image into 3 x 4 tiles. |
 `view-document` | `view.py` | Object-oriented (OOP) PDF viewer using wxPython. |
 
 ## Attributions
