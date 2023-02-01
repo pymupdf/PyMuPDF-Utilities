@@ -42,7 +42,7 @@ if not list(map(int, fitz.VersionBind.split("."))) >= [1, 14, 8]:
 mytime = time.clock if str is bytes else time.perf_counter
 
 n = 6
-d = 3 ** n  # edge length
+d = 3**n  # edge length
 
 t0 = mytime()
 ir = (0, 0, d, d)  # the pixmap rectangle

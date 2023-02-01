@@ -30,6 +30,7 @@ out_buf = ""  # text of one page
 
 doc = fitz.open()
 
+
 def page_out(b):
     page = doc.new_page(width=width, height=height)
     return page.insert_text(
@@ -37,6 +38,7 @@ def page_out(b):
         text=b,
         fontsize=fontsz,
     )
+
 
 while True:
     line = sourcefile.readline()
@@ -89,15 +91,17 @@ for page in doc:
     )
     page.clean_contents()
 
-doc.set_metadata({
-    "creationDate": fitz.get_pdf_now(),
-    "modDate": fitz.get_pdf_now(),
-    "creator": "convert.py",
-    "producer": "PyMuPDF %s" % fitz.VersionBind,
-    "title": "Content of file " + ifn,
-    "subject": "Demonstrate methods new_page, insert_text and draw_line",
-    "author": "Jorj McKie",
-})
+doc.set_metadata(
+    {
+        "creationDate": fitz.get_pdf_now(),
+        "modDate": fitz.get_pdf_now(),
+        "creator": "convert.py",
+        "producer": "PyMuPDF %s" % fitz.VersionBind,
+        "title": "Content of file " + ifn,
+        "subject": "Demonstrate methods new_page, insert_text and draw_line",
+        "author": "Jorj McKie",
+    }
+)
 doc.subset_fonts()
 doc.ez_save(ofn, garbage=4, pretty=True)
 doc.close()

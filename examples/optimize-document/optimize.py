@@ -38,10 +38,10 @@ subprocess.call(["fileoptimizer64", fullname])  # now invoke super optimizer
 t2 = time.perf_counter()  # save current time again
 
 cdir = os.path.split(fullname)[0]  # split dir from filename
-fnout = tempfile.mkstemp(suffix = ".pdf", dir = cdir)  # create temp pdf name
+fnout = tempfile.mkstemp(suffix=".pdf", dir=cdir)  # create temp pdf name
 doc = fitz.open(fullname)  # open now optimized PDF
 doc.set_metadata(meta)  # restore old metadata
-doc.save(fnout[1], garbage = 4)  # save temp PDF with it, a little sub opt
+doc.save(fnout[1], garbage=4)  # save temp PDF with it, a little sub opt
 doc.close()  # close it
 
 os.remove(fn)  # remove super optimized file
@@ -51,6 +51,6 @@ t3 = time.perf_counter()  # save current time again
 
 # put out runtime statistics
 print("Timings:")
-print(str(round(t1-t0, 4)).rjust(10), "save old metata")
-print(str(round(t2-t1, 4)).rjust(10), "execute FileOptimizer")
-print(str(round(t3-t2, 4)).rjust(10), "restore old metadata")
+print(str(round(t1 - t0, 4)).rjust(10), "save old metata")
+print(str(round(t2 - t1, 4)).rjust(10), "execute FileOptimizer")
+print(str(round(t3 - t2, 4)).rjust(10), "restore old metadata")

@@ -13,15 +13,17 @@ from __future__ import print_function
 import fitz
 import argparse
 
-parser = argparse.ArgumentParser(description="Enter CSV delimiter [;] and documment filename")
-parser.add_argument('-d', help='CSV delimiter [;]', default = ';')
-parser.add_argument('doc', help='document filename')
+parser = argparse.ArgumentParser(
+    description="Enter CSV delimiter [;] and documment filename"
+)
+parser.add_argument("-d", help="CSV delimiter [;]", default=";")
+parser.add_argument("doc", help="document filename")
 args = parser.parse_args()
-delim = args.d # requested CSV delimiter character
-fname = args.doc # input document filename
+delim = args.d  # requested CSV delimiter character
+fname = args.doc  # input document filename
 
 doc = fitz.open(fname)
-toc = doc.get_toc(simple = False)
+toc = doc.get_toc(simple=False)
 ext = fname[-3:].lower()
 outf = open("output.csv", "w")
 for t in toc:
