@@ -1,24 +1,47 @@
-Traversal with a for loop
+Chapter 1
 
-A lot of computations involve processing a string one character at a time.
-Often they start at the beginning, select each character in turn, do something
-to it, and continue until the end. This pattern of processing is called a
-traversal.
+The way of the program
 
-One way to write a traversal is with a while loop:
+The goal of this book is to teach you to think like a computer scientist. This
+way of thinking combines some of the best features of mathematics, engineering,
+and natural science. Like mathematicians, computer scientists use formal
+languages to denote ideas (specifically computations). Like engineers, they
+design things, assembling components into systems and evaluating tradeoffs among
+alternatives. Like scientists, they observe the behavior of complex systems,
+form hypotheses, and test predictions.
 
-index = 0
-while index < len(fruit):
-    letter = fruit[index]
-    print(letter)
-    index = index + 1
+The single most important skill for a computer scientist is problem solving.
+Problem solving means the ability to formulate problems, think creatively about
+solutions, and express a solution clearly and accurately. As it turns out, the
+process of learning to program is an excellent opportunity to practice
+problem-solving skills. That's why this chapter is called,
+"The way of the program".
 
-This loop traverses the string and displays each letter on a line by itself. The
-loop condition is index < len(fruit), so when index is equal to the length of
-the string, the condition is false, and the body of the loop doesn’t run. The
-last character accessed is the one with the index len(fruit)-1, which is the
-last character in the string.
+On one level, you will be learning to program, a useful skill by itself. On
+another level, you will use programming as a means to an end. As we go along,
+that end will become clearer.
 
-Think Python, How to Think Like a Computer Scientist by Allen Downey
+1.1 What is a program?
+
+A program is a sequence of instructions that specifies how to perform a
+computation. The computation might be something mathematical, such as solving a
+system of equations or finding the roots of a polynomial, but it can also be a
+symbolic computation, such as searching and replacing text in a document or
+something graphical, like processing an image or playing a video.
+
+The details look different in different languages, but a few basic instructions
+appear in just about every language:
+
+input: Get data from the keyboard, a file, the network, or some other device.
+
+output: Display data on the screen, save it in a file, send it over the network,
+etc.
+
+math: Perform basic mathematical operations like addition and multiplication.
+conditional execution: Check for certain conditions and run the appropriate code.
+
+
+Excerpt from "Think Python, How to Think Like a Computer Scientist"
+By Allen Downey
 Published by Green Tea Press
 Attribution-NonCommercial 3.0 Unported (CC BY-NC 3.0)
