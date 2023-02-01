@@ -1,32 +1,31 @@
 """
-Created on 2017-09-06
-
-Copyright 2017-2019, Jorj McKie, mailto:<jorj.x.mckie@outlook.de>
-
+Draw a regular polygon with a curly border
+--------------------------------------------------------------------------------
 License: GNU GPL V3
+(c) 2017 Jorj X. McKie
 
-PyMuPDF Demo Program
----------------------
-Draw an arbitrary regular polygon, but use wavy / squiggly lines instead of
-straight ones.
-Visible page size will be adjusted to the generated drawing.
-Two output files are generated: a PDF and a SVG image file.
+Usage
+-----
+python draw.py
 
-It also demonstrates how draw commands can be used to calculate points without
-actually drawing them.
+Description
+-----------
+Draw an arbitrary regular polygon using wavy lines instead of straight lines.
+Two output files are generated: a PDF and a SVG image file. The page size is
+adjusted to the drawing. This script also demonstrates how the draw commands can
+be used to calculate points without actually drawing them.
 
 Dependencies
 ------------
-PyMuPDF v1.12.2+
-
+PyMuPDF
 """
 
 import fitz
 
 print(fitz.__doc__)
 
-outpdf = __file__.replace(".py", ".pdf")
-outsvg = __file__.replace(".py", ".svg")
+outpdf = "output.pdf"
+outsvg = "output.svg"
 doc = fitz.open()
 page = doc.new_page()
 img = page.new_shape()

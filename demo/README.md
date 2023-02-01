@@ -2,7 +2,6 @@
 
 Program | Purpose
 ------- | -------
-curly-polygon.py | demo draw regular polygon with curly border
 decrypt.py | create a decrypted copy of a PDF file
 demo.py | demonstrates a broad range of PyMuPDF high-level functions
 demo-lowlevel.py | demonstrates PyMuPDF low-level functions
