@@ -49,7 +49,8 @@ Folder | File | Description |
 `import-metadata` | `import.py` | Import a metadata dictionary from a CSV file into a PDF document. |
 `import-toc` | `import.py` | Import a table of contents (ToC) from a CSV file into a PDF document. |
 `insert-images` | `insert.py` | Create a PDF document by inserting the images found in the input directory. |
-`insert-logo` | `insert-svg.py` | Insert the MuPDF logo in SVG format in all pages of a PDF document. |
+`insert-logo` | `file.py` | Insert the MuPDF logo in PNG format in all pages of a PDF document. |
+`insert-logo` | `svg.py` | Insert the MuPDF logo in SVG format in all pages of a PDF document. |
 `join-documents` | `join.py` | Create a PDF document by inserting the images in the input directory. |
 `list-embedded` | `list.py` | Print a list of embedded files in a document. |
 `make-calendar` | `make.py` | Create a calendar with three years in a row. |

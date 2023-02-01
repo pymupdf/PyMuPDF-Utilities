@@ -6,7 +6,7 @@ License: GNU GPL V3
 
 Usage
 -----
-python insert-svg.py input.pdf logo.svg
+python svg.py input.pdf logo.svg
 
 Dependencies
 ------------
