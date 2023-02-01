@@ -27,13 +27,16 @@ import fitz
 
 print(fitz.__doc__)
 
+
 def pvon(a):
     """Starting point of a reflected sun ray, given an angle a."""
     return (math.cos(a), math.sin(a))
 
+
 def pbis(a):
     """End point of a reflected sun ray, given an angle a."""
     return (math.cos(3 * a - math.pi), (math.sin(3 * a - math.pi)))
+
 
 fileprfx = "output"  # filename prefix
 coffee = fitz.pdfcolor["coffee"]  # color: latte macchiato?

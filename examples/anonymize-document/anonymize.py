@@ -18,6 +18,7 @@ deleted.
 from __future__ import print_function
 import fitz, sys
 
+
 def remove_txt(cont):
     """
     Remove everything enclosed in a pair of "BT" / "ET" strings, including both.
@@ -49,6 +50,7 @@ def remove_txt(cont):
         ncont = bytes(ncont, "utf-8")
     return ncont
 
+
 assert len(sys.argv) == 2, "need input PDF file name"
 fn = sys.argv[1]
 assert fn.endswith(".pdf"), "expect a PDF file"
@@ -62,4 +64,4 @@ for page in doc:
         ncont = remove_txt(cont)
         doc.update_stream(xref, ncont)
 
-doc.save("output.pdf", clean = True, garbage = 4)
+doc.save("output.pdf", clean=True, garbage=4)

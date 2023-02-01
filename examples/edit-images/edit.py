@@ -409,8 +409,8 @@ class PDFdisplay(wx.Dialog):
             self,
             wx.ID_ANY,
             wx.EmptyString,
-            u"Select image file",
-            u"*.*",
+            "Select image file",
+            "*.*",
             defPos,
             defSiz,
             wx.FLP_CHANGE_DIR | wx.FLP_FILE_MUST_EXIST | wx.FLP_SMALL,
@@ -1074,12 +1074,12 @@ class PDFdisplay(wx.Dialog):
         return
 
     def Rect_to_wxRect(self, fr):
-        """ Return a zoomed wx.Rect for given fitz.Rect."""
+        """Return a zoomed wx.Rect for given fitz.Rect."""
         r = (fr * self.zoom).irect  # zoomed IRect
         return wx.Rect(r.x0, r.y0, r.width, r.height)  # wx.Rect version
 
     def wxRect_to_Rect(self, wr):
-        """ Return a shrunk fitz.Rect for given wx.Rect."""
+        """Return a shrunk fitz.Rect for given wx.Rect."""
         r = fitz.Rect(wr.x, wr.y, wr.x + wr.width, wr.y + wr.height)
         return r * self.shrink  # shrunk fitz.Rect version
 
