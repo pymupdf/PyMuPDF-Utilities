@@ -1,36 +1,43 @@
 """
-Demo script: Convert input file to a PDF
------------------------------------------
-Intended for multi-page input files like XPS, EPUB etc.
+Convert an arbitrary document (XPS, EPUB, CBZ, etc.) to PDF
+--------------------------------------------------------------------------------
+License: GNU GPL V3
+(c) 2018 Jorj X. McKie
 
-Features:
----------
-Recovery of table of contents and links of input file.
-While this works well for bookmarks (outlines, table of contents),
-links will only work if they are not of type "LINK_NAMED".
-This link type is skipped by the script.
+Usage
+-----
+python convert.py input.epub
 
-For XPS and EPUB input, internal links however **are** of type "LINK_NAMED".
-Base library MuPDF does not resolve them to page numbers.
+Description
+-----------
+The table of contents and the links of the input file are recovered. While this
+works well for bookmarks (outlines, table of contents) links will only work as
+expected as long as they are not of type "LINK_NAMED". This link type is skipped
+by the script.
 
-So, for anyone expert enough to know the internal structure of these
-document types, can further interpret and resolve these link types.
+For XPS and EPUB though, internal links are of type "LINK_NAMED". MuPDF does not
+resolve them to page numbers. So, anyone knowledgeable enough about the internal
+structure of these document types can further interpret and resolve these link
+types.
 
 Dependencies
---------------
-PyMuPDF v1.13.3
+------------
+PyMuPDF
 """
-import sys
 
+import sys
 import fitz
 
 if not (list(map(int, fitz.VersionBind.split("."))) >= [1, 13, 3]):
     raise SystemExit("insufficient PyMuPDF version")
+
 fn = sys.argv[1]
 doc = fitz.open(fn)
+
 if doc.is_pdf:
     raise SystemExit("document is PDF already")
-print("Converting '%s' to '%s.pdf'" % (fn, fn))
+
+print("Converting '%s' to 'output.pdf'" % (fn))
 b = doc.convert_to_pdf()  # convert to pdf
 pdf = fitz.open("pdf", b)  # open as pdf
 
@@ -58,7 +65,5 @@ for pinput in doc:  # iterate through input pages
             continue
         pout.insert_link(l)  # simply output the others
 
-# save the conversion result
-pdf.save(fn + ".pdf", garbage=4, deflate=True)
-# say how many named links we skipped
+pdf.save("output.pdf", garbage=4, deflate=True)
 print("Skipped %i named links of a total of %i in input." % (link_skip, link_cnti))
