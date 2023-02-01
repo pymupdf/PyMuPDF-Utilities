@@ -25,12 +25,12 @@ class PDFViewer(sc.SizedFrame):
 
         paneCont = self.GetContentsPane()
         self.buttonpanel = pdfButtonPanel(
-            paneCont, wx.NewId(), wx.DefaultPosition, wx.DefaultSize, 0
+            paneCont, wx.NewIdRef(), wx.DefaultPosition, wx.DefaultSize, 0
         )
         self.buttonpanel.SetSizerProps(expand=True)
         self.viewer = pdfViewer(
             paneCont,
-            wx.NewId(),
+            wx.NewIdRef(),
             wx.DefaultPosition,
             wx.DefaultSize,
             wx.HSCROLL | wx.VSCROLL | wx.SUNKEN_BORDER,
