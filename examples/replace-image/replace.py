@@ -47,4 +47,4 @@ if __name__ == "__main__":
     item = images[0]
     old_xref = item[0]
     img_replace(page, old_xref, filename=img_file)
-    doc.ez_save("output.pdf", garbage=4, pretty=True)
+    doc.ez_save("output_replace.pdf", garbage=4, pretty=True)
