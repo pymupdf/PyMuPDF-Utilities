@@ -1,3 +1,14 @@
+"""
+Replace an image identified by xref
+--------------------------------------------------------------------------------
+License: GNU GPL V3
+(c) 2022 Jorj X. McKie
+
+Usage
+-----
+python replace.py
+"""
+
 import fitz
 
 if tuple(map(int, fitz.VersionBind.split("."))) < (1, 19, 5):
@@ -29,11 +40,11 @@ def img_replace(page, xref, filename=None, stream=None, pixmap=None):
 
 
 if __name__ == "__main__":
-    doc = fitz.open("original.pdf")
-    img_file = "nur-ruhig.jpg"  # the new image
+    doc = fitz.open("input.pdf")
+    img_file = "input.jpg"
     page = doc[0]
     images = page.get_images()  # we only are interested in first image here
     item = images[0]
-    old_xref = item[0]  # old image xref
+    old_xref = item[0]
     img_replace(page, old_xref, filename=img_file)
-    doc.ez_save("new-image.pdf", garbage=4, pretty=True)
+    doc.ez_save("output.pdf", garbage=4, pretty=True)
