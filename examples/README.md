@@ -21,20 +21,14 @@ Folder | File | Description |
 `attach-images` | `attach.py` | Attach the images in the input directory to a new document. |
 `browse-document` | `browse.py` | Display a document using Tkinter. |
 `combine-pages` | `combine.py` | Copy a PDF document combining every 4 pages. |
-`convert-document` | `convert.py` | Convert an arbitrary document (XPS, EPUB, CBZ, etc.) to PDF. |
-`convert-image` | `convert.py` | Convert an arbitrary image to a PNG pixmap using Pillow. |
-`convert-pixmap` | `convert.py` | Convert an arbitrary pixmap to JPEG format using Pillow. |
 `convert-text` | `convert.py` | A basic text-to-PDF converter. |
 `copy-embedded` | `copy.py` | Copy the embedded files in the input document to the output document. |
-`decrypt-document` | `decrypt.py` | Decrypt a PDF document with the password provided and save it as a new document. |
 `display-document` | `display.py` | Let the user select a document to scroll through it. |
 `draw-cardioid` | `draw.py` | Draw a cardioid. |
 `draw-caustic` | `draw.py` | Draw a caustic curve. |
 `draw-fractal` | `carpet.py` | Draw the Sierpinski carpet fractal. |
 `draw-fractal` | `punch.py` | Draw the Sierpinski carpet fractal. |
 `draw-fractal` | `triangle.py` | Draw the Sierpinski triangle fractal. |
-`draw-polygon` | `draw.py` | Draw a regular polygon with a curly border. |
-`draw-rgb-area` | `draw.py` | Draw an RGB pixel area with numpy and save it with fitz. |
 `draw-sines` | `draw.py` | Draw the sine and cosine functions. |
 `edit-images` | `edit.py` | Edit images in a PDF document. |
 `edit-links` | `edit.py` | Edit links in a PDF document. |
@@ -52,8 +46,6 @@ Folder | File | Description |
 `import-metadata` | `import.py` | Import a metadata dictionary from a CSV file into a PDF document. |
 `import-toc` | `import.py` | Import a table of contents (ToC) from a CSV file into a PDF document. |
 `insert-images` | `insert.py` | Create a PDF document by inserting the images found in the input directory. |
-`insert-logo` | `file.py` | Insert the MuPDF logo in PNG format in all pages of a PDF document. |
-`insert-logo` | `svg.py` | Insert the MuPDF logo in SVG format in all pages of a PDF document. |
 `join-documents` | `join.py` | Create a PDF document by inserting the images in the input directory. |
 `list-embedded` | `list.py` | Print a list of embedded files in a document. |
 `make-calendar` | `make.py` | Create a calendar with three years in a row. |
@@ -62,10 +54,10 @@ Folder | File | Description |
 `print-hsv` | `print.py` | Create a document showing RGB colors based on hue, saturation and value (HSV). |
 `print-page-format` | `print.py` | Print the paper size given a width and height. |
 `print-rgb` | `print.py` | Create a document showing RGB colors. |
+`replace-image` | `remove.py` | Remove an image identified by xref. |
+`replace-image` | `replace.py` | Replace an image identified by xref. |
 `split-document` | `split.py` | Split a PDF document into multiple pages (1 per page). |
 `test-blendmode` | `test.py` | Generate highlight annotations using blend modes. |
-`tile-image` | `tile.py` | Tile an image into 3 x 4 tiles. |
-`view-document` | `view.py` | Object-oriented (OOP) PDF viewer using wxPython. |
 
 ## Attributions
 Described below are the input files that have been used in the examples to create PDF, XPS files and eBooks with PyMuPDF.
