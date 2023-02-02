@@ -6,7 +6,7 @@ License: GNU GPL V3
 
 Usage
 -----
-python input.txt
+python convert.py input.txt
 """
 
 import sys

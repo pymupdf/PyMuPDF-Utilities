@@ -56,6 +56,7 @@ Folder | File | Description |
 `print-rgb` | `print.py` | Create a document showing RGB colors. |
 `replace-image` | `remove.py` | Remove an image identified by xref. |
 `replace-image` | `replace.py` | Replace an image identified by xref. |
+`split-document` | `split.py` | Split a PDF document into multiple pages (1 per page). |
 `test-blendmode` | `test.py` | Generate highlight annotations using blend modes. |
 
 ## Attributions
