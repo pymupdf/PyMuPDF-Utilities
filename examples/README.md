@@ -54,6 +54,8 @@ Folder | File | Description |
 `print-hsv` | `print.py` | Create a document showing RGB colors based on hue, saturation and value (HSV). |
 `print-page-format` | `print.py` | Print the paper size given a width and height. |
 `print-rgb` | `print.py` | Create a document showing RGB colors. |
+`replace-image` | `remove.py` | Remove an image identified by xref. |
+`replace-image` | `replace.py` | Replace an image identified by xref. |
 `test-blendmode` | `test.py` | Generate highlight annotations using blend modes. |
 
 ## Attributions
