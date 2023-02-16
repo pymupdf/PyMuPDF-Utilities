@@ -1,6 +1,8 @@
 # General Text Extraction
 This folder contains a number of scripts for extracting and analyzing text from documents.
 
+* `lookup-keywords.py`: easily finds the values for certain keywords whenever the page's layout is "predictable": every keyword is followed by its value, no text is in between and the value's boundary box is not higher up on the page. The location of both items is not otherwise restricted.
+
 * `layout-analyzer.py`: produces a new PDF showing the layout of all text and images.
 
 * `pdf2text.py`: "naive" or "native" text extraction, which simply prints the text as encountered in the document page. In many cases this may lead to text not appearing in the intended reading order or even to illegible text.
