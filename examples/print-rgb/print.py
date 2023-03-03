@@ -24,14 +24,8 @@ print(fitz.__doc__)
 print("Running:", __file__)
 
 
-def sortkey(x):
-    """Return '001002003' for (colorname, 1, 2, 3)"""
-    k = str(x[1]).zfill(3) + str(x[2]).zfill(3) + str(x[3]).zfill(3)
-    return k
-
-
 # create color list sorted down RGB values
-mylist = sorted(getColorInfoList(), reverse=True, key=lambda x: sortkey(x))
+mylist = sorted(getColorInfoList(), reverse=True, key=lambda x: x[1:])
 
 w = 800  # page width
 h = 600  # page height
@@ -67,7 +61,7 @@ while idx < num_colors:
 m = {
     "author": "Jorj X. McKie",
     "producer": "PyMuPDF",
-    "creator": "colordb.py",
+    "creator": "examples/print-rgb/print.py",
     "creationDate": fitz.get_pdf_now(),
     "modDate": fitz.get_pdf_now(),
     "title": "PyMuPDF Color Database",

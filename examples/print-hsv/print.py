@@ -62,8 +62,8 @@ rw = 80  # width of color rect
 rh = 60  # height of color rect
 
 num_colors = len(mylist)  # number of color triples
-black = getColor("black")  # text color
-white = getColor("white")  # text color
+black = 0  # text color
+white = (1, 1, 1)  # text color
 fsize = 8  # fontsize
 lheight = fsize * 1.2  # line height
 idx = 0  # index in color database
@@ -91,7 +91,7 @@ while idx < num_colors:
 m = {
     "author": "Jorj X. McKie",
     "producer": "PyMuPDF",
-    "creator": "colordb.py",
+    "creator": "examples/print-hsv/print.py",
     "creationDate": fitz.get_pdf_now(),
     "modDate": fitz.get_pdf_now(),
     "title": "PyMuPDF Color Database",
