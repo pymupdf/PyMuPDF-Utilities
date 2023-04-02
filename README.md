@@ -43,14 +43,9 @@ A new [folder](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/jupyter-
 ## Table Analysis
 
 This folder contains a collection of scripts to analyse a table. The intention here, too, is to extend the examples over time.
-Already there is a script which can extract table cells to a CSV file, if they are defined by gridlines. This includes any multi-line cell content.
+Already there is a script which can extract table cells to a pandas DataFrame (saved to EXCEL), if they are defined by gridlines. This includes any multi-line cell content.
 
 
 ## Examples
 
 Please check out [the examples](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/examples).
-
---------------------------------------------
-If you find my work for PyMuPDF useful, you might consider a PayPal donation:
-
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=PE6665GMGMDEY&source=url)
