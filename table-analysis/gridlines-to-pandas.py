@@ -3,45 +3,44 @@ Example script: Using PyMuPDF for table analysis
 -------------------------------------------------
 
 This script extracts cell content from a table on a PDF page and outputs
-a pandas DataFrame.
+a pandas DataFrame (as an Excel file).
 
-The script will work successfully if the following conditions are met:
+The script should work if the following conditions are met:
 
-1. The table has been / can be identified by a wrapping rectangle ("clip").
-2. The table has a clean (row x column) format.
-3. Each table cell is wrapped by "gridlines" (vector graphics).
+1. The table is inside a wrapping rectangle (boundary box or "bbox").
+2. The table has a clean (row x column) format, no joined cells.
+3. Table cell are wrapped by "gridlines" (vector graphics).
 
 The script executes the following steps:
 
 Step 0: Open file named in the command line, read first page and determine
-        the rectangle containing the table.
+        the bbox of the table by reading a JSON file with the same filename.
 Step 1: Extract x- and y-coordinates of vector graphic lines. They are
-        being used as cell borders to determine the right cell for each
-        piece of text. Create a corresponding Python table with empty text
-        cells.
-Step 2: Extract page text pieces ("spans") within the clip and sort them
-        by vertical, then horizontal coordinates. Sorting is required to
-        ensure correct sequence of multi-line table cell text content.
-        For each text piece, append it to the respective cell text.
-Step 3: Output Python table as a pandas DataFrame.
+        used as cell borders.
+Step 2: Extract page text as single words and put each word string in the
+        adequate cell.
+Step 3: Output Python table as a pandas DataFrame (resp. Excel file).
 
 """
-import pandas as pd
-import sys
 import fitz
+import pandas as pd
 
-# -------------------------------------------------------------------------
-# Make minimal wrapping rectangles:
-# Text extraction and searches deliver rectangles with no extra room above
-# and below text: their heights will equal the font size.
-# Popular fonts have higher line rectangles, e.g. Helvetica has a rectangle
-# height which is 37.4% larger than the font size.
-# -------------------------------------------------------------------------
+"""
+-------------------------------------------------------------------------
+Make minimal boundary boxes:
+Text extraction and searches deliver rectangles with no extra room above
+and below: their heights will equal the font size.
+Popular fonts have higher line rectangles, e.g. Helvetica has a height
+that is 37.4% larger than the font size. This may cause problems when
+trying to fit strings in externally defined rectangles - as is the case
+with gridlines.
+-------------------------------------------------------------------------
+"""
 fitz.Tools().set_small_glyph_heights(True)
 
 
-def main(page, clip):
-    """Extract table structure defined by gridlines within given clip."""
+def main(page, table_bbox):
+    """Extract table structure defined by gridlines within given table_bbox."""
 
     # vertical / horizontal line coordinates. Python 'sets' avoid duplicates.
     vert = set()  # vertical (x-) coordinates
@@ -81,7 +80,7 @@ def main(page, clip):
     paths = page.get_drawings()  # all line art / vector graphics on page
 
     for p in paths:  # iterate over vector graphis to find the lines
-        if not p["rect"] in clip:  # omit stuff not inside clip
+        if not p["rect"] in table_bbox:  # omit stuff outside table_bbox
             continue
         for item in p["items"]:  # look at lines and "thin" rectangles
             if item[0] == "l":  # a line
@@ -100,9 +99,9 @@ def main(page, clip):
                     hori.add(rect.y1)  # treat like row border
 
     vert = sorted(list(vert))  # sorted, without duplicates
-    clean_list(vert)
+    clean_list(vert)  # remove "almost" duplicate coordinates
     hori = sorted(list(hori))  # sorted, without duplicates
-    clean_list(hori)
+    clean_list(hori)  # remove "almost" duplicate coordinates
 
     # Define a Python table with following values:
     #   * has len(hori)-1 rows
@@ -110,15 +109,14 @@ def main(page, clip):
     cells = [[""] * (len(vert) - 1) for j in range(len(hori) - 1)]
 
     # -------------------------------------------------------------------------
-    # Step 2: Extract text words
-    # Extract and sort text words. We use the "words" output format.
+    # Step 2: Extract and sort text words
     # -------------------------------------------------------------------------
     # put the text pieces into the Python cells
     for w in page.get_text(
         "words",
         flags=fitz.TEXTFLAGS_TEXT & ~fitz.TEXT_PRESERVE_LIGATURES,
         sort=True,
-        clip=clip,
+        clip=table_bbox,
     ):
         ridx, cidx = getcoord(fitz.Rect(w[:4]), w[4])
         cells[ridx][cidx] += w[4] + " "  # append to stuff already in that cell
@@ -131,6 +129,8 @@ def main(page, clip):
 
     for i in range(len(hdr)):
         key = hdr[i].strip()
+        if not key:  # may be empty!
+            key = f"Col{i}"
         value = []
         for j in range(1, len(cells)):
             value.append(cells[j][i].strip())
@@ -139,19 +139,16 @@ def main(page, clip):
 
 
 if __name__ == "__main__":
-    doc = fitz.open(sys.argv[1])
-    page = doc[0]  # your page, use zero-based numbers
-    # -------------------------------------------------------------------------
-    # Step 0: Identify clip rectangle
-    # Look up top and bottom coordinates for relevant data, potentially also
-    # left and right borders.
-    # The following is just kidding: it assumes that there exist unique text
-    # pieces above and below the table and searches for them. Then uses their
-    # hit rectangles to compute the vertical limits 'top' and 'bottom'.
-    # Your situation will be different!
-    # -------------------------------------------------------------------------
-    top = page.search_for("Table 1")[0].y1
-    bot = page.search_for("Optional dependencies fo")[0].y0  # top y of rectangle
-    clip = fitz.Rect(0, top, page.rect.width, bot)
+    import json
+    import pathlib
+    import sys
+
+    filename = sys.argv[1]
+    doc = fitz.open(filename)
+    page = doc[0]
+    # Locate table on page.
+    # Assuming here, that we can access a JSON version.
+    clip = json.loads(pathlib.Path(filename.replace(".pdf", "-bbox.json")).read_text())
+    clip = fitz.Rect(clip)
     df = main(page, clip)
     df.to_excel(doc.name + ".xlsx")
