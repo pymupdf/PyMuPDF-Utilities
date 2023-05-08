@@ -58,6 +58,7 @@ Folder | File | Description |
 `replace-image` | `replace.py` | Replace an image identified by xref. |
 `split-document` | `split.py` | Split a PDF document into multiple pages (1 per page). |
 `test-blendmode` | `test.py` | Generate highlight annotations using blend modes. |
+`zerofy-rotation` | `zerofy-rotation.py` | Set page rotation to 0 without changing appearance. |
 
 ## Attributions
 Described below are the input files that have been used in the examples to create PDF, XPS files and eBooks with PyMuPDF.
