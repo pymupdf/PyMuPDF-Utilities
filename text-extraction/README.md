@@ -11,6 +11,8 @@ This folder contains a number of scripts for extracting and analyzing text from 
 
 * `fitzcli.py`: is a duplicate of the PyMuPDF batch / CLI module. So it offers all functions and commands described [here](https://pymupdf.readthedocs.io/en/latest/module.html), **_plus_** the new command `"gettext"`, which offers text extraction from arbitrary MuPDF documents. Most importantly, you can now etract text in a **_layout-preserving_** manner. The next section describes this in detail.
 
+* `multi_column.py`: A script and importable function to identify column-compatible text boxes on document pages. It automatically detects and enlarges bboxes that fit in the same column. A page may contain headers, footers, and also intermediate headers. The number of columns on a page need not be fixed and also may 1 (no columns). It handles text boxes separately if contained in areas with colored backgrounds.
+
 # Layout-preserving Text Extraction
 
 Via its subcommand `"gettext"`, script `fitzcli.py` offers text extraction in different formats. Of special interest surely is **_layout preservation_**, which produces text as close to the original physical layout as possible, surrounding areas where there are images, or reproducing text in tables and multi-column text.
