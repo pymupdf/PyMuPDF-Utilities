@@ -8,12 +8,11 @@ Features
 - Identify text belonging to (a variable number of) columns on the page.
 - Text with different background color is handled separately, allowing for
   easier treatment of side remarks, comment boxes, etc.
-- Uses MuPDF's text block detection capability to identify text blocks and
-  uses the block bboxes as primary structurinbg principle.
-- Supports ignoring footers via a footer marhin parameter.
-- Returns re-created text boundary boxes (integer coordinates) sorted ascending
-  by the top, then by the left coordinates. Callers can decide to change the
-  sorting order of the returned list.
+- Uses text block detection capability to identify text blocks and
+  uses the block bboxes as primary structuring principle.
+- Supports ignoring footers via a footer margin parameter.
+- Returns re-created text boundary boxes (integer coordinates), sorted ascending
+  by the top, then by the left coordinates.
 
 Restrictions
 -------------
@@ -32,7 +31,7 @@ Usage
 
   python multi_column.py input.pdf footer_margin
 
-  Where footer margin is the size of the footbottom stripe to ignore on each page.
+  Where footer margin is the height of the bottom stripe to ignore on each page.
   This code is intended to be modified according to your need.
 
 - Use in a Python script as follows:
