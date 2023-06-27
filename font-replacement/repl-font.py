@@ -61,7 +61,7 @@ Reasons include:
 
 * This script enforces use of embedded fonts. This will add to the output size.
 * We use fontTools to create font subsets based on the used unicodes.
-  Depending on the choice of the new font, subsetting may not wordk. We know of
+  Depending on the choice of the new font, subsetting may not work. We know of
   no way subsetting CFF fonts like the embeddable Base-14 font variants.
 
 License
