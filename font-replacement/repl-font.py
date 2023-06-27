@@ -505,7 +505,7 @@ for page in indoc:
     clean_fontnames(page)
 
 times.append(("Rebuilding:", timer()))
-print("PHase 3: Build font subsets.")
+print("Phase 3: Build font subsets.")
 indoc.subset_fonts()
 times.append(("Font subsetting:", timer()))
 
