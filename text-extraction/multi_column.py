@@ -54,7 +54,7 @@ import sys
 import fitz
 
 
-def column_boxes(page, footer_margin=50, no_image_text=True):
+def column_boxes(page, footer_margin=50, header_margin=50, no_image_text=True):
     """Determine bboxes which wrap a column."""
     paths = page.get_drawings()
     bboxes = []
@@ -71,7 +71,8 @@ def column_boxes(page, footer_margin=50, no_image_text=True):
 
     # compute relevant page area
     clip = +page.rect
-    clip.y1 -= footer_margin
+    clip.y1 -= footer_margin  # Remove footer area
+    clip.y0 += header_margin  # Remove header area
 
     def can_extend(temp, bb, bboxlist):
         """Determines whether rectangle 'temp' can be extended by 'bb'
@@ -301,6 +302,12 @@ if __name__ == "__main__":
     else:  # use default vaue
         footer_margin = 50
 
+    # check if header margin is given
+    if len(sys.argv) > 3:
+        header_margin = int(sys.argv[3])
+    else:  # use default vaue
+        header_margin = 50
+
     # open document
     doc = fitz.open(filename)
 
@@ -310,7 +317,7 @@ if __name__ == "__main__":
         page.wrap_contents()
 
         # get the text bboxes
-        bboxes = column_boxes(page, footer_margin=footer_margin)
+        bboxes = column_boxes(page, footer_margin=footer_margin, header_margin=header_margin)
 
         # prepare a canvas to draw rectangles and text
         shape = page.new_shape()
