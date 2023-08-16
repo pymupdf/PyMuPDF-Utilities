@@ -25,6 +25,7 @@ import time
 mat = fitz.Matrix(5, 5)  # high resolution matrix
 ocr_time = 0
 pix_time = 0
+INVALID_UNICODE = chr(0xFFFD)  # the "Invalid Unicode" character
 
 
 def get_tessocr(page, bbox):
@@ -63,7 +64,7 @@ for page in doc:
         for l in b["lines"]:
             for s in l["spans"]:
                 text = s["text"]
-                if chr(65533) in text:  # invalid characters encountered!
+                if INVALID_UNICODE in text:  # invalid characters encountered!
                     # invoke OCR
                     ocr_count += 1
                     print("before: '%s'" % text)
