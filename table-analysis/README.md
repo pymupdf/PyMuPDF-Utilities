@@ -17,8 +17,8 @@ You can iterate over these table objects to find details about their headers, ta
 
 The following examples have been collected as of 2023-08-20:
 
-* `find_tables.ipynb` (Jupyter notebook) reads a 1-page PDF with chinese Chinese text and two tables (with gridlines).
-* `join-tables.ipynb` (Jupyter notebook) reads a multi-page PDF and joins pieces of one single table that has been fragmented across these pages.
+* `find_tables.ipynb` (Jupyter notebook) reads a 1-page PDF with Chinese text and two tables.
+* `join-tables.ipynb` (Jupyter notebook) reads a multi-page PDF and joins the parts of a table that has been fragmented across these pages.
 
 ## Example scripts
 If running standalone, the example scripts accept the file name via CLI parameter and expect a same-named JSON file containing the bbox covering the table to be found on first page.
