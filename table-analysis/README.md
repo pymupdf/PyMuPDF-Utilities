@@ -1,7 +1,7 @@
 ## Breaking News: PyMuPDF's Table Support Starting with Version 1.23.0!
 Starting with its version 1.23.0, PyMuPDF offers complete integrated support for identifying tables on document pages and extracting their content.
 
-Just use the new [Page](https://pymupdf.readthedocs.io/en/latest/page.html) method [find_tables()]((https://pymupdf.readthedocs.io/en/latest/page.html#Page.find_tables)) to obtain an object that contains all detected tables on the page in a list.
+Just use the new [Page](https://pymupdf.readthedocs.io/en/latest/page.html) method [`find_tables()`]((https://pymupdf.readthedocs.io/en/latest/page.html#Page.find_tables)) to obtain an object that contains all detected tables on the page in a list.
 
 You can iterate over these table objects to find details about their headers, table cells and their content. A growing number of example scripts shows how to do this and how to pass the extracted information downstream to pandas Dataframes and Excel, CSV or JSON files.
 
