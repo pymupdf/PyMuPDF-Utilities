@@ -19,7 +19,7 @@ The following examples have been collected starting as of 2023-08-20:
 
 * `find_tables.ipynb` (Jupyter notebook) reads a 1-page PDF with Chinese text and two tables.
 * `join-tables.ipynb` (Jupyter notebook) reads a multi-page PDF and joins the parts of a table that has been fragmented across these pages.
-* `XPS-table.ipynb` (Jupyter notebook) confirms support of PyMuPDF's table feature for general document (comparison XPS vs. PDF).
+* `compare-xps-pdf.ipynb` (Jupyter notebook) confirms support of PyMuPDF's table feature for general document (comparison XPS vs. PDF).
 
 ## Example scripts
 If running standalone, the example scripts accept the file name via CLI parameter and expect a same-named JSON file containing the bbox covering the table to be found on first page.
