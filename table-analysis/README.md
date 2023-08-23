@@ -5,7 +5,7 @@ Just use the new [Page](https://pymupdf.readthedocs.io/en/latest/page.html) meth
 
 You can iterate over these table objects to find details about their headers, table cells and their content. A growing number of example scripts shows how to do this and how to pass the extracted information downstream to pandas Dataframes and Excel, CSV or JSON files.
 
-The following examples have been collected starting as of 2023-08-20:
+The following examples have been collected since 2023-08-20:
 
 * `find_tables.ipynb` (Jupyter notebook) reads a 1-page PDF with Chinese text and two tables.
 * `join-tables.ipynb` (Jupyter notebook) reads a multi-page PDF and joins the parts of a table that has been fragmented across these pages.
