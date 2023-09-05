@@ -20,7 +20,12 @@ Dependencies:
 PyMuPDF v1.19.0
 """
 import fitz
-import time
+import time, os
+
+print(fitz.__doc__)
+tessdata = os.getenv("TESSDATA_PREFIX")
+print("Found tessdata here:", tessdata)
+print()
 
 mat = fitz.Matrix(5, 5)  # high resolution matrix
 ocr_time = 0

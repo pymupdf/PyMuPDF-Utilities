@@ -22,6 +22,8 @@ for page in doc:
 
     for p in page.get_drawings():
         w = p["width"]  # thickness of the border line
+        if w is None:
+            w = 2
         r = p["rect"] + (-w, -w, w, w)  # enlarge each rectangle by width value
         for i in range(len(new_rects)):
             if abs(r & new_rects[i]) > 0:  # touching one of the new rects?
