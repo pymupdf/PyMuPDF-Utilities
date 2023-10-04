@@ -5,7 +5,7 @@ Walk through the drawings of a page and join path rectangles, which "touch"
 each other.
 This potentially results in a smaller set of rectangles, which each cover
 a vector graphics figure.
-for each of these rectanlges create high resolution PNG image.
+for each of these rectangles create a high resolution PNG image.
 
 License & Copyright
 -------------------
