@@ -19,36 +19,48 @@ import fitz
 
 def detect_rects(page):
     """Detect and join rectangles of connected vector graphics."""
+    # we need to exclude meaningless graphics that e.g. paint a white
+    # rectangle on the full page.
+    delta = (-1, -1, 1, 1)  # enlarge every path rect by this
+    parea = abs(page.rect) * 0.8  # area of the full page (80%)
+
+    # exclude graphics that are too large
+    paths = [p for p in page.get_drawings() if abs(p["rect"]) < parea]
+
     # make a list of vector graphics rectangles (IRects are sufficient)
     prects = sorted(
-        [p["rect"].irect for p in page.get_drawings()], key=lambda r: (r.y1, r.x0)
+        [(p["rect"] + delta).irect for p in paths], key=lambda r: (r.y1, r.x0)
     )
-    new_rects = []  # the final list of the joined records
+
+    new_rects = []  # the final list of the joined rectangles
 
     # -------------------------------------------------------------------------
-    # The strategy is to identify and join all rects having at least one
-    # point in common. We'll extend each rectangle somewhat by converting
-    # it into an IRect and adding a 1 point border around it.
-    # This allows using the ".intersects()" method for better performance.
+    # The strategy is to identify and join all rects that have at least one
+    # point in common.
     # -------------------------------------------------------------------------
-    while prects:  # the original list will shrink in the process
-        r = prects[0]  # start with first (top-left) rectangle
-        rx = r + (-1, -1, 1, 1)  # little larger so we can use intersections
-        for i in range(len(prects)):
-            if i == 0:  # ignore first rectangle
-                continue
-            nr = prects[i]
-            if rx.intersects(nr):  # intersecting first rectangle:
-                prects[i] |= r
-                prects[0] |= +prects[i]
-                r = +prects[0]
-                rx = r + (-1, -1, 1, 1)
-        new_rects.append(prects.pop(0))  # shorten the list
-        # remove duplicates: will dramatically improve performance!
+    while prects:  # the algorithm will empty this list
+        prects_len = len(prects)  # current list length
+        r = prects[0]  # first rectangle
+        repeat = True
+        while repeat:
+            for i in range(prects_len - 1, -1, -1):  # back to front
+                if i == 0:  # don't touch first rectangle
+                    continue
+                if r.intersects(prects[i]):
+                    r |= prects[i]  # join in to first rect
+                    prects[0] = +r  # copy to list item
+                    del prects[i]  # delete this rect
+            prects_len = len(prects)  # length may have changed
+
+            # This is true if remainings touch the updated first one.
+            # Otherwise the while ends.
+            repeat = any([r.intersects(prects[i]) for i in range(1, prects_len)])
+
+        # move first item over to result list
+        new_rects.append(prects.pop(0))
         prects = sorted(list(set(prects)), key=lambda r: (r.y1, r.x0))
 
-    new_rects = list(set(new_rects))
-    new_rects.sort(key=lambda r: (r.y1, r.x0))  # sort by location
+    new_rects = sorted(list(set(new_rects)), key=lambda r: (r.y1, r.x0))
     return [r for r in new_rects if r.width > 5 and r.height > 5]
 
 
