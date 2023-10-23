@@ -11,7 +11,7 @@ def resolve_names(doc):
 
     Returns:
         A dictionary of the form
-        dest_names["dest-name"] = {"page": 314, "to": (72, 211), "zoom": None}.
+        dest_names["dest-name"] = {"page": 314, "to": (72, 211), "zoom": 0}.
     """
 
     def get_names(xref, destinations):
@@ -33,7 +33,7 @@ def resolve_names(doc):
                 destinations = get_names(kid_xref, destinations)
 
         names = doc.xref_get_key(xref, "Names")
-        names = names[1][1:-1]
+        names = names[1][1:-1].strip()
         if names is not None:
             destinations.extend(split_destinations(names))
         return destinations
