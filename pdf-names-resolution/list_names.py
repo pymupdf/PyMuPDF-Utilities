@@ -30,24 +30,39 @@ def resolve_names(doc):
     # this is a backward listing of xref to page number
     page_xrefs = {doc.page_xref(i): i for i in range(doc.page_count)}
 
+    def obj_string(obj):
+        """Return string version of an object that has no xref."""
+        buffer = fitz.mupdf.fz_new_buffer(512)
+        output = fitz.mupdf.ll_fz_new_output_with_buffer(buffer.m_internal)
+        fitz.mupdf.ll_pdf_print_obj(output, obj.m_internal, 1, 0)
+        printed = fitz.JM_UnicodeFromBuffer(buffer)
+        fitz.mupdf.ll_fz_drop_output(output)
+        fitz.mupdf.ll_fz_drop_buffer(buffer.m_internal)
+        return printed
+
     def get_array(val):
         """Generate one item of the names dictionary."""
-        templ_dict = {"page": -1, "dest": ""}  # result template
+        templ_dict = {"page": -1, "dest": ""}  # value template
         xref = val.pdf_to_num()  # xref number of the destination target
 
         # we strive to extract the array of the dest target
         if val.pdf_is_array():  # already an array
-            array = doc.xref_object(xref, compressed=True)
+            if xref:
+                array = doc.xref_object(xref, compressed=True)
+            else:
+                array = obj_string(val)
+
         elif val.pdf_is_dict():  # check if dictionary
             # then there must exist a "D" key with the array as value
             array = doc.xref_get_key(xref, "D")[1]
+
         else:  # if all fails return the empty template
             return templ_dict
 
         # replace PDF "null" by zero, omit square brackets
         array = array.replace("null", "0")[1:-1]
 
-        # find stuff before /XYZ and similar
+        # find stuff before first "/"
         idx = array.find("/")
         if idx < 1:  # this has no target page spec
             templ_dict["dest"] = array  # return the orig. string
@@ -57,7 +72,7 @@ def resolve_names(doc):
         array = array[idx:]  # stuff after "/"
         templ_dict["dest"] = array
 
-        # if we start wifth /XYZ, extract x, y, zoom
+        # if we start with /XYZ: extract x, y, zoom
         if array.startswith("/XYZ"):
             arr_t = array.split()[1:]
             x, y, z = tuple(map(float, arr_t))
@@ -80,7 +95,7 @@ def resolve_names(doc):
         # length of the PDF dictionary
         name_count = fitz.mupdf.pdf_dict_len(pdf_dict)
 
-        # extract key-val of ieach dict item
+        # extract key-val of each dict item
         for i in range(name_count):
             key = fitz.mupdf.pdf_dict_get_key(pdf_dict, i)
             val = fitz.mupdf.pdf_dict_get_val(pdf_dict, i)
@@ -89,11 +104,11 @@ def resolve_names(doc):
             else:
                 print(f"key {i} is no /Name")
                 dict_key = None
-            dict_val = get_array(val)  # evaluate the destination array
-            if dict_key:
-                dest_dict[dict_key] = dict_val  # store key/value in dict
 
-    # access underlying PDF document
+            if dict_key:
+                dest_dict[dict_key] = get_array(val)  # store key/value in dict
+
+    # access underlying PDF document of fz Document
     pdf = fitz.mupdf.pdf_document_from_fz_document(doc)
 
     # access PDF trailer
@@ -106,7 +121,7 @@ def resolve_names(doc):
     catalog = fitz.mupdf.pdf_dict_get(trailer, root)
     dest_dict = {}
 
-    # PDF_NAME(Dests)
+    # make PDF_NAME(Dests)
     dests = fitz.mupdf.pdf_new_name("Dests")
 
     # extract destinations old style (PDF 1.1)
