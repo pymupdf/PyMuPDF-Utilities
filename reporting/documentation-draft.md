@@ -1,4 +1,4 @@
-# PyMuPDF Documentation - Upfront
+# PyMuPDF Reporting - Upfront Documentation
 
 This is a non-final, heads-up documentation for PyMuPDF's new reporting feature.
 
@@ -177,4 +177,30 @@ The corresponding table definition must be this:
     <td id="amount"></td>
     <td id="total"></td>
 </tr>
+```
+
+----------
+
+#### **Composing and Writing the Report**
+
+Once all building blocks have been defined as shown above, we now need to tell the Report object how it should create the pages. This happens via setting some `Report` properties:
+
+```python
+
+# (optional) these blocks appear at the top of each page
+report.header = [logo, header]
+
+# (optional) these blocks appear at the bottom of each page
+report.footer = [footer]
+
+# blocks appearing here are written sequentially
+report.sections = [
+    # some block starting on a new page in 2-columns layout
+    [block1, {"cols": 2, "format": "A4-l", "newpage": True}],
+    # a table show on a portrait letter page, 1 column
+    [table1, {"cols": 12, "format": "letter", "newpage": True}],
+]
+
+# finally "execute" or run the report
+report.run("report.pdf")
 ```
