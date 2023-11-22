@@ -11,7 +11,7 @@ Nevertheless, for a better understanding of the following, reading the documenta
 
 You should also read the the articles [How to Layout Articles Using PyMuPDF](https://artifex.com/blog/pymupdfs-new-story-feature-provides-advanced-pdf-layout-styling) and [The ‘Story’ Concept at Work](https://artifex.com/blog/how-to-layout-articles-using-pymupdfs-story-feature-part-2) on Artifex' blogging website.
 
-The presentation `pymupdf-reporting.pptx` in this folder gives you a good 4-page impression.
+This [presentation](https://github.com/pymupdf/PyMuPDF-Utilities/blob/master/reporting/pymupdf-reporting.pdf) gives you a good 4-page impression.
 
 ## Defining a Report
 ### The Layout
