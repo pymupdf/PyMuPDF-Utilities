@@ -138,10 +138,21 @@ class Table(object):
         fp = io.BytesIO()  # for memory PDF
         writer = fitz.DocumentWriter(fp)
         self.story.reset()
-        dev = writer.begin_page(self.mediabox)
+
+        current_section = self.report.get_current_section()
+        current_mediabox = (
+            fitz.paper_rect(current_section[2])
+            if len(current_section) == 3
+            else self.mediabox
+        )
+        self.where = self.report.set_margin(current_mediabox)
+
+        dev = writer.begin_page(current_mediabox)
 
         # customize for mulit columns
-        columns = self.report.COLS  # get columns from parent report
+        columns = (
+            current_section[1] if len(current_section) >= 2 else self.report.COLS
+        )  # get columns from parent report
         CELLS = []
         if columns > 1:  # n columns
             TABLE = fitz.make_table(self.where, cols=columns, rows=1)  # layouts
@@ -204,9 +215,14 @@ class Table(object):
                 rows = []
             for j, data in enumerate(rows):
                 row = templ.clone()  # clone model row
-                if self.alternating_bg != None and len(self.alternating_bg) >= 2:
-                    bg_color = self.alternating_bg[j % len(self.alternating_bg)]
-                    row.set_properties(bgcolor=bg_color)
+                if isinstance(self.alternating_bg, (tuple, list)):
+                    if len(self.alternating_bg) >= 2:
+                        bg_color = self.alternating_bg[j % len(self.alternating_bg)]
+                        row.set_properties(bgcolor=bg_color)
+                    elif len(self.alternating_bg) == 1:
+                        row.set_properties(bgcolor=self.alternating_bg[0])
+                elif isinstance(self.alternating_bg, str):
+                    row.set_properties(bgcolor=self.alternating_bg)
                 else:
                     bg_color = "#fff"
                 if self.last_row_bg and j == len(rows) - 1:
@@ -301,11 +317,7 @@ class Report(object):
         self.FOOTER_RECT = None
 
         self.css = css if css else ""
-        if margins == None:
-            self.where = self.mediabox + (36, 36, -36, -50)
-        else:
-            L, T, R, B = margins
-            self.where = self.mediabox + (L, T, -R, -B)
+        self.where = self.set_margin(self.mediabox)
 
         if isinstance(logo, str):
             self.logo_file = logo
@@ -332,6 +344,14 @@ class Report(object):
                     fitz_code, CSS=self.css, archive=self.archive, name=family
                 )
 
+    def set_margin(self, rect):
+        if self.margins == None:
+            result = rect + (36, 36, -36, -50)
+        else:
+            L, T, R, B = self.margins
+            result = rect + (L, T, -R, -B)
+        return result
+
     def current(self):
         if isinstance(self.sections[self.sindex], list):
             return self.sections[self.sindex][0]
@@ -341,16 +361,43 @@ class Report(object):
         if len(self.sections) > self.sindex and isinstance(
             self.sections[self.sindex], list
         ):
+            if len(self.sections[self.sindex]) < 2:
+                BufferError("Size is not matched")
+
             if not isinstance(self.sections[self.sindex][1], int):
                 TypeError("Columns type error")
-
-            if len(self.sections[self.sindex]) != 2:
-                BufferError("Size is not matched")
 
             self.COLS = self.sections[self.sindex][1]
             return True
         else:
             return False  # continue
+
+    def get_pagerect(self, old_pagebox):
+        if len(self.sections) > self.sindex and isinstance(
+            self.sections[self.sindex], list
+        ):
+            if len(self.sections[self.sindex]) < 3:
+                return old_pagebox, False
+
+            if not isinstance(self.sections[self.sindex][2], str):
+                TypeError("Paper Type error")
+
+            pagebox = fitz.paper_rect(self.sections[self.sindex][2])
+            return pagebox, True
+        else:
+            return old_pagebox, False
+
+    def get_current_section(self, index=None):
+        if index == None:
+            index = self.sindex
+        return (
+            self.sections[index]
+            if isinstance(self.sections[index], list)
+            else [self.sections[index]]
+        )
+
+    def isover(self):
+        return self.sindex >= len(self.sections)
 
     def run(self, filename):
         # init
@@ -360,10 +407,12 @@ class Report(object):
             self.footer = []
 
         self.sindex = 0
-        footer_height = 0.0
+        footer_height = 30.0
         header_height = 0.0
         more = True  # need more pages or not
         pno = 0
+        section_mediabox = self.mediabox
+        section_mediabox, _ = self.get_pagerect(section_mediabox)  # init
 
         fileobject = io.BytesIO()  # let DocumentWriter write to memory
         writer = fitz.DocumentWriter(fileobject)  # define output writer
@@ -387,7 +436,6 @@ class Report(object):
                     header_height,
                 ]
             )
-            self.where.y0 = header_height  # Section start from
 
         if len(self.footer):  # calculate Footer rectangle
             for fElement in self.footer:
@@ -406,20 +454,23 @@ class Report(object):
                     self.mediabox.y1,
                 ]
             )
-            self.where.y1 = self.where.y1 - footer_height  # adjust content rect (end)
 
-        for section in self.sections:  # create story
-            if isinstance(section, list):
-                # if not isinstance(section[0].story, fitz.Story):
-                self.COLS = section[1]  # save columns to calculate Header_Rect
-                section[0].make_story()
-            else:  # if not isinstance(section.story, fitz.Story):
-                self.COLS = 1  # init COLS
-                section.make_story()
+        self.COLS = self.columns  # init COLS
+        self.current().make_story()
+        _ = self.check_cols()
 
-        self.check_cols()  # init COLS
         while more:  # loop until all input text has been written out
-            dev = writer.begin_page(self.mediabox)  # prepare a new output page
+            dev = writer.begin_page(section_mediabox)  # prepare a new output page
+
+            self.where = self.set_margin(section_mediabox)
+            self.where.y0 = (
+                self.where.y0 if self.where.y0 > header_height else header_height
+            )
+            self.where.y1 = (
+                self.where.y1
+                if (section_mediabox.y1 - self.where.y1) > footer_height
+                else section_mediabox.y1 - footer_height
+            )
 
             ROWS = 1  # default
             TABLE = fitz.make_table(self.where, cols=self.COLS, rows=ROWS)  # layouts
@@ -464,26 +515,30 @@ class Report(object):
                     )  # draw current section
                     self.current().story.draw(dev, None)
 
-                if filled[3] < self.where.y1:  # check and add section/block
-                    if more == 0:
+                if more == 0:
+                    if filled[3] < self.where.y1:  # check and add section/block
                         if self.current().advance:
                             where.y0 = filled[
                                 3
                             ]  # update latest position for next drawing
-                        self.sindex += 1
+                    self.sindex += 1
 
-                        if self.check_cols():
-                            more_cell = False  # set End value to create new page
+                    if not self.isover():
+                        self.current().make_story()
 
-                if more:  # check and select next column
+                    section_mediabox, is_newpage = self.get_pagerect(section_mediabox)
+                    if self.check_cols() or is_newpage:
+                        more_cell = False  # set End value to create new page
+                else:  # check and select next column
                     cell_index += 1
 
                 if cell_index is CELL_LENGTH:  # check whether one page is completed
                     more_cell = False
                 else:
                     where = CELLS[cell_index]
+
                 more = True
-                if self.sindex >= len(self.sections):  # check completion of PDF
+                if self.isover():  # check completion of PDF
                     more = False
                     break
 
@@ -510,7 +565,7 @@ class Report(object):
                 font_dict[fontname] = (xref, refname, page.number)
 
             btm_rect = fitz.Rect(
-                self.where.x0, self.mediabox.y1 - 30, self.where.x1, page.rect.y1
+                self.where.x0, page.rect.y1 - 30, page.rect.x1, page.rect.y1
             )
             page.insert_textbox(  # draw page number
                 btm_rect,
@@ -532,7 +587,6 @@ class Report(object):
                 self.current().header_tops.pop(
                     0
                 )  # remove first element not draw in following loop
-
                 for i in range(0, len(self.current().header_tops)):  # draw Top Row
                     header = self.current().header_tops[i]
                     page = doc.load_page(header["pno"])
