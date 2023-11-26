@@ -123,7 +123,7 @@ for xref in range(1, lenXREF):  # scan through all PDF objects
         "*** Scanning Cross Reference ***",
     )
 
-    if doc.xref_get_key(xref, "Subtype") != "/Image":  # not an image
+    if doc.xref_get_key(xref, "Subtype")[1] != "/Image":  # not an image
         continue
     if xref in smasks:  # ignore smask
         continue
