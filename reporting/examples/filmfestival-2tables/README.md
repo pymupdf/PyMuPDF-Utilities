@@ -13,7 +13,7 @@ Two tabular reports are created in one common PDF.
 2. Report 2 lists all actors together with all the films where they have been cast.
 
 The following are noteworthy details:
-* Demonstrate how to use fronts from the [pymupdf-fonts](https://pypi.org/project/pymupdf-fonts/) package.
+* Demonstrate how to use fonts from the [pymupdf-fonts](https://pypi.org/project/pymupdf-fonts/) package.
 * Demonstrate how to combine multiple report sections (here: two table sections) in one report.
 * Due to MuPDF's automatic layouting algorithm, major layout changes can be achieved without coding effort, like
     - choice of page size or paper format

@@ -1,0 +1,64 @@
+<style>
+    body {
+        font-family: sans-serif;
+        font-size: 11px;
+    }
+
+    table {
+        border-spacing: 0;
+    }
+
+    td,
+    th {
+        padding-left: 3px;
+        padding-right: 3px;
+        border: .2px solid #bbb;
+    }
+
+    /*
+    td[id="line"],
+    td[id="uprice"],
+    td[id="qty"] {
+        padding-left: 3px;
+        padding-right: 10px;
+    }
+*/
+    td[id="uprice"],
+    td[id="qty*uprice"] {
+        text-align: right;
+    }
+
+    td[id="line"],
+    td[id="uom"],
+    td[id="qty"],
+    td[id="part"],
+    td[id="date"] {
+        text-align: center;
+    }
+</style>
+
+<body style="font-family: sans-serif;">
+    <table>
+        <tr id="header" style="background-color: #aaceeb;">
+            <th>Line</th>
+            <th>H&P ID</th>
+            <th>Description</th>
+            <th>Part No.</th>
+            <th>Qty</th>
+            <th>UOM</th>
+            <th>Date</th>
+            <th>Unit Price</th>
+            <th>Total Price</th>
+        <tr id="template">
+            <td id="line"></td>
+            <td id="hp-id"></td>
+            <td id="desc"></td>
+            <td id="part"></td>
+            <td id="qty"></td>
+            <td id="uom"></td>
+            <td id="date"></td>
+            <td id="uprice"></td>
+            <td id="tprice"></td>
+        </tr>
+    </table>
+</body>
