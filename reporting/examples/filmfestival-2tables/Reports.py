@@ -215,9 +215,9 @@ class Table(object):
                 bg_color = self.alternating_bg[j % len(self.alternating_bg)]
                 row.set_properties(bgcolor=bg_color)
             else:
-                bg_color = None
+                bg_color = "#fff"
             if self.last_row_bg and j == len(rows) - 1:
-                row.set_properties(bgcolor=self.last_row_bg)
+                bg_color = self.last_row_bg
             for i in range(len(data)):
                 text = str(data[i]).replace("\\n", "\n").replace("<br>", "\n")
                 tag = row.find(None, "id", fields[i])
