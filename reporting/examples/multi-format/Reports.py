@@ -1,10 +1,9 @@
 # written by Green
 
 import io
+import fitz
 import sys
 from pprint import pprint
-
-import fitz
 
 HEADER_RECT = None
 FOOTER_RECT = None
@@ -12,9 +11,7 @@ HEADER_LAST_COL_RECT = None
 
 
 class Block(object):
-    def __init__(
-        self, html=None, archive=None, report=None, css=None, story=None
-    ):
+    def __init__(self, html=None, archive=None, report=None, css=None, story=None):
         if not report:
             raise ValueError("need a report for creating this object")
         self.html = html
@@ -33,9 +30,7 @@ class Block(object):
 
     def make_story(self):
         if not isinstance(self.story, fitz.Story):
-            self.story = fitz.Story(
-                self.html, user_css=self.css, archive=self.archive
-            )
+            self.story = fitz.Story(self.html, user_css=self.css, archive=self.archive)
 
 
 class ImageBlock(object):
@@ -75,9 +70,7 @@ class ImageBlock(object):
 
     def make_story(self):
         if not isinstance(self.story, fitz.Story):
-            self.story = fitz.Story(
-                self.html, user_css=self.css, archive=self.archive
-            )
+            self.story = fitz.Story(self.html, user_css=self.css, archive=self.archive)
 
 
 class Table(object):
@@ -122,7 +115,7 @@ class Table(object):
         self.alternating_bg = alternating_bg
         self.last_row_bg = last_row_bg
 
-    def extract_header(self):
+    def extract_header(self, story):
         """Extract top row from table for later reproduction."""
         global HEADER_RECT  # the rectangle wrapping the top row
         global HEADER_LAST_COL_RECT  # the rectangle of last column in top row
@@ -144,64 +137,54 @@ class Table(object):
         # write first occurrence of table to find header information
         fp = io.BytesIO()  # for memory PDF
         writer = fitz.DocumentWriter(fp)
-        self.story.reset()
+        story.reset()
 
         current_section = self.report.get_current_section()
-        current_mediabox = (
-            fitz.paper_rect(current_section[2])
-            if len(current_section) == 3
-            else self.mediabox
-        )
-        self.where = self.report.set_margin(current_mediabox)
+        current_mediabox = self.report.mediabox
+        self.where = self.report.where
 
         dev = writer.begin_page(current_mediabox)
 
-        # customize for mulit columns
+        # customize for multi columns
         columns = (
-            current_section[1]
-            if len(current_section) >= 2
+            int(current_section[1]["cols"])
+            if "cols" in current_section[1]
             else self.report.COLS
         )  # get columns from parent report
-        CELLS = []
+
         if columns > 1:  # n columns
-            TABLE = fitz.make_table(self.where, cols=columns, rows=1)  # layouts
-            CELLS = [TABLE[i][j] for i in range(1) for j in range(columns)]
+            CELLS = self.report.cal_cells(self.where, columns)
             CELLS.reverse()
         else:
             CELLS = [self.where]
 
         for CELL in CELLS:
-            _, _ = self.story.place(CELL)
-            self.story.element_positions(
+            _, _ = story.place(CELL)
+            story.element_positions(
                 recorder, {"page": 0, "header": self.top_row}
             )  # get rectangle of top row
             self.HEADER_RECT.append(HEADER_RECT)
 
         if (
-            HEADER_LAST_COL_RECT != None
-            and HEADER_LAST_COL_RECT.x1 > HEADER_RECT.x1
+            HEADER_LAST_COL_RECT != None and HEADER_LAST_COL_RECT.x1 > HEADER_RECT.x1
         ):  # check last column is over top row
-            raise ValueError(
-                "Not enough to place it in {0} columns".format(columns)
-            )
+            raise ValueError("Not enough to place it in {0} columns".format(columns))
 
-        self.story.draw(dev)
+        story.draw(dev)
         writer.end_page()
         writer.close()
 
         # re-open temp PDF and load page 0
         doc = fitz.open("pdf", fp)
         page = doc[0]
-        paths = [
-            p for p in page.get_drawings() if p["rect"].intersects(HEADER_RECT)
+        paths = [p for p in page.get_drawings() if p["rect"].intersects(HEADER_RECT)]
+        blocks = page.get_text("dict", clip=HEADER_RECT, flags=fitz.TEXTFLAGS_TEXT)[
+            "blocks"
         ]
-        blocks = page.get_text(
-            "dict", clip=HEADER_RECT, flags=fitz.TEXTFLAGS_TEXT
-        )["blocks"]
         if blocks:  # extract the font name for text in the header
             self.HEADER_FONT = page.get_fonts()[0][3]
         doc.close()
-        self.story.reset()
+        story.reset()
         # self.HEADER_RECT = +HEADER_RECT
         self.HEADER_RECT.reverse()
         HEADER_RECT = None
@@ -210,67 +193,53 @@ class Table(object):
         return
 
     def make_story(self):
-        if self.story == None:
-            self.story = fitz.Story(
-                self.html, user_css=self.css, archive=self.archive
-            )
-            body = self.story.body
-            table = body.find("table", None, None)
-            if table == None:
-                raise ValueError("no table found in the HTML")
+        story = fitz.Story(self.html, user_css=self.css, archive=self.archive)
+        body = story.body
+        table = body.find("table", None, None)
+        if table == None:
+            raise ValueError("no table found in the HTML")
 
-            templ = body.find(None, "id", "template")  # locate template row
-            if templ == None and callable(self.fetch_rows):
-                raise ValueError("cannot find row 'template'")
+        templ = body.find(None, "id", "template")  # locate template row
+        if templ == None and callable(self.fetch_rows):
+            raise ValueError("cannot find row 'template'")
 
-            if callable(self.fetch_rows):
-                rows = self.fetch_rows()
-                fields = rows[0]
-                rows = rows[1:]
-            else:
-                rows = []
-            for j, data in enumerate(rows):
-                row = templ.clone()  # clone model row
-                if isinstance(self.alternating_bg, (tuple, list)):
-                    if len(self.alternating_bg) >= 2:
-                        bg_color = self.alternating_bg[
-                            j % len(self.alternating_bg)
-                        ]
-                        row.set_properties(bgcolor=bg_color)
-                    elif len(self.alternating_bg) == 1:
-                        row.set_properties(bgcolor=self.alternating_bg[0])
-                elif isinstance(self.alternating_bg, str):
-                    row.set_properties(bgcolor=self.alternating_bg)
-                else:
-                    bg_color = "#fff"
-                if self.last_row_bg and j == len(rows) - 1:
-                    row.set_properties(bgcolor=self.last_row_bg)
-                for i in range(len(data)):
-                    text = (
-                        str(data[i]).replace("\\n", "\n").replace("<br>", "\n")
-                    )
-                    tag = row.find(None, "id", fields[i])
-                    if tag == None:
-                        raise ValueError(
-                            f"id '{fields[i]}' not in template row."
-                        )
-                    if bg_color:
-                        tag.set_properties(bgcolor=bg_color)
-                    if text.startswith("|img|"):
-                        _ = tag.add_image(text[5:])
-                    else:
-                        _ = tag.add_text(text)
-                table.append_child(row)
-                # print("row appended")
-
-            if templ:
-                templ.remove()
+        if callable(self.fetch_rows):
+            rows = self.fetch_rows()
+            fields = rows[0]
+            rows = rows[1:]
         else:
-            body = self.story.body
-            body.add_style("margin-top:0;")
+            rows = []
+        for j, data in enumerate(rows):
+            row = templ.clone()  # clone model row
+            if self.alternating_bg != None and len(self.alternating_bg) >= 2:
+                bg_color = self.alternating_bg[j % len(self.alternating_bg)]
+                row.set_properties(bgcolor=bg_color)
+            else:
+                bg_color = None
+            if self.last_row_bg and j == len(rows) - 1:
+                row.set_properties(bgcolor=self.last_row_bg)
+            for i in range(len(data)):
+                text = str(data[i]).replace("\\n", "\n").replace("<br>", "\n")
+                tag = row.find(None, "id", fields[i])
+                if tag == None:
+                    raise ValueError(f"id '{fields[i]}' not in template row.")
+                if bg_color:
+                    tag.set_properties(bgcolor=bg_color)
+                if text.startswith("|img|"):
+                    _ = tag.add_image(text[5:])
+                else:
+                    _ = tag.add_text(text)
+            table.append_child(row)
+            # print("row appended")
+
+        if templ:
+            templ.remove()
+
+        if not isinstance(self.story, fitz.Story):
+            self.story = story
 
         if self.top_row != None:
-            self.extract_header()
+            self.extract_header(story=story)
 
     def repeat_header(self, page, rect, font_dict):
         """Recreate the top row header of the table on given page, rectangle"""
@@ -299,13 +268,9 @@ class Table(object):
         for p in self.HEADER_PATHS:
             for item in p["items"]:
                 if item[0] == "l":
-                    page.draw_line(
-                        item[1] * mat, item[2] * mat, color=p["color"]
-                    )
+                    page.draw_line(item[1] * mat, item[2] * mat, color=p["color"])
                 elif item[0] == "re":
-                    page.draw_rect(
-                        item[1] * mat, color=p["color"], fill=p["fill"]
-                    )
+                    page.draw_rect(item[1] * mat, color=p["color"], fill=p["fill"])
 
         fontname = make_fontname(page, self.HEADER_FONT, font_dict)
         for block in self.HEADER_BLOCKS:
@@ -313,10 +278,7 @@ class Table(object):
                 for span in line["spans"]:
                     point = fitz.Point(span["origin"]) * mat
                     page.insert_text(
-                        point,
-                        span["text"],
-                        fontname=fontname,
-                        fontsize=span["size"],
+                        point, span["text"], fontname=fontname, fontsize=span["size"]
                     )
 
 
@@ -346,6 +308,7 @@ class Report(object):
         self.FOOTER_RECT = None
 
         self.css = css if css else ""
+
         self.where = self.set_margin(self.mediabox)
 
         if isinstance(logo, str):
@@ -373,50 +336,56 @@ class Report(object):
                     fitz_code, CSS=self.css, archive=self.archive, name=family
                 )
 
-    def set_margin(self, rect):
+    def set_margin(self, rect):  # set margin with rect provided
         if self.margins == None:
-            result = rect + (36, 36, -36, -50)
+            result = rect + (36, 36, -36, -30)
         else:
             L, T, R, B = self.margins
             result = rect + (L, T, -R, -B)
         return result
 
-    def current(self):
+    def current_story(self):  # get current story to draw
         if isinstance(self.sections[self.sindex], list):
             return self.sections[self.sindex][0]
         return self.sections[self.sindex]
 
-    def check_cols(self):
+    def check_cols(self):  # set current columns and determin if going new page or not
+        _newpage = False
         if len(self.sections) > self.sindex and isinstance(
+            self.get_current_section(), list
+        ):
+            if len(self.get_current_section()) != 2:
+                raise BufferError("Size is not matched")
+
+            if "cols" in self.get_current_section()[1]:  # set columns with section info
+                self.COLS = int(self.sections[self.sindex][1]["cols"])
+
+            if (
+                "newpage" in self.sections[self.sindex][1]
+            ):  # detemin if going newpage or not
+                _newpage = self.sections[self.sindex][1]["newpage"]
+
+        return _newpage
+
+    def get_pagerect(self, old_pagebox):  # get current page mediabox
+        if len(self.sections) > self.sindex and isinstance(  # if section has info
             self.sections[self.sindex], list
         ):
-            if len(self.sections[self.sindex]) < 2:
-                BufferError("Size is not matched")
+            if (  # if don't have 'format', use previous mediabox
+                len(self.sections[self.sindex]) != 2
+                or "format" not in self.sections[self.sindex][1]
+            ):  # don't have property
+                return old_pagebox
 
-            if not isinstance(self.sections[self.sindex][1], int):
-                TypeError("Columns type error")
+            pagebox = fitz.paper_rect(self.sections[self.sindex][1]["format"])
 
-            self.COLS = self.sections[self.sindex][1]
-            return True
+            return pagebox
         else:
-            return False  # continue
+            return old_pagebox
 
-    def get_pagerect(self, old_pagebox):
-        if len(self.sections) > self.sindex and isinstance(
-            self.sections[self.sindex], list
-        ):
-            if len(self.sections[self.sindex]) < 3:
-                return old_pagebox, False
-
-            if not isinstance(self.sections[self.sindex][2], str):
-                TypeError("Paper Type error")
-
-            pagebox = fitz.paper_rect(self.sections[self.sindex][2])
-            return pagebox, True
-        else:
-            return old_pagebox, False
-
-    def get_current_section(self, index=None):
+    def get_current_section(
+        self, index=None
+    ):  # get section unit including section info
         if index == None:
             index = self.sindex
         return (
@@ -425,8 +394,14 @@ class Report(object):
             else [self.sections[index]]
         )
 
-    def isover(self):
+    def isover(self):  # check the end of sections
         return self.sindex >= len(self.sections)
+
+    def cal_cells(self, rect, columns):  # calculate cell areas
+        rows = 1  # default
+        TABLE = fitz.make_table(rect, cols=columns, rows=rows)  # layouts
+        CELLS = [TABLE[i][j] for i in range(rows) for j in range(columns)]
+        return CELLS
 
     def run(self, filename):
         # init
@@ -435,13 +410,12 @@ class Report(object):
         if self.footer == None:
             self.footer = []
 
-        self.sindex = 0
-        footer_height = 30.0
-        header_height = 0.0
+        self.sindex = 0  # initial value, start from zero
+        footer_height = 30.0  # default
+        header_height = 0.0  # default
         more = True  # need more pages or not
-        pno = 0
-        section_mediabox = self.mediabox
-        section_mediabox, _ = self.get_pagerect(section_mediabox)  # init
+        pno = 0  #
+        self.mediabox = self.get_pagerect(self.mediabox)  # init
 
         fileobject = io.BytesIO()  # let DocumentWriter write to memory
         writer = fitz.DocumentWriter(fileobject)  # define output writer
@@ -449,22 +423,13 @@ class Report(object):
         if len(self.header):
             for hElement in self.header:
                 if not isinstance(hElement.story, fitz.Story):
-                    hElement.make_story()
+                    hElement.make_story()  # calculate header element to place
                 _, self.HEADER_RECT = hElement.story.place(self.where)
 
                 if (
                     header_height < self.HEADER_RECT[3]
                 ):  # select max value for header height
                     header_height = self.HEADER_RECT[3]
-
-            self.HEADER_RECT = tuple(
-                [  # Header Rect
-                    self.HEADER_RECT[0],
-                    self.HEADER_RECT[1],
-                    self.HEADER_RECT[2],
-                    header_height,
-                ]
-            )
 
         if len(self.footer):  # calculate Footer rectangle
             for fElement in self.footer:
@@ -475,46 +440,48 @@ class Report(object):
                 if footer_height < self.FOOTER_RECT[3]:
                     footer_height = self.FOOTER_RECT[3]  # set footer height max
 
-            self.FOOTER_RECT = tuple(
-                [  # footer rect
-                    self.where.x0,
-                    self.where.y1 - footer_height,
-                    self.where.x1,
-                    self.mediabox.y1,
-                ]
-            )
-
-        self.COLS = self.columns  # init COLS
-        self.current().make_story()
-        _ = self.check_cols()
+        _ = self.check_cols()  # set initial columns from first section
 
         while more:  # loop until all input text has been written out
-            dev = writer.begin_page(
-                section_mediabox
-            )  # prepare a new output page
+            dev = writer.begin_page(self.mediabox)  # prepare a new output page
 
-            self.where = self.set_margin(section_mediabox)
-            self.where.y0 = (
-                self.where.y0
-                if self.where.y0 > header_height
-                else header_height
-            )
-            self.where.y1 = (
-                self.where.y1
-                if (section_mediabox.y1 - self.where.y1) > footer_height
-                else section_mediabox.y1 - footer_height
+            self.where = self.set_margin(self.mediabox)  # set margin
+            self.where.y0 = (  # remove space of header from main area
+                self.where.y0 if self.where.y0 > header_height else header_height
             )
 
-            ROWS = 1  # default
-            TABLE = fitz.make_table(
-                self.where, cols=self.COLS, rows=ROWS
-            )  # layouts
-            CELLS = [TABLE[i][j] for i in range(ROWS) for j in range(self.COLS)]
+            self.where.y1 = (  # remove space of footer from main area
+                self.where.y1 - footer_height
+            )
+            if len(self.header):
+                self.HEADER_RECT = tuple(  # calculate space of header
+                    [
+                        self.HEADER_RECT[0],
+                        self.HEADER_RECT[1],
+                        self.where.x1,
+                        header_height,
+                    ]
+                )
+            if len(self.footer):
+                self.FOOTER_RECT = tuple(  # calculate space of footer
+                    [
+                        self.where.x0,
+                        self.where.y1,
+                        self.where.x1,
+                        self.where.y1 + footer_height,
+                    ]
+                )
+
+            if self.sindex == 0 and not isinstance(  # make story of first section
+                self.current_story().story, fitz.Story
+            ):
+                self.current_story().make_story()
+
+            CELLS = self.cal_cells(self.where, self.COLS)  # calculate CELLS
             CELL_LENGTH = len(CELLS)  # get Length of Cells
 
             more_cell = True
             cell_index = 0  # columns index
-            where = CELLS[cell_index]  # temp where
 
             if len(self.header) != 0:  # draw Header
                 for hElement in self.header:
@@ -523,79 +490,105 @@ class Report(object):
                     hElement.story.place(self.HEADER_RECT)
                     hElement.story.draw(dev, None)
 
-            while (
-                more_cell
-            ):  # loop until it reach out max column count in one page
+            while more_cell:  # loop until it reach out max column count in one page
                 # content may be complete after any cell, ...
+                where = CELLS[cell_index]  # temp where
                 if (
-                    hasattr(self.current(), "HEADER_RECT")
-                    and len(self.current().HEADER_RECT) != 0
+                    hasattr(self.current_story(), "HEADER_RECT")
+                    and len(self.current_story().HEADER_RECT) != 0
                 ):  # this section store Table headers positions
-                    self.current().header_tops.append(
+                    self.current_story().header_tops.append(
                         {
                             "pno": pno,
-                            "left": self.current().HEADER_RECT[cell_index].x0,
+                            "left": self.current_story().HEADER_RECT[cell_index].x0,
                             "top": where.y0,
                         }
-                    )  # issue
+                    )  # save positions of top rows to draw
+
                     if (
-                        len(self.current().header_tops) > 1
-                    ):  # skip first piece of table because that has a top row
+                        len(self.current_story().header_tops) > 1
+                    ):  # skip first piece of table because that already has a top row
                         where.y0 += (
-                            self.current().HEADER_RECT[cell_index].height
+                            self.current_story().HEADER_RECT[cell_index].height
                         )  # move beginning of table as much as top row height
-                    where.y1 = round(where.y1 - 0.5)  # make integer for safety
+                    # where.y1 = round(where.y1 - 0.5)  # make integer for safety
 
                 if more:  # so check this status
-                    more, filled = self.current().story.place(
+                    more, filled = self.current_story().story.place(
                         where
                     )  # draw current section
-                    self.current().story.draw(dev, None)
+                    self.current_story().story.draw(dev, None)
 
-                if more == 0:
-                    if filled[3] < self.where.y1:  # check and add section/block
-                        if self.current().advance:
-                            where.y0 = filled[
-                                3
-                            ]  # update latest position for next drawing
-                    self.sindex += 1
+                if more == 0:  # if there is nothing to draw
+                    if (
+                        filled[3] < self.where.y1 and self.current_story().advance
+                    ):  # check and add section/block
+                        where.y0 = filled[3]  # update latest position for next drawing
 
-                    if not self.isover():
-                        self.current().make_story()
+                    self.sindex += 1  # go next section
 
-                    section_mediabox, is_newpage = self.get_pagerect(
-                        section_mediabox
-                    )
-                    if self.check_cols() or is_newpage:
+                    if self.isover():  # check the end of sections
+                        break
+
+                    self.mediabox = self.get_pagerect(
+                        self.mediabox
+                    )  # internally set mediabox
+                    if self.check_cols():  # check new page or not
                         more_cell = False  # set End value to create new page
+                    else:
+                        if cell_index * 2 < CELL_LENGTH and CELL_LENGTH != 1:
+                            # if last cell index is less than half of CELL_LENGTH,
+                            # next section starts next to last cell
+                            next_where = CELLS[cell_index + 1]  # remake layout
+                        else:  # if not, next section starts from the end of last section
+                            next_where = CELLS[cell_index]  # remake layout
+                            next_where.y0 = filled[3]
+                        next_where.x1 = self.where.x1  # use page end for next area end
+
+                        if (
+                            next_where.height * next_where.width > 0
+                        ):  # vaild rect to calculate
+                            # calculate CELLS to continue current page
+                            CELLS = self.cal_cells(next_where, self.COLS)
+                            CELL_LENGTH = len(
+                                CELLS
+                            )  # init where and cell_index, cell_length
+                            self.where = next_where
+                            cell_index = 0
+                        else:
+                            cell_index += 1
+
+                    if not isinstance(self.current_story().story, fitz.Story):
+                        self.current_story().make_story()
+
                 else:  # check and select next column
                     cell_index += 1
 
-                if (
-                    cell_index is CELL_LENGTH
-                ):  # check whether one page is completed
+                if cell_index is CELL_LENGTH:  # check whether one page is completed
                     more_cell = False
+                    self.where = self.set_margin(self.mediabox)
+                    self.current_story().make_story()
                 else:
-                    where = CELLS[cell_index]
+                    where = CELLS[cell_index]  # select new cell
 
                 more = True
-                if self.isover():  # check completion of PDF
-                    more = False
-                    break
 
-            if len(self.footer) != 0:  # draw Header
+            if len(self.footer) != 0:  # draw Footer
                 for fElement in self.footer:
                     fElement.story = None  # delete
                     fElement.make_story()
                     fElement.story.place(self.FOOTER_RECT)
                     fElement.story.draw(dev, None)
 
-            writer.end_page()  # finish the PDF page
+            writer.end_page()  # finish one page
+
+            if self.isover():  # end writing
+                break
             pno += 1
         writer.close()
 
         doc = fitz.open("pdf", fileobject)
-        page_count = doc.page_count
+        page_count = doc.page_count  # page count
         font_dict = dict()
 
         for page in doc:  # draw footer with page number
@@ -618,20 +611,21 @@ class Report(object):
             self.sindex = i
             if (
                 hasattr(
-                    self.current(), "HEADER_RECT"
+                    self.current_story(), "HEADER_RECT"
                 )  # check whether HEADER_RECT exists and be available
-                and len(self.current().HEADER_RECT) != 0
+                and len(self.current_story().HEADER_RECT) != 0
             ):
                 _ = self.check_cols()  # init COLS
-                header_rect = self.current().HEADER_RECT
+                header_rect = self.current_story().HEADER_RECT
 
-                self.current().header_tops.pop(
+                self.current_story().header_tops.pop(  # remove first element not draw in following loop
                     0
-                )  # remove first element not draw in following loop
+                )
+
                 for i in range(
-                    0, len(self.current().header_tops)
+                    0, len(self.current_story().header_tops)
                 ):  # draw Top Row
-                    header = self.current().header_tops[i]
+                    header = self.current_story().header_tops[i]
                     page = doc.load_page(header["pno"])
 
                     x1 = (
@@ -640,8 +634,7 @@ class Report(object):
                     y1 = (
                         header["top"] + header_rect[(i + 1) % self.COLS].height
                     )  # get bottom
-
-                    self.current().repeat_header(
+                    self.current_story().repeat_header(
                         page,
                         fitz.Rect(header["left"], header["top"], x1, y1),
                         font_dict,
