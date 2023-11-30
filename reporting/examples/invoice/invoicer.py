@@ -141,7 +141,8 @@ items = Table(  # generate a table object that can cross page boundaries
 # -----------------------------------------------------------------------------
 
 report.header = [logo, header]
-report.sections = [prolog, items]
+report.sections = [[prolog, {"cols": 1, "format": "letter-l", "newpage": True}],
+                   [items, {"cols": 1, "format": "letter-l", "newpage": False}]]
 
 # This generates the report and saves it to the given path name.
 report.run("output.pdf")

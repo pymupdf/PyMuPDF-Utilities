@@ -141,5 +141,8 @@ actor_items = Table(
 )
 
 report.header = [header]
-report.sections = [film_items, actor_items]
+report.sections = [
+    [film_items, {"cols": 1, "format": "a3", "newpage": True}],
+    [actor_items, {"cols": 1, "format": "a3", "newpage": False}],
+]
 report.run("output.pdf")

@@ -67,7 +67,9 @@ items = Table(
 
 # compose the report from above sections
 report.header = [header]  # appears on every page
-report.sections = [[items, 2]]  # 2 columns per page
+report.sections = [
+    [items, {"cols": 2, "format": "a3", "newpage": True}]
+]  # 2 columns per page
 
 # output the report
 report.run("output.pdf")
