@@ -5,13 +5,14 @@ This is a non-final, heads-up documentation for PyMuPDF's new reporting feature.
 ## Introduction
 PyMuPDF's Reporting feature is based on its class `Story`.
 
-Its goal is to **_radically simplify_** producing reports - especially standard reports - and put all the hassle and technical detail around defining
+The goal is to **_radically simplify_** producing reports - especially standard reports - and put all the hassle and technical detail around defining
 
 * headers and footers,
 * tables (including top-row repetition),
 * multi-column pages
+* page sizes and formats (portrait, landscape)
 
-and more behind the curtain.
+and more behind the curtain - which for instance means that changing the number of columns per page requires to **modify only one** parameter: consequential layout changes are computed automatically.
 
 Nevertheless, for a better understanding of the following, reading the documentation about the [`Story`](https://pymupdf.readthedocs.io/en/latest/story-class.html#story) class is recommended.
 
@@ -22,17 +23,21 @@ This [presentation](https://github.com/pymupdf/PyMuPDF-Utilities/blob/master/rep
 ## Major Features
 This is a list of key features of PyMuPDF's Reporting system:
 
-* The report layout is defined using powerful HTML and CSS languages.
+* The report layout is defined using the powerful HTML and CSS languages.
 
 * Multiple HTML sources can be used to deal with report sections separately like header, footer, images or tables.
 
-* Based on each piece of text, the right font is automatically selected from **Google's NOTO fonts** (includes Latin, CJK, Hindi, Tamil, and more).
+* Report data may be a mixture of any language or script.
+
+    - Based on each piece of text, the right font is automatically selected from **Google's NOTO fonts** (includes Latin, CJK, Hindi, Tamil, and more).
+    - This includes **left-to-right** and **right-to-left** scripts (Arabic, Hebrew, Persian).
+    - Complex ligatures as we have them in Devanagari are correctly reproduced using the powerful [HarfBuzz](https://github.com/harfbuzz/harfbuzz) text shaping engine.
 
 * **User fonts** can be included via appropriate CSS definitions. There is also elegant support for fonts from package [pymupdf-fonts](https://pypi.org/project/pymupdf-fonts/).
 
 * Support for any mixture of **multi-column pages** and **multiple page formats** in the same report.
 
-* **Report data** may reside on any Python-supported storage like SQL databases or JSON- and CSV-files, or containers like dictionaries, lists, [pandas](https://pypi.org/project/pandas/) DataFrames and more.
+* **Report data** may reside on any Python-supported storage like SQL databases, ZIP archives or JSON- and CSV-files, or containers like dictionaries, lists, [pandas](https://pypi.org/project/pandas/) DataFrames and more.
 
 * **Substitution of variables** in HTMLs is easy using the Story interface.
 

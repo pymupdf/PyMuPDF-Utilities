@@ -104,7 +104,6 @@ class Table(object):
         self.css = css if css else ""
         if self.report.css is not None:  # prepend CSS of owning report
             self.css = self.report.css + self.css
-
         self.fetch_rows = fetch_rows
         self.HEADER_RECT = []
         self.HEADER_BLOCKS = None
@@ -230,7 +229,6 @@ class Table(object):
                 else:
                     _ = tag.add_text(text)
             table.append_child(row)
-            # print("row appended")
 
         if templ:
             templ.remove()
@@ -306,7 +304,6 @@ class Report(object):
         self.archive = fitz.Archive(archive) if archive else fitz.Archive(".")
         self.HEADER_RECT = None
         self.FOOTER_RECT = None
-
         self.css = css if css else ""
 
         self.where = self.set_margin(self.mediabox)
