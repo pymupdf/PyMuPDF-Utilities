@@ -27,7 +27,7 @@ On report creation, characters from the bold or regular font versions are automa
 
 As we can see, the report definition refers to the `css` variable. Therefore all report sections will use the same fonts - **_except_** when they use their own font definitions, respectively their own CSS instructions.
 
-The Story's layout engine will take care of the rest and compute appropriate table and field widths, page breaks etc.
+Nothing else in the report program has to be changed: The Story's layout engine will take care of the rest and compute appropriate table and field widths, page breaks etc.
 
 ## Case: Kenpixel
 For further illustration purposes, script [kenpixel.py](https://github.com/pymupdf/PyMuPDF-Utilities/blob/master/reporting/examples/user-fonts/kenpixel.py) does the same thing with the small and quite exotic font "kenpixel.ttf".
