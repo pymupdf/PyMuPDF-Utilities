@@ -6,7 +6,7 @@ import fitz
 from Reports import *
 
 # The following defines the overall report object
-mediabox = fitz.paper_rect("letter-l")
+mediabox = fitz.paper_rect("a4-l")
 report = Report(mediabox)
 
 # Predefined HTML to define the header for all pages
@@ -142,7 +142,7 @@ items = Table(  # generate a table object that can cross page boundaries
 
 report.header = [logo, header]
 report.sections = [[prolog, Options(cols=1, format="letter-l")],
-                   [items, Options(newpage=False)]]
+                   [items, Options(format=Size(600, 600), newpage=False)]]
 
 # This generates the report and saves it to the given path name.
 report.run("output.pdf")

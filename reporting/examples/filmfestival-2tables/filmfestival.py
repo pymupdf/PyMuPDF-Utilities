@@ -55,7 +55,7 @@ td {padding-left: 3px;padding-right: 3px;}
 </table>
 """
 
-mediabox = fitz.paper_rect("A4")
+mediabox = fitz.paper_rect("letter")
 report = Report(mediabox, font_families={"sans-serif": "ubuntu", "serif": "ubuntu"})
 header = Block(html=HEADER, report=report)
 
@@ -143,6 +143,6 @@ actor_items = Table(
 report.header = [header]
 report.sections = [
     [film_items, Options(cols=1, format="A3", newpage=True)],
-    [actor_items, Options(format=Size(300, 600))],
+    [actor_items],
 ]
 report.run("output.pdf")
