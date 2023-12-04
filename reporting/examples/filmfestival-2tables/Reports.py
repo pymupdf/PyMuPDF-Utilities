@@ -9,7 +9,6 @@ HEADER_RECT = None
 FOOTER_RECT = None
 HEADER_LAST_COL_RECT = None
 
-
 class Block(object):
     def __init__(self, html=None, archive=None, report=None, css=None, story=None):
         if not report:
@@ -650,3 +649,5 @@ class Report(object):
 
         doc.subset_fonts()
         doc.ez_save(filename)  # save
+
+__all__ = ["Block", "Table", "ImageBlock", "Size", "Options", "Report"]

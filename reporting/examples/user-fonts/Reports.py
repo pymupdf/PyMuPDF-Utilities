@@ -9,7 +9,6 @@ HEADER_RECT = None
 FOOTER_RECT = None
 HEADER_LAST_COL_RECT = None
 
-
 class Block(object):
     def __init__(self, html=None, archive=None, report=None, css=None, story=None):
         if not report:
@@ -73,6 +72,19 @@ class ImageBlock(object):
             self.story = fitz.Story(self.html, user_css=self.css, archive=self.archive)
 
 
+class Options(object):
+    def __init__(self, cols=1, format="A4", newpage=True):
+        self.cols = cols
+        self.format = format
+        self.newpage = newpage
+
+
+class Size(object):
+    def __init__(self, width=100, height=100):
+        self.width = width
+        self.height = height
+
+
 class Table(object):
     def __init__(
         self,
@@ -104,6 +116,7 @@ class Table(object):
         self.css = css if css else ""
         if self.report.css is not None:  # prepend CSS of owning report
             self.css = self.report.css + self.css
+
         self.fetch_rows = fetch_rows
         self.HEADER_RECT = []
         self.HEADER_BLOCKS = None
@@ -138,18 +151,12 @@ class Table(object):
         writer = fitz.DocumentWriter(fp)
         story.reset()
 
-        current_section = self.report.get_current_section()
-        current_mediabox = self.report.mediabox
         self.where = self.report.where
 
-        dev = writer.begin_page(current_mediabox)
+        dev = writer.begin_page(self.report.mediabox)
 
         # customize for multi columns
-        columns = (
-            int(current_section[1]["cols"])
-            if "cols" in current_section[1]
-            else self.report.COLS
-        )  # get columns from parent report
+        columns = self.report.COLS  # get columns from parent report
 
         if columns > 1:  # n columns
             CELLS = self.report.cal_cells(self.where, columns)
@@ -229,6 +236,7 @@ class Table(object):
                 else:
                     _ = tag.add_text(text)
             table.append_child(row)
+            # print("row appended")
 
         if templ:
             templ.remove()
@@ -304,6 +312,8 @@ class Report(object):
         self.archive = fitz.Archive(archive) if archive else fitz.Archive(".")
         self.HEADER_RECT = None
         self.FOOTER_RECT = None
+        self.default_option = Options()
+
         self.css = css if css else ""
 
         self.where = self.set_margin(self.mediabox)
@@ -347,38 +357,37 @@ class Report(object):
         return self.sections[self.sindex]
 
     def check_cols(self):  # set current columns and determin if going new page or not
-        _newpage = False
-        if len(self.sections) > self.sindex and isinstance(
-            self.get_current_section(), list
-        ):
+        _newpage = self.default_option.newpage
+        if isinstance(self.get_current_section(), list):
             if len(self.get_current_section()) != 2:
-                raise BufferError("Size is not matched")
+                self.COLS = self.default_option.cols
+                return _newpage
 
-            if "cols" in self.get_current_section()[1]:  # set columns with section info
-                self.COLS = int(self.sections[self.sindex][1]["cols"])
-
-            if (
-                "newpage" in self.sections[self.sindex][1]
-            ):  # detemin if going newpage or not
-                _newpage = self.sections[self.sindex][1]["newpage"]
+            self.COLS = int(self.sections[self.sindex][1].cols)
+            _newpage = self.sections[self.sindex][1].newpage
 
         return _newpage
 
-    def get_pagerect(self, old_pagebox):  # get current page mediabox
-        if len(self.sections) > self.sindex and isinstance(  # if section has info
-            self.sections[self.sindex], list
-        ):
-            if (  # if don't have 'format', use previous mediabox
-                len(self.sections[self.sindex]) != 2
-                or "format" not in self.sections[self.sindex][1]
-            ):  # don't have property
-                return old_pagebox
+    def get_pagerect(self):  # get current page mediabox
+        if isinstance(self.sections[self.sindex], list):  # if section has info
+            if len(self.sections[self.sindex]) != 2:  # don't have property
+                return fitz.paper_rect(self.default_option.format)
 
-            pagebox = fitz.paper_rect(self.sections[self.sindex][1]["format"])
+            if isinstance(self.sections[self.sindex][1].format, str):
+                return fitz.paper_rect(self.sections[self.sindex][1].format)
 
-            return pagebox
+            if isinstance(
+                self.sections[self.sindex][1].format, fitz.Rect
+            ) or isinstance(self.sections[self.sindex][1].format, Size):
+                return fitz.Rect(
+                    0.0,
+                    0.0,
+                    self.sections[self.sindex][1].format.width,
+                    self.sections[self.sindex][1].format.height,
+                )
+
         else:
-            return old_pagebox
+            return fitz.paper_rect(self.default_option.format)
 
     def get_current_section(
         self, index=None
@@ -407,12 +416,15 @@ class Report(object):
         if self.footer == None:
             self.footer = []
 
+        if self.isover():
+            raise ValueError("section list is empty")
+
         self.sindex = 0  # initial value, start from zero
         footer_height = 30.0  # default
         header_height = 0.0  # default
         more = True  # need more pages or not
         pno = 0  #
-        self.mediabox = self.get_pagerect(self.mediabox)  # init
+        self.mediabox = self.get_pagerect()  # init
 
         fileobject = io.BytesIO()  # let DocumentWriter write to memory
         writer = fitz.DocumentWriter(fileobject)  # define output writer
@@ -527,9 +539,7 @@ class Report(object):
                     if self.isover():  # check the end of sections
                         break
 
-                    self.mediabox = self.get_pagerect(
-                        self.mediabox
-                    )  # internally set mediabox
+                    self.mediabox = self.get_pagerect()  # internally set mediabox
                     if self.check_cols():  # check new page or not
                         more_cell = False  # set End value to create new page
                     else:
@@ -639,3 +649,5 @@ class Report(object):
 
         doc.subset_fonts()
         doc.ez_save(filename)  # save
+
+__all__ = ["Block", "Table", "ImageBlock", "Size", "Options", "Report"]
