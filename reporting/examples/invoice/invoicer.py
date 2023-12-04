@@ -3,7 +3,7 @@ import sqlite3
 
 import fitz
 
-from Reports import Report, Table, Block, ImageBlock
+from Reports import Report, Table, Block, ImageBlock, Options
 
 # The following defines the overall report object
 mediabox = fitz.paper_rect("letter-l")
@@ -141,8 +141,8 @@ items = Table(  # generate a table object that can cross page boundaries
 # -----------------------------------------------------------------------------
 
 report.header = [logo, header]
-report.sections = [[prolog, {"cols": 1, "format": "letter-l", "newpage": True}],
-                   [items, {"cols": 1, "format": "letter-l", "newpage": False}]]
+report.sections = [[prolog, Options(cols=1, format="letter-l")],
+                   [items, Options(newpage=False)]]
 
 # This generates the report and saves it to the given path name.
 report.run("output.pdf")

@@ -4,7 +4,7 @@ import fitz
 
 # from fitz.reports import Report, Block, Table
 # until official release as part of PymuPDF use this import statement instead:
-from Reports import Report, Block, Table
+from Reports import Report, Block, Table, Options, Size
 
 # -----------------------------------------------------------------------------
 # HTML sources
@@ -142,7 +142,7 @@ actor_items = Table(
 
 report.header = [header]
 report.sections = [
-    [film_items, {"cols": 1, "format": "a3", "newpage": True}],
-    [actor_items, {"cols": 1, "format": "a3", "newpage": False}],
+    [film_items, Options(cols=1, format="A3", newpage=True)],
+    [actor_items, Options(format=Size(300, 600))],
 ]
 report.run("output.pdf")

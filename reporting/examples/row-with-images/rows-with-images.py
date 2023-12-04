@@ -1,7 +1,7 @@
 import pathlib
 import fitz
 import zipfile
-from Reports import Block, Table, Report, ImageBlock
+from Reports import Block, Table, Report, ImageBlock, Options
 
 # The following defines the overall report object
 mediabox = fitz.paper_rect("a4")  # the only required parameter
@@ -65,7 +65,7 @@ items = Table(
 )
 
 report.sections = [
-    [items, {"cols": 1, "format": "letter", "newpage": True}],
+    [items, Options(cols= 1, format="letter", newpage=True)],
 ]  # set sections list
 report.header = [header]
 report.footer = [footer]
