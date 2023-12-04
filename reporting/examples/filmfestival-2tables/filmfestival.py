@@ -143,6 +143,6 @@ actor_items = Table(
 report.header = [header]
 report.sections = [
     [film_items, Options(cols=1, format="A3", newpage=True)],
-    [actor_items, Options(format=Size(300, 600))],
+    [actor_items, Options(format=Size(600, 400))],
 ]
 report.run("output.pdf")

@@ -20,11 +20,12 @@ footer.make_story()
 
 HTML = """
 <style>
-body {font-family: sans-serif;font-size: 14px;}
+body {font-family: sans-serif;font-size: 11px;}
 td, th {
     padding-left: 10px;
     padding-right: 10px;
 }
+table {margin-left: 20%;}
 </style>
 
 <body>
@@ -61,11 +62,11 @@ items = Table(
     top_row="header",
     fetch_rows=fetch_rows,
     archive=national_flags,
-    alternating_bg=("#ccc", "#aaa", "#fff"),
+    alternating_bg=("#ccc", "#ddd", "#eee"),
 )
 
 report.sections = [
-    [items, Options(cols= 1, format="letter", newpage=True)],
+    [items, Options(cols=1, format="letter", newpage=True)],
 ]  # set sections list
 report.header = [header]
 report.footer = [footer]
