@@ -2,7 +2,7 @@ import pathlib
 
 import fitz
 
-from Reports import Block, Report, Table
+from Reports import Block, Report, Table, Options
 
 ITEMS = """
     <p><i>Percent "%" is city population as a percentage of the country, as of "Year".</i></p><p></p>
@@ -68,7 +68,7 @@ items = Table(
 # compose the report from above sections
 report.header = [header]  # appears on every page
 report.sections = [
-    [items, {"cols": 2, "format": "a3", "newpage": True}]
+    [items, Options(cols=2, format="a3")]
 ]  # 2 columns per page
 
 # output the report
