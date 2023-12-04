@@ -4,7 +4,7 @@ import fitz
 
 # from fitz.reports import Report, Block, Table
 # until official release as part of PymuPDF use this import statement instead:
-from Reports import Report, Block, Table
+from Reports import *
 
 # -----------------------------------------------------------------------------
 # HTML sources
@@ -146,8 +146,8 @@ actor_items = Table(
 
 report.header = [header]
 report.sections = [
-    [film_items, {"cols": 1, "format": "a4-l", "newpage": True}],
-    [actor_items, {"cols": 1, "format": "a3-l", "newpage": False}],
+    [film_items, Options(cols=1, format="a4-l", newpage=True)],
+    [actor_items, Options(cols=1, format="a3-l", newpage=False)],
 ]
 
 report.run("output-dejavu.pdf")

@@ -3,7 +3,7 @@ import sqlite3
 
 import fitz
 
-from Reports import Report, Table, Block, ImageBlock, Options
+from Reports import *
 
 # The following defines the overall report object
 mediabox = fitz.paper_rect("letter-l")

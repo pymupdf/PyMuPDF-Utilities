@@ -2,7 +2,7 @@ import pathlib
 
 import fitz
 
-from Reports import Block, Report, Table, Options
+from Reports import *
 
 ITEMS = """
     <p><i>Percent "%" is city population as a percentage of the country, as of "Year".</i></p><p></p>

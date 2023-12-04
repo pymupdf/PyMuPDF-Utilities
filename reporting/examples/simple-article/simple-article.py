@@ -1,6 +1,6 @@
 import pathlib
 import fitz
-from Reports import Report, Block, Options
+from Reports import *
 
 report = Report(mediabox=fitz.paper_rect("a4-l"))
 

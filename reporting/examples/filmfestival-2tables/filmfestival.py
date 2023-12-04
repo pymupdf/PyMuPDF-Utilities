@@ -2,9 +2,9 @@ import sqlite3
 
 import fitz
 
-# from fitz.reports import Report, Block, Table
+
 # until official release as part of PymuPDF use this import statement instead:
-from Reports import Report, Block, Table, Options, Size
+from Reports import *
 
 # -----------------------------------------------------------------------------
 # HTML sources

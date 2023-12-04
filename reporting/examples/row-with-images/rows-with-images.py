@@ -1,7 +1,7 @@
 import pathlib
 import fitz
 import zipfile
-from Reports import Block, Table, Report, ImageBlock, Options
+from Reports import *
 
 # The following defines the overall report object
 mediabox = fitz.paper_rect("a4")  # the only required parameter
