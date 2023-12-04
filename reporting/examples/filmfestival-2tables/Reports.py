@@ -73,7 +73,7 @@ class ImageBlock(object):
 
 
 class Options(object):
-    def __init__(self, cols=1, format="A4", newpage=True):
+    def __init__(self, cols=0, format=None, newpage=None):
         self.cols = cols
         self.format = format
         self.newpage = newpage
@@ -312,7 +312,7 @@ class Report(object):
         self.archive = fitz.Archive(archive) if archive else fitz.Archive(".")
         self.HEADER_RECT = None
         self.FOOTER_RECT = None
-        self.default_option = Options()
+        self.default_option = Options(cols=1, format=mediabox, newpage=True)
 
         self.css = css if css else ""
 
@@ -359,7 +359,7 @@ class Report(object):
     def check_cols(self):  # set current columns and determin if going new page or not
         _newpage = self.default_option.newpage
         if isinstance(self.get_current_section(), list):
-            if len(self.get_current_section()) != 2:
+            if len(self.get_current_section()) != 2 or self.sections[self.sindex][1].cols == 0:
                 self.COLS = self.default_option.cols
                 return _newpage
 
@@ -370,8 +370,13 @@ class Report(object):
 
     def get_pagerect(self):  # get current page mediabox
         if isinstance(self.sections[self.sindex], list):  # if section has info
-            if len(self.sections[self.sindex]) != 2:  # don't have property
-                return fitz.paper_rect(self.default_option.format)
+            if len(self.sections[self.sindex]) != 2 or self.sections[self.sindex][1].format == None:  # don't have property
+                return fitz.Rect(
+                    0.0,
+                    0.0,
+                    self.default_option.format.width,
+                    self.default_option.format.height,
+                )
 
             if isinstance(self.sections[self.sindex][1].format, str):
                 return fitz.paper_rect(self.sections[self.sindex][1].format)
