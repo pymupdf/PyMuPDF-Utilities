@@ -5,8 +5,9 @@ import fitz
 import sys
 from pprint import pprint
 
-class Block():
-    def __init__(self, html=None, archive=None, report=None, css=None, story=None):
+
+class Block:
+    def __init__(self, report, html=None, archive=None, css=None, story=None):
         self.html = html
         self.report = report
         self.archive = self.report.archive
@@ -26,12 +27,12 @@ class Block():
             self.story = fitz.Story(self.html, user_css=self.css, archive=self.archive)
 
 
-class ImageBlock():
+class ImageBlock:
     def __init__(
         self,
+        report,
         url=None,
         archive=None,
-        report=None,
         css=None,
         story=None,
         width=None,
@@ -60,23 +61,23 @@ class ImageBlock():
             self.story = fitz.Story(self.html, user_css=self.css, archive=self.archive)
 
 
-class Options():
+class Options:
     def __init__(self, cols=0, format=None, newpage=None):
         self.cols = cols
         self.format = format
         self.newpage = newpage
 
 
-class Size():
+class Size:
     def __init__(self, width=100, height=100):
         self.width = width
         self.height = height
 
 
-class Table():
+class Table:
     def __init__(
         self,
-        report=None,
+        report,
         html=None,
         story=None,
         fetch_rows=None,
@@ -86,8 +87,6 @@ class Table():
         css=None,
         alternating_bg=None,
     ):
-        if not report:
-            raise ValueError("need a report for creating this object")
         self.report = report
         self.html = html
         self.story = story
@@ -104,9 +103,9 @@ class Table():
             self.css = self.report.css + self.css
 
         self.fetch_rows = fetch_rows
-        self.HEADER_RECTS = [] # rect area of header
-        self.HEADER_RECT = None # the rectangle wrapping the top row
-        self.HEADER_LAST_COL_RECT = None # the rectangle of last column in top row
+        self.HEADER_RECTS = []  # rect area of header
+        self.HEADER_RECT = None  # the rectangle wrapping the top row
+        self.HEADER_LAST_COL_RECT = None  # the rectangle of last column in top row
         self.HEADER_BLOCKS = None
         self.HEADER_FONT = None
         self.HEADER_PATHS = None
@@ -135,7 +134,7 @@ class Table():
         story.reset()
 
         dev = writer.begin_page(self.report.mediabox)
-        
+
         # customize for multi columns
         columns = self.report.cols  # get columns from parent report
 
@@ -153,7 +152,8 @@ class Table():
             self.HEADER_RECTS.append(self.HEADER_RECT)
 
         if (
-            self.HEADER_LAST_COL_RECT != None and self.HEADER_LAST_COL_RECT.x1 > self.HEADER_RECT.x1
+            self.HEADER_LAST_COL_RECT != None
+            and self.HEADER_LAST_COL_RECT.x1 > self.HEADER_RECT.x1
         ):  # check last column is over top row
             raise ValueError("Not enough to place it in {0} columns".format(columns))
 
@@ -164,10 +164,12 @@ class Table():
         # re-open temp PDF and load page 0
         doc = fitz.open("pdf", fp)
         page = doc[0]
-        paths = [p for p in page.get_drawings() if p["rect"].intersects(self.HEADER_RECT)]
-        blocks = page.get_text("dict", clip=self.HEADER_RECT, flags=fitz.TEXTFLAGS_TEXT)[
-            "blocks"
+        paths = [
+            p for p in page.get_drawings() if p["rect"].intersects(self.HEADER_RECT)
         ]
+        blocks = page.get_text(
+            "dict", clip=self.HEADER_RECT, flags=fitz.TEXTFLAGS_TEXT
+        )["blocks"]
         if blocks:  # extract the font name for text in the header
             self.HEADER_FONT = page.get_fonts()[0][3]
         doc.close()
@@ -268,7 +270,7 @@ class Table():
                     )
 
 
-class Report():
+class Report:
     def __init__(
         self,
         mediabox,
@@ -299,7 +301,7 @@ class Report():
 
         self.sindex = 0
         self.cols = columns
-        self.archive = fitz.Archive(".") if archive is None else archive 
+        self.archive = fitz.Archive(".") if archive is None else archive
         self.header_rect = None
         self.footer_rect = None
         self.default_option = Options(cols=1, format=mediabox, newpage=True)
@@ -344,7 +346,10 @@ class Report():
     def check_cols(self):  # set current columns and determin if going new page or not
         _newpage = self.default_option.newpage
         if isinstance(self.get_current_section(), list):
-            if len(self.get_current_section()) != 2 or self.sections[self.sindex][1].cols == 0:
+            if (
+                len(self.get_current_section()) != 2
+                or self.sections[self.sindex][1].cols == 0
+            ):
                 self.cols = self.default_option.cols
                 return _newpage
 
@@ -355,7 +360,10 @@ class Report():
 
     def get_pagerect(self):  # get current page mediabox
         if isinstance(self.sections[self.sindex], list):  # if section has info
-            if len(self.sections[self.sindex]) != 2 or self.sections[self.sindex][1].format is None:  # don't have property
+            if (
+                len(self.sections[self.sindex]) != 2
+                or self.sections[self.sindex][1].format is None
+            ):  # don't have property
                 return fitz.Rect(
                     0.0,
                     0.0,
@@ -597,13 +605,16 @@ class Report():
             )
             page.insert_textbox(  # draw page number
                 btm_rect,
-                "Page {0} of {1}".format(page.number+1, page_count),
+                "Page {0} of {1}".format(page.number + 1, page_count),
                 align=fitz.TEXT_ALIGN_CENTER,
             )
 
         for i in range(0, len(self.sections)):
             self.sindex = i
-            if (hasattr(self.current_story(), "HEADER_RECTS") and len(self.current_story().HEADER_RECTS) != 0):
+            if (
+                hasattr(self.current_story(), "HEADER_RECTS")
+                and len(self.current_story().HEADER_RECTS) != 0
+            ):
                 _ = self.check_cols()  # init COLS
                 header_rects = self.current_story().HEADER_RECTS
 
@@ -631,5 +642,6 @@ class Report():
 
         doc.subset_fonts()
         doc.ez_save(filename)  # save
+
 
 __all__ = ["Block", "Table", "ImageBlock", "Size", "Options", "Report"]
