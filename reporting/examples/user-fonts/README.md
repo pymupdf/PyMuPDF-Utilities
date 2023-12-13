@@ -32,4 +32,7 @@ Nothing else in the report program has to be changed: The Story's layout engine 
 ## Case: Kenpixel
 For further illustration purposes, script [kenpixel.py](https://github.com/pymupdf/PyMuPDF-Utilities/blob/master/reporting/examples/user-fonts/kenpixel.py) does the same thing with the small and quite exotic font "kenpixel.ttf".
 
-When looking at the resulting report files, both have similar sizes - although the DejaVu font files are very much larger than Kenpixel. This effect is achieved by PyMuPDF's in-built font subsetting engine which compresses fonts by eliminating all unused characters.
+## Conclusion
+When looking at the resulting report files, both have similar sizes (37 KB vs. 41 KB) - although the two DejaVu font files are **_very much larger_** (>= 600 KB each) than Kenpixel (18 KB). This effect is achieved by PyMuPDF's in-built font subsetting engine which compresses fonts by eliminating all unused characters. 
+
+The Reporting code automatically invokes font sub-setting. Therefore, even if the text is polyglot and many font files must be referenced, the resulting PDF file size remains within reasonable limits. 

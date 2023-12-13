@@ -67,9 +67,7 @@ items = Table(
 
 # compose the report from above sections
 report.header = [header]  # appears on every page
-report.sections = [
-    [items, Options(cols=2, format="a3")]
-]  # 2 columns per page
+report.sections = [[items, Options(cols=2, format=report.mediabox)]]
 
 # output the report
 report.run("output.pdf")
