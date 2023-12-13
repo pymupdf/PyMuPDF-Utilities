@@ -135,7 +135,7 @@ class Table():
         story.reset()
 
         dev = writer.begin_page(self.report.mediabox)
-
+        
         # customize for multi columns
         columns = self.report.cols  # get columns from parent report
 
@@ -217,6 +217,9 @@ class Table():
                 else:
                     _ = tag.add_text(text)
             table.append_child(row)
+
+        if templ:
+            templ.remove()
 
         if not isinstance(self.story, fitz.Story):
             self.story = story
