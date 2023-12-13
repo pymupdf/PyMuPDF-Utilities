@@ -604,7 +604,6 @@ class Report():
         for i in range(0, len(self.sections)):
             self.sindex = i
             if (hasattr(self.current_story(), "HEADER_RECTS") and len(self.current_story().HEADER_RECTS) != 0):
-                print(self.current_story().HEADER_RECTS)
                 _ = self.check_cols()  # init COLS
                 header_rects = self.current_story().HEADER_RECTS
 
