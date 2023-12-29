@@ -42,3 +42,7 @@ chapter, pno = doc.find_bookmark(bm)  # retrieve new location
 Method `find_bookmark()` returns a location in `(chapter, pno)` style. TXT documents only have one chapter, so `chapter = 0`.
 
 `bm` is an integer with a special internal structure - which must not be touched in any way.
+
+## In This Folder
+
+The files in this folder are Jupyter notebooks which you can view or download and try out.
