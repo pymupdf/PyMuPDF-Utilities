@@ -5,22 +5,21 @@ This repository contains demos and examples to help you create PDF, XPS, and eBo
 
 Some examples were initially created in the early days of the package. API changes implemented over time may have caused discrepancies in the scripts. We may not update them every time an update is released, so there's no guarantee they all will work as originally expected. If you look at the scripts as what they are intended to be, examples, then they will give you a good start.
 
-Up to PyMupdf 1.18.x, methods and attributes have been renamed according to the snake-case standard. For the time being including versions 1.19.x, old and new names will coexist. For example, `doc.newPage()` can be used as well as `doc.new_page()` to create a new page.
+## "TXT" Documents
+PyMuPDF now (v1.23.x) also supports **plain text files** as a `Document`, like PDF, XPS, EPUB etc. They will behave just like any other document: you can search and extract text, render pages as Pixmaps etc.
 
-> In versions 1.19.x, a deprecation warning is issued if camel-case names are used. In newest versions only snake-case names are valid. You may want to use the `alias-changer.py` script in this folder to keep your code up-to-date. Alternatively, use `fitz.restore_aliases()`.
+This offers ways to access program sources, markdown documents and basically any file, as long as it is encoded in ASCII, UTF-8 or UTF-16.
+
+Please navigate to folder [text-documents](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/text-documents) for details.
+
 
 ## OCR Support
-Starting with version 1.19.0, PyMuPDF supports MuPDF's integrated Tesseract OCR features. Over time, we will add examples for using this.
-
-There are nonetheless also other ways to use OCR tools in PyMuPDF scripts.
-
 There are now two demo examples in the new folder [OCR](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/OCR) which use MuPDF OCR, Tesseract OCR and `easyocr` respectively.
 
 To see more "interactive" demos of the new OCR features, please also have a look at the notebook collection in the [jupyter-notebooks](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/jupyter-notebooks) folder.
 
 ## Advanced TOC Handling
 Handling of table of contents (TOC) has been significantly improved in v1.18.6. I have therefore created another new [folder](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/advanced-toc) dealing specifically with this subject.
-
 
 ## Font Replacement
 New for PyMuPDF v1.17.6 is the ability to replace selected fonts in existing PDFs. This is a set of two scripts and their documentation in [this](https://github.com/pymupdf/PyMuPDF-Utilities/tree/master/font-replacement) folder.
