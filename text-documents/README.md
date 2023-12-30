@@ -2,7 +2,7 @@
 
 PyMuPDF supports files in plain text formats as a `Document`.
 
-They can be opened as usual, text can be etracted and searched for, and pages can be rendered as Pixmaps and more.
+They can be opened as usual, text can be extracted and searched for, and pages can be rendered as Pixmaps and more.
 
 You can use it for general text files, program sources, markdown documents and many more: ASCII, UTF-8 and UTF-16 are supported.
 
