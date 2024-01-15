@@ -58,9 +58,11 @@ def detect_rects(page):
 
         # move first item over to result list
         new_rects.append(prects.pop(0))
-        prects = sorted(list(set(prects)), key=lambda r: (r.y1, r.x0))
+        prects={f'{prect.x0}_{prect.y0}_{prect.x1}_{prect.y1}':prect for prect in prects}
+        prects = sorted(list(prects.values()), key=lambda r: (r.y1, r.x0))
 
-    new_rects = sorted(list(set(new_rects)), key=lambda r: (r.y1, r.x0))
+    new_rects={f'{new_rect.x0}_{new_rect.y0}_{new_rect.x1}_{new_rect.y1}':new_rect for new_rect in new_rects}
+    new_rects = sorted(list(new_rects.values()), key=lambda r: (r.y1, r.x0))
     return [r for r in new_rects if r.width > 5 and r.height > 5]
 
 
