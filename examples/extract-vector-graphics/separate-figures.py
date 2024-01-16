@@ -29,7 +29,7 @@ def detect_rects(page):
 
     # make a list of vector graphics rectangles (IRects are sufficient)
     prects = sorted(
-        [(p["rect"] + delta).irect for p in paths], key=lambda r: (r.y1, r.x0)
+        [p["rect"] + delta for p in paths], key=lambda r: (r.y1, r.x0)
     )
 
     new_rects = []  # the final list of the joined rectangles
@@ -61,7 +61,7 @@ def detect_rects(page):
         prects = sorted(list(set(prects)), key=lambda r: (r.y1, r.x0))
 
     new_rects = sorted(list(set(new_rects)), key=lambda r: (r.y1, r.x0))
-    return [r for r in new_rects if r.width > 5 and r.height > 5]
+    return [r.irect for r in new_rects if r.width > 5 and r.height > 5]
 
 
 doc = fitz.open(sys.argv[1])
