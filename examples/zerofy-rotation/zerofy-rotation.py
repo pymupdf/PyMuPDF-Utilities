@@ -32,4 +32,5 @@ for src_page in src:  # iterate over input pages
         rotate=-src_rot,  # reversed original rotation
     )
 
-doc.ez_save(doc.name.replace(".pdf", "-rot0.pdf"))
+src.close()
+doc.ez_save(src.name.replace(".pdf", "-rot0.pdf"), clean=True)

@@ -185,32 +185,46 @@ class Table:
         story = fitz.Story(self.html, user_css=self.css, archive=self.archive)
         body = story.body
         table = body.find("table", None, None)
-        if table == None:
+        if table is None:
             raise ValueError("no table found in the HTML")
 
         templ = body.find(None, "id", "template")  # locate template row
-        if templ == None and callable(self.fetch_rows):
-            raise ValueError("cannot find row 'template'")
+        if templ is None and self.fetch_rows is not None:
+            raise ValueError("cannot find required 'template' row")
 
-        if callable(self.fetch_rows):
-            rows = self.fetch_rows()
-            fields = rows[0]
-            rows = rows[1:]
-        else:
-            rows = []
+        rows = []
+        if hasattr(self.fetch_rows, "__getitem__"):
+            rows = self.fetch_rows
+        elif hasattr(self.fetch_rows, "__next__"):
+            rows = [r for r in self.fetch_rows]
+        elif callable(self.fetch_rows):
+            func = self.fetch_rows()
+            if hasattr(func, "__getitem__"):
+                rows = func
+            elif hasattr(func, "__next__"):
+                rows = [r for r in func]
+            else:
+                raise ValueError("bad type 'fetch_rows'")
+
+        if rows and not len(rows) > 1:
+            raise ValueError("row count must be 2 or more")
+
+        fields = rows[0]  # first row must contain header field id's
+        rows = rows[1:]  # row data
+
         for j, data in enumerate(rows):
             row = templ.clone()  # clone model row
             if self.alternating_bg != None and len(self.alternating_bg) >= 2:
                 bg_color = self.alternating_bg[j % len(self.alternating_bg)]
                 row.set_properties(bgcolor=bg_color)
             else:
-                bg_color = "#fff"
+                bg_color = "#fff"  # ensure there always is a background color
             if self.last_row_bg and j == len(rows) - 1:
                 bg_color = self.last_row_bg
             for i in range(len(data)):
                 text = str(data[i]).replace("\\n", "\n").replace("<br>", "\n")
                 tag = row.find(None, "id", fields[i])
-                if tag == None:
+                if tag is None:
                     raise ValueError(f"id '{fields[i]}' not in template row.")
                 if bg_color:
                     tag.set_properties(bgcolor=bg_color)
