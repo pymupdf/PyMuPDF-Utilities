@@ -1,12 +1,12 @@
 """
 Display a document using Tkinter
 -------------------------------------------------------------------------------
-License: GNU GPL V3+
-(c) 2018-2019 Jorj X. McKie
+License: GNU AGPL V3.0
+(c) 2022-2024 Artifex Software Inc
 
 Usage
 -----
-python browse.py input.pdf
+python browse.py [input.pdf]
 
 Description
 -----------
@@ -26,6 +26,9 @@ To improve paging performance, we are not directly creating pixmaps from
 pages, but instead from the fitz.DisplayList of the page. Each display list
 will be stored in a list and looked up by page number. This way, zooming
 pixmaps and page re-visits will re-use a once-created display list.
+
+Improvements as of version 1.23.*
+Supporting document types Mobi and text files.
 
 Dependencies
 ------------
@@ -63,6 +66,11 @@ if len(sys.argv) == 1:
             ("Text", "*.txt"),
             ("Text", "*.text"),
             ("Text", "*.log"),
+            ("Text", "*.py"),
+            ("Text", "*.h"),
+            ("Text", "*.c"),
+            ("Text", "*.cpp"),
+            ("Text", "*.cs"),
             # add more document types here
         ),
     )
@@ -73,7 +81,13 @@ if not fname:
     sg.Popup("Cancelling:", "No filename supplied")
     sys.exit("Cancelled: no filename supplied")
 
-doc = fitz.open(fname)
+if fname.endswith((".py", ".c", ".cpp", ".cs", ".h")):
+    ftype = "txt"
+else:
+    ftype = None
+doc = fitz.open(fname, filetype=ftype)
+if not ftype is None:
+    doc.layout(width=600, height=800, fontsize=12)
 page_count = len(doc)
 
 # allocate storage for page display lists
