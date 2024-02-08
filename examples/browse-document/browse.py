@@ -56,9 +56,13 @@ if len(sys.argv) == 1:
             ("PDF Files", "*.pdf"),
             ("XPS Files", "*.*xps"),
             ("Epub Files", "*.epub"),
+            ("Mobi Files", "*.mobi"),
             ("Fiction Books", "*.fb2"),
             ("Comic Books", "*.cbz"),
             ("HTML", "*.htm*"),
+            ("Text", "*.txt"),
+            ("Text", "*.text"),
+            ("Text", "*.log"),
             # add more document types here
         ),
     )
