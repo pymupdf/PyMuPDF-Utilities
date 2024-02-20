@@ -85,9 +85,10 @@ def detect_rects(page):
     return [r for r in new_rects if r.width > 5 and r.height > 5]
 
 
-doc = fitz.open(sys.argv[1])
-for page in doc:
-    new_rects = detect_rects(page)
-    for i, r in enumerate(new_rects):
-        pix = page.get_pixmap(dpi=150, clip=r)
-        pix.save("graphic-%03i-%02i.png" % (page.number, i))
+if __name__ == "__main__":
+    doc = fitz.open(sys.argv[1])
+    for page in doc:
+        new_rects = detect_rects(page)
+        for i, r in enumerate(new_rects):
+            pix = page.get_pixmap(dpi=150, clip=r)
+            pix.save("graphic-%03i-%02i.png" % (page.number, i))
