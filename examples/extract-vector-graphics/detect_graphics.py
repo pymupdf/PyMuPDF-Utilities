@@ -31,20 +31,38 @@ def detect_rects(page):
     delta = 2
 
     def are_neighbors(r1, r2):
-        """Detect whether r1, r2 are neighbors.
+        """Detect whether r1, r2 are "neighbors".
 
-        Defined as:
-        The minimum distance between points of r1 and points of r2 is not
-        larger than delta.
+        Args:
+            r1, r2 must be fitz.Rect objects.
 
-        This check supports empty rect-likes and thus also lines.
+        Returns:
+            True or False.
+
+        Notes:
+            'Neighbors' are defined as:
+            The minimum distance between points of r1 and points of r2 is not
+            larger than delta.
+
+            This check supports empty rectangles and thus also lines.
         """
         if (
-            r2.x0 - delta <= r1.x0 <= r2.x1 + delta
-            or r2.x0 - delta <= r1.x1 <= r2.x1 + delta
-        ) and (
-            r2.y0 - delta <= r1.y0 <= r2.y1 + delta
-            or r2.y0 - delta <= r1.y1 <= r2.y1 + delta
+            (
+                r2.x0 - delta <= r1.x0 <= r2.x1 + delta
+                or r2.x0 - delta <= r1.x1 <= r2.x1 + delta
+            )
+            and (
+                r2.y0 - delta <= r1.y0 <= r2.y1 + delta
+                or r2.y0 - delta <= r1.y1 <= r2.y1 + delta
+            )
+            or (
+                r1.x0 - delta <= r2.x0 <= r1.x1 + delta
+                or r1.x0 - delta <= r2.x1 <= r1.x1 + delta
+            )
+            and (
+                r1.y0 - delta <= r2.y0 <= r1.y1 + delta
+                or r1.y0 - delta <= r2.y1 <= r1.y1 + delta
+            )
         ):
             return True
         return False
