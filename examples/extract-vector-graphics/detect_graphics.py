@@ -33,18 +33,11 @@ def detect_rects(page):
     def are_neighbors(r1, r2):
         """Detect whether r1, r2 are "neighbors".
 
-        Args:
-            r1, r2 must be fitz.Rect objects.
+        Neighbors are defined as:
+        The minimum distance between points of r1 and points of r2 is not
+        larger than delta.
 
-        Returns:
-            True or False.
-
-        Notes:
-            'Neighbors' are defined as:
-            The minimum distance between points of r1 and points of r2 is not
-            larger than delta.
-
-            This check supports empty rectangles and thus also lines.
+        This check supports empty rect-likes and thus also lines.
         """
         if (
             (
@@ -86,15 +79,13 @@ def detect_rects(page):
         repeat = True
         while repeat:
             repeat = False
-            for i in range(len(prects) - 1, -1, -1):  # back to front
-                if i == 0:  # don't touch first rectangle
-                    continue
+            for i in range(len(prects) - 1, 0, -1):  # back to front
                 if are_neighbors(prects[i], r):
                     r |= prects[i]  # join in to first rect
-                    prects[0] = +r  # copy to list item
                     del prects[i]  # delete this rect
                     repeat = True
 
+        prects[0] = +r
         # move first item over to result list
         new_rects.append(prects.pop(0))
         prects = sorted(list(set(prects)), key=lambda r: (r.y1, r.x0))
