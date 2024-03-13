@@ -60,11 +60,16 @@ def detect_rects(page):
             return True
         return False
 
-    # we exclude graphics that are not contained within page margins
+    # we exclude graphics not contained in reasonable page margins
     parea = page.rect + (-36, -36, 36, 36)
 
     # exclude graphics not contained inside margins
-    paths = [p for p in page.get_drawings() if p["rect"] in parea]
+    paths = [
+        p
+        for p in page.get_drawings()
+        if parea.x0 <= p["rect"].x0 <= p["rect"].x1 <= parea.x1
+        and parea.y0 <= p["rect"].y0 <= p["rect"].y1 <= parea.y1
+    ]
 
     # list of all vector graphic rectangles
     prects = sorted([p["rect"] for p in paths], key=lambda r: (r.y1, r.x0))
@@ -81,7 +86,8 @@ def detect_rects(page):
             repeat = False
             for i in range(len(prects) - 1, 0, -1):  # back to front
                 if are_neighbors(prects[i], r):
-                    r |= prects[i]  # join in to first rect
+                    r |= prects[i].tl  # join in to first rect
+                    r |= prects[i].br  # join in to first rect
                     del prects[i]  # delete this rect
                     repeat = True
 
