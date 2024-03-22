@@ -21,14 +21,12 @@ License AGPL 3.0
 Copyright (c) 2021-2024, Jorj McKie
 """
 
-import sys
-
 import fitz
 
 
-def detect_rects(page):
+def detect_rects(page, graphics=None):
     """Detect and join rectangles of neighboring vector graphics."""
-    delta = 2
+    delta = 3
 
     def are_neighbors(r1, r2):
         """Detect whether r1, r2 are "neighbors".
@@ -63,6 +61,8 @@ def detect_rects(page):
     # we exclude graphics not contained in reasonable page margins
     parea = page.rect + (-36, -36, 36, 36)
 
+    if graphics is None:
+        graphics = page.get_drawings()
     # exclude graphics not contained inside margins
     paths = [
         p
@@ -87,7 +87,7 @@ def detect_rects(page):
             for i in range(len(prects) - 1, 0, -1):  # back to front
                 if are_neighbors(prects[i], r):
                     r |= prects[i].tl  # join in to first rect
-                    r |= prects[i].br  # join in to first rect
+                    r |= prects[i].br
                     del prects[i]  # delete this rect
                     repeat = True
 
@@ -101,6 +101,8 @@ def detect_rects(page):
 
 
 if __name__ == "__main__":
+    import sys
+
     doc = fitz.open(sys.argv[1])
     for page in doc:
         new_rects = detect_rects(page)
