@@ -40,6 +40,7 @@ PySimpleGUI, tkinter
 
 Changes
 -------
+* 2024-03-29: update progress meter function call
 * 2021-09-17: remove PIL and use extended pixmap features instead
 * 2020-10-04: for images with an /SMask, we use Pillow to recover original
 * 2020-11-21: convert cases with special /ColorSpace definitions to RGB PNG
@@ -121,11 +122,12 @@ page_count = doc.page_count  # number of pages
 xreflist = []
 imglist = []
 for pno in range(page_count):
-    sg.QuickMeter(
+    sg.one_line_progress_meter(
         "Extract Images",  # show our progress
         pno + 1,
         page_count,
         "*** Scanning Pages ***",
+        orientation = "h",
     )
 
     il = doc.get_page_images(pno)
