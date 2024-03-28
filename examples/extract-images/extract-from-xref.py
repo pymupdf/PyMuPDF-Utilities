@@ -46,7 +46,8 @@ PySimpleGUI, tkinter
 
 Changes
 --------
-2021-09-17: Removed PIL dependency
+* 2024-03-29: update progress meter function call
+* 2021-09-17: Removed PIL dependency
 """
 
 from __future__ import print_function
@@ -116,11 +117,12 @@ smasks = set()  # stores xrefs of /SMask objects
 # loop through PDF images
 # ------------------------------------------------------------------------------
 for xref in range(1, lenXREF):  # scan through all PDF objects
-    sg.QuickMeter(
+    sg.one_line_progress_meter(
         "Extract Images",  # show our progress
         xref,
         lenXREF,
         "*** Scanning Cross Reference ***",
+        orientation = "h",
     )
 
     if doc.xref_get_key(xref, "Subtype")[1] != "/Image":  # not an image
