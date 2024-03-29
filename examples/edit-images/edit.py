@@ -1,7 +1,7 @@
 """
 Edit images in a PDF document
 -------------------------------------------------------------------------------
-License: GNU AFFERO GPL 3
+License: GNU AFFERO GPL 3.0
 (c) 2020 Jorj X. McKie
 
 Usage
