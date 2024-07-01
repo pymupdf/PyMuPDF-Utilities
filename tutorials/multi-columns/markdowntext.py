@@ -12,7 +12,8 @@ import sys
 
 
 filename = sys.argv[1]
+outname = filename.replace(".pdf", ".md")
 md_text = pymupdf4llm.to_markdown(filename)
 
 # output document markdown text as one string
-pathlib.Path(f"{filename}-markdown.md").write_bytes(md_text.encode())
+pathlib.Path(outname).write_bytes(md_text.encode())
