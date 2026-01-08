@@ -89,7 +89,7 @@ Respectively this:
   {'kind': 1, 'page': 8, 'to': Point(72.0, 36.0), 'xref': 23, 'zoom': 0.0}]]
 ```
 
-perhe second version provides an additional entry with more detail per item.
+The second version provides an additional entry with more detail per item.
 
 > Please note that the items occur in the sequence as defined in the document. They are **_not sorted_**, specifically not by page number.
 
@@ -124,7 +124,7 @@ In PyMuPDF you can use the item detail dictionary to achieve this:
 
 ## (B) - Manipulate Selected TOC Items
 
-Replacing the complete TOC as offered by `doc.set_toc` may not always be desireable:
+Replacing the complete TOC as offered by `doc.set_toc` may not always be desirable:
 
 If all you want is changing e.g. a few bookmark titles out of several hundred or even thousands of TOC items, then replacing the whole bunch may be a waste of disk space and / or processing time.
 
