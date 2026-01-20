@@ -236,7 +236,8 @@ def cont_clean(page, fontrefs):
                 if lines[i] == b"ET":  # end text object
                     found = False  # no longer in found mode
                     continue
-                if lines[i].endswith(b" Tf"):  # font invoker command
+                #if lines[i].endswith(b" Tf"):  # font invoker command
+                if lines[i].startswith(b"/"):
                     if lines[i].startswith(ref):  # our font?
                         found = True  # switch on
                         lines[i] = b""  # remove line
@@ -269,16 +270,35 @@ def cont_clean(page, fontrefs):
         return changed, lines
 
     doc = page.parent
+    xref_list = []
     for xref in fontrefs.keys():
         xref0 = 0 + xref
         if xref0 == 0:  # the page contents
-            xref0 = page.get_contents()[0]  # there is only one /Contents obj now
+            #xref0 = page.get_contents()[0]  # there is only one /Contents obj now
+            xref_list += [(xref,i) for i in page.get_contents()]
+        else:
+            xref_list.append((xref,xref0))
+    
+    for (xref, xref0) in xref_list: 
         cont = doc.xref_stream(xref0)
-        cont_lines = cont.splitlines()
+        cont_line = cont.splitlines()
+        cont_lines = []
+        for line in cont_line:
+            if len(line) == 0:
+                continue
+            parts = line.split(b'/')
+            parts = [b'/' + part for part in parts if part]  # prepend '/' to each part
+            if not line.startswith(b'/'):
+                parts[0] = parts[0][1:]
+            cont_lines.extend(parts)
+
+        if len(cont_lines) == 0 or cont_lines[0] == cont:
+            return False
         changed, cont_lines = remove_font(fontrefs[xref], cont_lines)
         if changed:
             cont = b"\n".join(cont_lines) + b"\n"
             doc.update_stream(xref0, cont)  # replace command source
+    return True
 
 
 def clean_fontnames(page):
@@ -354,20 +374,20 @@ def build_repl_table(doc, fname):
         continue
 
 
-def tilted_span(page, wdir, span, font):
+def tilted_span(page, wdir, word, font):
     """Output a non-horizontal text span."""
     cos, sin = wdir  # writing direction from the line
     matrix = fitz.Matrix(cos, -sin, sin, cos, 0, 0)  # corresp. matrix
-    text = span["text"]  # text to write
-    bbox = fitz.Rect(span["bbox"])
-    fontsize = span["size"]  # adjust fontsize
+    text = word["text"]  # text to write
+    bbox = fitz.Rect(word["bbox"])
+    fontsize = word["size"]  # adjust fontsize
     tl = font.text_length(text, fontsize)  # text length with new font
     m = max(bbox.width, bbox.height)  # must not exceed max bbox dimension
     if tl > m:
         fontsize *= m / tl  # otherwise adjust
     opa = 0.1 if fontsize > 100 else 1  # fake opacity for large fontsizes
-    tw = fitz.TextWriter(page.rect, opacity=opa, color=fitz.sRGB_to_pdf(span["color"]))
-    origin = fitz.Point(span["origin"])
+    tw = fitz.TextWriter(page.rect, opacity=opa, color=fitz.sRGB_to_pdf(word["color"]))
+    origin = fitz.Point(word["origin"])
     if sin > 0:  # clockwise rotation
         origin.y = bbox.y0
     tw.append(origin, text, font=font, fontsize=fontsize)
@@ -448,14 +468,19 @@ print()
 print("Phase 2: Rebuild document with new fonts.")
 for page in indoc:
     # extract text again
-    blocks = page.get_text("dict", flags=extr_flags)["blocks"]
+    blocks = page.get_text("rawdict", flags=extr_flags)["blocks"]
 
     # clean contents streams of the page and any XObjects.
-    page.clean_contents(sanitize=True)
+    # page.clean_contents(sanitize=True)
     fontrefs = get_page_fontrefs(page)
     if fontrefs == {}:  # page has no fonts to replace
         continue
-    cont_clean(page, fontrefs)  # remove text using fonts to be replaced
+
+    valid = cont_clean(page, fontrefs)  # remove text using fonts to be replaced
+    if not valid:
+        print("Cannot process this file.")
+        sys.exit() 
+
     textwriters = {}  # contains one text writer per detected text color
 
     for block in blocks:
@@ -472,29 +497,52 @@ for page in indoc:
                     continue
 
                 font = fitz.Font(fontbuffer=font_buffers[new_fontname])
-                text = span["text"].replace(chr(0xFFFD), chr(0xB6))
-                # guard against non-utf8 characters
-                textb = text.encode("utf8", errors="backslashreplace")
-                text = textb.decode("utf8", errors="backslashreplace")
-                span["text"] = text
-                if wdir != [1, 0]:  # special treatment for tilted text
-                    tilted_span(page, wdir, span, font)
-                    continue
-                color = span["color"]  # make or reuse textwriter for the color
-                if color in textwriters.keys():  # already have a textwriter?
-                    tw = textwriters[color]  # re-use it
-                else:  # make new
-                    tw = fitz.TextWriter(page.rect)  # make text writer
-                    textwriters[color] = tw  # store it for later use
-                try:
-                    tw.append(
-                        span["origin"],
-                        text,
-                        font=font,
-                        fontsize=resize(span, font),  # use adjusted fontsize
-                    )
-                except:
-                    print("page %i exception:" % page.number, text)
+                span_char = span["chars"]
+                word_list = []
+                for character in span_char:
+                    if character['c'].isspace():
+                        word_list.append({'bbox': fitz.Rect(0,0,0,0),
+                                            'text': '', 'origin': None,
+                                            'color': span['color'], 
+                                            'size': span['size']})
+                    else:
+                        if not word_list:
+                            word_list.append({'bbox': fitz.Rect(character['bbox']), 
+                                            'text': character['c'], 
+                                            'origin': character['origin'], 
+                                            'color': span['color'], 
+                                            'size': span['size']})
+                        else:
+                            if word_list[-1]['origin'] is None:
+                                word_list[-1]['origin'] = character['origin']
+                            word_list[-1]['bbox'] = fitz.Rect(character['bbox']) | word_list[-1]['bbox']
+                            word_list[-1]['text'] += character['c']
+                word_list_cleaned = [word for word in word_list if word['origin'] is not None]
+
+                for word in word_list_cleaned:
+                    text = word["text"].replace(chr(0xFFFD), chr(0xB6))
+                    # guard against non-utf8 characters
+                    textb = text.encode("utf8", errors="backslashreplace")
+                    text = textb.decode("utf8", errors="backslashreplace")
+
+                    if wdir != [1, 0]:  # special treatment for tilted text
+                        tilted_span(page, wdir, word, font)
+                        continue
+
+                    if word['color'] in textwriters.keys():  # already have a textwriter?
+                        tw = textwriters[word['color']]  # re-use it
+                    else:  # make new
+                        tw = fitz.TextWriter(page.rect)  # make text writer
+                        textwriters[word['color']] = tw  # store it for later use
+                    try:
+                        tw.append(
+                            pos=word["origin"],
+                            text=text,
+                            font=font,
+                            fontsize=min(span['size'],resize(word, font)),  # use adjusted fontsize
+                        )
+                    except:
+                        print("page %i exception:" % page.number, text)
 
     # now write all text stored in the list of text writers
     for color in textwriters.keys():  # output the stored text per color
@@ -506,7 +554,7 @@ for page in indoc:
 
 times.append(("Rebuilding:", timer()))
 print("Phase 3: Build font subsets.")
-indoc.subset_fonts()
+#indoc.subset_fonts()
 times.append(("Font subsetting:", timer()))
 
 indoc.save(
